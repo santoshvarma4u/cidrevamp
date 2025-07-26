@@ -151,6 +151,43 @@ export default function AdminVideos() {
     },
   });
 
+  const deleteVideoMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/admin/videos/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete video");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/videos"] });
+      toast({
+        title: "Success",
+        description: "Video deleted successfully",
+      });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to delete video",
+        variant: "destructive",
+      });
+    },
+  });
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -196,6 +233,12 @@ export default function AdminVideos() {
       isPublished: video.isPublished,
     });
     setIsDialogOpen(true);
+  };
+
+  const handleDelete = (videoId: number) => {
+    if (window.confirm("Are you sure you want to delete this video? This action cannot be undone.")) {
+      deleteVideoMutation.mutate(videoId);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -379,6 +422,14 @@ export default function AdminVideos() {
                                 onClick={() => handleEdit(video)}
                               >
                                 <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleDelete(video.id)}
+                                className="text-red-600 hover:text-red-700"
+                              >
+                                <Trash2 className="h-4 w-4" />
                               </Button>
                             </div>
                           </TableCell>

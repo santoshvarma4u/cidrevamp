@@ -408,31 +408,25 @@ export default function AdminPhotos() {
                     {photo.isPublished ? 'Published' : 'Draft'}
                   </span>
                 </div>
-                <div className="flex gap-2 pt-2 border-t border-gray-100" style={{ backgroundColor: 'yellow', minHeight: '40px' }}>
-                  <button
-                    onClick={() => {
-                      alert('Edit button clicked!');
-                      console.log("Edit button clicked for photo:", photo.id);
-                      handleEdit(photo);
-                    }}
-                    className="flex-1 px-3 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors flex items-center justify-center gap-1"
-                    style={{ backgroundColor: 'blue', color: 'white', border: '2px solid red' }}
+                <div className="flex gap-2 pt-2 border-t border-gray-100">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleEdit(photo)}
+                    className="flex-1"
                   >
-                    <Edit className="h-4 w-4" />
-                    EDIT BUTTON
-                  </button>
-                  <button
-                    onClick={() => {
-                      alert('Delete button clicked!');
-                      console.log("Delete button clicked for photo:", photo.id);
-                      handleDelete(photo.id);
-                    }}
-                    className="flex-1 px-3 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors flex items-center justify-center gap-1"
-                    style={{ backgroundColor: 'red', color: 'white', border: '2px solid black' }}
+                    <Edit className="h-4 w-4 mr-1" />
+                    Edit
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleDelete(photo.id)}
+                    className="flex-1 text-red-600 hover:text-red-700"
                   >
-                    <Trash2 className="h-4 w-4" />
-                    DELETE BUTTON
-                  </button>
+                    <Trash2 className="h-4 w-4 mr-1" />
+                    Delete
+                  </Button>
                 </div>
               </CardContent>
             </Card>
