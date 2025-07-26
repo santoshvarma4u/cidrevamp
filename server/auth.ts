@@ -90,9 +90,16 @@ export function setupAuth(app: Express) {
   
   passport.deserializeUser(async (id: string, done) => {
     try {
+      console.log("Deserializing user with ID:", id);
       const user = await storage.getUser(id);
+      if (user) {
+        console.log("User deserialized successfully:", user.username, "Role:", user.role);
+      } else {
+        console.log("User not found during deserialization:", id);
+      }
       done(null, user);
     } catch (error) {
+      console.error("Error during user deserialization:", error);
       done(error);
     }
   });
@@ -197,6 +204,7 @@ export function requireAdmin(req: any, res: any, next: any) {
   }
   
   const user = req.user as User;
+  
   if (user.role !== 'admin' && user.role !== 'super_admin') {
     return res.status(403).json({ message: "Admin access required" });
   }

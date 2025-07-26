@@ -28,6 +28,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
+
+
   // Public routes are now handled in setupAuth()
 
   // Public API routes
@@ -147,15 +149,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin-only routes
-  const requireAdmin = (req: any, res: any, next: any) => {
-    if (req.user?.claims?.sub) {
-      // Check if user is admin (this would be based on user role)
-      next();
-    } else {
-      res.status(403).json({ message: "Admin access required" });
-    }
-  };
+  // Admin-only routes (using imported requireAdmin middleware from auth.ts)
 
   // Admin Pages
   app.post('/api/admin/pages', requireAdmin, async (req: any, res) => {
