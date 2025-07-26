@@ -23,6 +23,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import AdminSidebar from "@/components/admin/Sidebar";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -191,7 +192,9 @@ export default function AdminNews() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="flex min-h-screen">
+      <AdminSidebar />
+      <div className="flex-1 ml-64 p-8 space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">News Management</h1>
@@ -376,6 +379,7 @@ export default function AdminNews() {
             </Card>
           ))
         )}
+      </div>
       </div>
     </div>
   );
