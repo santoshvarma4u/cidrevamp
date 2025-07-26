@@ -167,11 +167,9 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   {user.role === 'admin' || user.role === 'super_admin' ? (
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Admin Panel
-                      </Link>
+                    <DropdownMenuItem onClick={() => window.location.href = '/admin'}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Admin Panel
                     </DropdownMenuItem>
                   ) : null}
                   <DropdownMenuItem 
@@ -203,51 +201,79 @@ export default function Header() {
             <SheetContent side="right" className="w-80">
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full justify-start">
-                      Home
-                    </Button>
-                  </Link>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start"
+                    onClick={() => {
+                      window.location.href = '/';
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Home
+                  </Button>
                   
                   <div className="space-y-1">
                     <p className="font-medium text-sm text-gray-500 px-3">About CID</p>
                     {aboutLinks.map((link) => (
-                      <Link key={link.href} href={link.href} onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="ghost" className="w-full justify-start text-sm pl-6">
-                          {link.title}
-                        </Button>
-                      </Link>
+                      <Button 
+                        key={link.href}
+                        variant="ghost" 
+                        className="w-full justify-start text-sm pl-6"
+                        onClick={() => {
+                          window.location.href = link.href;
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        {link.title}
+                      </Button>
                     ))}
                   </div>
 
                   <div className="space-y-1">
                     <p className="font-medium text-sm text-gray-500 px-3">Specialized Wings</p>
                     {specializedWings.map((wing) => (
-                      <Link key={wing.href} href={wing.href} onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="ghost" className="w-full justify-start text-sm pl-6">
-                          <wing.icon className="mr-2 h-4 w-4" />
-                          {wing.title}
-                        </Button>
-                      </Link>
+                      <Button 
+                        key={wing.href}
+                        variant="ghost" 
+                        className="w-full justify-start text-sm pl-6"
+                        onClick={() => {
+                          window.location.href = wing.href;
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        <wing.icon className="mr-2 h-4 w-4" />
+                        {wing.title}
+                      </Button>
                     ))}
                   </div>
 
                   <div className="space-y-1">
                     <p className="font-medium text-sm text-gray-500 px-3">Citizen Services</p>
                     {citizenServices.map((service) => (
-                      <Link key={service.href} href={service.href} onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="ghost" className="w-full justify-start text-sm pl-6">
-                          {service.title}
-                        </Button>
-                      </Link>
+                      <Button 
+                        key={service.href}
+                        variant="ghost" 
+                        className="w-full justify-start text-sm pl-6"
+                        onClick={() => {
+                          window.location.href = service.href;
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        {service.title}
+                      </Button>
                     ))}
                   </div>
 
-                  <Link href="/media/gallery" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full justify-start">
-                      Media Center
-                    </Button>
-                  </Link>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start"
+                    onClick={() => {
+                      window.location.href = '/media/gallery';
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Media Center
+                  </Button>
                 </div>
               </div>
             </SheetContent>

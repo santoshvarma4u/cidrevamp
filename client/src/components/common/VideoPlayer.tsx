@@ -1,25 +1,44 @@
-import { useState, useRef } from "react";
-import { Play, Pause, Volume2, VolumeX, Maximize, Eye } from "lucide-react";
+import { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import type { Video } from "@shared/schema";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Play, 
+  Pause, 
+  Volume2, 
+  VolumeX, 
+  Maximize, 
+  Calendar,
+  Clock,
+} from "lucide-react";
+
+interface Video {
+  id: number;
+  title: string;
+  description?: string;
+  fileName: string;
+  filePath: string;
+  thumbnailPath?: string;
+  duration?: number;
+  category?: string;
+  createdAt: string;
+}
 
 interface VideoPlayerProps {
   video: Video;
-  autoplay?: boolean;
+  autoPlay?: boolean;
   showControls?: boolean;
   className?: string;
 }
 
 export default function VideoPlayer({ 
   video, 
-  autoplay = false, 
+  autoPlay = false, 
   showControls = true,
-  className = ""
+  className = "" 
 }: VideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [showOverlay, setShowOverlay] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const togglePlay = () => {
@@ -30,6 +49,7 @@ export default function VideoPlayer({
         videoRef.current.play();
       }
       setIsPlaying(!isPlaying);
+      setShowOverlay(false);
     }
   };
 
@@ -50,130 +70,127 @@ export default function VideoPlayer({
     }
   };
 
-  const handleTimeUpdate = () => {
-    if (videoRef.current) {
-      setCurrentTime(videoRef.current.currentTime);
-    }
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleLoadedMetadata = () => {
-    if (videoRef.current) {
-      setDuration(videoRef.current.duration);
-    }
+  const handleVideoClick = () => {
+    togglePlay();
   };
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const time = parseFloat(e.target.value);
-    if (videoRef.current) {
-      videoRef.current.currentTime = time;
-      setCurrentTime(time);
-    }
-  };
-
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  const handleVideoEnd = () => {
+    setIsPlaying(false);
+    setShowOverlay(true);
   };
 
   return (
     <div className={`relative bg-black rounded-lg overflow-hidden ${className}`}>
+      {/* Video Element */}
       <video
         ref={videoRef}
-        src={video.videoUrl}
-        poster={video.thumbnailUrl}
-        className="w-full h-auto"
-        autoPlay={autoplay}
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
+        className="w-full h-full object-cover cursor-pointer"
+        autoPlay={autoPlay}
+        muted={isMuted}
+        onClick={handleVideoClick}
+        onEnded={handleVideoEnd}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
-      />
-      
-      {showControls && (
-        <>
-          {/* Play button overlay */}
-          {!isPlaying && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
-              <Button
-                onClick={togglePlay}
-                size="lg"
-                className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white border-2 border-white rounded-full p-4"
-              >
-                <Play className="h-8 w-8" />
-              </Button>
-            </div>
-          )}
+        poster={video.thumbnailPath ? `/uploads/${video.thumbnailPath}` : undefined}
+      >
+        <source src={`/uploads/${video.fileName}`} type="video/mp4" />
+        <source src={`/uploads/${video.fileName}`} type="video/webm" />
+        Your browser does not support the video tag.
+      </video>
 
-          {/* Controls bar */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-            <div className="flex items-center space-x-4">
-              <Button
-                onClick={togglePlay}
-                size="sm"
-                variant="ghost"
-                className="text-white hover:bg-white hover:bg-opacity-20"
-              >
-                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </Button>
+      {/* Overlay */}
+      {showOverlay && (
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity">
+          <Button
+            onClick={togglePlay}
+            size="lg"
+            className="bg-white bg-opacity-90 text-black hover:bg-white rounded-full p-4"
+          >
+            <Play className="h-8 w-8" />
+          </Button>
+        </div>
+      )}
 
-              <div className="flex-1 flex items-center space-x-2">
-                <span className="text-white text-sm">{formatTime(currentTime)}</span>
-                <input
-                  type="range"
-                  min="0"
-                  max={duration}
-                  value={currentTime}
-                  onChange={handleSeek}
-                  className="flex-1 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
-                  style={{
-                    background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${(currentTime / duration) * 100}%, #6b7280 ${(currentTime / duration) * 100}%, #6b7280 100%)`
-                  }}
-                />
-                <span className="text-white text-sm">{formatTime(duration)}</span>
-              </div>
-
-              <Button
-                onClick={toggleMute}
-                size="sm"
-                variant="ghost"
-                className="text-white hover:bg-white hover:bg-opacity-20"
-              >
-                {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-              </Button>
-
-              <Button
-                onClick={toggleFullscreen}
-                size="sm"
-                variant="ghost"
-                className="text-white hover:bg-white hover:bg-opacity-20"
-              >
-                <Maximize className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Video info */}
-          <div className="absolute top-4 left-4 right-4">
-            <h3 className="text-white font-semibold text-lg drop-shadow-lg">{video.title}</h3>
-            {video.description && (
-              <p className="text-white text-sm opacity-90 drop-shadow-lg mt-1">
-                {video.description}
-              </p>
-            )}
-            <div className="flex items-center space-x-4 mt-2">
-              <div className="flex items-center space-x-1 text-white text-sm opacity-80">
-                <Eye className="h-4 w-4" />
-                <span>{video.viewCount} views</span>
+      {/* Video Info Overlay */}
+      <div className="absolute top-4 left-4 right-4">
+        <div className="flex items-start justify-between">
+          <div className="bg-black bg-opacity-75 rounded-lg p-3 max-w-md">
+            <h3 className="text-white font-semibold mb-1 text-sm">{video.title}</h3>
+            <div className="flex items-center space-x-2 text-xs text-gray-200">
+              {video.category && (
+                <Badge variant="secondary" className="text-xs">
+                  {video.category}
+                </Badge>
+              )}
+              <div className="flex items-center">
+                <Calendar className="h-3 w-3 mr-1" />
+                {new Date(video.createdAt).toLocaleDateString()}
               </div>
               {video.duration && (
-                <span className="text-white text-sm opacity-80">
-                  {formatTime(video.duration)}
-                </span>
+                <div className="flex items-center">
+                  <Clock className="h-3 w-3 mr-1" />
+                  {formatDuration(video.duration)}
+                </div>
               )}
             </div>
           </div>
-        </>
+        </div>
+      </div>
+
+      {/* Controls */}
+      {showControls && (
+        <div className="absolute bottom-4 left-4 right-4">
+          <div className="bg-black bg-opacity-75 rounded-lg p-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Button
+                  onClick={togglePlay}
+                  size="sm"
+                  variant="ghost"
+                  className="text-white hover:bg-white hover:bg-opacity-20"
+                >
+                  {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                </Button>
+                
+                <Button
+                  onClick={toggleMute}
+                  size="sm"
+                  variant="ghost"
+                  className="text-white hover:bg-white hover:bg-opacity-20"
+                >
+                  {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                </Button>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Button
+                  onClick={toggleFullscreen}
+                  size="sm"
+                  variant="ghost"
+                  className="text-white hover:bg-white hover:bg-opacity-20"
+                >
+                  <Maximize className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Loading State */}
+      {!videoRef.current && (
+        <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
+            <p className="text-sm">Loading video...</p>
+          </div>
+        </div>
       )}
     </div>
   );
