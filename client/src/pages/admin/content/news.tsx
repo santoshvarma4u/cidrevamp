@@ -71,7 +71,7 @@ export default function AdminNews() {
         category: data.category,
         isPublished: data.isPublished,
         isPinned: data.isPinned,
-        publishedAt: data.isPublished ? new Date().toISOString() : null,
+        publishedAt: data.isPublished ? new Date() : null,
       };
       return await apiRequest("/api/news", {
         method: "POST",
@@ -106,7 +106,7 @@ export default function AdminNews() {
         category: data.category,
         isPublished: data.isPublished,
         isPinned: data.isPinned,
-        publishedAt: data.isPublished ? new Date().toISOString() : null,
+        publishedAt: data.isPublished ? new Date() : null,
       };
       return await apiRequest(`/api/news/${editingNews.id}`, {
         method: "PATCH",
