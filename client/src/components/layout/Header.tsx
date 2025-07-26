@@ -37,6 +37,7 @@ import {
   Gavel,
   Scale,
 } from "lucide-react";
+import leftLogoSrc from "@assets/leftlogo_1753517979998.png";
 
 export default function Header() {
   const [location] = useLocation();
@@ -131,9 +132,11 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-4">
-            <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-              <Shield className="h-8 w-8 text-white" />
-            </div>
+            <img 
+              src={leftLogoSrc} 
+              alt="Government of Telangana" 
+              className="w-16 h-16 object-contain"
+            />
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
                 Crime Investigation Department
