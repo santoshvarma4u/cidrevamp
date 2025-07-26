@@ -88,11 +88,10 @@ export default function Header() {
   ];
 
   const aboutLinks = [
-    { title: "CID History & Background", href: "/about/history" },
+    { title: "About CID", href: "/about/history" },
     { title: "Organization Structure", href: "/about/structure" },
-    { title: "Mission & Vision", href: "/about/mission" },
-    { title: "Leadership & Officers", href: "/about/leadership" },
-    { title: "Contact Information", href: "/about/contact" },
+    { title: "Senior Officers", href: "/about/leadership" },
+    { title: "FAQ's", href: "/about/faqs" },
   ];
 
   return (
@@ -133,9 +132,9 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4 flex-1">
-            <img 
-              src={leftLogoSrc} 
-              alt="Government of Telangana" 
+            <img
+              src={leftLogoSrc}
+              alt="Government of Telangana"
               className="w-16 h-16 object-contain"
             />
             <div>
@@ -150,9 +149,9 @@ export default function Header() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <img 
-              src={rightLogoSrc} 
-              alt="Telangana State Police" 
+            <img
+              src={rightLogoSrc}
+              alt="Telangana State Police"
               className="w-16 h-16 object-contain mr-4"
             />
 
