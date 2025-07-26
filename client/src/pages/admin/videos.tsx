@@ -110,7 +110,7 @@ export default function AdminVideos() {
 
   const deleteVideoMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/videos/${id}`);
+      await apiRequest("DELETE", `/api/admin/videos/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/videos"] });
