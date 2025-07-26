@@ -38,6 +38,7 @@ import {
   Scale,
 } from "lucide-react";
 import leftLogoSrc from "@assets/leftlogo_1753517979998.png";
+import rightLogoSrc from "@assets/police-logo_1753517995022.png";
 
 export default function Header() {
   const [location] = useLocation();
@@ -131,7 +132,7 @@ export default function Header() {
       {/* Main Header */}
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-1">
             <img 
               src={leftLogoSrc} 
               alt="Government of Telangana" 
@@ -146,9 +147,14 @@ export default function Header() {
                 3rd Floor, DGP Office, Lakadikapul, Hyderabad-004
               </p>
             </div>
-          </Link>
+          </div>
 
           <div className="hidden md:flex items-center space-x-4">
+            <img 
+              src={rightLogoSrc} 
+              alt="Telangana State Police" 
+              className="w-16 h-16 object-contain mr-4"
+            />
             <Button
               className="bg-red-600 text-white hover:bg-red-700"
               onClick={() => (window.location.href = "tel:100")}
