@@ -143,6 +143,7 @@ export default function AdminPhotos() {
   });
 
   const resetForm = () => {
+    console.log("Resetting form");
     setFormData({
       title: "",
       description: "",
@@ -373,7 +374,7 @@ export default function AdminPhotos() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredPhotos.map((photo) => (
             <Card key={photo.id} className="overflow-hidden">
-              <div className="aspect-video bg-gray-200 relative">
+              <div className="aspect-video bg-gray-200 relative" style={{ pointerEvents: 'none' }}>
                 <img
                   src={`/uploads/${photo.fileName}`}
                   alt={photo.title}
@@ -382,28 +383,28 @@ export default function AdminPhotos() {
                     (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
                   }}
                 />
-                <div className="absolute top-2 right-2 flex space-x-1">
+                <div className="absolute top-2 right-2 flex space-x-1 z-10">
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
+                    onClick={() => {
+                      console.log("Edit button clicked!");
                       handleEdit(photo);
                     }}
-                    className="bg-white/90 hover:bg-white"
+                    className="bg-white/90 hover:bg-white shadow-md"
+                    style={{ pointerEvents: 'auto' }}
                   >
                     <Edit className="h-3 w-3" />
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
+                    onClick={() => {
+                      console.log("Delete button clicked!");
                       handleDelete(photo.id);
                     }}
-                    className="bg-white/90 hover:bg-white text-red-600 hover:text-red-700"
+                    className="bg-white/90 hover:bg-white text-red-600 hover:text-red-700 shadow-md"
+                    style={{ pointerEvents: 'auto' }}
                   >
                     <Trash2 className="h-3 w-3" />
                   </Button>
