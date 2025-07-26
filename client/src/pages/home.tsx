@@ -143,14 +143,38 @@ export default function Home() {
         />
         <div className="relative container mx-auto px-4 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-5xl font-bold mb-6 leading-tight">
-                Transparent, Impartial & Efficient Investigation
-              </h1>
-              <p className="text-xl mb-8 text-blue-100">
-                Premier investigation agency of Telangana State using high-end,
-                state-of-the-art equipment with quality forensic support.
-              </p>
+            {/* Director General Message */}
+            <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
+              <div className="flex flex-col md:flex-row gap-4">
+                {/* Director Photo */}
+                <div className="flex-shrink-0">
+                  <div className="w-24 h-28 md:w-28 md:h-32 rounded-lg overflow-hidden bg-gray-100">
+                    <img
+                      src="/uploads/adgp-photo.png"
+                      alt="Ms. Charu Sinha, IPS"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                
+                {/* Director Info and Message */}
+                <div className="flex-1">
+                  <div className="mb-3">
+                    <h3 className="text-xl font-bold text-white mb-1">Ms. Charu Sinha, IPS</h3>
+                    <p className="text-sm font-semibold text-blue-200 mb-2">
+                      Addl. Director General of Police, CID, Telangana State.
+                    </p>
+                  </div>
+                  
+                  <div className="text-blue-100 leading-relaxed space-y-2 text-sm">
+                    <p>
+                      Crime Investigation Department is the premier investigation agency of Telangana State. Our 
+                      endeavour is to provide transparent, impartial, efficient and systematic investigation using high 
+                      end, state of the art equipment with quality forensic support.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
@@ -182,50 +206,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Director General Message & News */}
+      {/* Photo Gallery & News */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* Director General Message */}
+            {/* Photo Gallery */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200">
-                <div className="flex flex-col md:flex-row gap-4">
-                  {/* Director Photo */}
-                  <div className="flex-shrink-0">
-                    <div className="w-28 h-32 md:w-32 md:h-36 rounded-lg overflow-hidden bg-gray-100">
-                      <img
-                        src="/uploads/adgp-photo.png"
-                        alt="Ms. Charu Sinha, IPS"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+                <h3 className="text-2xl font-bold text-blue-800 mb-4 text-center">Latest Photo Gallery</h3>
+                {latestPhotos.length > 0 ? (
+                  <AutoScrollSlider photos={latestPhotos} />
+                ) : (
+                  <div className="text-center py-8">
+                    <Images className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500">No photos available</p>
                   </div>
-                  
-                  {/* Director Info and Message */}
-                  <div className="flex-1">
-                    <div className="mb-4">
-                      <h3 className="text-2xl font-bold text-blue-800 mb-1">Ms. Charu Sinha, IPS</h3>
-                      <p className="text-lg font-semibold text-blue-600 mb-2">
-                        Addl. Director General of Police, CID, Telangana State.
-                      </p>
-                    </div>
-                    
-                    <div className="text-gray-700 leading-relaxed space-y-2 text-sm">
-                      <p>
-                        Crime Investigation Department is the premier investigation agency of Telangana State. Our 
-                        endeavour is to provide transparent, impartial, efficient and systematic investigation using high 
-                        end, state of the art equipment with quality forensic support in coordination with national 
-                        and international agencies.
-                      </p>
-                      
-                      <p>
-                        Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and 
-                        mission. Our specialized wings include Economic Offences, General Offences, Child and 
-                        Women Protection, Protection of Civil Rights and Cyber Crimes.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
 

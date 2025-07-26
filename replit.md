@@ -32,6 +32,13 @@ Preferred communication style: Simple, everyday language.
 - Features Ms. Charu Sinha IPS profile with mission statement and cybercrime news updates
 - **COMPLETED**: Added Ms. Charu Sinha's official photo and implemented auto-scrolling news
 - Reduced section height and added 4-second auto-scroll with smooth transitions in news panel
+- **COMPLETED**: Integrated news management into CMS with full CRUD operations
+- News articles can be created, edited, published, and deleted through admin panel at /admin/content/news
+- Homepage now displays database-driven news content in auto-scrolling format
+- **COMPLETED**: Reorganized homepage layout per user request
+- Moved Director General content to hero section alongside video for better integration
+- Positioned photo gallery in main content area where DGP content was previously located
+- Maintained consistent UI aesthetics with glass-morphism design and responsive layout
 
 ## System Architecture
 
