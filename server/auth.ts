@@ -31,6 +31,12 @@ async function comparePasswords(supplied: string, stored: string): Promise<boole
 }
 
 export function setupAuth(app: Express) {
+  // Debug middleware to log all requests to auth routes
+  app.use('/api', (req, res, next) => {
+    console.log(`Auth middleware: ${req.method} ${req.path}`);
+    next();
+  });
+
   // Session configuration - use memory store for simplicity
   const MemoryStore = createMemoryStore(session);
   const sessionStore = new MemoryStore({
@@ -136,6 +142,7 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
+    console.log("Login request received:", req.method, req.path, req.body);
     passport.authenticate("local", (err: any, user: SelectUser | false, info: any) => {
       if (err) {
         console.error("Authentication error:", err);

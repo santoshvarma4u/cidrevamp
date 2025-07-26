@@ -40,8 +40,18 @@ export default function AdminAuth() {
       });
 
       if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || 'Login failed');
+        console.error("Login request failed:", res.status, res.statusText);
+        const contentType = res.headers.get('content-type');
+        console.error("Response content-type:", contentType);
+        
+        if (contentType && contentType.includes('application/json')) {
+          const error = await res.json();
+          throw new Error(error.message || 'Login failed');
+        } else {
+          const text = await res.text();
+          console.error("Non-JSON response:", text.substring(0, 200));
+          throw new Error(`Login failed: ${res.status} ${res.statusText}`);
+        }
       }
 
       return res.json();
