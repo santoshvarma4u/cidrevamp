@@ -37,6 +37,7 @@ export default function AdminPhotos() {
 
   const { data: photos = [], isLoading } = useQuery<Photo[]>({
     queryKey: ["/api/photos"],
+    queryFn: () => fetch('/api/photos', { credentials: 'include' }).then(res => res.json()),
   });
 
   const createPhotoMutation = useMutation({

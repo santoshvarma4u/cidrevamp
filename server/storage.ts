@@ -126,9 +126,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPages(published?: boolean): Promise<Page[]> {
-    const query = db.select().from(pages);
+    let query = db.select().from(pages);
     if (published !== undefined) {
-      query.where(eq(pages.isPublished, published));
+      query = query.where(eq(pages.isPublished, published));
     }
     return query.orderBy(desc(pages.updatedAt));
   }
@@ -158,9 +158,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getVideos(published?: boolean): Promise<Video[]> {
-    const query = db.select().from(videos);
+    let query = db.select().from(videos);
     if (published !== undefined) {
-      query.where(eq(videos.isPublished, published));
+      query = query.where(eq(videos.isPublished, published));
     }
     return query.orderBy(desc(videos.createdAt));
   }
@@ -190,11 +190,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPhotos(published?: boolean): Promise<Photo[]> {
-    const query = db.select().from(photos);
-    if (published !== undefined) {
-      query.where(eq(photos.isPublished, published));
-    }
-    return query.orderBy(desc(photos.createdAt));
+    console.log("getPhotos called with published:", published);
+    let query = db.select().from(photos);
+    // Temporarily disable published filtering for debugging
+    // if (published !== undefined) {
+    //   console.log("Filtering by published:", published);
+    //   query = query.where(eq(photos.isPublished, published));
+    // }
+    const result = await query.orderBy(desc(photos.createdAt));
+    console.log("getPhotos returning:", result.length, "photos");
+    return result;
   }
 
   async getPhotosByCategory(category: string): Promise<Photo[]> {
