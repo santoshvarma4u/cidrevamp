@@ -21,6 +21,7 @@ import AdminDashboard from "@/pages/admin/dashboard";
 import AdminPages from "@/pages/admin/content/pages";
 import AdminVideos from "@/pages/admin/content/videos";
 import AdminPhotos from "@/pages/admin/content/photos";
+import AdminNews from "@/pages/admin/content/news";
 import AdminComplaints from "@/pages/admin/complaints/list";
 
 import queryClient from "@/lib/queryClient";
@@ -61,6 +62,7 @@ function Router() {
           <Route path="/admin/content/pages" component={AdminPages} />
           <Route path="/admin/content/videos" component={AdminVideos} />
           <Route path="/admin/content/photos" component={AdminPhotos} />
+          <Route path="/admin/content/news" component={AdminNews} />
           <Route path="/admin/complaints" component={AdminComplaints} />
         </>
       )}

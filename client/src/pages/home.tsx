@@ -194,7 +194,7 @@ export default function Home() {
                   <div className="flex-shrink-0">
                     <div className="w-28 h-32 md:w-32 md:h-36 rounded-lg overflow-hidden bg-gray-100">
                       <img
-                        src="/attached_assets/adgpImage_1753520299812.png"
+                        src="/uploads/adgp-photo.png"
                         alt="Ms. Charu Sinha, IPS"
                         className="w-full h-full object-cover"
                       />
@@ -239,26 +239,20 @@ export default function Home() {
                 
                 {/* News Content */}
                 <div className="p-4">
-                  <AutoScrollNews 
-                    newsItems={[
-                      {
-                        id: 1,
-                        content: `They use an alphanumeric or Special Characters Complicated Password for all their online accounts that is difficult to crack via fraud tools online. Password he said must be Changed Once In Three Months and one should never use common passwords which is a common mistake committed by many people. While speaking about vulnerability to cybercrime he mentioned the various steps taken by Telangana State Police to combat CyberCrime.`,
-                        borderColor: "border-orange-400"
-                      },
-                      {
-                        id: 2,
-                        content: `Telangana State Police have 4 exclusive CYBERCRIME Police Stations. One CID training 3 with one each in Hyderabad, Cyberabad, Rachakonda.`,
-                        borderColor: "border-blue-400"
-                      },
-                      {
-                        id: 3,
-                        content: `An exclusive T4C Telangana Cyber Coordination Centre is established in line with of MHA. www.cybercrime.gov.in is an exclusive website for reporting cybercrime. 1930 is a toll free number for reporting Cyber financial fraud.`,
-                        borderColor: "border-green-400"
-                      }
-                    ]}
-                    scrollInterval={4000}
-                  />
+                  {latestNews.length > 0 ? (
+                    <AutoScrollNews 
+                      newsItems={latestNews.map((newsItem, index) => ({
+                        id: newsItem.id,
+                        content: newsItem.excerpt || newsItem.content.substring(0, 300) + "...",
+                        borderColor: index % 3 === 0 ? "border-orange-400" : index % 3 === 1 ? "border-blue-400" : "border-green-400"
+                      }))}
+                      scrollInterval={4000}
+                    />
+                  ) : (
+                    <div className="text-center text-gray-500 py-8">
+                      <p>No news articles available at the moment.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

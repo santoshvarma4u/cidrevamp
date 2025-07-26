@@ -353,7 +353,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin News
-  app.post('/api/admin/news', requireAdmin, async (req: any, res) => {
+  app.post('/api/news', requireAdmin, async (req: any, res) => {
     try {
       const validatedData = insertNewsSchema.parse({
         ...req.body,
@@ -367,6 +367,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       console.error("Error creating news:", error);
       res.status(500).json({ message: "Failed to create news" });
+    }
+  });
+
+  app.patch('/api/news/:id', requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertNewsSchema.partial().parse(req.body);
+      const news = await storage.updateNews(id, validatedData);
+      res.json(news);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating news:", error);
+      res.status(500).json({ message: "Failed to update news" });
+    }
+  });
+
+  app.delete('/api/news/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteNews(id);
+      res.json({ message: "News deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting news:", error);
+      res.status(500).json({ message: "Failed to delete news" });
     }
   });
 

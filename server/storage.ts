@@ -256,41 +256,11 @@ export class DatabaseStorage implements IStorage {
     return query.orderBy(desc(complaints.createdAt));
   }
 
-  // Video operations
-  async createVideo(video: InsertVideo): Promise<Video> {
-    const [newVideo] = await db.insert(videos).values(video).returning();
-    return newVideo;
-  }
 
-  async updateVideo(id: number, videoData: Partial<InsertVideo>): Promise<Video> {
-    const [updatedVideo] = await db
-      .update(videos)
-      .set({ ...videoData, updatedAt: new Date() })
-      .where(eq(videos.id, id))
-      .returning();
-    return updatedVideo;
-  }
-
-  async deleteVideo(id: number): Promise<void> {
-    await db.delete(videos).where(eq(videos.id, id));
-  }
-
-  async getVideo(id: number): Promise<Video | undefined> {
-    const [video] = await db.select().from(videos).where(eq(videos.id, id));
-    return video;
-  }
-
-  async getVideos(published?: boolean): Promise<Video[]> {
-    let query = db.select().from(videos);
-    if (published !== undefined) {
-      query = query.where(eq(videos.isPublished, published));
-    }
-    return query.orderBy(desc(videos.createdAt));
-  }
 
   // News operations
-  async createNews(news: InsertNews): Promise<News> {
-    const [newNews] = await db.insert(news).values(news).returning();
+  async createNews(newsData: InsertNews): Promise<News> {
+    const [newNews] = await db.insert(news).values(newsData).returning();
     return newNews;
   }
 
@@ -313,9 +283,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllNews(published?: boolean): Promise<News[]> {
-    const query = db.select().from(news);
+    let query = db.select().from(news);
     if (published !== undefined) {
-      query.where(eq(news.isPublished, published));
+      query = query.where(eq(news.isPublished, published));
     }
     return query.orderBy(desc(news.createdAt));
   }
