@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 // Public pages
 import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
+import AdminAuth from "@/pages/admin/auth";
 import GeneralOffences from "@/pages/wings/general-offences";
 import WomenProtection from "@/pages/wings/women-protection";
 import EconomicOffences from "@/pages/wings/economic-offences";
@@ -49,6 +50,9 @@ function Router() {
       <Route path="/citizen/status" component={ComplaintStatus} />
       <Route path="/about/structure" component={OrganizationStructure} />
       <Route path="/media/gallery" component={MediaGallery} />
+
+      {/* Admin auth route (public) */}
+      <Route path="/admin/login" component={AdminAuth} />
 
       {/* Admin routes */}
       {isAuthenticated && isAdmin && (

@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth, requireAuth, requireAdmin } from "./auth";
 import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema } from "@shared/schema";
 import multer from "multer";
 import path from "path";
@@ -28,17 +28,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
+  // Public routes are now handled in setupAuth()
 
   // Public API routes
 
@@ -168,11 +158,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   };
 
   // Admin Pages
-  app.post('/api/admin/pages', isAuthenticated, requireAdmin, async (req: any, res) => {
+  app.post('/api/admin/pages', requireAdmin, async (req: any, res) => {
     try {
       const validatedData = insertPageSchema.parse({
         ...req.body,
-        authorId: req.user.claims.sub
+        authorId: req.user.id
       });
       const page = await storage.createPage(validatedData);
       res.json(page);
@@ -185,7 +175,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/admin/pages/:id', isAuthenticated, requireAdmin, async (req, res) => {
+  app.put('/api/admin/pages/:id', requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertPageSchema.partial().parse(req.body);
@@ -200,7 +190,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete('/api/admin/pages/:id', isAuthenticated, requireAdmin, async (req, res) => {
+  app.delete('/api/admin/pages/:id', requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deletePage(id);
@@ -212,7 +202,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin Videos
-  app.post('/api/admin/videos', isAuthenticated, requireAdmin, upload.single('video'), async (req: any, res) => {
+  app.post('/api/admin/videos', requireAdmin, upload.single('video'), async (req: any, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: "Video file is required" });
@@ -222,7 +212,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         fileName: req.file.filename,
         filePath: req.file.path,
-        uploadedBy: req.user.claims.sub
+        uploadedBy: req.user.id
       });
       
       const video = await storage.createVideo(validatedData);
@@ -236,7 +226,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/admin/videos/:id', isAuthenticated, requireAdmin, async (req, res) => {
+  app.put('/api/admin/videos/:id', requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertVideoSchema.partial().parse(req.body);
@@ -252,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin Photos
-  app.post('/api/admin/photos', isAuthenticated, requireAdmin, upload.single('photo'), async (req: any, res) => {
+  app.post('/api/admin/photos', requireAdmin, upload.single('photo'), async (req: any, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: "Photo file is required" });
@@ -262,7 +252,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...req.body,
         fileName: req.file.filename,
         filePath: req.file.path,
-        uploadedBy: req.user.claims.sub
+        uploadedBy: req.user.id
       });
       
       const photo = await storage.createPhoto(validatedData);
@@ -277,7 +267,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin Complaints
-  app.get('/api/admin/complaints', isAuthenticated, requireAdmin, async (req, res) => {
+  app.get('/api/admin/complaints', requireAdmin, async (req, res) => {
     try {
       const status = req.query.status as string;
       const complaints = await storage.getComplaints(status);
@@ -288,12 +278,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/admin/complaints/:id', isAuthenticated, requireAdmin, async (req: any, res) => {
+  app.put('/api/admin/complaints/:id', requireAdmin, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
       const updateData = {
         ...req.body,
-        assignedTo: req.body.assignedTo || req.user.claims.sub
+        assignedTo: req.body.assignedTo || req.user.id
       };
       const complaint = await storage.updateComplaint(id, updateData);
       res.json(complaint);
@@ -304,11 +294,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin News
-  app.post('/api/admin/news', isAuthenticated, requireAdmin, async (req: any, res) => {
+  app.post('/api/admin/news', requireAdmin, async (req: any, res) => {
     try {
       const validatedData = insertNewsSchema.parse({
         ...req.body,
-        authorId: req.user.claims.sub
+        authorId: req.user.id
       });
       const news = await storage.createNews(validatedData);
       res.json(news);
