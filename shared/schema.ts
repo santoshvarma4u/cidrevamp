@@ -256,7 +256,9 @@ export const insertComplaintSchema = createInsertSchema(complaints).omit({
   updatedAt: true,
 });
 
-export const insertNewsSchema = createInsertSchema(news).omit({
+export const insertNewsSchema = createInsertSchema(news, {
+  publishedAt: z.string().datetime().nullable().transform((val) => val ? new Date(val) : null),
+}).omit({
   id: true,
   createdAt: true,
   updatedAt: true,

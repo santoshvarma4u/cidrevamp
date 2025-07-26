@@ -355,25 +355,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin News
   app.post('/api/news', requireAdmin, async (req: any, res) => {
     try {
-      console.log("Raw request body:", req.body);
-      
-      // Handle date conversion properly
-      const processedBody = {
+      const validatedData = insertNewsSchema.parse({
         ...req.body,
-        publishedAt: req.body.publishedAt ? new Date(req.body.publishedAt) : null,
         authorId: req.user.id
-      };
-      
-      console.log("Processed body:", processedBody);
-      
-      const validatedData = insertNewsSchema.parse(processedBody);
-      console.log("Validated data:", validatedData);
-      
+      });
       const news = await storage.createNews(validatedData);
       res.json(news);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        console.error("Validation errors:", error.errors);
         return res.status(400).json({ message: "Invalid data", errors: error.errors });
       }
       console.error("Error creating news:", error);
