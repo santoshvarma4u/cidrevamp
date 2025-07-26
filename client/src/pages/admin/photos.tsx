@@ -188,6 +188,7 @@ export default function AdminPhotos() {
   };
 
   const handleEdit = (photo: Photo) => {
+    console.log("Edit button clicked for photo:", photo);
     setEditingPhoto(photo);
     setFormData({
       title: photo.title,
@@ -196,6 +197,7 @@ export default function AdminPhotos() {
       isPublished: photo.isPublished || false,
     });
     setIsDialogOpen(true);
+    console.log("Dialog should open now");
   };
 
   const handleDelete = (id: number) => {
