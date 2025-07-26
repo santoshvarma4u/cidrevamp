@@ -69,8 +69,10 @@ export default function AdminNews() {
         authorId: "admin", // In a real app, get from auth context
         publishedAt: data.isPublished ? new Date() : null,
       };
-      const response = await apiRequest("POST", "/api/news", payload);
-      return response.json();
+      return await apiRequest("/api/news", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/news"] });
@@ -97,8 +99,10 @@ export default function AdminNews() {
         ...data,
         publishedAt: data.isPublished ? new Date() : null,
       };
-      const response = await apiRequest("PATCH", `/api/news/${editingNews.id}`, payload);
-      return response.json();
+      return await apiRequest(`/api/news/${editingNews.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/news"] });
@@ -121,7 +125,9 @@ export default function AdminNews() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/news/${id}`);
+      return await apiRequest(`/api/news/${id}`, {
+        method: "DELETE",
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/news"] });
@@ -154,8 +160,8 @@ export default function AdminNews() {
       content: news.content,
       excerpt: news.excerpt || "",
       category: news.category || "general",
-      isPublished: news.isPublished,
-      isPinned: news.isPinned,
+      isPublished: Boolean(news.isPublished),
+      isPinned: Boolean(news.isPinned),
     });
     setIsDialogOpen(true);
   };
@@ -329,7 +335,7 @@ export default function AdminNews() {
                       )}
                       <span>•</span>
                       <span>
-                        {new Date(news.createdAt).toLocaleDateString()}
+                        {news.createdAt ? new Date(news.createdAt).toLocaleDateString() : 'No date'}
                       </span>
                     </div>
                   </div>
