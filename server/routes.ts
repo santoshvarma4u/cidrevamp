@@ -260,6 +260,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.put('/api/admin/photos/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertPhotoSchema.partial().parse(req.body);
+      const photo = await storage.updatePhoto(id, validatedData);
+      res.json(photo);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating photo:", error);
+      res.status(500).json({ message: "Failed to update photo" });
+    }
+  });
+
+  app.delete('/api/admin/photos/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deletePhoto(id);
+      res.json({ message: "Photo deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting photo:", error);
+      res.status(500).json({ message: "Failed to delete photo" });
+    }
+  });
+
   // Admin Complaints
   app.get('/api/admin/complaints', requireAdmin, async (req, res) => {
     try {

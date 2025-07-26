@@ -51,21 +51,21 @@ export default function Header() {
       icon: ChartLine,
     },
     {
-      title: "Cyber Crimes Wing", 
+      title: "Cyber Crimes Wing",
       description: "IT Act violations, cyber security",
       href: "/wings/cyber-crimes",
       icon: Monitor,
     },
     {
       title: "Women & Child Protection",
-      description: "Women safety, SHE teams, anti-trafficking", 
+      description: "Women safety, SHE teams, anti-trafficking",
       href: "/wings/women-protection",
       icon: Heart,
     },
     {
       title: "General Offences Wing",
       description: "Criminal investigations, murder cases",
-      href: "/wings/general-offences", 
+      href: "/wings/general-offences",
       icon: Gavel,
     },
     {
@@ -110,9 +110,9 @@ export default function Header() {
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <a 
-                href="https://twitter.com/cidtelangana" 
-                target="_blank" 
+              <a
+                href="https://twitter.com/cidtelangana"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-blue-300 hidden md:inline-flex items-center"
               >
@@ -135,16 +135,20 @@ export default function Header() {
               <Shield className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Crime Investigation Department</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Crime Investigation Department
+              </h1>
               <p className="text-gray-600">Telangana State Police</p>
-              <p className="text-sm text-gray-500">3rd Floor, DGP Office, Lakadikapul, Hyderabad-004</p>
+              <p className="text-sm text-gray-500">
+                3rd Floor, DGP Office, Lakadikapul, Hyderabad-004
+              </p>
             </div>
           </Link>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button 
+            <Button
               className="bg-red-600 text-white hover:bg-red-700"
-              onClick={() => window.location.href = 'tel:100'}
+              onClick={() => (window.location.href = "tel:100")}
             >
               <TriangleAlert className="mr-2 h-4 w-4" />
               Emergency
@@ -155,25 +159,30 @@ export default function Header() {
                 Lodge Complaint
               </Button>
             </Link>
-            
+
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    className="flex items-center space-x-2"
+                  >
                     <User className="h-4 w-4" />
                     <span>{user.firstName || user.email}</span>
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {user.role === 'admin' || user.role === 'super_admin' ? (
-                    <DropdownMenuItem onClick={() => window.location.href = '/admin'}>
+                  {user.role === "admin" || user.role === "super_admin" ? (
+                    <DropdownMenuItem
+                      onClick={() => (window.location.href = "/admin")}
+                    >
                       <Settings className="mr-2 h-4 w-4" />
                       Admin Panel
                     </DropdownMenuItem>
                   ) : null}
-                  <DropdownMenuItem 
-                    onClick={() => window.location.href = '/api/logout'}
+                  <DropdownMenuItem
+                    onClick={() => (window.location.href = "/api/logout")}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout
@@ -181,9 +190,9 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button 
+              <Button
                 variant="outline"
-                onClick={() => window.location.href = '/api/login'}
+                onClick={() => (window.location.href = "/admin/login")}
               >
                 <User className="mr-2 h-4 w-4" />
                 Login
@@ -201,23 +210,25 @@ export default function Header() {
             <SheetContent side="right" className="w-80">
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     className="w-full justify-start"
                     onClick={() => {
-                      window.location.href = '/';
+                      window.location.href = "/";
                       setIsMobileMenuOpen(false);
                     }}
                   >
                     Home
                   </Button>
-                  
+
                   <div className="space-y-1">
-                    <p className="font-medium text-sm text-gray-500 px-3">About CID</p>
+                    <p className="font-medium text-sm text-gray-500 px-3">
+                      About CID
+                    </p>
                     {aboutLinks.map((link) => (
-                      <Button 
+                      <Button
                         key={link.href}
-                        variant="ghost" 
+                        variant="ghost"
                         className="w-full justify-start text-sm pl-6"
                         onClick={() => {
                           window.location.href = link.href;
@@ -230,11 +241,13 @@ export default function Header() {
                   </div>
 
                   <div className="space-y-1">
-                    <p className="font-medium text-sm text-gray-500 px-3">Specialized Wings</p>
+                    <p className="font-medium text-sm text-gray-500 px-3">
+                      Specialized Wings
+                    </p>
                     {specializedWings.map((wing) => (
-                      <Button 
+                      <Button
                         key={wing.href}
-                        variant="ghost" 
+                        variant="ghost"
                         className="w-full justify-start text-sm pl-6"
                         onClick={() => {
                           window.location.href = wing.href;
@@ -248,11 +261,13 @@ export default function Header() {
                   </div>
 
                   <div className="space-y-1">
-                    <p className="font-medium text-sm text-gray-500 px-3">Citizen Services</p>
+                    <p className="font-medium text-sm text-gray-500 px-3">
+                      Citizen Services
+                    </p>
                     {citizenServices.map((service) => (
-                      <Button 
+                      <Button
                         key={service.href}
-                        variant="ghost" 
+                        variant="ghost"
                         className="w-full justify-start text-sm pl-6"
                         onClick={() => {
                           window.location.href = service.href;
@@ -264,11 +279,11 @@ export default function Header() {
                     ))}
                   </div>
 
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     className="w-full justify-start"
                     onClick={() => {
-                      window.location.href = '/media/gallery';
+                      window.location.href = "/media/gallery";
                       setIsMobileMenuOpen(false);
                     }}
                   >
@@ -287,9 +302,9 @@ export default function Header() {
           <NavigationMenu className="max-w-full">
             <NavigationMenuList className="space-x-8 py-4">
               <NavigationMenuItem>
-                <NavigationMenuLink 
+                <NavigationMenuLink
                   className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
-                  onClick={() => window.location.href = '/'}
+                  onClick={() => (window.location.href = "/")}
                 >
                   Home
                 </NavigationMenuLink>
@@ -302,10 +317,10 @@ export default function Header() {
                 <NavigationMenuContent>
                   <div className="w-80 p-4">
                     {aboutLinks.map((link) => (
-                      <NavigationMenuLink 
+                      <NavigationMenuLink
                         key={link.href}
                         className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
-                        onClick={() => window.location.href = link.href}
+                        onClick={() => (window.location.href = link.href)}
                       >
                         {link.title}
                       </NavigationMenuLink>
@@ -321,10 +336,10 @@ export default function Header() {
                 <NavigationMenuContent>
                   <div className="w-96 p-4">
                     {specializedWings.map((wing) => (
-                      <NavigationMenuLink 
+                      <NavigationMenuLink
                         key={wing.href}
                         className="flex items-start space-x-3 px-4 py-3 hover:bg-gray-100 rounded transition group cursor-pointer"
-                        onClick={() => window.location.href = wing.href}
+                        onClick={() => (window.location.href = wing.href)}
                       >
                         <wing.icon className="h-5 w-5 text-gray-600 mt-0.5" />
                         <div>
@@ -348,10 +363,10 @@ export default function Header() {
                 <NavigationMenuContent>
                   <div className="w-80 p-4">
                     {citizenServices.map((service) => (
-                      <NavigationMenuLink 
+                      <NavigationMenuLink
                         key={service.href}
                         className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
-                        onClick={() => window.location.href = service.href}
+                        onClick={() => (window.location.href = service.href)}
                       >
                         {service.title}
                       </NavigationMenuLink>
@@ -361,18 +376,18 @@ export default function Header() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuLink 
+                <NavigationMenuLink
                   className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
-                  onClick={() => window.location.href = '/public-awareness'}
+                  onClick={() => (window.location.href = "/public-awareness")}
                 >
                   Public Awareness
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuLink 
+                <NavigationMenuLink
                   className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
-                  onClick={() => window.location.href = '/media/gallery'}
+                  onClick={() => (window.location.href = "/media/gallery")}
                 >
                   Media Center
                 </NavigationMenuLink>

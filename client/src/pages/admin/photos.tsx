@@ -6,84 +6,73 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import FileUpload from "@/components/admin/file-upload";
-import PhotoGallery from "@/components/common/photo-gallery";
-import {
-  Image,
-  Plus,
-  Edit,
-  Trash2,
-  Search,
-  Filter,
-  Calendar,
-  Folder,
-  Upload,
-} from "lucide-react";
+import { Image, Plus, Edit, Trash2, Upload } from "lucide-react";
+import type { Photo } from "@shared/schema";
 
-const photoSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
-  imageUrl: z.string().url("Valid image URL is required"),
-  thumbnailUrl: z.string().url().optional(),
-  categoryId: z.number().optional(),
-  isPublished: z.boolean().default(false),
-});
-
-type PhotoFormData = z.infer<typeof photoSchema>;
+interface PhotoFormData {
+  title: string;
+  description: string;
+  category: string;
+  isPublished: boolean;
+  photo?: File;
+}
 
 export default function AdminPhotos() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingPhoto, setEditingPhoto] = useState<any>(null);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [editingPhoto, setEditingPhoto] = useState<Photo | null>(null);
+  const [formData, setFormData] = useState<PhotoFormData>({
+    title: "",
+    description: "",
+    category: "operations",
+    isPublished: false,
+  });
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: photos, isLoading } = useQuery({
+  const { data: photos = [], isLoading } = useQuery<Photo[]>({
     queryKey: ["/api/photos"],
-  });
-
-  const { data: categories } = useQuery({
-    queryKey: ["/api/photo-categories"],
-  });
-
-  const form = useForm<PhotoFormData>({
-    resolver: zodResolver(photoSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      imageUrl: "",
-      thumbnailUrl: "",
-      isPublished: false,
-    },
   });
 
   const createPhotoMutation = useMutation({
     mutationFn: async (data: PhotoFormData) => {
-      const response = await apiRequest("POST", "/api/photos", data);
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', data.title);
+      formDataToSend.append('description', data.description || '');
+      formDataToSend.append('category', data.category);
+      formDataToSend.append('isPublished', data.isPublished.toString());
+      
+      if (data.photo) {
+        formDataToSend.append('photo', data.photo);
+      }
+
+      const response = await fetch('/api/admin/photos', {
+        method: 'POST',
+        credentials: 'include',
+        body: formDataToSend,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to create photo');
+      }
+
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/photos"] });
-      toast({ title: "Photo added successfully" });
+      toast({ title: "Photo uploaded successfully" });
       setIsDialogOpen(false);
-      form.reset();
+      resetForm();
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
-        title: "Error adding photo",
+        title: "Error uploading photo",
         description: error.message,
         variant: "destructive",
       });
@@ -92,17 +81,29 @@ export default function AdminPhotos() {
 
   const updatePhotoMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<PhotoFormData> }) => {
-      const response = await apiRequest("PUT", `/api/photos/${id}`, data);
+      const response = await fetch(`/api/admin/photos/${id}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to update photo');
+      }
+
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/photos"] });
       toast({ title: "Photo updated successfully" });
       setIsDialogOpen(false);
-      setEditingPhoto(null);
-      form.reset();
+      resetForm();
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error updating photo",
         description: error.message,
@@ -113,13 +114,21 @@ export default function AdminPhotos() {
 
   const deletePhotoMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/photos/${id}`);
+      const response = await fetch(`/api/admin/photos/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to delete photo');
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/photos"] });
       toast({ title: "Photo deleted successfully" });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error deleting photo",
         description: error.message,
@@ -128,23 +137,58 @@ export default function AdminPhotos() {
     },
   });
 
-  const handleSubmit = (data: PhotoFormData) => {
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      description: "",
+      category: "operations",
+      isPublished: false,
+    });
+    setEditingPhoto(null);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.title.trim()) {
+      toast({
+        title: "Error",
+        description: "Title is required",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (editingPhoto) {
-      updatePhotoMutation.mutate({ id: editingPhoto.id, data });
+      updatePhotoMutation.mutate({ 
+        id: editingPhoto.id, 
+        data: {
+          title: formData.title,
+          description: formData.description,
+          category: formData.category,
+          isPublished: formData.isPublished,
+        }
+      });
     } else {
-      createPhotoMutation.mutate(data);
+      if (!formData.photo) {
+        toast({
+          title: "Error",
+          description: "Photo file is required",
+          variant: "destructive",
+        });
+        return;
+      }
+      createPhotoMutation.mutate(formData);
     }
   };
 
-  const handleEdit = (photo: any) => {
+  const handleEdit = (photo: Photo) => {
     setEditingPhoto(photo);
-    form.reset({
-      title: photo.title || "",
+    setFormData({
+      title: photo.title,
       description: photo.description || "",
-      imageUrl: photo.imageUrl,
-      thumbnailUrl: photo.thumbnailUrl || "",
-      categoryId: photo.categoryId || undefined,
-      isPublished: photo.isPublished,
+      category: photo.category || "operations",
+      isPublished: photo.isPublished || false,
     });
     setIsDialogOpen(true);
   };
@@ -155,312 +199,220 @@ export default function AdminPhotos() {
     }
   };
 
-  const handleImageUpload = (url: string) => {
-    form.setValue("imageUrl", url);
-    // Generate thumbnail URL (in real app, this would be handled by the server)
-    form.setValue("thumbnailUrl", url);
-  };
-
-  const openNewDialog = () => {
-    setEditingPhoto(null);
-    form.reset();
-    setIsDialogOpen(true);
-  };
-
-  const filteredPhotos = photos?.filter((photo: any) => {
-    const matchesSearch = photo.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         photo.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "all" ||
-                         (statusFilter === "published" && photo.isPublished) ||
-                         (statusFilter === "draft" && !photo.isPublished);
-    const matchesCategory = categoryFilter === "all" || photo.categoryId?.toString() === categoryFilter;
-    return matchesSearch && matchesStatus && matchesCategory;
+  const filteredPhotos = photos.filter(photo => {
+    const matchesSearch = photo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (photo.description && photo.description.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory = categoryFilter === "all" || photo.category === categoryFilter;
+    return matchesSearch && matchesCategory;
   });
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Photo Management</h1>
-          <p className="text-gray-600">Manage photo galleries and image collections</p>
+          <h1 className="text-3xl font-bold text-gray-900">Photo Management</h1>
+          <p className="text-gray-600 mt-1">Manage photo gallery for the website</p>
         </div>
-        <div className="flex space-x-2">
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={openNewDialog}>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Photos
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>
-                  {editingPhoto ? "Edit Photo" : "Add New Photo"}
-                </DialogTitle>
-              </DialogHeader>
-              
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-                  <div>
-                    <Label>Image File</Label>
-                    <FileUpload
-                      onUpload={handleImageUpload}
-                      accept={{ 'image/*': ['.jpeg', '.jpg', '.png', '.gif'] }}
-                      className="mt-2"
-                    />
-                    {form.watch("imageUrl") && (
-                      <div className="mt-4">
-                        <img
-                          src={form.watch("imageUrl")}
-                          alt="Preview"
-                          className="w-full max-w-md h-48 object-cover rounded-lg"
-                        />
-                      </div>
-                    )}
-                  </div>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button onClick={resetForm} className="bg-gov-blue hover:bg-gov-dark-blue">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Photo
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>
+                {editingPhoto ? "Edit Photo" : "Add New Photo"}
+              </DialogTitle>
+            </DialogHeader>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="title">Title *</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  required
+                />
+              </div>
 
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Title</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter photo title..." {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+              <div>
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="category">Category</Label>
+                <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="operations">Operations</SelectItem>
+                    <SelectItem value="events">Events</SelectItem>
+                    <SelectItem value="awards">Awards</SelectItem>
+                    <SelectItem value="training">Training</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {!editingPhoto && (
+                <div>
+                  <Label htmlFor="photo">Photo File *</Label>
+                  <Input
+                    id="photo"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setFormData({ ...formData, photo: file });
+                      }
+                    }}
+                    required
                   />
+                </div>
+              )}
 
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="Enter photo description..." 
-                            rows={3}
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="published"
+                  checked={formData.isPublished}
+                  onCheckedChange={(checked) => setFormData({ ...formData, isPublished: checked })}
+                />
+                <Label htmlFor="published">Published</Label>
+              </div>
 
-                  <FormField
-                    control={form.control}
-                    name="categoryId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Category</FormLabel>
-                        <Select 
-                          onValueChange={(value) => field.onChange(value ? parseInt(value) : undefined)} 
-                          defaultValue={field.value?.toString()}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select category" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {categories?.map((category: any) => (
-                              <SelectItem key={category.id} value={category.id.toString()}>
-                                {category.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="isPublished"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base">Published</FormLabel>
-                          <div className="text-sm text-gray-600">
-                            Make this photo visible to the public
-                          </div>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="flex justify-end space-x-4">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      onClick={() => setIsDialogOpen(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button 
-                      type="submit" 
-                      disabled={createPhotoMutation.isPending || updatePhotoMutation.isPending}
-                    >
-                      {createPhotoMutation.isPending || updatePhotoMutation.isPending ? "Saving..." : "Save Photo"}
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
-        </div>
+              <div className="flex justify-end space-x-2">
+                <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  type="submit" 
+                  disabled={createPhotoMutation.isPending || updatePhotoMutation.isPending}
+                  className="bg-gov-blue hover:bg-gov-dark-blue"
+                >
+                  {createPhotoMutation.isPending || updatePhotoMutation.isPending ? (
+                    "Saving..."
+                  ) : editingPhoto ? (
+                    "Update Photo"
+                  ) : (
+                    "Upload Photo"
+                  )}
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Filters */}
-      <Card className="mb-6">
+      <Card>
         <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex space-x-4">
             <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search photos..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+              <Input
+                placeholder="Search photos..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full md:w-48">
+              <SelectTrigger className="w-48">
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                {categories?.map((category: any) => (
-                  <SelectItem key={category.id} value={category.id.toString()}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Filter by status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Photos</SelectItem>
-                <SelectItem value="published">Published</SelectItem>
-                <SelectItem value="draft">Draft</SelectItem>
+                <SelectItem value="operations">Operations</SelectItem>
+                <SelectItem value="events">Events</SelectItem>
+                <SelectItem value="awards">Awards</SelectItem>
+                <SelectItem value="training">Training</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </CardContent>
       </Card>
 
-      {/* Photos Grid/List */}
+      {/* Photos Grid */}
       {isLoading ? (
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[...Array(8)].map((_, i) => (
-            <Card key={i} className="animate-pulse">
-              <div className="aspect-square bg-gray-200" />
+        <div className="text-center py-8">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gov-blue mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading photos...</p>
+        </div>
+      ) : filteredPhotos.length === 0 ? (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <Image className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Photos Found</h3>
+            <p className="text-gray-600 mb-4">
+              {photos.length === 0 ? "Get started by uploading your first photo." : "No photos match your current filters."}
+            </p>
+            {photos.length === 0 && (
+              <Button onClick={() => setIsDialogOpen(true)} className="bg-gov-blue hover:bg-gov-dark-blue">
+                <Upload className="h-4 w-4 mr-2" />
+                Upload First Photo
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredPhotos.map((photo) => (
+            <Card key={photo.id} className="overflow-hidden">
+              <div className="aspect-video bg-gray-200 relative">
+                <img
+                  src={`/uploads/${photo.fileName}`}
+                  alt={photo.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
+                  }}
+                />
+                <div className="absolute top-2 right-2 flex space-x-1">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleEdit(photo)}
+                    className="bg-white/90 hover:bg-white"
+                  >
+                    <Edit className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleDelete(photo.id)}
+                    className="bg-white/90 hover:bg-white text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
               <CardContent className="p-4">
-                <div className="h-4 bg-gray-200 rounded mb-2" />
-                <div className="h-3 bg-gray-200 rounded w-2/3" />
+                <h3 className="font-medium text-gray-900 mb-1">{photo.title}</h3>
+                {photo.description && (
+                  <p className="text-sm text-gray-600 mb-2 line-clamp-2">{photo.description}</p>
+                )}
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <span className="capitalize">{photo.category}</span>
+                  <span className={`px-2 py-1 rounded-full ${
+                    photo.isPublished 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-gray-100 text-gray-800'
+                  }`}>
+                    {photo.isPublished ? 'Published' : 'Draft'}
+                  </span>
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
-      ) : filteredPhotos && filteredPhotos.length > 0 ? (
-        <div className="space-y-6">
-          {/* Admin Actions for each photo */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredPhotos.map((photo: any) => (
-              <Card key={photo.id} className="group hover:shadow-lg transition-shadow">
-                <div className="relative aspect-square overflow-hidden">
-                  <img
-                    src={photo.thumbnailUrl || photo.imageUrl}
-                    alt={photo.title || "Photo"}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute top-2 right-2">
-                    <Badge variant={photo.isPublished ? "default" : "secondary"}>
-                      {photo.isPublished ? "Published" : "Draft"}
-                    </Badge>
-                  </div>
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center space-x-2">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => handleEdit(photo)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(photo.id)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-                
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-gray-900 mb-1 line-clamp-1">
-                    {photo.title || "Untitled"}
-                  </h3>
-                  
-                  {photo.description && (
-                    <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-                      {photo.description}
-                    </p>
-                  )}
-
-                  <div className="flex items-center justify-between text-xs text-gray-500">
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="h-3 w-3" />
-                      <span>{new Date(photo.createdAt).toLocaleDateString()}</span>
-                    </div>
-                    {photo.categoryId && (
-                      <div className="flex items-center space-x-1">
-                        <Folder className="h-3 w-3" />
-                        <span>
-                          {categories?.find((cat: any) => cat.id === photo.categoryId)?.name || "Uncategorized"}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <Card>
-          <CardContent className="p-12 text-center">
-            <Image className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Photos Found</h3>
-            <p className="text-gray-600 mb-4">
-              {searchTerm || statusFilter !== "all" || categoryFilter !== "all"
-                ? "No photos match your current filters."
-                : "Start by uploading your first photo."
-              }
-            </p>
-            <Button onClick={openNewDialog}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add First Photo
-            </Button>
-          </CardContent>
-        </Card>
       )}
     </div>
   );
