@@ -64,10 +64,14 @@ export default function AdminNews() {
 
   const createMutation = useMutation({
     mutationFn: async (data: NewsFormData) => {
-      const payload: InsertNews = {
-        ...data,
-        authorId: "admin", // In a real app, get from auth context
-        publishedAt: data.isPublished ? new Date() : null,
+      const payload = {
+        title: data.title,
+        content: data.content,
+        excerpt: data.excerpt,
+        category: data.category,
+        isPublished: data.isPublished,
+        isPinned: data.isPinned,
+        publishedAt: data.isPublished ? new Date().toISOString() : null,
       };
       return await apiRequest("/api/news", {
         method: "POST",
@@ -95,9 +99,14 @@ export default function AdminNews() {
   const updateMutation = useMutation({
     mutationFn: async (data: NewsFormData) => {
       if (!editingNews) throw new Error("No news item selected for editing");
-      const payload: Partial<InsertNews> = {
-        ...data,
-        publishedAt: data.isPublished ? new Date() : null,
+      const payload = {
+        title: data.title,
+        content: data.content,
+        excerpt: data.excerpt,
+        category: data.category,
+        isPublished: data.isPublished,
+        isPinned: data.isPinned,
+        publishedAt: data.isPublished ? new Date().toISOString() : null,
       };
       return await apiRequest(`/api/news/${editingNews.id}`, {
         method: "PATCH",
