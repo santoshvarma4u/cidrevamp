@@ -57,8 +57,11 @@ export default function AdminPhotos() {
         body: formDataToSend,
       });
 
+      console.log("Upload response status:", response.status);
+      
       if (!response.ok) {
         const error = await response.json();
+        console.error("Upload error response:", error);
         throw new Error(error.message || 'Failed to create photo');
       }
 
@@ -71,6 +74,7 @@ export default function AdminPhotos() {
       resetForm();
     },
     onError: (error: Error) => {
+      console.error("Photo upload error:", error);
       toast({
         title: "Error uploading photo",
         description: error.message,
@@ -379,7 +383,11 @@ export default function AdminPhotos() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleEdit(photo)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleEdit(photo);
+                    }}
                     className="bg-white/90 hover:bg-white"
                   >
                     <Edit className="h-3 w-3" />
@@ -387,7 +395,11 @@ export default function AdminPhotos() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleDelete(photo.id)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleDelete(photo.id);
+                    }}
                     className="bg-white/90 hover:bg-white text-red-600 hover:text-red-700"
                   >
                     <Trash2 className="h-3 w-3" />

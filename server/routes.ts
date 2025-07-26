@@ -242,8 +242,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Photo file is required" });
       }
 
+      console.log("Request body:", req.body);
+      console.log("Request file:", req.file);
+      
       const validatedData = insertPhotoSchema.parse({
-        ...req.body,
+        title: req.body.title,
+        description: req.body.description || "",
+        category: req.body.category || "operations",
+        isPublished: req.body.isPublished === 'true',
         fileName: req.file.filename,
         filePath: req.file.path,
         uploadedBy: req.user.id
