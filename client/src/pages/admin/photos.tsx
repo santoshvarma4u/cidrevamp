@@ -391,35 +391,11 @@ export default function AdminPhotos() {
                 />
               </div>
               <CardContent className="p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-medium text-gray-900">{photo.title}</h3>
-                  <div className="flex gap-1 ml-2">
-                    <button
-                      onClick={() => {
-                        console.log("Edit button clicked for photo:", photo.id);
-                        handleEdit(photo);
-                      }}
-                      className="p-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors"
-                      title="Edit photo"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        console.log("Delete button clicked for photo:", photo.id);
-                        handleDelete(photo.id);
-                      }}
-                      className="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
-                      title="Delete photo"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
+                <h3 className="font-medium text-gray-900 mb-2">{photo.title}</h3>
                 {photo.description && (
-                  <p className="text-sm text-gray-600 mb-2 line-clamp-2">{photo.description}</p>
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{photo.description}</p>
                 )}
-                <div className="flex items-center justify-between text-xs text-gray-500">
+                <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
                   <span className="capitalize">{photo.category}</span>
                   <span className={`px-2 py-1 rounded-full ${
                     photo.isPublished 
@@ -428,6 +404,28 @@ export default function AdminPhotos() {
                   }`}>
                     {photo.isPublished ? 'Published' : 'Draft'}
                   </span>
+                </div>
+                <div className="flex gap-2 pt-2 border-t border-gray-100">
+                  <button
+                    onClick={() => {
+                      console.log("Edit button clicked for photo:", photo.id);
+                      handleEdit(photo);
+                    }}
+                    className="flex-1 px-3 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors flex items-center justify-center gap-1"
+                  >
+                    <Edit className="h-4 w-4" />
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => {
+                      console.log("Delete button clicked for photo:", photo.id);
+                      handleDelete(photo.id);
+                    }}
+                    className="flex-1 px-3 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors flex items-center justify-center gap-1"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Delete
+                  </button>
                 </div>
               </CardContent>
             </Card>
