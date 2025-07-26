@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import type { Video, Photo, News } from "@shared/schema";
 import VideoPlayer from "@/components/media/VideoPlayer";
 import PhotoGallery from "@/components/media/PhotoGallery";
+import AutoScrollSlider from "@/components/common/AutoScrollSlider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -275,7 +276,7 @@ export default function Home() {
 
           {latestPhotos.length > 0 ? (
             <>
-              <PhotoGallery photos={latestPhotos} />
+              <AutoScrollSlider photos={latestPhotos} autoScrollInterval={3000} />
               <div className="text-center mt-8">
                 <Link href="/media/gallery">
                   <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
