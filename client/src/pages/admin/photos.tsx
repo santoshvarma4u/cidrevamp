@@ -220,6 +220,12 @@ export default function AdminPhotos() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Photo Management</h1>
           <p className="text-gray-600 mt-1">Manage photo gallery for the website</p>
+          <button 
+            onClick={() => console.log("TEST BUTTON CLICKED")}
+            className="mt-2 px-3 py-1 bg-green-500 text-white rounded text-sm"
+          >
+            Test Button (Click Me)
+          </button>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
@@ -373,8 +379,8 @@ export default function AdminPhotos() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredPhotos.map((photo) => (
-            <Card key={photo.id} className="overflow-hidden relative">
-              <div className="aspect-video bg-gray-200 relative">
+            <Card key={photo.id} className="overflow-hidden">
+              <div className="aspect-video bg-gray-200">
                 <img
                   src={`/uploads/${photo.fileName}`}
                   alt={photo.title}
@@ -383,31 +389,33 @@ export default function AdminPhotos() {
                     (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
                   }}
                 />
-                <div className="absolute top-2 right-2 flex gap-2 z-50">
-                  <button
-                    onClick={() => {
-                      console.log("Edit button clicked for photo:", photo.id);
-                      handleEdit(photo);
-                    }}
-                    className="p-2 bg-white rounded border shadow-lg hover:bg-gray-50 cursor-pointer"
-                    style={{ pointerEvents: 'auto', position: 'relative', zIndex: 100 }}
-                  >
-                    <Edit className="h-4 w-4 text-gray-700" />
-                  </button>
-                  <button
-                    onClick={() => {
-                      console.log("Delete button clicked for photo:", photo.id);
-                      handleDelete(photo.id);
-                    }}
-                    className="p-2 bg-white rounded border shadow-lg hover:bg-red-50 cursor-pointer"
-                    style={{ pointerEvents: 'auto', position: 'relative', zIndex: 100 }}
-                  >
-                    <Trash2 className="h-4 w-4 text-red-600" />
-                  </button>
-                </div>
               </div>
               <CardContent className="p-4">
-                <h3 className="font-medium text-gray-900 mb-1">{photo.title}</h3>
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-medium text-gray-900">{photo.title}</h3>
+                  <div className="flex gap-1 ml-2">
+                    <button
+                      onClick={() => {
+                        console.log("Edit button clicked for photo:", photo.id);
+                        handleEdit(photo);
+                      }}
+                      className="p-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition-colors"
+                      title="Edit photo"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        console.log("Delete button clicked for photo:", photo.id);
+                        handleDelete(photo.id);
+                      }}
+                      className="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors"
+                      title="Delete photo"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
                 {photo.description && (
                   <p className="text-sm text-gray-600 mb-2 line-clamp-2">{photo.description}</p>
                 )}
