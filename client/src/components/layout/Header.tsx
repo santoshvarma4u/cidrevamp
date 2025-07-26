@@ -155,19 +155,6 @@ export default function Header() {
               alt="Telangana State Police" 
               className="w-16 h-16 object-contain mr-4"
             />
-            <Button
-              className="bg-red-600 text-white hover:bg-red-700"
-              onClick={() => (window.location.href = "tel:100")}
-            >
-              <TriangleAlert className="mr-2 h-4 w-4" />
-              Emergency
-            </Button>
-            <Link href="/citizen/complaint">
-              <Button className="bg-blue-600 text-white hover:bg-blue-700">
-                <FileText className="mr-2 h-4 w-4" />
-                Lodge Complaint
-              </Button>
-            </Link>
 
             {isAuthenticated && user ? (
               <DropdownMenu>
