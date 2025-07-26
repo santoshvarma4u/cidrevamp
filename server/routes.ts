@@ -210,7 +210,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const validatedData = insertVideoSchema.parse({
-        ...req.body,
+        title: req.body.title,
+        description: req.body.description || "",
+        category: req.body.category || "news",
+        isPublished: req.body.isPublished === 'true',
         fileName: req.file.filename,
         filePath: req.file.path,
         uploadedBy: req.user.id
