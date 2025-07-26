@@ -222,15 +222,17 @@ export default function Home() {
             {/* Photo Gallery */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-80 flex flex-col">
-                <h3 className="text-2xl font-bold text-blue-800 mb-4 text-center">Latest Photo Gallery</h3>
-                <div className="flex-1">
+                <h3 className="text-xl font-bold text-blue-800 mb-3 text-center">Latest Photo Gallery</h3>
+                <div className="flex-1 overflow-hidden">
                   {latestPhotos.length > 0 ? (
-                    <AutoScrollSlider photos={latestPhotos} />
+                    <div className="h-full">
+                      <AutoScrollSlider photos={latestPhotos} />
+                    </div>
                   ) : (
-                    <div className="text-center py-8 h-full flex items-center justify-center">
+                    <div className="text-center h-full flex items-center justify-center">
                       <div>
-                        <Images className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-500">No photos available</p>
+                        <Images className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+                        <p className="text-gray-500 text-sm">No photos available</p>
                       </div>
                     </div>
                   )}
