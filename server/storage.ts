@@ -190,16 +190,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPhotos(published?: boolean): Promise<Photo[]> {
-    console.log("getPhotos called with published:", published);
     let query = db.select().from(photos);
-    // Temporarily disable published filtering for debugging
-    // if (published !== undefined) {
-    //   console.log("Filtering by published:", published);
-    //   query = query.where(eq(photos.isPublished, published));
-    // }
-    const result = await query.orderBy(desc(photos.createdAt));
-    console.log("getPhotos returning:", result.length, "photos");
-    return result;
+    if (published !== undefined) {
+      query = query.where(eq(photos.isPublished, published));
+    }
+    return query.orderBy(desc(photos.createdAt));
   }
 
   async getPhotosByCategory(category: string): Promise<Photo[]> {

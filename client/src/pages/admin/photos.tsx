@@ -373,8 +373,8 @@ export default function AdminPhotos() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredPhotos.map((photo) => (
-            <Card key={photo.id} className="overflow-hidden">
-              <div className="aspect-video bg-gray-200 relative" style={{ pointerEvents: 'none' }}>
+            <Card key={photo.id} className="overflow-hidden relative">
+              <div className="aspect-video bg-gray-200 relative">
                 <img
                   src={`/uploads/${photo.fileName}`}
                   alt={photo.title}
@@ -383,31 +383,27 @@ export default function AdminPhotos() {
                     (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
                   }}
                 />
-                <div className="absolute top-2 right-2 flex space-x-1 z-10">
-                  <Button
-                    size="sm"
-                    variant="outline"
+                <div className="absolute top-2 right-2 flex gap-2 z-50">
+                  <button
                     onClick={() => {
-                      console.log("Edit button clicked!");
+                      console.log("Edit button clicked for photo:", photo.id);
                       handleEdit(photo);
                     }}
-                    className="bg-white/90 hover:bg-white shadow-md"
-                    style={{ pointerEvents: 'auto' }}
+                    className="p-2 bg-white rounded border shadow-lg hover:bg-gray-50 cursor-pointer"
+                    style={{ pointerEvents: 'auto', position: 'relative', zIndex: 100 }}
                   >
-                    <Edit className="h-3 w-3" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
+                    <Edit className="h-4 w-4 text-gray-700" />
+                  </button>
+                  <button
                     onClick={() => {
-                      console.log("Delete button clicked!");
+                      console.log("Delete button clicked for photo:", photo.id);
                       handleDelete(photo.id);
                     }}
-                    className="bg-white/90 hover:bg-white text-red-600 hover:text-red-700 shadow-md"
-                    style={{ pointerEvents: 'auto' }}
+                    className="p-2 bg-white rounded border shadow-lg hover:bg-red-50 cursor-pointer"
+                    style={{ pointerEvents: 'auto', position: 'relative', zIndex: 100 }}
                   >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
+                    <Trash2 className="h-4 w-4 text-red-600" />
+                  </button>
                 </div>
               </div>
               <CardContent className="p-4">
