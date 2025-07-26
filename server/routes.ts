@@ -121,7 +121,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // News
   app.get('/api/news', async (req, res) => {
     try {
-      const published = req.query.published === 'true';
+      // If published query param is explicitly set, filter by it
+      // Otherwise, return all news (for admin panel)
+      const published = req.query.published ? req.query.published === 'true' : undefined;
       const news = await storage.getAllNews(published);
       res.json(news);
     } catch (error) {
