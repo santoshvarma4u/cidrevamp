@@ -8,6 +8,16 @@ This is a full-stack web application for the Criminal Investigation Department (
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+**January 26, 2025** - Successfully resolved loading spinner issue
+- Fixed authentication flow to not block public pages
+- Updated query client to handle 401 responses gracefully for auth endpoints
+- Created missing VideoPlayer and PhotoGallery components
+- Fixed all nested anchor tag warnings in navigation menu
+- Resolved TypeScript type errors in home and landing pages
+- Application now loads properly for public users
+
 ## System Architecture
 
 ### Frontend Architecture
