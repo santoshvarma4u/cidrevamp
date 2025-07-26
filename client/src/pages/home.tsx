@@ -158,26 +158,24 @@ export default function Home() {
                 </div>
                 
                 {/* Director Info and Message */}
-                <div className="flex-1">
-                  <div className="mb-3">
-                    <h3 className="text-xl font-bold text-white mb-1">Ms. Charu Sinha, IPS</h3>
-                    <p className="text-sm font-semibold text-blue-200 mb-2">
+                <div className="flex-1 overflow-hidden">
+                  <div className="mb-2">
+                    <h3 className="text-lg font-bold text-white mb-1">Ms. Charu Sinha, IPS</h3>
+                    <p className="text-xs font-semibold text-blue-200 mb-2">
                       Addl. Director General of Police, CID, Telangana State.
                     </p>
                   </div>
                   
-                  <div className="text-blue-100 leading-relaxed space-y-2 text-sm">
+                  <div className="text-blue-100 leading-relaxed text-xs">
                     <p>
                       Crime Investigation Department is the premier investigation agency of Telangana State. Our 
-                      endeavour is to provide transparent, impartial, efficient and systematic investigation using high 
-                      end, state of the art equipment with quality forensic support in coordination with national 
-                      and international agencies.
+                      endeavour is to provide transparent, impartial and efficient investigation using state-of-the-art 
+                      equipment with quality forensic support.
                     </p>
                     
-                    <p>
-                      Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and 
-                      mission. Our specialized wings include Economic Offences, General Offences, Child and 
-                      Women Protection, Protection of Civil Rights and Cyber Crimes.
+                    <p className="mt-2">
+                      Our specialized wings include Economic Offences, Cyber Crimes, Women & Child Protection, 
+                      and General Offences to serve justice effectively.
                     </p>
                   </div>
                 </div>
