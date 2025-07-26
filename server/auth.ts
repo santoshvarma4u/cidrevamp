@@ -5,13 +5,13 @@ import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
-import { User, LoginData } from "@shared/schema";
+import { User as SelectUser, LoginData } from "@shared/schema";
 import connectPg from "connect-pg-simple";
 import createMemoryStore from "memorystore";
 
 declare global {
   namespace Express {
-    interface User extends User {}
+    interface User extends SelectUser {}
   }
 }
 
@@ -136,7 +136,7 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local", (err: any, user: User | false, info: any) => {
+    passport.authenticate("local", (err: any, user: SelectUser | false, info: any) => {
       if (err) {
         console.error("Authentication error:", err);
         return res.status(500).json({ message: "Authentication failed" });
@@ -177,7 +177,7 @@ export function setupAuth(app: Express) {
       return res.status(401).json({ message: "Unauthorized" });
     }
     
-    const user = req.user as User;
+    const user = req.user as SelectUser;
     res.json({
       id: user.id,
       username: user.username,
@@ -203,7 +203,7 @@ export function requireAdmin(req: any, res: any, next: any) {
     return res.status(401).json({ message: "Authentication required" });
   }
   
-  const user = req.user as User;
+  const user = req.user as SelectUser;
   
   if (user.role !== 'admin' && user.role !== 'super_admin') {
     return res.status(403).json({ message: "Admin access required" });
