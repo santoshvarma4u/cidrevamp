@@ -30,6 +30,8 @@ Preferred communication style: Simple, everyday language.
 - Slider auto-advances every 3 seconds with manual navigation controls and responsive design
 - **COMPLETED**: Added Director General message and News section before Specialized Wings
 - Features Ms. Charu Sinha IPS profile with mission statement and cybercrime news updates
+- **COMPLETED**: Added Ms. Charu Sinha's official photo and implemented auto-scrolling news
+- Reduced section height and added 4-second auto-scroll with smooth transitions in news panel
 
 ## System Architecture
 

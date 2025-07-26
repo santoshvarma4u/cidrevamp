@@ -5,6 +5,7 @@ import type { Video, Photo, News } from "@shared/schema";
 import VideoPlayer from "@/components/media/VideoPlayer";
 import PhotoGallery from "@/components/media/PhotoGallery";
 import AutoScrollSlider from "@/components/common/AutoScrollSlider";
+import AutoScrollNews from "@/components/common/AutoScrollNews";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -182,18 +183,18 @@ export default function Home() {
       </section>
 
       {/* Director General Message & News */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Director General Message */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl p-8 shadow-lg border-2 border-orange-200">
-                <div className="flex flex-col md:flex-row gap-6">
+              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200">
+                <div className="flex flex-col md:flex-row gap-4">
                   {/* Director Photo */}
                   <div className="flex-shrink-0">
-                    <div className="w-32 h-40 md:w-40 md:h-48 rounded-lg overflow-hidden bg-gray-100">
+                    <div className="w-28 h-32 md:w-32 md:h-36 rounded-lg overflow-hidden bg-gray-100">
                       <img
-                        src="/api/placeholder/160/192"
+                        src="/attached_assets/adgpImage_1753520299812.png"
                         alt="Ms. Charu Sinha, IPS"
                         className="w-full h-full object-cover"
                       />
@@ -209,20 +210,18 @@ export default function Home() {
                       </p>
                     </div>
                     
-                    <div className="text-gray-700 leading-relaxed space-y-3">
+                    <div className="text-gray-700 leading-relaxed space-y-2 text-sm">
                       <p>
                         Crime Investigation Department is the premier investigation agency of Telangana State. Our 
                         endeavour is to provide transparent, impartial, efficient and systematic investigation using high 
                         end, state of the art equipment with quality forensic support in coordination with national 
-                        and international agencies. We follow the principle that 'men may lie but material will not.'
+                        and international agencies.
                       </p>
                       
                       <p>
                         Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and 
                         mission. Our specialized wings include Economic Offences, General Offences, Child and 
-                        Women Protection, Protection of Civil Rights and Cyber Crimes. We welcome any 
-                        feedback from the citizens related to any crime. I wish this website paves way for the 
-                        public awareness about recent crimes and alerts.
+                        Women Protection, Protection of Civil Rights and Cyber Crimes.
                       </p>
                     </div>
                   </div>
@@ -232,49 +231,34 @@ export default function Home() {
 
             {/* News Section */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-blue-200">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-blue-200 h-80">
                 {/* News Header */}
-                <div className="bg-blue-800 text-white px-6 py-4">
-                  <h3 className="text-xl font-bold text-center">News</h3>
+                <div className="bg-blue-800 text-white px-6 py-3">
+                  <h3 className="text-lg font-bold text-center">News</h3>
                 </div>
                 
                 {/* News Content */}
-                <div className="p-6">
-                  <div className="space-y-4 text-sm">
-                    <div className="border-l-4 border-orange-400 pl-4">
-                      <p className="text-gray-700 leading-relaxed">
-                        They use an alphanumeric or Special Characters 
-                        <span className="font-bold"> Complicated Password</span> for all their online 
-                        accounts that is difficult to crack via fraud tools 
-                        online. Password he said must be <span className="font-bold">Changed Once 
-                        In Three Months</span> and one should never use common 
-                        passwords which is a common mistake 
-                        committed by many people. While speaking 
-                        about vulnerability to cybercrime he mentioned 
-                        the various steps taken by Telangana State Police 
-                        to combat CyberCrime.
-                      </p>
-                    </div>
-                    
-                    <div className="border-l-4 border-blue-400 pl-4">
-                      <p className="text-gray-700 leading-relaxed">
-                        Telangana State Police have <span className="font-bold">4 exclusive 
-                        CYBERCRIME</span> Police Stations. One 
-                        <span className="font-bold"> CID</span>training 3 with one each in Hyderabad, 
-                        Cyberabad, Rachakonda.
-                      </p>
-                    </div>
-                    
-                    <div className="border-l-4 border-green-400 pl-4">
-                      <p className="text-gray-700 leading-relaxed">
-                        An exclusive <span className="font-bold">T4C Telangana Cyber 
-                        Coordination Centre</span> is established in line with 
-                        of MHA. <span className="text-blue-600 font-bold">www.cybercrime.gov.in</span> is an exclusive 
-                        website for reporting cybercrime. <span className="font-bold">1930 is a toll 
-                        free number for reporting Cyber financial fraud.</span>
-                      </p>
-                    </div>
-                  </div>
+                <div className="p-4">
+                  <AutoScrollNews 
+                    newsItems={[
+                      {
+                        id: 1,
+                        content: `They use an alphanumeric or Special Characters Complicated Password for all their online accounts that is difficult to crack via fraud tools online. Password he said must be Changed Once In Three Months and one should never use common passwords which is a common mistake committed by many people. While speaking about vulnerability to cybercrime he mentioned the various steps taken by Telangana State Police to combat CyberCrime.`,
+                        borderColor: "border-orange-400"
+                      },
+                      {
+                        id: 2,
+                        content: `Telangana State Police have 4 exclusive CYBERCRIME Police Stations. One CID training 3 with one each in Hyderabad, Cyberabad, Rachakonda.`,
+                        borderColor: "border-blue-400"
+                      },
+                      {
+                        id: 3,
+                        content: `An exclusive T4C Telangana Cyber Coordination Centre is established in line with of MHA. www.cybercrime.gov.in is an exclusive website for reporting cybercrime. 1930 is a toll free number for reporting Cyber financial fraud.`,
+                        borderColor: "border-green-400"
+                      }
+                    ]}
+                    scrollInterval={4000}
+                  />
                 </div>
               </div>
             </div>
