@@ -62,7 +62,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Videos
   app.get('/api/videos', async (req, res) => {
     try {
-      const published = req.query.published === 'true';
+      let published: boolean | undefined = undefined;
+      
+      // Only filter by published status if explicitly requested
+      if (req.query.published === 'true') {
+        published = true;
+      } else if (req.query.published === 'false') {
+        published = false;
+      }
+      // If no published query param, return all videos (both published and draft)
+      
       const videos = await storage.getVideos(published);
       res.json(videos);
     } catch (error) {
