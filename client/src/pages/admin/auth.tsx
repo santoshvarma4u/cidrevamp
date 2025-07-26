@@ -30,6 +30,7 @@ export default function AdminAuth() {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginData) => {
+      console.log("Making fetch request to /api/login");
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: {
@@ -75,7 +76,10 @@ export default function AdminAuth() {
   });
 
   const handleSubmit = (e: React.FormEvent) => {
+    console.log("Form submitted");
     e.preventDefault();
+    console.log("Form data:", formData);
+    
     if (!formData.username || !formData.password) {
       toast({
         title: "Missing fields",
@@ -84,6 +88,8 @@ export default function AdminAuth() {
       });
       return;
     }
+    
+    console.log("Calling loginMutation.mutate");
     loginMutation.mutate(formData);
   };
 
@@ -158,6 +164,10 @@ export default function AdminAuth() {
 
               <Button
                 type="submit"
+                onClick={(e) => {
+                  console.log("Button clicked");
+                  // Don't prevent default here, let form submission handle it
+                }}
                 className="w-full bg-gov-blue hover:bg-gov-dark-blue text-white py-2 px-4 rounded-md font-medium transition-colors"
                 disabled={loginMutation.isPending}
               >
