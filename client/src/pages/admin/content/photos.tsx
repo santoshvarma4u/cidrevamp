@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Edit, Images, Upload } from "lucide-react";
+import { Plus, Edit, Trash2, Images, Upload } from "lucide-react";
 
 interface PhotoFormData {
   title: string;
@@ -105,6 +105,43 @@ export default function AdminPhotos() {
     },
   });
 
+  const deletePhotoMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/admin/photos/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete photo");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/photos"] });
+      toast({
+        title: "Success",
+        description: "Photo deleted successfully",
+      });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        toast({
+          title: "Unauthorized",
+          description: "You are logged out. Logging in again...",
+          variant: "destructive",
+        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      toast({
+        title: "Error",
+        description: "Failed to delete photo",
+        variant: "destructive",
+      });
+    },
+  });
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -143,6 +180,23 @@ export default function AdminPhotos() {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
+    }
+  };
+
+  const handleEdit = (photo: any) => {
+    setEditingPhoto(photo);
+    setFormData({
+      title: photo.title,
+      description: photo.description || "",
+      category: photo.category,
+      isPublished: photo.isPublished,
+    });
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = (photoId: number) => {
+    if (window.confirm("Are you sure you want to delete this photo? This action cannot be undone.")) {
+      deletePhotoMutation.mutate(photoId);
     }
   };
 
@@ -285,9 +339,9 @@ export default function AdminPhotos() {
                   <div className="flex items-center justify-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                   </div>
-                ) : photos.length > 0 ? (
+                ) : (photos as any[]).length > 0 ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {photos.map((photo: any) => (
+                    {(photos as any[]).map((photo: any) => (
                       <div key={photo.id} className="relative group">
                         <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
                           <img
@@ -295,13 +349,22 @@ export default function AdminPhotos() {
                             alt={photo.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                           />
-                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center">
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center gap-2">
                             <Button
                               size="sm"
                               variant="outline"
                               className="opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={() => handleEdit(photo)}
                             >
                               <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="opacity-0 group-hover:opacity-100 transition-opacity text-red-600 hover:text-red-700"
+                              onClick={() => handleDelete(photo.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </div>
