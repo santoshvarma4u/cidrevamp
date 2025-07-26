@@ -78,7 +78,7 @@ export default function AdminVideos() {
       setIsDialogOpen(false);
       form.reset();
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error creating video",
         description: error.message,
@@ -99,7 +99,7 @@ export default function AdminVideos() {
       setEditingVideo(null);
       form.reset();
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error updating video",
         description: error.message,
@@ -116,7 +116,7 @@ export default function AdminVideos() {
       queryClient.invalidateQueries({ queryKey: ["/api/videos"] });
       toast({ title: "Video deleted successfully" });
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error deleting video",
         description: error.message,
@@ -167,14 +167,14 @@ export default function AdminVideos() {
     setIsDialogOpen(true);
   };
 
-  const filteredVideos = videos?.filter((video: any) => {
+  const filteredVideos = videos ? videos.filter((video: any) => {
     const matchesSearch = video.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          video.description?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" ||
                          (statusFilter === "published" && video.isPublished) ||
                          (statusFilter === "draft" && !video.isPublished);
     return matchesSearch && matchesStatus;
-  });
+  }) : [];
 
   return (
     <div className="container mx-auto px-4 py-8">
