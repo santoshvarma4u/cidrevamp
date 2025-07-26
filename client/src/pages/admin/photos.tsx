@@ -234,12 +234,15 @@ export default function AdminPhotos() {
               Add Photo
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-md" aria-describedby="dialog-description">
             <DialogHeader>
               <DialogTitle>
                 {editingPhoto ? "Edit Photo" : "Add New Photo"}
               </DialogTitle>
             </DialogHeader>
+            <div id="dialog-description" className="sr-only">
+              {editingPhoto ? "Edit the photo details below" : "Upload a new photo and set its details"}
+            </div>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
