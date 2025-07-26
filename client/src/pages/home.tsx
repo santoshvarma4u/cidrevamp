@@ -47,56 +47,79 @@ export default function Home() {
   const specializedWings = [
     {
       title: "Economic Offences Wing",
-      description: "Handles financial crimes including banking frauds, counterfeit currency, MLM schemes, and money circulation frauds.",
+      description:
+        "Handles financial crimes including banking frauds, counterfeit currency, MLM schemes, and money circulation frauds.",
       icon: ChartLine,
       color: "blue",
       href: "/wings/economic-offences",
-      features: ["FICN Nodal Agency", "PMLA & FEMA Reporting", "Banking Fraud Investigation"],
+      features: [
+        "FICN Nodal Agency",
+        "PMLA & FEMA Reporting",
+        "Banking Fraud Investigation",
+      ],
     },
     {
       title: "Cyber Crimes Wing",
-      description: "Specialized unit for cybercrime investigation, IT Act violations, video piracy, and digital forensics.",
+      description:
+        "Specialized unit for cybercrime investigation, IT Act violations, video piracy, and digital forensics.",
       icon: Shield,
       color: "purple",
       href: "/wings/cyber-crimes",
-      features: ["State-wide Jurisdiction", "Public Awareness Programs", "Training & Capacity Building"],
+      features: [
+        "State-wide Jurisdiction",
+        "Public Awareness Programs",
+        "Training & Capacity Building",
+      ],
     },
     {
       title: "Women & Child Protection",
-      description: "Comprehensive protection services including SHE Teams, anti-trafficking unit, and NRI women safety cell.",
+      description:
+        "Comprehensive protection services including SHE Teams, anti-trafficking unit, and NRI women safety cell.",
       icon: Heart,
       color: "pink",
       href: "/wings/women-protection",
-      features: ["SHE Teams & SHE Bharosa", "Anti Human Trafficking", "Missing Persons Monitoring"],
+      features: [
+        "SHE Teams & SHE Bharosa",
+        "Anti Human Trafficking",
+        "Missing Persons Monitoring",
+      ],
     },
     {
       title: "General Offences Wing",
-      description: "Handles serious criminal investigations including murder, robbery, and complex inter-district matters.",
+      description:
+        "Handles serious criminal investigations including murder, robbery, and complex inter-district matters.",
       icon: Gavel,
       color: "gray",
       href: "/wings/general-offences",
-      features: ["Murder Investigations", "Serious Crime Cases", "Inter-district Coordination"],
+      features: [
+        "Murder Investigations",
+        "Serious Crime Cases",
+        "Inter-district Coordination",
+      ],
     },
   ];
 
   const safetyAlerts = [
     {
       title: "Cyber Security Alert",
-      description: "Beware of fake emails asking for OTP/PIN. Never share your banking credentials with anyone.",
+      description:
+        "Beware of fake emails asking for OTP/PIN. Never share your banking credentials with anyone.",
       priority: "HIGH PRIORITY",
       icon: Shield,
       color: "red",
     },
     {
       title: "Banking Fraud Warning",
-      description: "Do not click on suspicious links in SMS claiming lottery wins or prize money.",
+      description:
+        "Do not click on suspicious links in SMS claiming lottery wins or prize money.",
       priority: "MEDIUM PRIORITY",
       icon: TriangleAlert,
       color: "yellow",
     },
     {
       title: "Social Media Safety",
-      description: "Be cautious about sharing personal information on social media platforms.",
+      description:
+        "Be cautious about sharing personal information on social media platforms.",
       priority: "GENERAL ADVISORY",
       icon: Smartphone,
       color: "green",
@@ -113,8 +136,8 @@ export default function Home() {
           className="absolute inset-0 bg-black bg-opacity-40"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1577962917302-cd874c99c7c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
         <div className="relative container mx-auto px-4 py-20">
@@ -124,22 +147,9 @@ export default function Home() {
                 Transparent, Impartial & Efficient Investigation
               </h1>
               <p className="text-xl mb-8 text-blue-100">
-                Premier investigation agency of Telangana State using high-end, state-of-the-art equipment with quality forensic support.
+                Premier investigation agency of Telangana State using high-end,
+                state-of-the-art equipment with quality forensic support.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/citizen/complaint">
-                  <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
-                    <FileText className="mr-2 h-5 w-5" />
-                    Lodge Complaint
-                  </Button>
-                </Link>
-                <Link href="/citizen/status">
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
-                    <Search className="mr-2 h-5 w-5" />
-                    Check Status
-                  </Button>
-                </Link>
-              </div>
             </div>
 
             <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
@@ -154,7 +164,7 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              
+
               <div className="space-y-2 mt-4">
                 {latestVideos.slice(1, 3).map((video) => (
                   <div
@@ -171,51 +181,100 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Quick Services */}
-      <section className="py-12 bg-white">
+      {/* Director General Message & News */}
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-red-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition gov-card-hover">
-              <div className="flex items-center space-x-4">
-                <Phone className="h-8 w-8" />
-                <div>
-                  <h3 className="text-xl font-bold">Emergency</h3>
-                  <p className="text-lg">100</p>
-                  <p className="text-sm opacity-90">Press 8 for T-Safe</p>
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Director General Message */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-2xl p-8 shadow-lg border-2 border-orange-200">
+                <div className="flex flex-col md:flex-row gap-6">
+                  {/* Director Photo */}
+                  <div className="flex-shrink-0">
+                    <div className="w-32 h-40 md:w-40 md:h-48 rounded-lg overflow-hidden bg-gray-100">
+                      <img
+                        src="/api/placeholder/160/192"
+                        alt="Ms. Charu Sinha, IPS"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Director Info and Message */}
+                  <div className="flex-1">
+                    <div className="mb-4">
+                      <h3 className="text-2xl font-bold text-blue-800 mb-1">Ms. Charu Sinha, IPS</h3>
+                      <p className="text-lg font-semibold text-blue-600 mb-2">
+                        Addl. Director General of Police, CID, Telangana State.
+                      </p>
+                    </div>
+                    
+                    <div className="text-gray-700 leading-relaxed space-y-3">
+                      <p>
+                        Crime Investigation Department is the premier investigation agency of Telangana State. Our 
+                        endeavour is to provide transparent, impartial, efficient and systematic investigation using high 
+                        end, state of the art equipment with quality forensic support in coordination with national 
+                        and international agencies. We follow the principle that 'men may lie but material will not.'
+                      </p>
+                      
+                      <p>
+                        Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and 
+                        mission. Our specialized wings include Economic Offences, General Offences, Child and 
+                        Women Protection, Protection of Civil Rights and Cyber Crimes. We welcome any 
+                        feedback from the citizens related to any crime. I wish this website paves way for the 
+                        public awareness about recent crimes and alerts.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <Link href="/citizen/complaint">
-              <div className="bg-blue-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition gov-card-hover cursor-pointer">
-                <div className="flex items-center space-x-4">
-                  <FileText className="h-8 w-8" />
-                  <div>
-                    <h3 className="text-xl font-bold">Lodge Complaint</h3>
-                    <p className="text-sm opacity-90">File online petition</p>
-                  </div>
+            {/* News Section */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-blue-200">
+                {/* News Header */}
+                <div className="bg-blue-800 text-white px-6 py-4">
+                  <h3 className="text-xl font-bold text-center">News</h3>
                 </div>
-              </div>
-            </Link>
-
-            <Link href="/citizen/status">
-              <div className="bg-green-600 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition gov-card-hover cursor-pointer">
-                <div className="flex items-center space-x-4">
-                  <Search className="h-8 w-8" />
-                  <div>
-                    <h3 className="text-xl font-bold">Check Status</h3>
-                    <p className="text-sm opacity-90">Track your complaint</p>
+                
+                {/* News Content */}
+                <div className="p-6">
+                  <div className="space-y-4 text-sm">
+                    <div className="border-l-4 border-orange-400 pl-4">
+                      <p className="text-gray-700 leading-relaxed">
+                        They use an alphanumeric or Special Characters 
+                        <span className="font-bold"> Complicated Password</span> for all their online 
+                        accounts that is difficult to crack via fraud tools 
+                        online. Password he said must be <span className="font-bold">Changed Once 
+                        In Three Months</span> and one should never use common 
+                        passwords which is a common mistake 
+                        committed by many people. While speaking 
+                        about vulnerability to cybercrime he mentioned 
+                        the various steps taken by Telangana State Police 
+                        to combat CyberCrime.
+                      </p>
+                    </div>
+                    
+                    <div className="border-l-4 border-blue-400 pl-4">
+                      <p className="text-gray-700 leading-relaxed">
+                        Telangana State Police have <span className="font-bold">4 exclusive 
+                        CYBERCRIME</span> Police Stations. One 
+                        <span className="font-bold"> CID</span>training 3 with one each in Hyderabad, 
+                        Cyberabad, Rachakonda.
+                      </p>
+                    </div>
+                    
+                    <div className="border-l-4 border-green-400 pl-4">
+                      <p className="text-gray-700 leading-relaxed">
+                        An exclusive <span className="font-bold">T4C Telangana Cyber 
+                        Coordination Centre</span> is established in line with 
+                        of MHA. <span className="text-blue-600 font-bold">www.cybercrime.gov.in</span> is an exclusive 
+                        website for reporting cybercrime. <span className="font-bold">1930 is a toll 
+                        free number for reporting Cyber financial fraud.</span>
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </Link>
-
-            <div className="bg-gray-800 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition gov-card-hover cursor-pointer">
-              <div className="flex items-center space-x-4">
-                <Smartphone className="h-8 w-8" />
-                <div>
-                  <h3 className="text-xl font-bold">T-Safe App</h3>
-                  <p className="text-sm opacity-90">Women safety app</p>
                 </div>
               </div>
             </div>
@@ -227,33 +286,47 @@ export default function Home() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Specialized Wings</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Specialized Wings
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our specialized departments handle diverse criminal investigations with expert knowledge and advanced technology
+              Our specialized departments handle diverse criminal investigations
+              with expert knowledge and advanced technology
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8">
             {specializedWings.map((wing, index) => (
-              <Card key={index} className="border-l-4 border-l-blue-600 hover:shadow-xl transition-shadow gov-card-hover">
+              <Card
+                key={index}
+                className="border-l-4 border-l-blue-600 hover:shadow-xl transition-shadow gov-card-hover"
+              >
                 <CardContent className="p-8">
                   <div className="flex items-start space-x-4">
                     <div className={`bg-${wing.color}-100 p-3 rounded-lg`}>
                       <wing.icon className={`h-6 w-6 text-${wing.color}-600`} />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-3">{wing.title}</h3>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                        {wing.title}
+                      </h3>
                       <p className="text-gray-600 mb-4">{wing.description}</p>
                       <div className="space-y-2 mb-4">
                         {wing.features.map((feature, idx) => (
-                          <div key={idx} className="flex items-center space-x-2">
+                          <div
+                            key={idx}
+                            className="flex items-center space-x-2"
+                          >
                             <CheckCircle className="h-4 w-4 text-green-600" />
                             <span className="text-sm">{feature}</span>
                           </div>
                         ))}
                       </div>
                       <Link href={wing.href}>
-                        <Button variant="link" className="p-0 text-blue-600 font-semibold">
+                        <Button
+                          variant="link"
+                          className="p-0 text-blue-600 font-semibold"
+                        >
                           Learn More →
                         </Button>
                       </Link>
@@ -270,13 +343,20 @@ export default function Home() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Photo Gallery</h2>
-            <p className="text-xl text-gray-600">Recent operations and activities by CID Telangana</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Photo Gallery
+            </h2>
+            <p className="text-xl text-gray-600">
+              Recent operations and activities by CID Telangana
+            </p>
           </div>
 
           {latestPhotos.length > 0 ? (
             <>
-              <AutoScrollSlider photos={latestPhotos} autoScrollInterval={3000} />
+              <AutoScrollSlider
+                photos={latestPhotos}
+                autoScrollInterval={3000}
+              />
               <div className="text-center mt-8">
                 <Link href="/media/gallery">
                   <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
@@ -303,8 +383,13 @@ export default function Home() {
               <TriangleAlert className="h-6 w-6 text-yellow-900" />
             </div>
             <div>
-              <h2 className="text-3xl font-bold text-yellow-900 mb-2">Public Safety Alerts</h2>
-              <p className="text-yellow-800">Stay informed about latest security threats and safety guidelines</p>
+              <h2 className="text-3xl font-bold text-yellow-900 mb-2">
+                Public Safety Alerts
+              </h2>
+              <p className="text-yellow-800">
+                Stay informed about latest security threats and safety
+                guidelines
+              </p>
             </div>
           </div>
 
@@ -313,11 +398,23 @@ export default function Home() {
               <Card key={index} className="bg-white shadow-md">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-3 mb-4">
-                    <alert.icon className={`h-5 w-5 text-${alert.color === 'red' ? 'red' : alert.color === 'yellow' ? 'yellow' : 'green'}-600`} />
+                    <alert.icon
+                      className={`h-5 w-5 text-${alert.color === "red" ? "red" : alert.color === "yellow" ? "yellow" : "green"}-600`}
+                    />
                     <h3 className="font-bold text-gray-900">{alert.title}</h3>
                   </div>
-                  <p className="text-gray-600 text-sm mb-4">{alert.description}</p>
-                  <Badge variant={alert.color === 'red' ? 'destructive' : alert.color === 'yellow' ? 'secondary' : 'outline'}>
+                  <p className="text-gray-600 text-sm mb-4">
+                    {alert.description}
+                  </p>
+                  <Badge
+                    variant={
+                      alert.color === "red"
+                        ? "destructive"
+                        : alert.color === "yellow"
+                          ? "secondary"
+                          : "outline"
+                    }
+                  >
                     {alert.priority}
                   </Badge>
                 </CardContent>
@@ -332,13 +429,20 @@ export default function Home() {
         <section className="py-16 bg-gray-100">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Latest News</h2>
-              <p className="text-xl text-gray-600">Stay updated with recent developments and announcements</p>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Latest News
+              </h2>
+              <p className="text-xl text-gray-600">
+                Stay updated with recent developments and announcements
+              </p>
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
               {latestNews.map((article) => (
-                <Card key={article.id} className="hover:shadow-lg transition-shadow">
+                <Card
+                  key={article.id}
+                  className="hover:shadow-lg transition-shadow"
+                >
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
                       <Badge variant="outline">{article.category}</Badge>

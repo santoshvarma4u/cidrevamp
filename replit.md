@@ -28,6 +28,8 @@ Preferred communication style: Simple, everyday language.
 - Header layout now streamlined with logos, title, and user controls only
 - **COMPLETED**: Implemented auto-scrolling photo slider for homepage gallery section
 - Slider auto-advances every 3 seconds with manual navigation controls and responsive design
+- **COMPLETED**: Added Director General message and News section before Specialized Wings
+- Features Ms. Charu Sinha IPS profile with mission statement and cybercrime news updates
 
 ## System Architecture
 
