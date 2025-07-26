@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import type { Video, Photo, News } from "@shared/schema";
 import VideoPlayer from "@/components/media/VideoPlayer";
 import PhotoGallery from "@/components/media/PhotoGallery";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,15 +27,15 @@ import {
 } from "lucide-react";
 
 export default function Home() {
-  const { data: videos = [] } = useQuery({
+  const { data: videos = [] } = useQuery<Video[]>({
     queryKey: ["/api/videos", { published: true }],
   });
 
-  const { data: photos = [] } = useQuery({
+  const { data: photos = [] } = useQuery<Photo[]>({
     queryKey: ["/api/photos", { published: true }],
   });
 
-  const { data: news = [] } = useQuery({
+  const { data: news = [] } = useQuery<News[]>({
     queryKey: ["/api/news", { published: true }],
   });
 

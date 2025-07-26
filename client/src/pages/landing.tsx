@@ -4,21 +4,22 @@ import Footer from "@/components/layout/Footer";
 import VideoPlayer from "@/components/common/VideoPlayer";
 import PhotoGallery from "@/components/common/PhotoGallery";
 import { useQuery } from "@tanstack/react-query";
+import type { Video, Photo } from "@shared/schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Shield, Phone, FileText, Search, Smartphone, Play, ChevronRight, TriangleAlert, ChartLine, Users, Gavel, Heart } from "lucide-react";
 
 export default function Landing() {
-  const { data: videos } = useQuery({
-    queryKey: ["/api/public/videos"],
+  const { data: videos = [] } = useQuery<Video[]>({
+    queryKey: ["/api/videos", { published: true }],
   });
 
-  const { data: photos } = useQuery({
-    queryKey: ["/api/public/photos"],
+  const { data: photos = [] } = useQuery<Photo[]>({
+    queryKey: ["/api/photos", { published: true }],
   });
 
-  const { data: safetyAlerts } = useQuery({
-    queryKey: ["/api/public/safety-alerts"],
+  const { data: safetyAlerts = [] } = useQuery<any[]>({
+    queryKey: ["/api/news", { published: true }],
   });
 
   const featuredVideos = videos?.slice(0, 3) || [];

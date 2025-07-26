@@ -287,11 +287,12 @@ export default function Header() {
           <NavigationMenu className="max-w-full">
             <NavigationMenuList className="space-x-8 py-4">
               <NavigationMenuItem>
-                <Link href="/">
-                  <NavigationMenuLink className="text-white hover:text-blue-200 transition px-3 py-2">
-                    Home
-                  </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink 
+                  className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
+                  onClick={() => window.location.href = '/'}
+                >
+                  Home
+                </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
@@ -301,11 +302,13 @@ export default function Header() {
                 <NavigationMenuContent>
                   <div className="w-80 p-4">
                     {aboutLinks.map((link) => (
-                      <Link key={link.href} href={link.href}>
-                        <NavigationMenuLink className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition">
-                          {link.title}
-                        </NavigationMenuLink>
-                      </Link>
+                      <NavigationMenuLink 
+                        key={link.href}
+                        className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
+                        onClick={() => window.location.href = link.href}
+                      >
+                        {link.title}
+                      </NavigationMenuLink>
                     ))}
                   </div>
                 </NavigationMenuContent>
@@ -318,19 +321,21 @@ export default function Header() {
                 <NavigationMenuContent>
                   <div className="w-96 p-4">
                     {specializedWings.map((wing) => (
-                      <Link key={wing.href} href={wing.href}>
-                        <NavigationMenuLink className="flex items-start space-x-3 px-4 py-3 hover:bg-gray-100 rounded transition group">
-                          <wing.icon className="h-5 w-5 text-gray-600 mt-0.5" />
-                          <div>
-                            <div className="font-medium text-gray-900 group-hover:text-blue-600">
-                              {wing.title}
-                            </div>
-                            <div className="text-sm text-gray-600">
-                              {wing.description}
-                            </div>
+                      <NavigationMenuLink 
+                        key={wing.href}
+                        className="flex items-start space-x-3 px-4 py-3 hover:bg-gray-100 rounded transition group cursor-pointer"
+                        onClick={() => window.location.href = wing.href}
+                      >
+                        <wing.icon className="h-5 w-5 text-gray-600 mt-0.5" />
+                        <div>
+                          <div className="font-medium text-gray-900 group-hover:text-blue-600">
+                            {wing.title}
                           </div>
-                        </NavigationMenuLink>
-                      </Link>
+                          <div className="text-sm text-gray-600">
+                            {wing.description}
+                          </div>
+                        </div>
+                      </NavigationMenuLink>
                     ))}
                   </div>
                 </NavigationMenuContent>
@@ -343,30 +348,34 @@ export default function Header() {
                 <NavigationMenuContent>
                   <div className="w-80 p-4">
                     {citizenServices.map((service) => (
-                      <Link key={service.href} href={service.href}>
-                        <NavigationMenuLink className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition">
-                          {service.title}
-                        </NavigationMenuLink>
-                      </Link>
+                      <NavigationMenuLink 
+                        key={service.href}
+                        className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
+                        onClick={() => window.location.href = service.href}
+                      >
+                        {service.title}
+                      </NavigationMenuLink>
                     ))}
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link href="/public-awareness">
-                  <NavigationMenuLink className="text-white hover:text-blue-200 transition px-3 py-2">
-                    Public Awareness
-                  </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink 
+                  className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
+                  onClick={() => window.location.href = '/public-awareness'}
+                >
+                  Public Awareness
+                </NavigationMenuLink>
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link href="/media/gallery">
-                  <NavigationMenuLink className="text-white hover:text-blue-200 transition px-3 py-2">
-                    Media Center
-                  </NavigationMenuLink>
-                </Link>
+                <NavigationMenuLink 
+                  className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
+                  onClick={() => window.location.href = '/media/gallery'}
+                >
+                  Media Center
+                </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
