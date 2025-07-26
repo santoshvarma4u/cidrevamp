@@ -408,26 +408,30 @@ export default function AdminPhotos() {
                     {photo.isPublished ? 'Published' : 'Draft'}
                   </span>
                 </div>
-                <div className="flex gap-2 pt-2 border-t border-gray-100">
+                <div className="flex gap-2 pt-2 border-t border-gray-100" style={{ backgroundColor: 'yellow', minHeight: '40px' }}>
                   <button
                     onClick={() => {
+                      alert('Edit button clicked!');
                       console.log("Edit button clicked for photo:", photo.id);
                       handleEdit(photo);
                     }}
                     className="flex-1 px-3 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors flex items-center justify-center gap-1"
+                    style={{ backgroundColor: 'blue', color: 'white', border: '2px solid red' }}
                   >
                     <Edit className="h-4 w-4" />
-                    Edit
+                    EDIT BUTTON
                   </button>
                   <button
                     onClick={() => {
+                      alert('Delete button clicked!');
                       console.log("Delete button clicked for photo:", photo.id);
                       handleDelete(photo.id);
                     }}
                     className="flex-1 px-3 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors flex items-center justify-center gap-1"
+                    style={{ backgroundColor: 'red', color: 'white', border: '2px solid black' }}
                   >
                     <Trash2 className="h-4 w-4" />
-                    Delete
+                    DELETE BUTTON
                   </button>
                 </div>
               </CardContent>
