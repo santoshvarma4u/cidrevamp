@@ -142,10 +142,10 @@ export default function Home() {
           }}
         />
         <div className="relative container mx-auto px-4 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 items-stretch">
             {/* Director General Message */}
-            <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
-              <div className="flex flex-col md:flex-row gap-4">
+            <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col">
+              <div className="flex flex-col md:flex-row gap-4 flex-1">
                 {/* Director Photo */}
                 <div className="flex-shrink-0">
                   <div className="w-24 h-28 md:w-28 md:h-32 rounded-lg overflow-hidden bg-gray-100">
@@ -170,36 +170,47 @@ export default function Home() {
                     <p>
                       Crime Investigation Department is the premier investigation agency of Telangana State. Our 
                       endeavour is to provide transparent, impartial, efficient and systematic investigation using high 
-                      end, state of the art equipment with quality forensic support.
+                      end, state of the art equipment with quality forensic support in coordination with national 
+                      and international agencies.
+                    </p>
+                    
+                    <p>
+                      Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and 
+                      mission. Our specialized wings include Economic Offences, General Offences, Child and 
+                      Women Protection, Protection of Civil Rights and Cyber Crimes.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
+            <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col">
               <h3 className="text-2xl font-bold mb-4">Latest Video News</h3>
-              {latestVideos.length > 0 ? (
-                <VideoPlayer video={latestVideos[0]} />
-              ) : (
-                <div className="aspect-video bg-gray-900 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <Play className="h-16 w-16 text-white mb-4 mx-auto" />
-                    <p className="text-white">No videos available</p>
+              <div className="flex-1 flex flex-col">
+                {latestVideos.length > 0 ? (
+                  <div className="flex-1">
+                    <VideoPlayer video={latestVideos[0]} />
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="flex-1 bg-gray-900 rounded-lg flex items-center justify-center">
+                    <div className="text-center">
+                      <Play className="h-16 w-16 text-white mb-4 mx-auto" />
+                      <p className="text-white">No videos available</p>
+                    </div>
+                  </div>
+                )}
 
-              <div className="space-y-2 mt-4">
-                {latestVideos.slice(1, 3).map((video) => (
-                  <div
-                    key={video.id}
-                    className="flex items-center space-x-3 p-3 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition"
-                  >
-                    <Play className="h-4 w-4 text-blue-200" />
-                    <span className="text-sm">{video.title}</span>
-                  </div>
-                ))}
+                <div className="space-y-2 mt-4">
+                  {latestVideos.slice(1, 3).map((video) => (
+                    <div
+                      key={video.id}
+                      className="flex items-center space-x-3 p-3 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition"
+                    >
+                      <Play className="h-4 w-4 text-blue-200" />
+                      <span className="text-sm">{video.title}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -212,16 +223,20 @@ export default function Home() {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Photo Gallery */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200">
+              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-80 flex flex-col">
                 <h3 className="text-2xl font-bold text-blue-800 mb-4 text-center">Latest Photo Gallery</h3>
-                {latestPhotos.length > 0 ? (
-                  <AutoScrollSlider photos={latestPhotos} />
-                ) : (
-                  <div className="text-center py-8">
-                    <Images className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500">No photos available</p>
-                  </div>
-                )}
+                <div className="flex-1">
+                  {latestPhotos.length > 0 ? (
+                    <AutoScrollSlider photos={latestPhotos} />
+                  ) : (
+                    <div className="text-center py-8 h-full flex items-center justify-center">
+                      <div>
+                        <Images className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                        <p className="text-gray-500">No photos available</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
