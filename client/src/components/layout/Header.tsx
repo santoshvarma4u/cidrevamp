@@ -12,6 +12,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import {
   DropdownMenu,
@@ -98,7 +99,8 @@ export default function Header() {
 
   // Helper function to organize menu pages by group
   const getMenuPagesByGroup = (group: string) => {
-    return menuPages
+    const pages = Array.isArray(menuPages) ? menuPages : [];
+    return pages
       .filter((page: any) => page.menuParent === group)
       .sort((a: any, b: any) => a.menuOrder - b.menuOrder)
       .map((page: any) => ({
@@ -109,7 +111,8 @@ export default function Header() {
   };
 
   // Get top-level menu pages (no parent group)
-  const topLevelPages = menuPages
+  const pages = Array.isArray(menuPages) ? menuPages : [];
+  const topLevelPages = pages
     .filter((page: any) => !page.menuParent || page.menuParent === "" || page.menuParent === "top-level")
     .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
 
@@ -384,7 +387,7 @@ export default function Header() {
       {/* Desktop Navigation Menu */}
       <nav className="bg-blue-600 text-white hidden lg:block">
         <div className="container mx-auto px-4">
-          <NavigationMenu className="max-w-full">
+          <NavigationMenu className="max-w-full relative">
             <NavigationMenuList className="flex justify-start space-x-8 py-4">
               <NavigationMenuItem>
                 <NavigationMenuLink
@@ -408,11 +411,11 @@ export default function Header() {
               ))}
 
               {allAboutPages.length > 0 && (
-                <NavigationMenuItem className="relative">
+                <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     About CID
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
+                  <NavigationMenuContent>
                     <div className="w-80 p-4">
                       {allAboutPages.map((link) => (
                         <NavigationMenuLink
@@ -429,11 +432,11 @@ export default function Header() {
               )}
 
               {allWingsPages.length > 0 && (
-                <NavigationMenuItem className="relative">
+                <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     Specialized Wings
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
+                  <NavigationMenuContent>
                     <div className="w-96 p-4">
                       {allWingsPages.map((wing) => (
                         <NavigationMenuLink
@@ -460,11 +463,11 @@ export default function Header() {
               )}
 
               {allCitizenPages.length > 0 && (
-                <NavigationMenuItem className="relative">
+                <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     Citizen Services
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
+                  <NavigationMenuContent>
                     <div className="w-80 p-4">
                       {allCitizenPages.map((service) => (
                         <NavigationMenuLink
@@ -481,11 +484,11 @@ export default function Header() {
               )}
 
               {allMediaPages.length > 0 && (
-                <NavigationMenuItem className="relative">
+                <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     Media & Resources
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
+                  <NavigationMenuContent>
                     <div className="w-80 p-4">
                       {allMediaPages.map((media) => (
                         <NavigationMenuLink
@@ -502,11 +505,11 @@ export default function Header() {
               )}
 
               {allContactPages.length > 0 && (
-                <NavigationMenuItem className="relative">
+                <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     Contact & Information
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
+                  <NavigationMenuContent>
                     <div className="w-80 p-4">
                       {allContactPages.map((contact) => (
                         <NavigationMenuLink
@@ -531,6 +534,7 @@ export default function Header() {
                 </NavigationMenuLink>
               </NavigationMenuItem>
             </NavigationMenuList>
+            <NavigationMenuViewport className="absolute top-full left-0 mt-1 w-full" />
           </NavigationMenu>
         </div>
       </nav>
