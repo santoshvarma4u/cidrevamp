@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -37,6 +38,11 @@ interface PageFormData {
   metaTitle: string;
   metaDescription: string;
   isPublished: boolean;
+  showInMenu: boolean;
+  menuTitle: string;
+  menuParent: string;
+  menuOrder: number;
+  menuDescription: string;
 }
 
 export default function AdminPages() {
@@ -52,6 +58,11 @@ export default function AdminPages() {
     metaTitle: "",
     metaDescription: "",
     isPublished: false,
+    showInMenu: false,
+    menuTitle: "",
+    menuParent: "",
+    menuOrder: 0,
+    menuDescription: "",
   });
 
   useEffect(() => {
@@ -187,6 +198,11 @@ export default function AdminPages() {
       metaTitle: "",
       metaDescription: "",
       isPublished: false,
+      showInMenu: false,
+      menuTitle: "",
+      menuParent: "",
+      menuOrder: 0,
+      menuDescription: "",
     });
   };
 
@@ -208,6 +224,11 @@ export default function AdminPages() {
       metaTitle: page.metaTitle || "",
       metaDescription: page.metaDescription || "",
       isPublished: page.isPublished,
+      showInMenu: page.showInMenu || false,
+      menuTitle: page.menuTitle || "",
+      menuParent: page.menuParent || "",
+      menuOrder: page.menuOrder || 0,
+      menuDescription: page.menuDescription || "",
     });
     setIsDialogOpen(true);
   };
@@ -306,14 +327,84 @@ export default function AdminPages() {
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        id="published"
-                        checked={formData.isPublished}
-                        onCheckedChange={(checked) => setFormData({ ...formData, isPublished: checked })}
-                      />
-                      <Label htmlFor="published">Publish immediately</Label>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="published"
+                          checked={formData.isPublished}
+                          onCheckedChange={(checked) => setFormData({ ...formData, isPublished: checked })}
+                        />
+                        <Label htmlFor="published">Publish immediately</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="showInMenu"
+                          checked={formData.showInMenu}
+                          onCheckedChange={(checked) => setFormData({ ...formData, showInMenu: checked })}
+                        />
+                        <Label htmlFor="showInMenu">Show in Navigation Menu</Label>
+                      </div>
                     </div>
+                    
+                    {formData.showInMenu && (
+                      <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+                        <h3 className="font-semibold text-gray-900">Menu Configuration</h3>
+                        
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="menuTitle">Menu Title (optional)</Label>
+                            <Input
+                              id="menuTitle"
+                              value={formData.menuTitle}
+                              onChange={(e) => setFormData({ ...formData, menuTitle: e.target.value })}
+                              placeholder="Leave empty to use page title"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="menuParent">Menu Group</Label>
+                            <Select 
+                              value={formData.menuParent} 
+                              onValueChange={(value) => setFormData({ ...formData, menuParent: value })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select menu group" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="">Top Level (No Group)</SelectItem>
+                                <SelectItem value="about">About CID</SelectItem>
+                                <SelectItem value="wings">Specialized Wings</SelectItem>
+                                <SelectItem value="citizen-services">Citizen Services</SelectItem>
+                                <SelectItem value="media">Media & Resources</SelectItem>
+                                <SelectItem value="contact">Contact & Information</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                        
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="menuOrder">Display Order</Label>
+                            <Input
+                              id="menuOrder"
+                              type="number"
+                              value={formData.menuOrder}
+                              onChange={(e) => setFormData({ ...formData, menuOrder: parseInt(e.target.value) || 0 })}
+                              placeholder="0"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="menuDescription">Menu Description (optional)</Label>
+                            <Input
+                              id="menuDescription"
+                              value={formData.menuDescription}
+                              onChange={(e) => setFormData({ ...formData, menuDescription: e.target.value })}
+                              placeholder="Brief description for dropdown menus"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     
                     <div className="flex space-x-2">
                       <Button
@@ -354,6 +445,7 @@ export default function AdminPages() {
                         <TableHead>Title</TableHead>
                         <TableHead>Slug</TableHead>
                         <TableHead>Status</TableHead>
+                        <TableHead>Menu</TableHead>
                         <TableHead>Last Updated</TableHead>
                         <TableHead>Actions</TableHead>
                       </TableRow>
@@ -367,6 +459,22 @@ export default function AdminPages() {
                             <Badge variant={page.isPublished ? "default" : "secondary"}>
                               {page.isPublished ? "Published" : "Draft"}
                             </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {page.showInMenu ? (
+                              <div className="space-y-1">
+                                <Badge variant="outline" className="text-xs">
+                                  In Menu
+                                </Badge>
+                                {page.menuParent && (
+                                  <div className="text-xs text-gray-500">
+                                    Group: {page.menuParent}
+                                  </div>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-gray-400 text-sm">Not in menu</span>
+                            )}
                           </TableCell>
                           <TableCell>
                             {new Date(page.updatedAt).toLocaleDateString()}

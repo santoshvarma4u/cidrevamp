@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
+import { useMenuPages } from "@/hooks/useMenuPages";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -44,6 +45,7 @@ export default function Header() {
   const [location] = useLocation();
   const { isAuthenticated, user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: menuPages = [], isLoading: menuLoading } = useMenuPages();
 
   const specializedWings = [
     {
@@ -93,6 +95,37 @@ export default function Header() {
     { title: "Senior Officers", href: "/about/leadership" },
     { title: "FAQ's", href: "/about/faqs" },
   ];
+
+  // Helper function to organize menu pages by group
+  const getMenuPagesByGroup = (group: string) => {
+    return menuPages
+      .filter((page: any) => page.menuParent === group)
+      .sort((a: any, b: any) => a.menuOrder - b.menuOrder)
+      .map((page: any) => ({
+        title: page.menuTitle || page.title,
+        description: page.menuDescription || "",
+        href: `/${page.slug}`,
+      }));
+  };
+
+  // Get top-level menu pages (no parent group)
+  const topLevelPages = menuPages
+    .filter((page: any) => !page.menuParent || page.menuParent === "")
+    .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
+
+  // Dynamically build menu groups by merging static and dynamic pages
+  const dynamicAboutPages = getMenuPagesByGroup("about");
+  const dynamicWingsPages = getMenuPagesByGroup("wings");
+  const dynamicCitizenPages = getMenuPagesByGroup("citizen-services");
+  const dynamicMediaPages = getMenuPagesByGroup("media");
+  const dynamicContactPages = getMenuPagesByGroup("contact");
+
+  // Merge with existing static items
+  const allAboutPages = [...aboutLinks, ...dynamicAboutPages];
+  const allWingsPages = [...specializedWings, ...dynamicWingsPages];
+  const allCitizenPages = [...citizenServices, ...dynamicCitizenPages];
+  const allMediaPages = [...dynamicMediaPages];
+  const allContactPages = [...dynamicContactPages];
 
   return (
     <header className="bg-white shadow-sm border-b-2 border-blue-600">
@@ -216,11 +249,26 @@ export default function Header() {
                     Home
                   </Button>
 
+                  {/* Top-level pages */}
+                  {topLevelPages.map((page: any) => (
+                    <Button
+                      key={page.slug}
+                      variant="ghost"
+                      className="w-full justify-start"
+                      onClick={() => {
+                        window.location.href = `/${page.slug}`;
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      {page.menuTitle || page.title}
+                    </Button>
+                  ))}
+
                   <div className="space-y-1">
                     <p className="font-medium text-sm text-gray-500 px-3">
                       About CID
                     </p>
-                    {aboutLinks.map((link) => (
+                    {allAboutPages.map((link) => (
                       <Button
                         key={link.href}
                         variant="ghost"
@@ -239,7 +287,7 @@ export default function Header() {
                     <p className="font-medium text-sm text-gray-500 px-3">
                       Specialized Wings
                     </p>
-                    {specializedWings.map((wing) => (
+                    {allWingsPages.map((wing) => (
                       <Button
                         key={wing.href}
                         variant="ghost"
@@ -249,7 +297,7 @@ export default function Header() {
                           setIsMobileMenuOpen(false);
                         }}
                       >
-                        <wing.icon className="mr-2 h-4 w-4" />
+                        {wing.icon && <wing.icon className="mr-2 h-4 w-4" />}
                         {wing.title}
                       </Button>
                     ))}
@@ -259,7 +307,7 @@ export default function Header() {
                     <p className="font-medium text-sm text-gray-500 px-3">
                       Citizen Services
                     </p>
-                    {citizenServices.map((service) => (
+                    {allCitizenPages.map((service) => (
                       <Button
                         key={service.href}
                         variant="ghost"
@@ -273,6 +321,48 @@ export default function Header() {
                       </Button>
                     ))}
                   </div>
+
+                  {allMediaPages.length > 0 && (
+                    <div className="space-y-1">
+                      <p className="font-medium text-sm text-gray-500 px-3">
+                        Media & Resources
+                      </p>
+                      {allMediaPages.map((media) => (
+                        <Button
+                          key={media.href}
+                          variant="ghost"
+                          className="w-full justify-start text-sm pl-6"
+                          onClick={() => {
+                            window.location.href = media.href;
+                            setIsMobileMenuOpen(false);
+                          }}
+                        >
+                          {media.title}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+
+                  {allContactPages.length > 0 && (
+                    <div className="space-y-1">
+                      <p className="font-medium text-sm text-gray-500 px-3">
+                        Contact & Information
+                      </p>
+                      {allContactPages.map((contact) => (
+                        <Button
+                          key={contact.href}
+                          variant="ghost"
+                          className="w-full justify-start text-sm pl-6"
+                          onClick={() => {
+                            window.location.href = contact.href;
+                            setIsMobileMenuOpen(false);
+                          }}
+                        >
+                          {contact.title}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
 
                   <Button
                     variant="ghost"
@@ -305,79 +395,132 @@ export default function Header() {
                 </NavigationMenuLink>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
-                  About CID
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="w-80 p-4">
-                    {aboutLinks.map((link) => (
-                      <NavigationMenuLink
-                        key={link.href}
-                        className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
-                        onClick={() => (window.location.href = link.href)}
-                      >
-                        {link.title}
-                      </NavigationMenuLink>
-                    ))}
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+              {/* Top-level pages */}
+              {topLevelPages.map((page: any) => (
+                <NavigationMenuItem key={page.slug}>
+                  <NavigationMenuLink
+                    className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
+                    onClick={() => (window.location.href = `/${page.slug}`)}
+                  >
+                    {page.menuTitle || page.title}
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              ))}
 
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
-                  Specialized Wings
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="w-96 p-4">
-                    {specializedWings.map((wing) => (
-                      <NavigationMenuLink
-                        key={wing.href}
-                        className="flex items-start space-x-3 px-4 py-3 hover:bg-gray-100 rounded transition group cursor-pointer"
-                        onClick={() => (window.location.href = wing.href)}
-                      >
-                        <wing.icon className="h-5 w-5 text-gray-600 mt-0.5" />
-                        <div>
-                          <div className="font-medium text-gray-900 group-hover:text-blue-600">
-                            {wing.title}
+              {allAboutPages.length > 0 && (
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+                    About CID
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="w-80 p-4">
+                      {allAboutPages.map((link) => (
+                        <NavigationMenuLink
+                          key={link.href}
+                          className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
+                          onClick={() => (window.location.href = link.href)}
+                        >
+                          {link.title}
+                        </NavigationMenuLink>
+                      ))}
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              )}
+
+              {allWingsPages.length > 0 && (
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+                    Specialized Wings
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="w-96 p-4">
+                      {allWingsPages.map((wing) => (
+                        <NavigationMenuLink
+                          key={wing.href}
+                          className="flex items-start space-x-3 px-4 py-3 hover:bg-gray-100 rounded transition group cursor-pointer"
+                          onClick={() => (window.location.href = wing.href)}
+                        >
+                          {wing.icon && <wing.icon className="h-5 w-5 text-gray-600 mt-0.5" />}
+                          <div>
+                            <div className="font-medium text-gray-900 group-hover:text-blue-600">
+                              {wing.title}
+                            </div>
+                            {wing.description && (
+                              <div className="text-sm text-gray-600">
+                                {wing.description}
+                              </div>
+                            )}
                           </div>
-                          <div className="text-sm text-gray-600">
-                            {wing.description}
-                          </div>
-                        </div>
-                      </NavigationMenuLink>
-                    ))}
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+                        </NavigationMenuLink>
+                      ))}
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              )}
 
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
-                  Citizen Services
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="w-80 p-4">
-                    {citizenServices.map((service) => (
-                      <NavigationMenuLink
-                        key={service.href}
-                        className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
-                        onClick={() => (window.location.href = service.href)}
-                      >
-                        {service.title}
-                      </NavigationMenuLink>
-                    ))}
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+              {allCitizenPages.length > 0 && (
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+                    Citizen Services
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="w-80 p-4">
+                      {allCitizenPages.map((service) => (
+                        <NavigationMenuLink
+                          key={service.href}
+                          className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
+                          onClick={() => (window.location.href = service.href)}
+                        >
+                          {service.title}
+                        </NavigationMenuLink>
+                      ))}
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              )}
 
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
-                  onClick={() => (window.location.href = "/public-awareness")}
-                >
-                  Public Awareness
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+              {allMediaPages.length > 0 && (
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+                    Media & Resources
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="w-80 p-4">
+                      {allMediaPages.map((media) => (
+                        <NavigationMenuLink
+                          key={media.href}
+                          className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
+                          onClick={() => (window.location.href = media.href)}
+                        >
+                          {media.title}
+                        </NavigationMenuLink>
+                      ))}
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              )}
+
+              {allContactPages.length > 0 && (
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+                    Contact & Information
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <div className="w-80 p-4">
+                      {allContactPages.map((contact) => (
+                        <NavigationMenuLink
+                          key={contact.href}
+                          className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
+                          onClick={() => (window.location.href = contact.href)}
+                        >
+                          {contact.title}
+                        </NavigationMenuLink>
+                      ))}
+                    </div>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              )}
 
               <NavigationMenuItem>
                 <NavigationMenuLink

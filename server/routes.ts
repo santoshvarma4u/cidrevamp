@@ -46,6 +46,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Menu pages endpoint
+  app.get('/api/pages/menu', async (req, res) => {
+    try {
+      const menuPages = await storage.getMenuPages();
+      res.json(menuPages);
+    } catch (error) {
+      console.error("Error fetching menu pages:", error);
+      res.status(500).json({ message: "Failed to fetch menu pages" });
+    }
+  });
+
   app.get('/api/pages/slug/:slug', async (req, res) => {
     try {
       const page = await storage.getPageBySlug(req.params.slug);

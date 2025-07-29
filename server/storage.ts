@@ -38,6 +38,7 @@ export interface IStorage {
   getPage(id: number): Promise<Page | undefined>;
   getPageBySlug(slug: string): Promise<Page | undefined>;
   getPages(published?: boolean): Promise<Page[]>;
+  getMenuPages(): Promise<Page[]>;
 
   // Video operations
   createVideo(video: InsertVideo): Promise<Video>;
@@ -131,6 +132,12 @@ export class DatabaseStorage implements IStorage {
       query = query.where(eq(pages.isPublished, published));
     }
     return query.orderBy(desc(pages.updatedAt));
+  }
+
+  async getMenuPages(): Promise<Page[]> {
+    return db.select().from(pages)
+      .where(and(eq(pages.isPublished, true), eq(pages.showInMenu, true)))
+      .orderBy(pages.menuOrder, pages.title);
   }
 
   // Video operations

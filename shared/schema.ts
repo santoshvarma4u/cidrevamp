@@ -49,6 +49,13 @@ export const pages = pgTable("pages", {
   metaTitle: varchar("meta_title"),
   metaDescription: text("meta_description"),
   isPublished: boolean("is_published").default(false),
+  // Menu configuration fields
+  showInMenu: boolean("show_in_menu").default(false),
+  menuTitle: varchar("menu_title"), // Optional custom menu title (falls back to title)
+  menuParent: varchar("menu_parent"), // Parent menu group (e.g., 'about', 'citizen-services', 'wings')
+  menuOrder: integer("menu_order").default(0), // Order within menu group
+  menuDescription: text("menu_description"), // Optional description for dropdown menus
+  // End menu fields
   authorId: varchar("author_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
