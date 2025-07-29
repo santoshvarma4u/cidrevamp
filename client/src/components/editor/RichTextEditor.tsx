@@ -43,6 +43,7 @@ export default function RichTextEditor({
 
   useEffect(() => {
     if (editorRef.current && !isUpdatingRef.current) {
+      // Set the HTML content directly so it renders properly
       editorRef.current.innerHTML = value || '';
     }
   }, [value]);
@@ -132,26 +133,15 @@ export default function RichTextEditor({
   };
 
   const insertTable = () => {
-    const tableHtml = `
-      <table border="1" style="border-collapse: collapse; width: 100%; margin: 10px 0;">
-        <tr>
-          <th style="padding: 8px; background-color: #f5f5f5;">Header 1</th>
-          <th style="padding: 8px; background-color: #f5f5f5;">Header 2</th>
-          <th style="padding: 8px; background-color: #f5f5f5;">Header 3</th>
-        </tr>
-        <tr>
-          <td style="padding: 8px;">Cell 1</td>
-          <td style="padding: 8px;">Cell 2</td>
-          <td style="padding: 8px;">Cell 3</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px;">Cell 4</td>
-          <td style="padding: 8px;">Cell 5</td>
-          <td style="padding: 8px;">Cell 6</td>
-        </tr>
-      </table>
-    `;
+    const tableHtml = `<table border="1" style="border-collapse: collapse; width: 100%; margin: 10px 0;"><tr><th style="padding: 8px; background-color: #f5f5f5;">Header 1</th><th style="padding: 8px; background-color: #f5f5f5;">Header 2</th><th style="padding: 8px; background-color: #f5f5f5;">Header 3</th></tr><tr><td style="padding: 8px;">Cell 1</td><td style="padding: 8px;">Cell 2</td><td style="padding: 8px;">Cell 3</td></tr><tr><td style="padding: 8px;">Cell 4</td><td style="padding: 8px;">Cell 5</td><td style="padding: 8px;">Cell 6</td></tr></table>`;
     document.execCommand('insertHTML', false, tableHtml);
+    editorRef.current?.focus();
+    handleInput();
+  };
+
+  const insertOfficerGrid = () => {
+    const gridHtml = `<div style="text-align: center; margin-bottom: 40px;"><h1 style="color: #1e40af; font-size: 2.5rem; font-weight: bold; margin-bottom: 20px;">Senior Officers</h1></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; padding: 20px;"><div style="background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 30px; text-align: center; border: 1px solid #e5e7eb;"><div style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin: 0 auto 20px; border: 4px solid #3b82f6;"><img src="https://via.placeholder.com/120x120/4f46e5/ffffff?text=OFFICER" alt="Officer Name" style="width: 100%; height: 100%; object-fit: cover;"></div><h3 style="color: #1e40af; font-weight: bold; margin-bottom: 8px; font-size: 1.1rem;">OFFICER NAME, IPS</h3><p style="color: #6b7280; margin-bottom: 4px; font-weight: 600;">Designation</p><p style="color: #6b7280; margin-bottom: 4px;">Department</p><p style="color: #6b7280; margin-bottom: 15px;">CID, Telangana</p><a href="mailto:officer@tspolice.gov.in" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">officer@tspolice.gov.in</a></div><div style="background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 30px; text-align: center; border: 1px solid #e5e7eb;"><div style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin: 0 auto 20px; border: 4px solid #3b82f6;"><img src="https://via.placeholder.com/120x120/059669/ffffff?text=OFFICER" alt="Officer Name" style="width: 100%; height: 100%; object-fit: cover;"></div><h3 style="color: #1e40af; font-weight: bold; margin-bottom: 8px; font-size: 1.1rem;">OFFICER NAME, IPS</h3><p style="color: #6b7280; margin-bottom: 4px; font-weight: 600;">Designation</p><p style="color: #6b7280; margin-bottom: 4px;">Department</p><p style="color: #6b7280; margin-bottom: 15px;">CID, Telangana</p><a href="mailto:officer@tspolice.gov.in" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">officer@tspolice.gov.in</a></div><div style="background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 30px; text-align: center; border: 1px solid #e5e7eb;"><div style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin: 0 auto 20px; border: 4px solid #3b82f6;"><img src="https://via.placeholder.com/120x120/dc2626/ffffff?text=OFFICER" alt="Officer Name" style="width: 100%; height: 100%; object-fit: cover;"></div><h3 style="color: #1e40af; font-weight: bold; margin-bottom: 8px; font-size: 1.1rem;">OFFICER NAME, IPS</h3><p style="color: #6b7280; margin-bottom: 4px; font-weight: 600;">Designation</p><p style="color: #6b7280; margin-bottom: 4px;">Department</p><p style="color: #6b7280; margin-bottom: 15px;">CID, Telangana</p><a href="mailto:officer@tspolice.gov.in" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">officer@tspolice.gov.in</a></div></div>`;
+    document.execCommand('insertHTML', false, gridHtml);
     editorRef.current?.focus();
     handleInput();
   };
@@ -345,6 +335,14 @@ export default function RichTextEditor({
           title="Insert Table"
         >
           📊
+        </button>
+        <button
+          type="button"
+          onClick={insertOfficerGrid}
+          className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-200"
+          title="Insert Officer Grid"
+        >
+          👥
         </button>
         
         <div className="w-px bg-gray-300 mx-1"></div>
