@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  Phone, 
-  Mail, 
-  Menu, 
-  Shield, 
-  AlertTriangle, 
+  Phone,
+  Mail,
+  Menu,
+  Shield,
+  AlertTriangle,
   FileText,
   ChevronDown,
   ExternalLink,
@@ -34,19 +34,19 @@ export default function Header() {
       href: "/wings/economic-offences",
     },
     {
-      title: "Cyber Crimes Wing", 
+      title: "Cyber Crimes Wing",
       description: "IT Act violations, cyber security",
       href: "/wings/cyber-crimes",
     },
     {
       title: "Women & Child Protection",
-      description: "Women safety, SHE teams, anti-trafficking", 
+      description: "Women safety, SHE teams, anti-trafficking",
       href: "/wings/women-protection",
     },
     {
       title: "General Offences Wing",
       description: "Criminal investigations, murder cases",
-      href: "/wings/general-offences", 
+      href: "/wings/general-offences",
     },
     {
       title: "Protection of Civil Rights",
@@ -89,9 +89,9 @@ export default function Header() {
               </span>
             </div>
             <div className="flex items-center space-x-4">
-              <a 
-                href="https://twitter.com/CIDTelangana" 
-                target="_blank" 
+              <a
+                href="https://twitter.com/CIDTelangana"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-blue-300 transition-colors"
               >
@@ -114,12 +114,16 @@ export default function Header() {
               <Shield className="text-white h-8 w-8" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Crime Investigation Department</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Crime Investigation Department
+              </h1>
               <p className="text-gray-600">Telangana State Police</p>
-              <p className="text-sm text-gray-500 hidden md:block">3rd Floor, DGP Office, Lakadikapul, Hyderabad-004</p>
+              <p className="text-sm text-gray-500 hidden md:block">
+                3rd Floor, DGP Office, Lakadikapul, Hyderabad-004
+              </p>
             </div>
           </Link>
-          
+
           <div className="hidden md:flex items-center space-x-4">
             <Button className="bg-red-600 hover:bg-red-700">
               <AlertTriangle className="mr-2 h-4 w-4" />
@@ -154,7 +158,7 @@ export default function Header() {
 
                   <NavigationMenuItem>
                     <NavigationMenuTrigger className="bg-transparent hover:bg-blue-700">
-                      About CID
+                      About
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid w-80 gap-1 p-4 bg-white text-gray-900">
@@ -165,7 +169,9 @@ export default function Header() {
                                 href={page.href}
                                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900"
                               >
-                                <div className="text-sm font-medium leading-none">{page.title}</div>
+                                <div className="text-sm font-medium leading-none">
+                                  {page.title}
+                                </div>
                               </Link>
                             </NavigationMenuLink>
                           </li>
@@ -187,7 +193,9 @@ export default function Header() {
                                 href={wing.href}
                                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900"
                               >
-                                <div className="text-sm font-medium leading-none">{wing.title}</div>
+                                <div className="text-sm font-medium leading-none">
+                                  {wing.title}
+                                </div>
                                 <p className="line-clamp-2 text-xs leading-snug text-gray-600">
                                   {wing.description}
                                 </p>
@@ -212,7 +220,9 @@ export default function Header() {
                                 href={service.href}
                                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900"
                               >
-                                <div className="text-sm font-medium leading-none">{service.title}</div>
+                                <div className="text-sm font-medium leading-none">
+                                  {service.title}
+                                </div>
                               </Link>
                             </NavigationMenuLink>
                           </li>
@@ -245,28 +255,41 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden text-white hover:bg-blue-700">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="lg:hidden text-white hover:bg-blue-700"
+                >
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-80 bg-white">
                 <div className="flex flex-col space-y-4 mt-8">
                   <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full justify-start text-left">
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start text-left"
+                    >
                       Home
                     </Button>
                   </Link>
-                  
+
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">About CID</h3>
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                      About CID
+                    </h3>
                     <div className="space-y-1 ml-4">
                       {aboutPages.map((page) => (
-                        <Link 
-                          key={page.href} 
-                          href={page.href} 
+                        <Link
+                          key={page.href}
+                          href={page.href}
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
-                          <Button variant="ghost" size="sm" className="w-full justify-start text-left">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="w-full justify-start text-left"
+                          >
                             {page.title}
                           </Button>
                         </Link>
@@ -275,15 +298,21 @@ export default function Header() {
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Specialized Wings</h3>
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                      Specialized Wings
+                    </h3>
                     <div className="space-y-1 ml-4">
                       {specializedWings.map((wing) => (
-                        <Link 
-                          key={wing.href} 
-                          href={wing.href} 
+                        <Link
+                          key={wing.href}
+                          href={wing.href}
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
-                          <Button variant="ghost" size="sm" className="w-full justify-start text-left">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="w-full justify-start text-left"
+                          >
                             {wing.title}
                           </Button>
                         </Link>
@@ -292,15 +321,21 @@ export default function Header() {
                   </div>
 
                   <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Citizen Services</h3>
+                    <h3 className="font-semibold text-gray-900 mb-2">
+                      Citizen Services
+                    </h3>
                     <div className="space-y-1 ml-4">
                       {citizenServices.map((service) => (
-                        <Link 
-                          key={service.href} 
-                          href={service.href} 
+                        <Link
+                          key={service.href}
+                          href={service.href}
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
-                          <Button variant="ghost" size="sm" className="w-full justify-start text-left">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="w-full justify-start text-left"
+                          >
                             {service.title}
                           </Button>
                         </Link>
