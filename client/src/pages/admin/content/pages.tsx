@@ -60,7 +60,7 @@ export default function AdminPages() {
     isPublished: false,
     showInMenu: false,
     menuTitle: "",
-    menuParent: "",
+    menuParent: "none",
     menuOrder: 0,
     menuDescription: "",
   });
@@ -200,7 +200,7 @@ export default function AdminPages() {
       isPublished: false,
       showInMenu: false,
       menuTitle: "",
-      menuParent: "",
+      menuParent: "none",
       menuOrder: 0,
       menuDescription: "",
     });
@@ -208,10 +208,17 @@ export default function AdminPages() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Convert "none" back to empty string for database
+    const submissionData = {
+      ...formData,
+      menuParent: formData.menuParent === "none" ? "" : formData.menuParent
+    };
+    
     if (editingPage) {
-      updatePageMutation.mutate({ id: editingPage.id, data: formData });
+      updatePageMutation.mutate({ id: editingPage.id, data: submissionData });
     } else {
-      createPageMutation.mutate(formData);
+      createPageMutation.mutate(submissionData);
     }
   };
 
@@ -226,7 +233,7 @@ export default function AdminPages() {
       isPublished: page.isPublished,
       showInMenu: page.showInMenu || false,
       menuTitle: page.menuTitle || "",
-      menuParent: page.menuParent || "",
+      menuParent: page.menuParent || "none",
       menuOrder: page.menuOrder || 0,
       menuDescription: page.menuDescription || "",
     });
@@ -372,7 +379,7 @@ export default function AdminPages() {
                                 <SelectValue placeholder="Select parent menu or leave blank for main menu" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="">Main Menu (No Parent)</SelectItem>
+                                <SelectItem value="none">Main Menu (No Parent)</SelectItem>
                                 {Array.isArray(pages) && (pages as any[])
                                   .filter((page: any) => page.showInMenu && !page.menuParent)
                                   .sort((a: any, b: any) => a.menuOrder - b.menuOrder)
@@ -384,7 +391,7 @@ export default function AdminPages() {
                               </SelectContent>
                             </Select>
                             <p className="text-xs text-gray-500 mt-1">
-                              {formData.menuParent ? "Will appear as dropdown item" : "Will appear as main menu item"}
+                              {formData.menuParent && formData.menuParent !== "none" ? "Will appear as dropdown item" : "Will appear as main menu item"}
                             </p>
                           </div>
                         </div>
