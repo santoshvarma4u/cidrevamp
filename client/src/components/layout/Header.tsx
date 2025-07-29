@@ -32,8 +32,8 @@ export default function Header() {
   // Get all parent-level menu pages (no submenus)
   const pages = Array.isArray(menuPages) ? menuPages : [];
   const mainMenuPages = pages
-    .filter((page: any) => page.show_in_menu)
-    .sort((a: any, b: any) => a.menu_order - b.menu_order);
+    .filter((page: any) => page.showInMenu)
+    .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
 
   return (
     <header className="bg-white shadow-sm border-b-2 border-blue-600">
@@ -168,7 +168,7 @@ export default function Header() {
                         setIsMobileMenuOpen(false);
                       }}
                     >
-                      {page.menu_title || page.title}
+                      {page.menuTitle || page.title}
                     </Button>
                   ))}
                 </div>
@@ -198,7 +198,7 @@ export default function Header() {
                 className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2"
                 onClick={() => (window.location.href = `/${page.slug}`)}
               >
-                {page.menu_title || page.title}
+                {page.menuTitle || page.title}
               </Button>
             ))}
           </div>
