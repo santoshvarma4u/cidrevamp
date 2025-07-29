@@ -128,11 +128,11 @@ export class DatabaseStorage implements IStorage {
 
   async getPages(published?: boolean): Promise<Page[]> {
     if (published !== undefined) {
-      return db.select().from(pages)
+      return await db.select().from(pages)
         .where(eq(pages.isPublished, published))
         .orderBy(desc(pages.updatedAt));
     }
-    return db.select().from(pages)
+    return await db.select().from(pages)
       .orderBy(desc(pages.updatedAt));
   }
 
@@ -167,11 +167,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getVideos(published?: boolean): Promise<Video[]> {
-    let query = db.select().from(videos);
     if (published !== undefined) {
-      query = query.where(eq(videos.isPublished, published));
+      return await db.select().from(videos)
+        .where(eq(videos.isPublished, published))
+        .orderBy(desc(videos.createdAt));
     }
-    return query.orderBy(desc(videos.createdAt));
+    return await db.select().from(videos)
+      .orderBy(desc(videos.createdAt));
   }
 
   // Photo operations
@@ -199,11 +201,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPhotos(published?: boolean): Promise<Photo[]> {
-    let query = db.select().from(photos);
     if (published !== undefined) {
-      query = query.where(eq(photos.isPublished, published));
+      return await db.select().from(photos)
+        .where(eq(photos.isPublished, published))
+        .orderBy(desc(photos.createdAt));
     }
-    return query.orderBy(desc(photos.createdAt));
+    return await db.select().from(photos)
+      .orderBy(desc(photos.createdAt));
   }
 
   async getPhotosByCategory(category: string): Promise<Photo[]> {
@@ -292,11 +296,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllNews(published?: boolean): Promise<News[]> {
-    let query = db.select().from(news);
     if (published !== undefined) {
-      query = query.where(eq(news.isPublished, published));
+      return await db.select().from(news)
+        .where(eq(news.isPublished, published))
+        .orderBy(desc(news.createdAt));
     }
-    return query.orderBy(desc(news.createdAt));
+    return await db.select().from(news)
+      .orderBy(desc(news.createdAt));
   }
 
   // Menu operations

@@ -37,7 +37,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Pages
   app.get('/api/pages', async (req, res) => {
     try {
-      const published = req.query.published === 'true';
+      let published: boolean | undefined = undefined;
+      
+      if (req.query.published === 'true') {
+        published = true;
+      } else if (req.query.published === 'false') {
+        published = false;
+      }
+      // If no published query param, get all pages
+      
       const pages = await storage.getPages(published);
       res.json(pages);
     } catch (error) {

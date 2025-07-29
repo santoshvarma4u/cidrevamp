@@ -56,10 +56,7 @@ function Router() {
       {/* Admin auth route (public) */}
       <Route path="/admin/login" component={AdminAuth} />
 
-      {/* Dynamic page route - must be after all static routes */}
-      <Route path="/:slug" component={DynamicPage} />
-
-      {/* Admin routes */}
+      {/* Admin routes - must be before dynamic page route */}
       {isAuthenticated && isAdmin && (
         <>
           <Route path="/admin" component={AdminDashboard} />
@@ -70,6 +67,9 @@ function Router() {
           <Route path="/admin/complaints" component={AdminComplaints} />
         </>
       )}
+
+      {/* Dynamic page route - must be LAST after all static routes */}
+      <Route path="/:slug" component={DynamicPage} />
 
       <Route component={NotFound} />
     </Switch>
