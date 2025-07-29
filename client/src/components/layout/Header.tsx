@@ -29,11 +29,21 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: menuPages = [], isLoading: menuLoading } = useMenuPages();
 
-  // Get all parent-level menu pages (no submenus)
+  // Get all menu pages and organize them hierarchically
   const pages = Array.isArray(menuPages) ? menuPages : [];
-  const mainMenuPages = pages
-    .filter((page: any) => page.showInMenu)
+  const allMenuPages = pages.filter((page: any) => page.showInMenu);
+  
+  // Get parent pages (no menuParent)
+  const parentPages = allMenuPages
+    .filter((page: any) => !page.menuParent)
     .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
+  
+  // Get child pages grouped by parent
+  const getChildPages = (parentSlug: string) => {
+    return allMenuPages
+      .filter((page: any) => page.menuParent === parentSlug)
+      .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
+  };
 
   return (
     <header className="bg-white shadow-sm border-b-2 border-blue-600">
@@ -157,20 +167,40 @@ export default function Header() {
                     Home
                   </Button>
 
-                  {/* Main menu pages */}
-                  {mainMenuPages.map((page: any) => (
-                    <Button
-                      key={page.slug}
-                      variant="ghost"
-                      className="w-full justify-start"
-                      onClick={() => {
-                        window.location.href = `/${page.slug}`;
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      {page.menuTitle || page.title}
-                    </Button>
-                  ))}
+                  {/* Parent menu pages with potential submenus */}
+                  {parentPages.map((page: any) => {
+                    const childPages = getChildPages(page.slug);
+                    
+                    return (
+                      <div key={page.slug} className="space-y-1">
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start font-medium"
+                          onClick={() => {
+                            window.location.href = `/${page.slug}`;
+                            setIsMobileMenuOpen(false);
+                          }}
+                        >
+                          {page.menuTitle || page.title}
+                        </Button>
+                        
+                        {/* Child pages */}
+                        {childPages.map((childPage: any) => (
+                          <Button
+                            key={childPage.slug}
+                            variant="ghost"
+                            className="w-full justify-start pl-6 text-sm text-gray-600"
+                            onClick={() => {
+                              window.location.href = `/${childPage.slug}`;
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
+                            {childPage.menuTitle || childPage.title}
+                          </Button>
+                        ))}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </SheetContent>
@@ -190,17 +220,54 @@ export default function Header() {
               Home
             </Button>
 
-            {/* Main menu pages */}
-            {mainMenuPages.map((page: any) => (
-              <Button
-                key={page.slug}
-                variant="ghost"
-                className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2"
-                onClick={() => (window.location.href = `/${page.slug}`)}
-              >
-                {page.menuTitle || page.title}
-              </Button>
-            ))}
+            {/* Parent menu pages with dropdowns if they have children */}
+            {parentPages.map((page: any) => {
+              const childPages = getChildPages(page.slug);
+              
+              if (childPages.length > 0) {
+                // Has children - render as dropdown
+                return (
+                  <DropdownMenu key={page.slug}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2 flex items-center space-x-1"
+                      >
+                        <span>{page.menuTitle || page.title}</span>
+                        <ChevronDown className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuItem
+                        onClick={() => (window.location.href = `/${page.slug}`)}
+                      >
+                        {page.menuTitle || page.title} Home
+                      </DropdownMenuItem>
+                      {childPages.map((childPage: any) => (
+                        <DropdownMenuItem
+                          key={childPage.slug}
+                          onClick={() => (window.location.href = `/${childPage.slug}`)}
+                        >
+                          {childPage.menuTitle || childPage.title}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                );
+              } else {
+                // No children - render as regular button
+                return (
+                  <Button
+                    key={page.slug}
+                    variant="ghost"
+                    className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2"
+                    onClick={() => (window.location.href = `/${page.slug}`)}
+                  >
+                    {page.menuTitle || page.title}
+                  </Button>
+                );
+              }
+            })}
           </div>
         </div>
       </nav>

@@ -40,7 +40,9 @@ interface PageFormData {
   isPublished: boolean;
   showInMenu: boolean;
   menuTitle: string;
+  menuParent: string;
   menuOrder: number;
+  menuDescription: string;
 }
 
 export default function AdminPages() {
@@ -58,7 +60,9 @@ export default function AdminPages() {
     isPublished: false,
     showInMenu: false,
     menuTitle: "",
+    menuParent: "",
     menuOrder: 0,
+    menuDescription: "",
   });
 
   useEffect(() => {
@@ -196,7 +200,9 @@ export default function AdminPages() {
       isPublished: false,
       showInMenu: false,
       menuTitle: "",
+      menuParent: "",
       menuOrder: 0,
+      menuDescription: "",
     });
   };
 
@@ -220,7 +226,9 @@ export default function AdminPages() {
       isPublished: page.isPublished,
       showInMenu: page.showInMenu || false,
       menuTitle: page.menuTitle || "",
+      menuParent: page.menuParent || "",
       menuOrder: page.menuOrder || 0,
+      menuDescription: page.menuDescription || "",
     });
     setIsDialogOpen(true);
   };
@@ -342,7 +350,6 @@ export default function AdminPages() {
                     {formData.showInMenu && (
                       <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
                         <h3 className="font-semibold text-gray-900">Menu Configuration</h3>
-                        <p className="text-sm text-gray-600 mb-4">This page will appear as a parent menu item in the main navigation.</p>
                         
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
@@ -351,11 +358,38 @@ export default function AdminPages() {
                               id="menuTitle"
                               value={formData.menuTitle}
                               onChange={(e) => setFormData({ ...formData, menuTitle: e.target.value })}
-                              placeholder="e.g., ABOUT, CIG, MEDIA"
-                              required
+                              placeholder="Leave empty to use page title"
                             />
-                            <p className="text-xs text-gray-500 mt-1">This will be the text displayed in the navigation menu</p>
+                            <p className="text-xs text-gray-500 mt-1">Text displayed in navigation menu</p>
                           </div>
+                          <div>
+                            <Label htmlFor="menuParent">Parent Menu</Label>
+                            <Select 
+                              value={formData.menuParent} 
+                              onValueChange={(value) => setFormData({ ...formData, menuParent: value })}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select parent menu or leave blank for main menu" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="">Main Menu (No Parent)</SelectItem>
+                                {Array.isArray(pages) && (pages as any[])
+                                  .filter((page: any) => page.showInMenu && !page.menuParent)
+                                  .sort((a: any, b: any) => a.menuOrder - b.menuOrder)
+                                  .map((page: any) => (
+                                    <SelectItem key={page.id} value={page.slug}>
+                                      {page.menuTitle || page.title}
+                                    </SelectItem>
+                                  ))}
+                              </SelectContent>
+                            </Select>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {formData.menuParent ? "Will appear as dropdown item" : "Will appear as main menu item"}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="grid md:grid-cols-2 gap-4">
                           <div>
                             <Label htmlFor="menuOrder">Display Order</Label>
                             <Input
@@ -363,10 +397,19 @@ export default function AdminPages() {
                               type="number"
                               value={formData.menuOrder}
                               onChange={(e) => setFormData({ ...formData, menuOrder: parseInt(e.target.value) || 0 })}
-                              placeholder="1, 2, 3..."
-                              min="1"
+                              placeholder="0"
                             />
-                            <p className="text-xs text-gray-500 mt-1">Lower numbers appear first in the menu</p>
+                            <p className="text-xs text-gray-500 mt-1">Lower numbers appear first</p>
+                          </div>
+                          <div>
+                            <Label htmlFor="menuDescription">Menu Description (optional)</Label>
+                            <Input
+                              id="menuDescription"
+                              value={formData.menuDescription}
+                              onChange={(e) => setFormData({ ...formData, menuDescription: e.target.value })}
+                              placeholder="Brief description for dropdown menus"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">Shown in dropdown tooltips</p>
                           </div>
                         </div>
                       </div>
@@ -432,9 +475,15 @@ export default function AdminPages() {
                                 <Badge variant="outline" className="text-xs">
                                   In Menu
                                 </Badge>
-                                <div className="text-xs text-gray-500">
-                                  Order: {page.menuOrder || 0}
-                                </div>
+                                {page.menuParent ? (
+                                  <div className="text-xs text-gray-500">
+                                    Under: {page.menuParent}
+                                  </div>
+                                ) : (
+                                  <div className="text-xs text-gray-500">
+                                    Main Menu Item
+                                  </div>
+                                )}
                               </div>
                             ) : (
                               <span className="text-gray-400 text-sm">Not in menu</span>
