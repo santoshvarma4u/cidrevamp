@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Calendar, User } from "lucide-react";
 
 interface NewsItem {
   id: number;
+  title?: string;
   content: string;
+  excerpt?: string;
+  publishedAt?: string;
   borderColor: string;
 }
 
@@ -60,17 +66,58 @@ export default function AutoScrollNews({
       >
         {/* Duplicate items for seamless loop */}
         {[...newsItems, ...newsItems].map((item, index) => (
-          <div 
-            key={`${item.id}-${index}`}
-            className="mb-4 p-3 bg-gray-50 rounded-lg"
-            style={{ minHeight: '120px' }}
-          >
-            <div className={`border-l-4 ${item.borderColor} pl-4 w-full`}>
-              <p className="text-gray-700 leading-relaxed text-sm">
-                {item.content}
-              </p>
-            </div>
-          </div>
+          <Dialog key={`${item.id}-${index}`}>
+            <DialogTrigger asChild>
+              <div 
+                className="mb-4 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+                style={{ minHeight: '120px' }}
+              >
+                <div className={`border-l-4 ${item.borderColor} pl-4 w-full`}>
+                  {item.title && (
+                    <h4 className="text-gray-900 font-semibold text-sm mb-2 line-clamp-2">
+                      {item.title}
+                    </h4>
+                  )}
+                  <p className="text-gray-700 leading-relaxed text-sm line-clamp-3">
+                    {item.excerpt || item.content}
+                  </p>
+                  <p className="text-blue-600 text-xs mt-2 font-medium">
+                    Click to read more →
+                  </p>
+                </div>
+              </div>
+            </DialogTrigger>
+            
+            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-xl font-bold text-gray-900">
+                  {item.title || "News Article"}
+                </DialogTitle>
+                {item.publishedAt && (
+                  <div className="flex items-center space-x-4 text-sm text-gray-500 mt-2">
+                    <div className="flex items-center space-x-1">
+                      <Calendar className="h-4 w-4" />
+                      <span>{new Date(item.publishedAt).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <User className="h-4 w-4" />
+                      <span>CID Telangana</span>
+                    </div>
+                  </div>
+                )}
+              </DialogHeader>
+              
+              <div className="mt-4">
+                <div className={`border-l-4 ${item.borderColor} pl-4`}>
+                  <div className="prose prose-sm max-w-none">
+                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                      {item.content}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         ))}
       </div>
     </div>

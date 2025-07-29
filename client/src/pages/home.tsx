@@ -254,7 +254,10 @@ export default function Home() {
                     <AutoScrollNews 
                       newsItems={latestNews.map((newsItem, index) => ({
                         id: newsItem.id,
-                        content: newsItem.excerpt || newsItem.content.substring(0, 300) + "...",
+                        title: newsItem.title,
+                        content: newsItem.content,
+                        excerpt: newsItem.excerpt || newsItem.content.substring(0, 200) + "...",
+                        publishedAt: newsItem.publishedAt,
                         borderColor: index % 3 === 0 ? "border-orange-400" : index % 3 === 1 ? "border-blue-400" : "border-green-400"
                       }))}
                       scrollInterval={6000}
