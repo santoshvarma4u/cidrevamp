@@ -40,9 +40,7 @@ interface PageFormData {
   isPublished: boolean;
   showInMenu: boolean;
   menuTitle: string;
-  menuParent: string;
   menuOrder: number;
-  menuDescription: string;
 }
 
 export default function AdminPages() {
@@ -60,9 +58,7 @@ export default function AdminPages() {
     isPublished: false,
     showInMenu: false,
     menuTitle: "",
-    menuParent: "",
     menuOrder: 0,
-    menuDescription: "",
   });
 
   useEffect(() => {
@@ -200,9 +196,7 @@ export default function AdminPages() {
       isPublished: false,
       showInMenu: false,
       menuTitle: "",
-      menuParent: "",
       menuOrder: 0,
-      menuDescription: "",
     });
   };
 
@@ -226,9 +220,7 @@ export default function AdminPages() {
       isPublished: page.isPublished,
       showInMenu: page.showInMenu || false,
       menuTitle: page.menuTitle || "",
-      menuParent: page.menuParent || "",
       menuOrder: page.menuOrder || 0,
-      menuDescription: page.menuDescription || "",
     });
     setIsDialogOpen(true);
   };
@@ -350,39 +342,20 @@ export default function AdminPages() {
                     {formData.showInMenu && (
                       <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
                         <h3 className="font-semibold text-gray-900">Menu Configuration</h3>
+                        <p className="text-sm text-gray-600 mb-4">This page will appear as a parent menu item in the main navigation.</p>
                         
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="menuTitle">Menu Title (optional)</Label>
+                            <Label htmlFor="menuTitle">Menu Title</Label>
                             <Input
                               id="menuTitle"
                               value={formData.menuTitle}
                               onChange={(e) => setFormData({ ...formData, menuTitle: e.target.value })}
-                              placeholder="Leave empty to use page title"
+                              placeholder="e.g., ABOUT, CIG, MEDIA"
+                              required
                             />
+                            <p className="text-xs text-gray-500 mt-1">This will be the text displayed in the navigation menu</p>
                           </div>
-                          <div>
-                            <Label htmlFor="menuParent">Menu Group</Label>
-                            <Select 
-                              value={formData.menuParent} 
-                              onValueChange={(value) => setFormData({ ...formData, menuParent: value })}
-                            >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select menu group" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="top-level">Top Level (No Group)</SelectItem>
-                                <SelectItem value="about">About CID</SelectItem>
-                                <SelectItem value="wings">Specialized Wings</SelectItem>
-                                <SelectItem value="citizen-services">Citizen Services</SelectItem>
-                                <SelectItem value="media">Media & Resources</SelectItem>
-                                <SelectItem value="contact">Contact & Information</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-                        
-                        <div className="grid md:grid-cols-2 gap-4">
                           <div>
                             <Label htmlFor="menuOrder">Display Order</Label>
                             <Input
@@ -390,17 +363,10 @@ export default function AdminPages() {
                               type="number"
                               value={formData.menuOrder}
                               onChange={(e) => setFormData({ ...formData, menuOrder: parseInt(e.target.value) || 0 })}
-                              placeholder="0"
+                              placeholder="1, 2, 3..."
+                              min="1"
                             />
-                          </div>
-                          <div>
-                            <Label htmlFor="menuDescription">Menu Description (optional)</Label>
-                            <Input
-                              id="menuDescription"
-                              value={formData.menuDescription}
-                              onChange={(e) => setFormData({ ...formData, menuDescription: e.target.value })}
-                              placeholder="Brief description for dropdown menus"
-                            />
+                            <p className="text-xs text-gray-500 mt-1">Lower numbers appear first in the menu</p>
                           </div>
                         </div>
                       </div>
@@ -438,7 +404,7 @@ export default function AdminPages() {
                   <div className="flex items-center justify-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                   </div>
-                ) : pages.length > 0 ? (
+                ) : Array.isArray(pages) && pages.length > 0 ? (
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -451,7 +417,7 @@ export default function AdminPages() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {pages.map((page: any) => (
+                      {(pages as any[]).map((page: any) => (
                         <TableRow key={page.id}>
                           <TableCell className="font-medium">{page.title}</TableCell>
                           <TableCell>/{page.slug}</TableCell>
@@ -466,11 +432,9 @@ export default function AdminPages() {
                                 <Badge variant="outline" className="text-xs">
                                   In Menu
                                 </Badge>
-                                {page.menuParent && (
-                                  <div className="text-xs text-gray-500">
-                                    Group: {page.menuParent}
-                                  </div>
-                                )}
+                                <div className="text-xs text-gray-500">
+                                  Order: {page.menuOrder || 0}
+                                </div>
                               </div>
                             ) : (
                               <span className="text-gray-400 text-sm">Not in menu</span>
