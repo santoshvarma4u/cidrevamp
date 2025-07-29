@@ -127,11 +127,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPages(published?: boolean): Promise<Page[]> {
-    let query = db.select().from(pages);
     if (published !== undefined) {
-      query = query.where(eq(pages.isPublished, published));
+      return db.select().from(pages)
+        .where(eq(pages.isPublished, published))
+        .orderBy(desc(pages.updatedAt));
     }
-    return query.orderBy(desc(pages.updatedAt));
+    return db.select().from(pages)
+      .orderBy(desc(pages.updatedAt));
   }
 
   async getMenuPages(): Promise<Page[]> {

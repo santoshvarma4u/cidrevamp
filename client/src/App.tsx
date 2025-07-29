@@ -15,6 +15,7 @@ import ComplaintForm from "@/pages/citizen/complaint";
 import ComplaintStatus from "@/pages/citizen/status";
 import OrganizationStructure from "@/pages/about/structure";
 import MediaGallery from "@/pages/media/gallery";
+import DynamicPage from "@/pages/dynamic-page";
 
 // Admin pages
 import AdminDashboard from "@/pages/admin/dashboard";
@@ -54,6 +55,9 @@ function Router() {
 
       {/* Admin auth route (public) */}
       <Route path="/admin/login" component={AdminAuth} />
+
+      {/* Dynamic page route - must be after all static routes */}
+      <Route path="/:slug" component={DynamicPage} />
 
       {/* Admin routes */}
       {isAuthenticated && isAdmin && (
