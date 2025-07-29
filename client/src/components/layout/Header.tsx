@@ -225,34 +225,39 @@ export default function Header() {
               const childPages = getChildPages(page.slug);
               
               if (childPages.length > 0) {
-                // Has children - render as dropdown
+                // Has children - render as dropdown with clickable parent
                 return (
-                  <DropdownMenu key={page.slug}>
-                    <DropdownMenuTrigger asChild>
+                  <div key={page.slug} className="relative inline-block">
+                    <div className="flex items-center">
                       <Button
                         variant="ghost"
-                        className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2 flex items-center space-x-1"
-                      >
-                        <span>{page.menuTitle || page.title}</span>
-                        <ChevronDown className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                      <DropdownMenuItem
+                        className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2"
                         onClick={() => (window.location.href = `/${page.slug}`)}
                       >
-                        {page.menuTitle || page.title} Home
-                      </DropdownMenuItem>
-                      {childPages.map((childPage: any) => (
-                        <DropdownMenuItem
-                          key={childPage.slug}
-                          onClick={() => (window.location.href = `/${childPage.slug}`)}
-                        >
-                          {childPage.menuTitle || childPage.title}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                        {page.menuTitle || page.title}
+                      </Button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-1 py-2"
+                          >
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                          {childPages.map((childPage: any) => (
+                            <DropdownMenuItem
+                              key={childPage.slug}
+                              onClick={() => (window.location.href = `/${childPage.slug}`)}
+                            >
+                              {childPage.menuTitle || childPage.title}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  </div>
                 );
               } else {
                 // No children - render as regular button
