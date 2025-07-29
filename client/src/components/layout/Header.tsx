@@ -1,19 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { useMenuPages } from "@/hooks/useMenuPages";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -300,7 +291,7 @@ export default function Header() {
                           setIsMobileMenuOpen(false);
                         }}
                       >
-                        {wing.icon && <wing.icon className="mr-2 h-4 w-4" />}
+                        {(wing as any).icon && React.createElement((wing as any).icon, { className: "mr-2 h-4 w-4" })}
                         {wing.title}
                       </Button>
                     ))}
@@ -387,155 +378,155 @@ export default function Header() {
       {/* Desktop Navigation Menu */}
       <nav className="bg-blue-600 text-white hidden lg:block">
         <div className="container mx-auto px-4">
-          <NavigationMenu className="max-w-full relative">
-            <NavigationMenuList className="flex justify-start space-x-8 py-4">
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
-                  onClick={() => (window.location.href = "/")}
-                >
-                  Home
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+          <div className="flex justify-start space-x-8 py-4">
+            <Button
+              variant="ghost"
+              className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2"
+              onClick={() => (window.location.href = "/")}
+            >
+              Home
+            </Button>
 
-              {/* Top-level pages */}
-              {topLevelPages.map((page: any) => (
-                <NavigationMenuItem key={page.slug}>
-                  <NavigationMenuLink
-                    className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
-                    onClick={() => (window.location.href = `/${page.slug}`)}
-                  >
-                    {page.menuTitle || page.title}
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              ))}
+            {/* Top-level pages */}
+            {topLevelPages.map((page: any) => (
+              <Button
+                key={page.slug}
+                variant="ghost"
+                className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2"
+                onClick={() => (window.location.href = `/${page.slug}`)}
+              >
+                {page.menuTitle || page.title}
+              </Button>
+            ))}
 
-              {allAboutPages.length > 0 && (
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+            {allAboutPages.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2">
                     About CID
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-80 p-4">
-                      {allAboutPages.map((link) => (
-                        <NavigationMenuLink
-                          key={link.href}
-                          className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
-                          onClick={() => (window.location.href = link.href)}
-                        >
-                          {link.title}
-                        </NavigationMenuLink>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              )}
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80 p-2">
+                  {allAboutPages.map((link) => (
+                    <DropdownMenuItem
+                      key={link.href}
+                      className="px-4 py-2 hover:bg-gray-100 rounded transition cursor-pointer"
+                      onClick={() => (window.location.href = link.href)}
+                    >
+                      {link.title}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
 
-              {allWingsPages.length > 0 && (
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+            {allWingsPages.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2">
                     Specialized Wings
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-96 p-4">
-                      {allWingsPages.map((wing) => (
-                        <NavigationMenuLink
-                          key={wing.href}
-                          className="flex items-start space-x-3 px-4 py-3 hover:bg-gray-100 rounded transition group cursor-pointer"
-                          onClick={() => (window.location.href = wing.href)}
-                        >
-                          {wing.icon && <wing.icon className="h-5 w-5 text-gray-600 mt-0.5" />}
-                          <div>
-                            <div className="font-medium text-gray-900 group-hover:text-blue-600">
-                              {wing.title}
-                            </div>
-                            {wing.description && (
-                              <div className="text-sm text-gray-600">
-                                {wing.description}
-                              </div>
-                            )}
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-96 p-2">
+                  {allWingsPages.map((wing) => (
+                    <DropdownMenuItem
+                      key={wing.href}
+                      className="flex items-start space-x-3 px-4 py-3 hover:bg-gray-100 rounded transition cursor-pointer"
+                      onClick={() => (window.location.href = wing.href)}
+                    >
+                      {(wing as any).icon && React.createElement((wing as any).icon, { className: "h-5 w-5 text-gray-600 mt-0.5" })}
+                      <div>
+                        <div className="font-medium text-gray-900 hover:text-blue-600">
+                          {wing.title}
+                        </div>
+                        {wing.description && (
+                          <div className="text-sm text-gray-600">
+                            {wing.description}
                           </div>
-                        </NavigationMenuLink>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              )}
+                        )}
+                      </div>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
 
-              {allCitizenPages.length > 0 && (
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+            {allCitizenPages.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2">
                     Citizen Services
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-80 p-4">
-                      {allCitizenPages.map((service) => (
-                        <NavigationMenuLink
-                          key={service.href}
-                          className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
-                          onClick={() => (window.location.href = service.href)}
-                        >
-                          {service.title}
-                        </NavigationMenuLink>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              )}
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80 p-2">
+                  {allCitizenPages.map((service) => (
+                    <DropdownMenuItem
+                      key={service.href}
+                      className="px-4 py-2 hover:bg-gray-100 rounded transition cursor-pointer"
+                      onClick={() => (window.location.href = service.href)}
+                    >
+                      {service.title}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
 
-              {allMediaPages.length > 0 && (
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+            {allMediaPages.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2">
                     Media & Resources
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-80 p-4">
-                      {allMediaPages.map((media) => (
-                        <NavigationMenuLink
-                          key={media.href}
-                          className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
-                          onClick={() => (window.location.href = media.href)}
-                        >
-                          {media.title}
-                        </NavigationMenuLink>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              )}
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80 p-2">
+                  {allMediaPages.map((media) => (
+                    <DropdownMenuItem
+                      key={media.href}
+                      className="px-4 py-2 hover:bg-gray-100 rounded transition cursor-pointer"
+                      onClick={() => (window.location.href = media.href)}
+                    >
+                      {media.title}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
 
-              {allContactPages.length > 0 && (
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
+            {allContactPages.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2">
                     Contact & Information
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="w-80 p-4">
-                      {allContactPages.map((contact) => (
-                        <NavigationMenuLink
-                          key={contact.href}
-                          className="block px-4 py-2 hover:bg-gray-100 hover:text-gray-900 rounded transition cursor-pointer"
-                          onClick={() => (window.location.href = contact.href)}
-                        >
-                          {contact.title}
-                        </NavigationMenuLink>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              )}
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80 p-2">
+                  {allContactPages.map((contact) => (
+                    <DropdownMenuItem
+                      key={contact.href}
+                      className="px-4 py-2 hover:bg-gray-100 rounded transition cursor-pointer"
+                      onClick={() => (window.location.href = contact.href)}
+                    >
+                      {contact.title}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
 
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
-                  onClick={() => (window.location.href = "/media/gallery")}
-                >
-                  Media Center
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-            <NavigationMenuViewport className="absolute top-full left-0 mt-1 w-full" />
-          </NavigationMenu>
+            <Button
+              variant="ghost"
+              className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2"
+              onClick={() => (window.location.href = "/media/gallery")}
+            >
+              Media Center
+            </Button>
+          </div>
         </div>
       </nav>
     </header>

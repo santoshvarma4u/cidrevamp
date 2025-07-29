@@ -200,17 +200,7 @@ body {
   background: hsl(var(--gov-blue));
 }
 
-/* Navigation menu positioning fixes */
-[data-radix-navigation-menu-viewport] {
-  position: absolute;
-  left: 0;
-  top: 100%;
-  width: 100%;
-  perspective: 2000px;
-}
-
-[data-radix-navigation-menu-content] {
-  position: absolute;
-  left: 0;
-  top: 0;
+/* Dropdown menu positioning */
+[data-radix-dropdown-menu-content] {
+  z-index: 50;
 }
