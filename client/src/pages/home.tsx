@@ -221,9 +221,9 @@ export default function Home() {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Photo Gallery */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-80 flex flex-col">
+              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-96 flex flex-col">
                 <h3 className="text-xl font-bold text-blue-800 mb-3 text-center">Latest Photo Gallery</h3>
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 min-h-0 overflow-hidden">
                   {latestPhotos.length > 0 ? (
                     <div className="h-full">
                       <AutoScrollSlider photos={latestPhotos} />
@@ -242,14 +242,14 @@ export default function Home() {
 
             {/* News Section */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-blue-200 h-80">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-blue-200 h-96">
                 {/* News Header */}
                 <div className="bg-blue-800 text-white px-6 py-3">
                   <h3 className="text-lg font-bold text-center">News</h3>
                 </div>
                 
                 {/* News Content */}
-                <div className="p-4">
+                <div className="p-4 h-80 overflow-hidden">
                   {latestNews.length > 0 ? (
                     <AutoScrollNews 
                       newsItems={latestNews.map((newsItem, index) => ({
@@ -257,7 +257,7 @@ export default function Home() {
                         content: newsItem.excerpt || newsItem.content.substring(0, 300) + "...",
                         borderColor: index % 3 === 0 ? "border-orange-400" : index % 3 === 1 ? "border-blue-400" : "border-green-400"
                       }))}
-                      scrollInterval={4000}
+                      scrollInterval={6000}
                     />
                   ) : (
                     <div className="text-center text-gray-500 py-8">
@@ -328,41 +328,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Photo Gallery */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Photo Gallery
-            </h2>
-            <p className="text-xl text-gray-600">
-              Recent operations and activities by CID Telangana
-            </p>
-          </div>
-
-          {latestPhotos.length > 0 ? (
-            <>
-              <AutoScrollSlider
-                photos={latestPhotos}
-                autoScrollInterval={3000}
-              />
-              <div className="text-center mt-8">
-                <Link href="/media/gallery">
-                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                    <Images className="mr-2 h-5 w-5" />
-                    View All Photos
-                  </Button>
-                </Link>
-              </div>
-            </>
-          ) : (
-            <div className="text-center py-12">
-              <Images className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">No photos available at the moment</p>
-            </div>
-          )}
-        </div>
-      </section>
 
       {/* Public Safety Alerts */}
       <section className="py-16 bg-yellow-50 border-l-4 border-yellow-400">

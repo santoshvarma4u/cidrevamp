@@ -13,21 +13,34 @@ interface AutoScrollNewsProps {
 
 export default function AutoScrollNews({ 
   newsItems, 
-  scrollInterval = 4000 
+  scrollInterval = 6000 
 }: AutoScrollNewsProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     if (newsItems.length <= 1) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => 
-        prevIndex === newsItems.length - 1 ? 0 : prevIndex + 1
-      );
-    }, scrollInterval);
+      setScrollPosition((prevPosition) => {
+        // Calculate total content height (each item takes 120px + 16px margin)
+        const itemHeight = 136; // height + margin
+        const totalHeight = newsItems.length * itemHeight;
+        const containerHeight = 320; // h-80 = 320px
+        
+        // Move down by 1px for smooth continuous scroll
+        const newPosition = prevPosition + 1;
+        
+        // Reset to top when we've scrolled through all content
+        if (newPosition >= totalHeight - containerHeight + itemHeight) {
+          return 0;
+        }
+        
+        return newPosition;
+      });
+    }, 50); // Scroll every 50ms for smooth animation
 
     return () => clearInterval(interval);
-  }, [newsItems.length, scrollInterval]);
+  }, [newsItems.length]);
 
   if (newsItems.length === 0) {
     return (
@@ -38,19 +51,19 @@ export default function AutoScrollNews({
   }
 
   return (
-    <div className="relative h-64 overflow-hidden">
+    <div className="relative h-80 overflow-hidden">
       <div 
-        className="transition-transform duration-500 ease-in-out"
+        className="transition-transform duration-75 ease-linear"
         style={{ 
-          transform: `translateY(-${currentIndex * 100}%)`,
-          height: `${newsItems.length * 100}%`
+          transform: `translateY(-${scrollPosition}px)`,
         }}
       >
-        {newsItems.map((item, index) => (
+        {/* Duplicate items for seamless loop */}
+        {[...newsItems, ...newsItems].map((item, index) => (
           <div 
-            key={item.id}
-            className="h-64 flex items-center"
-            style={{ height: `${100 / newsItems.length}%` }}
+            key={`${item.id}-${index}`}
+            className="mb-4 p-3 bg-gray-50 rounded-lg"
+            style={{ minHeight: '120px' }}
           >
             <div className={`border-l-4 ${item.borderColor} pl-4 w-full`}>
               <p className="text-gray-700 leading-relaxed text-sm">
@@ -58,18 +71,6 @@ export default function AutoScrollNews({
               </p>
             </div>
           </div>
-        ))}
-      </div>
-
-      {/* Scroll Indicators */}
-      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
-        {newsItems.map((_, index) => (
-          <div
-            key={index}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              index === currentIndex ? "bg-blue-600" : "bg-gray-300"
-            }`}
-          />
         ))}
       </div>
     </div>
