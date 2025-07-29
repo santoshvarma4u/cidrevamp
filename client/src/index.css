@@ -199,3 +199,17 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--gov-blue));
 }
+
+/* Custom navigation menu positioning */
+[data-radix-navigation-menu-content] {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  transform: none !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure each NavigationMenuItem is positioned relative */
+[data-radix-navigation-menu-item] {
+  position: relative;
+}

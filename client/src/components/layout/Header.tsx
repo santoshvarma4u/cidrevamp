@@ -385,7 +385,7 @@ export default function Header() {
       <nav className="bg-blue-600 text-white hidden lg:block">
         <div className="container mx-auto px-4">
           <NavigationMenu className="max-w-full">
-            <NavigationMenuList className="space-x-8 py-4">
+            <NavigationMenuList className="flex justify-start space-x-8 py-4">
               <NavigationMenuItem>
                 <NavigationMenuLink
                   className="text-white hover:text-blue-200 transition px-3 py-2 cursor-pointer"
@@ -408,11 +408,11 @@ export default function Header() {
               ))}
 
               {allAboutPages.length > 0 && (
-                <NavigationMenuItem>
+                <NavigationMenuItem className="relative">
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     About CID
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
+                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
                     <div className="w-80 p-4">
                       {allAboutPages.map((link) => (
                         <NavigationMenuLink
@@ -429,11 +429,11 @@ export default function Header() {
               )}
 
               {allWingsPages.length > 0 && (
-                <NavigationMenuItem>
+                <NavigationMenuItem className="relative">
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     Specialized Wings
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
+                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
                     <div className="w-96 p-4">
                       {allWingsPages.map((wing) => (
                         <NavigationMenuLink
@@ -460,11 +460,11 @@ export default function Header() {
               )}
 
               {allCitizenPages.length > 0 && (
-                <NavigationMenuItem>
+                <NavigationMenuItem className="relative">
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     Citizen Services
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
+                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
                     <div className="w-80 p-4">
                       {allCitizenPages.map((service) => (
                         <NavigationMenuLink
@@ -481,11 +481,11 @@ export default function Header() {
               )}
 
               {allMediaPages.length > 0 && (
-                <NavigationMenuItem>
+                <NavigationMenuItem className="relative">
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     Media & Resources
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
+                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
                     <div className="w-80 p-4">
                       {allMediaPages.map((media) => (
                         <NavigationMenuLink
@@ -502,11 +502,11 @@ export default function Header() {
               )}
 
               {allContactPages.length > 0 && (
-                <NavigationMenuItem>
+                <NavigationMenuItem className="relative">
                   <NavigationMenuTrigger className="text-white hover:text-blue-200 bg-transparent hover:bg-blue-700">
                     Contact & Information
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
+                  <NavigationMenuContent className="absolute top-full left-0 mt-0">
                     <div className="w-80 p-4">
                       {allContactPages.map((contact) => (
                         <NavigationMenuLink
