@@ -28,6 +28,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth middleware
   await setupAuth(app);
 
+  // Image upload endpoint for rich text editor
+  app.post('/api/upload/image', requireAuth, upload.single('image'), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: 'No image file provided' });
+      }
+
+      // Return the file URL
+      const imageUrl = `/uploads/${req.file.filename}`;
+      res.json({ 
+        url: imageUrl,
+        filename: req.file.filename,
+        originalName: req.file.originalname,
+        size: req.file.size
+      });
+    } catch (error) {
+      console.error('Image upload error:', error);
+      res.status(500).json({ message: 'Failed to upload image' });
+    }
+  });
+
 
 
   // Public routes are now handled in setupAuth()
