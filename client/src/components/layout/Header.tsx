@@ -110,7 +110,7 @@ export default function Header() {
 
   // Get top-level menu pages (no parent group)
   const topLevelPages = menuPages
-    .filter((page: any) => !page.menuParent || page.menuParent === "")
+    .filter((page: any) => !page.menuParent || page.menuParent === "" || page.menuParent === "top-level")
     .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
 
   // Dynamically build menu groups by merging static and dynamic pages

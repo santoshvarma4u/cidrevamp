@@ -371,7 +371,7 @@ export default function AdminPages() {
                                 <SelectValue placeholder="Select menu group" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="">Top Level (No Group)</SelectItem>
+                                <SelectItem value="top-level">Top Level (No Group)</SelectItem>
                                 <SelectItem value="about">About CID</SelectItem>
                                 <SelectItem value="wings">Specialized Wings</SelectItem>
                                 <SelectItem value="citizen-services">Citizen Services</SelectItem>
