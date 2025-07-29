@@ -69,7 +69,16 @@ export default function RichTextEditor({
       const formData = new FormData();
       formData.append('image', file);
       
-      const response = await apiRequest('POST', '/api/upload/image', formData);
+      const response = await fetch('/api/upload/image', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include' // Important for session cookies
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       if (data.url) {
@@ -156,7 +165,7 @@ export default function RichTextEditor({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 rich-text-editor">
       {label && <Label>{label}</Label>}
       
       {/* Toolbar */}
@@ -224,9 +233,10 @@ export default function RichTextEditor({
           onChange={(e) => formatText('fontSize', e.target.value)}
           className="px-2 py-1 text-sm border border-gray-300 rounded hover:bg-gray-200"
           title="Font Size"
+          defaultValue="3"
         >
           <option value="1">Small</option>
-          <option value="3" selected>Normal</option>
+          <option value="3">Normal</option>
           <option value="4">Medium</option>
           <option value="5">Large</option>
           <option value="6">X-Large</option>
@@ -431,8 +441,8 @@ export default function RichTextEditor({
         suppressContentEditableWarning={true}
       />
       
-      <style jsx>{`
-        [contenteditable]:empty:before {
+      <style>{`
+        .rich-text-editor [contenteditable]:empty:before {
           content: attr(data-placeholder);
           color: #9ca3af;
           pointer-events: none;
