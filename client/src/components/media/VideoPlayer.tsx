@@ -89,7 +89,7 @@ export default function VideoPlayer({
       {/* Video Element */}
       <video
         ref={videoRef}
-        className="w-full h-full object-cover cursor-pointer"
+        className="w-full h-full object-contain cursor-pointer"
         autoPlay={autoPlay}
         muted={isMuted}
         onClick={handleVideoClick}
@@ -97,6 +97,7 @@ export default function VideoPlayer({
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         poster={video.thumbnailPath ? `/uploads/${video.thumbnailPath}` : undefined}
+        style={{ maxWidth: '100%', maxHeight: '100%' }}
       >
         <source src={`/uploads/${video.fileName}`} type="video/mp4" />
         <source src={`/uploads/${video.fileName}`} type="video/webm" />
