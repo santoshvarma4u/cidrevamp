@@ -28,6 +28,13 @@ import {
   CheckCircle,
 } from "lucide-react";
 
+// Helper function to safely convert dates to ISO strings
+const formatDate = (date: any): string => {
+  if (!date) return new Date().toISOString();
+  if (typeof date === 'string') return date;
+  return new Date(date).toISOString();
+};
+
 export default function Home() {
   const { data: videos = [] } = useQuery<Video[]>({
     queryKey: ["/api/videos", { published: true }],
@@ -193,7 +200,7 @@ export default function Home() {
                       thumbnailPath: latestVideos[0].thumbnailPath || '',
                       duration: latestVideos[0].duration || 0,
                       category: latestVideos[0].category || 'news',
-                      createdAt: latestVideos[0].createdAt?.toISOString() || new Date().toISOString()
+                      createdAt: formatDate(latestVideos[0].createdAt)
                     }} className="w-full h-full" />
                   </div>
                 ) : (
@@ -264,7 +271,7 @@ export default function Home() {
                         title: newsItem.title,
                         content: newsItem.content,
                         excerpt: newsItem.excerpt || newsItem.content.substring(0, 200) + "...",
-                        publishedAt: newsItem.publishedAt?.toISOString() || newsItem.createdAt?.toISOString() || new Date().toISOString(),
+                        publishedAt: formatDate(newsItem.publishedAt || newsItem.createdAt),
                         borderColor: index % 3 === 0 ? "border-orange-400" : index % 3 === 1 ? "border-blue-400" : "border-green-400"
                       }))}
                       scrollInterval={6000}
