@@ -193,7 +193,7 @@ export default function Home() {
               <h3 className="text-xl font-bold mb-3">Latest Video News</h3>
               <div className="flex-1 flex flex-col">
                 {latestVideos.length > 0 ? (
-                  <div className="w-full aspect-video max-h-40 rounded-lg bg-black mb-3 overflow-hidden">
+                  <div className="w-full aspect-video max-h-52 rounded-lg bg-black mb-3 overflow-hidden">
                     <VideoPlayer video={{
                       ...latestVideos[0],
                       description: latestVideos[0].description || '',
@@ -204,7 +204,7 @@ export default function Home() {
                     }} className="w-full h-full" />
                   </div>
                 ) : (
-                  <div className="w-full aspect-video max-h-40 bg-gray-900 rounded-lg flex items-center justify-center mb-3">
+                  <div className="w-full aspect-video max-h-52 bg-gray-900 rounded-lg flex items-center justify-center mb-3">
                     <div className="text-center">
                       <Play className="h-16 w-16 text-white mb-4 mx-auto" />
                       <p className="text-white">No videos available</p>
