@@ -187,7 +187,14 @@ export default function Home() {
               <div className="flex-1 flex flex-col">
                 {latestVideos.length > 0 ? (
                   <div className="w-full h-52 overflow-hidden rounded-lg bg-black mb-3">
-                    <VideoPlayer video={latestVideos[0]} className="w-full h-full" />
+                    <VideoPlayer video={{
+                      ...latestVideos[0],
+                      description: latestVideos[0].description || '',
+                      thumbnailPath: latestVideos[0].thumbnailPath || '',
+                      duration: latestVideos[0].duration || 0,
+                      category: latestVideos[0].category || 'news',
+                      createdAt: latestVideos[0].createdAt?.toISOString() || new Date().toISOString()
+                    }} className="w-full h-full" />
                   </div>
                 ) : (
                   <div className="w-full h-52 bg-gray-900 rounded-lg flex items-center justify-center mb-3">
@@ -257,7 +264,7 @@ export default function Home() {
                         title: newsItem.title,
                         content: newsItem.content,
                         excerpt: newsItem.excerpt || newsItem.content.substring(0, 200) + "...",
-                        publishedAt: newsItem.publishedAt,
+                        publishedAt: newsItem.publishedAt?.toISOString() || newsItem.createdAt?.toISOString() || new Date().toISOString(),
                         borderColor: index % 3 === 0 ? "border-orange-400" : index % 3 === 1 ? "border-blue-400" : "border-green-400"
                       }))}
                       scrollInterval={6000}
@@ -405,7 +412,7 @@ export default function Home() {
                       <Badge variant="outline">{article.category}</Badge>
                       <div className="flex items-center text-sm text-gray-500">
                         <Clock className="h-4 w-4 mr-1" />
-                        {new Date(article.createdAt).toLocaleDateString()}
+                        {article.createdAt ? new Date(article.createdAt).toLocaleDateString() : 'No date'}
                       </div>
                     </div>
                     <CardTitle className="text-lg">{article.title}</CardTitle>
