@@ -15,6 +15,8 @@ import ComplaintForm from "@/pages/citizen/complaint";
 import ComplaintStatus from "@/pages/citizen/status";
 import OrganizationStructure from "@/pages/about/structure";
 import MediaGallery from "@/pages/media/gallery";
+import PhotoGallery from "@/pages/PhotoGallery";
+import VideoGallery from "@/pages/VideoGallery";
 import DynamicPage from "@/pages/dynamic-page";
 
 // Admin pages
@@ -52,6 +54,8 @@ function Router() {
       <Route path="/citizen/status" component={ComplaintStatus} />
       <Route path="/about/structure" component={OrganizationStructure} />
       <Route path="/media/gallery" component={MediaGallery} />
+      <Route path="/photo-gallery" component={PhotoGallery} />
+      <Route path="/video-gallery" component={VideoGallery} />
 
       {/* Admin auth route (public) */}
       <Route path="/admin/login" component={AdminAuth} />
