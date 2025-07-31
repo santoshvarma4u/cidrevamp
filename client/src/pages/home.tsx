@@ -183,14 +183,14 @@ export default function Home() {
             </div>
 
             <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col">
-              <h3 className="text-2xl font-bold mb-4">Latest Video News</h3>
-              <div className="flex-1 flex flex-col min-h-0 max-h-48">
+              <h3 className="text-xl font-bold mb-3">Latest Video News</h3>
+              <div className="flex-1 flex flex-col">
                 {latestVideos.length > 0 ? (
-                  <div className="w-full h-40 overflow-hidden rounded-lg bg-black">
-                    <VideoPlayer video={latestVideos[0]} className="w-full h-40" />
+                  <div className="w-full h-52 overflow-hidden rounded-lg bg-black mb-3">
+                    <VideoPlayer video={latestVideos[0]} className="w-full h-full" />
                   </div>
                 ) : (
-                  <div className="flex-1 bg-gray-900 rounded-lg flex items-center justify-center">
+                  <div className="w-full h-52 bg-gray-900 rounded-lg flex items-center justify-center mb-3">
                     <div className="text-center">
                       <Play className="h-16 w-16 text-white mb-4 mx-auto" />
                       <p className="text-white">No videos available</p>
@@ -198,14 +198,14 @@ export default function Home() {
                   </div>
                 )}
 
-                <div className="space-y-2 mt-4">
-                  {latestVideos.slice(1, 3).map((video) => (
+                <div className="flex-1 space-y-1 overflow-hidden">
+                  {latestVideos.slice(1, 2).map((video) => (
                     <div
                       key={video.id}
-                      className="flex items-center space-x-3 p-3 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition"
+                      className="flex items-center space-x-3 p-2 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition"
                     >
-                      <Play className="h-4 w-4 text-blue-200" />
-                      <span className="text-sm">{video.title}</span>
+                      <Play className="h-3 w-3 text-blue-200" />
+                      <span className="text-xs truncate">{video.title}</span>
                     </div>
                   ))}
                 </div>
