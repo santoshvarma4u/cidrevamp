@@ -168,8 +168,14 @@ export default function AdminAuth() {
                   console.log("Button clicked");
                   // Don't prevent default here, let form submission handle it
                 }}
-                className="w-full bg-gov-blue hover:bg-gov-dark-blue text-white py-2 px-4 rounded-md font-medium transition-colors"
+                className="w-full !bg-blue-600 hover:!bg-blue-700 !text-white !py-3 !px-4 !rounded-md !font-medium !transition-colors !shadow-lg !border-blue-600 hover:!border-blue-700"
                 disabled={loginMutation.isPending}
+                style={{
+                  backgroundColor: '#2563eb',
+                  color: 'white',
+                  border: '1px solid #2563eb',
+                  minHeight: '44px'
+                }}
               >
                 {loginMutation.isPending ? (
                   <div className="flex items-center justify-center">
