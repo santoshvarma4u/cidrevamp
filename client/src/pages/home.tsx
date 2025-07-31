@@ -184,10 +184,10 @@ export default function Home() {
 
             <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col">
               <h3 className="text-2xl font-bold mb-4">Latest Video News</h3>
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col min-h-0 max-h-48">
                 {latestVideos.length > 0 ? (
-                  <div className="flex-1 w-full h-full max-w-full overflow-hidden rounded-lg">
-                    <VideoPlayer video={latestVideos[0]} className="w-full h-full" />
+                  <div className="w-full h-40 overflow-hidden rounded-lg bg-black">
+                    <VideoPlayer video={latestVideos[0]} className="w-full h-40" />
                   </div>
                 ) : (
                   <div className="flex-1 bg-gray-900 rounded-lg flex items-center justify-center">
