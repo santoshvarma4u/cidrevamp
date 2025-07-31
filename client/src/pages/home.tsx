@@ -186,8 +186,8 @@ export default function Home() {
               <h3 className="text-2xl font-bold mb-4">Latest Video News</h3>
               <div className="flex-1 flex flex-col">
                 {latestVideos.length > 0 ? (
-                  <div className="flex-1">
-                    <VideoPlayer video={latestVideos[0]} />
+                  <div className="flex-1 w-full h-full max-w-full overflow-hidden rounded-lg">
+                    <VideoPlayer video={latestVideos[0]} className="w-full h-full" />
                   </div>
                 ) : (
                   <div className="flex-1 bg-gray-900 rounded-lg flex items-center justify-center">
