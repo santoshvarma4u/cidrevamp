@@ -36,6 +36,19 @@
   --gov-gray: hsl(215, 16%, 47%);
   --emergency: hsl(0, 84%, 60%);
   --success: hsl(142, 76%, 36%);
+  
+  /* Teal & Cream Theme */
+  --teal-primary: hsl(178, 78%, 35%);
+  --teal-secondary: hsl(178, 100%, 25%);
+  --cream: hsl(47, 100%, 95%);
+  --cream-dark: hsl(45, 65%, 85%);
+  --light-beige: hsl(42, 78%, 90%);
+  
+  /* Navy Blue Theme */
+  --navy-primary: hsl(213, 100%, 20%);
+  --navy-secondary: hsl(213, 100%, 15%);
+  --navy-light: hsl(213, 50%, 30%);
+  --navy-accent: hsl(213, 80%, 40%);
 }
 
 .dark {

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -6,6 +7,7 @@ import VideoPlayer from "@/components/media/VideoPlayer";
 import PhotoGallery from "@/components/media/PhotoGallery";
 import AutoScrollSlider from "@/components/common/AutoScrollSlider";
 import AutoScrollNews from "@/components/common/AutoScrollNews";
+import { ThemeSelector, Theme } from "@/components/ThemeSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -36,6 +38,8 @@ const formatDate = (date: any): string => {
 };
 
 export default function Home() {
+  const [currentTheme, setCurrentTheme] = useState<Theme>('original');
+
   const { data: videos = [] } = useQuery<Video[]>({
     queryKey: ["/api/videos", { published: true }],
   });
@@ -134,12 +138,44 @@ export default function Home() {
     },
   ];
 
+  // Get theme-specific classes
+  const getThemeClasses = () => {
+    switch (currentTheme) {
+      case 'teal':
+        return {
+          background: 'bg-gradient-to-br from-orange-50 to-amber-50',
+          heroGradient: 'bg-gradient-to-r from-teal-600 to-teal-700',
+          cardBg: 'bg-white bg-opacity-20',
+          textAccent: 'text-teal-200',
+          sectionBg: 'bg-gradient-to-br from-orange-50 to-amber-50'
+        };
+      case 'navy':
+        return {
+          background: 'bg-slate-50',
+          heroGradient: 'bg-gradient-to-r from-blue-900 to-blue-800',
+          cardBg: 'bg-white bg-opacity-15',
+          textAccent: 'text-blue-200',
+          sectionBg: 'bg-slate-50'
+        };
+      default:
+        return {
+          background: 'bg-gray-50',
+          heroGradient: 'bg-gradient-to-r from-blue-600 to-blue-700',
+          cardBg: 'bg-white bg-opacity-10',
+          textAccent: 'text-blue-200',
+          sectionBg: 'bg-gray-50'
+        };
+    }
+  };
+
+  const themeClasses = getThemeClasses();
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${themeClasses.background}`}>
       <Header />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-blue-600 to-blue-700 text-white overflow-hidden">
+      <section className={`relative ${themeClasses.heroGradient} text-white overflow-hidden`}>
         <div
           className="absolute inset-0 bg-black bg-opacity-40"
           style={{
@@ -151,7 +187,7 @@ export default function Home() {
         <div className="relative container mx-auto px-4 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-stretch">
             {/* Director General Message */}
-            <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col">
+            <div className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}>
               <div className="flex flex-col md:flex-row gap-4 flex-1">
                 {/* Director Photo */}
                 <div className="flex-shrink-0">
@@ -168,12 +204,12 @@ export default function Home() {
                 <div className="flex-1 overflow-hidden">
                   <div className="mb-2">
                     <h3 className="text-lg font-bold text-white mb-1">Ms. Charu Sinha, IPS</h3>
-                    <p className="text-xs font-semibold text-blue-200 mb-2">
+                    <p className={`text-xs font-semibold ${themeClasses.textAccent} mb-2`}>
                       Addl. Director General of Police, CID, Telangana State.
                     </p>
                   </div>
                   
-                  <div className="text-blue-100 leading-relaxed text-xs">
+                  <div className={`${currentTheme === 'teal' ? 'text-teal-100' : currentTheme === 'navy' ? 'text-blue-100' : 'text-blue-100'} leading-relaxed text-xs`}>
                     <p>
                       Crime Investigation Department is the premier investigation agency of Telangana State. Our 
                       endeavour is to provide transparent, impartial and efficient investigation using state-of-the-art 
@@ -189,7 +225,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col">
+            <div className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}>
               <h3 className="text-xl font-bold mb-3">Latest Video News</h3>
               <div className="flex-1 flex flex-col">
                 {latestVideos.length > 0 ? (
@@ -230,7 +266,7 @@ export default function Home() {
       </section>
 
       {/* Photo Gallery & News */}
-      <section className="py-12 bg-gray-50">
+      <section className={`py-12 ${themeClasses.sectionBg}`}>
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Photo Gallery */}
@@ -289,7 +325,7 @@ export default function Home() {
       </section>
 
       {/* Specialized Wings */}
-      <section className="py-16 bg-gray-50">
+      <section className={`py-16 ${currentTheme === 'teal' ? 'bg-orange-100' : currentTheme === 'navy' ? 'bg-blue-50' : 'bg-gray-50'}`}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -435,6 +471,9 @@ export default function Home() {
       )}
 
       <Footer />
+      
+      {/* Theme Selector */}
+      <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
     </div>
   );
 }
