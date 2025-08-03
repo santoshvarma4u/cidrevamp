@@ -151,11 +151,11 @@ export default function Home() {
         };
       case 'navy':
         return {
-          background: 'bg-slate-50',
+          background: 'bg-gradient-to-br from-orange-50 to-amber-50',
           heroGradient: 'bg-gradient-to-r from-blue-900 to-blue-800',
           cardBg: 'bg-white bg-opacity-15',
           textAccent: 'text-blue-200',
-          sectionBg: 'bg-slate-50'
+          sectionBg: 'bg-gradient-to-br from-orange-50 to-amber-50'
         };
       default:
         return {
@@ -172,7 +172,7 @@ export default function Home() {
 
   return (
     <div className={`min-h-screen ${themeClasses.background}`}>
-      <Header />
+      <Header theme={currentTheme} />
 
       {/* Hero Section */}
       <section className={`relative ${themeClasses.heroGradient} text-white overflow-hidden`}>
@@ -325,7 +325,7 @@ export default function Home() {
       </section>
 
       {/* Specialized Wings */}
-      <section className={`py-16 ${currentTheme === 'teal' ? 'bg-orange-100' : currentTheme === 'navy' ? 'bg-blue-50' : 'bg-gray-50'}`}>
+      <section className={`py-16 ${currentTheme === 'teal' ? 'bg-orange-100' : currentTheme === 'navy' ? 'bg-orange-100' : 'bg-gray-50'}`}>
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">

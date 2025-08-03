@@ -23,7 +23,11 @@ import {
 import leftLogoSrc from "@assets/leftlogo_1753517979998.png";
 import rightLogoSrc from "@assets/police-logo_1753517995022.png";
 
-export default function Header() {
+interface HeaderProps {
+  theme?: 'original' | 'teal' | 'navy';
+}
+
+export default function Header({ theme = 'original' }: HeaderProps) {
   const [location] = useLocation();
   const { isAuthenticated, user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -45,10 +49,36 @@ export default function Header() {
       .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
   };
 
+  // Get theme-specific classes
+  const getHeaderThemeClasses = () => {
+    switch (theme) {
+      case 'teal':
+        return {
+          headerBg: 'bg-white shadow-sm border-b-2 border-teal-600',
+          topBarBg: 'bg-teal-800',
+          navBg: 'bg-white'
+        };
+      case 'navy':
+        return {
+          headerBg: 'bg-orange-50 shadow-sm border-b-2 border-blue-900',
+          topBarBg: 'bg-blue-900',
+          navBg: 'bg-orange-50'
+        };
+      default:
+        return {
+          headerBg: 'bg-white shadow-sm border-b-2 border-blue-600',
+          topBarBg: 'bg-gray-800',
+          navBg: 'bg-white'
+        };
+    }
+  };
+
+  const headerTheme = getHeaderThemeClasses();
+
   return (
-    <header className="bg-white shadow-sm border-b-2 border-blue-600">
+    <header className={headerTheme.headerBg}>
       {/* Top Bar */}
-      <div className="bg-gray-800 text-white py-2">
+      <div className={`${headerTheme.topBarBg} text-white py-2`}>
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center space-x-6">
@@ -209,7 +239,7 @@ export default function Header() {
       </div>
 
       {/* Desktop Navigation Menu */}
-      <nav className="bg-blue-600 text-white hidden lg:block">
+      <nav className={`${theme === 'teal' ? 'bg-teal-600' : theme === 'navy' ? 'bg-blue-900' : 'bg-blue-600'} text-white hidden lg:block`}>
         <div className="container mx-auto px-4">
           <div className="flex justify-start space-x-8 py-4">
             <Button
