@@ -33,12 +33,12 @@ import {
 // Helper function to safely convert dates to ISO strings
 const formatDate = (date: any): string => {
   if (!date) return new Date().toISOString();
-  if (typeof date === 'string') return date;
+  if (typeof date === "string") return date;
   return new Date(date).toISOString();
 };
 
 export default function Home() {
-  const [currentTheme, setCurrentTheme] = useState<Theme>('original');
+  const [currentTheme, setCurrentTheme] = useState<Theme>("original");
 
   const { data: videos = [] } = useQuery<Video[]>({
     queryKey: ["/api/videos", { published: true }],
@@ -141,29 +141,29 @@ export default function Home() {
   // Get theme-specific classes
   const getThemeClasses = () => {
     switch (currentTheme) {
-      case 'teal':
+      case "teal":
         return {
-          background: 'bg-gradient-to-br from-orange-50 to-amber-50',
-          heroGradient: 'bg-gradient-to-r from-teal-600 to-teal-700',
-          cardBg: 'bg-white bg-opacity-20',
-          textAccent: 'text-teal-200',
-          sectionBg: 'bg-gradient-to-br from-orange-50 to-amber-50'
+          background: "bg-gradient-to-br from-orange-50 to-amber-50",
+          heroGradient: "bg-gradient-to-r from-teal-600 to-teal-700",
+          cardBg: "bg-white bg-opacity-20",
+          textAccent: "text-teal-200",
+          sectionBg: "bg-gradient-to-br from-orange-50 to-amber-50",
         };
-      case 'navy':
+      case "navy":
         return {
-          background: 'bg-gradient-to-br from-orange-50 to-amber-50',
-          heroGradient: 'bg-gradient-to-r from-blue-900 to-blue-800',
-          cardBg: 'bg-white bg-opacity-15',
-          textAccent: 'text-blue-200',
-          sectionBg: 'bg-gradient-to-br from-orange-50 to-amber-50'
+          background: "bg-gradient-to-br from-orange-50 to-amber-50",
+          heroGradient: "bg-gradient-to-r from-blue-900 to-blue-800",
+          cardBg: "bg-white bg-opacity-15",
+          textAccent: "text-blue-200",
+          sectionBg: "bg-gradient-to-br from-orange-50 to-amber-50",
         };
       default:
         return {
-          background: 'bg-gray-50',
-          heroGradient: 'bg-gradient-to-r from-blue-600 to-blue-700',
-          cardBg: 'bg-white bg-opacity-10',
-          textAccent: 'text-blue-200',
-          sectionBg: 'bg-gray-50'
+          background: "bg-gray-50",
+          heroGradient: "bg-gradient-to-r from-blue-600 to-blue-700",
+          cardBg: "bg-white bg-opacity-10",
+          textAccent: "text-blue-200",
+          sectionBg: "bg-gray-50",
         };
     }
   };
@@ -175,7 +175,9 @@ export default function Home() {
       <Header theme={currentTheme} />
 
       {/* Hero Section */}
-      <section className={`relative ${themeClasses.heroGradient} text-white overflow-hidden`}>
+      <section
+        className={`relative ${themeClasses.heroGradient} text-white overflow-hidden`}
+      >
         <div
           className="absolute inset-0 bg-black bg-opacity-40"
           style={{
@@ -187,7 +189,9 @@ export default function Home() {
         <div className="relative container mx-auto px-4 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-stretch">
             {/* Director General Message */}
-            <div className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}>
+            <div
+              className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}
+            >
               <div className="flex flex-col md:flex-row gap-4 flex-1">
                 {/* Director Photo */}
                 <div className="flex-shrink-0">
@@ -199,45 +203,59 @@ export default function Home() {
                     />
                   </div>
                 </div>
-                
+
                 {/* Director Info and Message */}
                 <div className="flex-1 overflow-hidden">
                   <div className="mb-2">
-                    <h3 className="text-lg font-bold text-white mb-1">Ms. Charu Sinha, IPS</h3>
-                    <p className={`text-xs font-semibold ${themeClasses.textAccent} mb-2`}>
+                    <h3 className="text-lg font-bold text-white mb-1">
+                      Ms. Charu Sinha, IPS
+                    </h3>
+                    <p
+                      className={`text-s font-semibold ${themeClasses.textAccent} mb-2`}
+                    >
                       Addl. Director General of Police, CID, Telangana State.
                     </p>
                   </div>
-                  
-                  <div className={`${currentTheme === 'teal' ? 'text-teal-100' : currentTheme === 'navy' ? 'text-blue-100' : 'text-blue-100'} leading-relaxed text-xs`}>
+
+                  <div
+                    className={`${currentTheme === "teal" ? "text-teal-100" : currentTheme === "navy" ? "text-blue-100" : "text-blue-100"} leading-relaxed text-s`}
+                  >
                     <p>
-                      Crime Investigation Department is the premier investigation agency of Telangana State. Our 
-                      endeavour is to provide transparent, impartial and efficient investigation using state-of-the-art 
-                      equipment with quality forensic support.
+                      Crime Investigation Department is the premier
+                      investigation agency of Telangana State. Our endeavour is
+                      to provide transparent, impartial and efficient
+                      investigation using state-of-the-art equipment with
+                      quality forensic support.
                     </p>
-                    
+
                     <p className="mt-2">
-                      Our specialized wings include Economic Offences, Cyber Crimes, Women & Child Protection, 
-                      and General Offences to serve justice effectively.
+                      Our specialized wings include Economic Offences, Cyber
+                      Crimes, Women & Child Protection, and General Offences to
+                      serve justice effectively.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}>
+            <div
+              className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}
+            >
               <h3 className="text-xl font-bold mb-3">Latest Video News</h3>
               <div className="flex-1 flex flex-col">
                 {latestVideos.length > 0 ? (
                   <div className="w-full aspect-video max-h-52 rounded-lg bg-black mb-3 overflow-hidden">
-                    <VideoPlayer video={{
-                      ...latestVideos[0],
-                      description: latestVideos[0].description || '',
-                      thumbnailPath: latestVideos[0].thumbnailPath || '',
-                      duration: latestVideos[0].duration || 0,
-                      category: latestVideos[0].category || 'news',
-                      createdAt: formatDate(latestVideos[0].createdAt)
-                    }} className="w-full h-full" />
+                    <VideoPlayer
+                      video={{
+                        ...latestVideos[0],
+                        description: latestVideos[0].description || "",
+                        thumbnailPath: latestVideos[0].thumbnailPath || "",
+                        duration: latestVideos[0].duration || 0,
+                        category: latestVideos[0].category || "news",
+                        createdAt: formatDate(latestVideos[0].createdAt),
+                      }}
+                      className="w-full h-full"
+                    />
                   </div>
                 ) : (
                   <div className="w-full aspect-video max-h-52 bg-gray-900 rounded-lg flex items-center justify-center mb-3">
@@ -272,7 +290,9 @@ export default function Home() {
             {/* Photo Gallery */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-96 flex flex-col">
-                <h3 className="text-xl font-bold text-blue-800 mb-3 text-center">Latest Photo Gallery</h3>
+                <h3 className="text-xl font-bold text-blue-800 mb-3 text-center">
+                  Latest Photo Gallery
+                </h3>
                 <div className="flex-1 min-h-0 overflow-hidden">
                   {latestPhotos.length > 0 ? (
                     <div className="h-full">
@@ -282,7 +302,9 @@ export default function Home() {
                     <div className="text-center h-full flex items-center justify-center">
                       <div>
                         <Images className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                        <p className="text-gray-500 text-sm">No photos available</p>
+                        <p className="text-gray-500 text-sm">
+                          No photos available
+                        </p>
                       </div>
                     </div>
                   )}
@@ -297,18 +319,27 @@ export default function Home() {
                 <div className="bg-blue-800 text-white px-6 py-3">
                   <h3 className="text-lg font-bold text-center">News</h3>
                 </div>
-                
+
                 {/* News Content */}
                 <div className="p-4 h-80 overflow-hidden">
                   {latestNews.length > 0 ? (
-                    <AutoScrollNews 
+                    <AutoScrollNews
                       newsItems={latestNews.map((newsItem, index) => ({
                         id: newsItem.id,
                         title: newsItem.title,
                         content: newsItem.content,
-                        excerpt: newsItem.excerpt || newsItem.content.substring(0, 200) + "...",
-                        publishedAt: formatDate(newsItem.publishedAt || newsItem.createdAt),
-                        borderColor: index % 3 === 0 ? "border-orange-400" : index % 3 === 1 ? "border-blue-400" : "border-green-400"
+                        excerpt:
+                          newsItem.excerpt ||
+                          newsItem.content.substring(0, 200) + "...",
+                        publishedAt: formatDate(
+                          newsItem.publishedAt || newsItem.createdAt,
+                        ),
+                        borderColor:
+                          index % 3 === 0
+                            ? "border-orange-400"
+                            : index % 3 === 1
+                              ? "border-blue-400"
+                              : "border-green-400",
                       }))}
                       scrollInterval={6000}
                     />
@@ -325,7 +356,9 @@ export default function Home() {
       </section>
 
       {/* Specialized Wings */}
-      <section className={`py-16 ${currentTheme === 'teal' ? 'bg-orange-100' : currentTheme === 'navy' ? 'bg-orange-100' : 'bg-gray-50'}`}>
+      <section
+        className={`py-16 ${currentTheme === "teal" ? "bg-orange-100" : currentTheme === "navy" ? "bg-orange-100" : "bg-gray-50"}`}
+      >
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -380,7 +413,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
 
       {/* Public Safety Alerts */}
       <section className="py-16 bg-yellow-50 border-l-4 border-yellow-400">
@@ -455,7 +487,9 @@ export default function Home() {
                       <Badge variant="outline">{article.category}</Badge>
                       <div className="flex items-center text-sm text-gray-500">
                         <Clock className="h-4 w-4 mr-1" />
-                        {article.createdAt ? new Date(article.createdAt).toLocaleDateString() : 'No date'}
+                        {article.createdAt
+                          ? new Date(article.createdAt).toLocaleDateString()
+                          : "No date"}
                       </div>
                     </div>
                     <CardTitle className="text-lg">{article.title}</CardTitle>
@@ -471,9 +505,12 @@ export default function Home() {
       )}
 
       <Footer />
-      
+
       {/* Theme Selector */}
-      <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+      <ThemeSelector
+        currentTheme={currentTheme}
+        onThemeChange={setCurrentTheme}
+      />
     </div>
   );
 }

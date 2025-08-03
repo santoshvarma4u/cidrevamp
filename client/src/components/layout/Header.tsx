@@ -24,10 +24,10 @@ import leftLogoSrc from "@assets/leftlogo_1753517979998.png";
 import rightLogoSrc from "@assets/police-logo_1753517995022.png";
 
 interface HeaderProps {
-  theme?: 'original' | 'teal' | 'navy';
+  theme?: "original" | "teal" | "navy";
 }
 
-export default function Header({ theme = 'original' }: HeaderProps) {
+export default function Header({ theme = "original" }: HeaderProps) {
   const [location] = useLocation();
   const { isAuthenticated, user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -36,12 +36,12 @@ export default function Header({ theme = 'original' }: HeaderProps) {
   // Get all menu pages and organize them hierarchically
   const pages = Array.isArray(menuPages) ? menuPages : [];
   const allMenuPages = pages.filter((page: any) => page.showInMenu);
-  
+
   // Get parent pages (no menuParent)
   const parentPages = allMenuPages
     .filter((page: any) => !page.menuParent)
     .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
-  
+
   // Get child pages grouped by parent
   const getChildPages = (parentSlug: string) => {
     return allMenuPages
@@ -52,23 +52,23 @@ export default function Header({ theme = 'original' }: HeaderProps) {
   // Get theme-specific classes
   const getHeaderThemeClasses = () => {
     switch (theme) {
-      case 'teal':
+      case "teal":
         return {
-          headerBg: 'bg-white shadow-sm border-b-2 border-teal-600',
-          topBarBg: 'bg-teal-800',
-          navBg: 'bg-white'
+          headerBg: "bg-white shadow-sm border-b-2 border-teal-600",
+          topBarBg: "bg-teal-800",
+          navBg: "bg-white",
         };
-      case 'navy':
+      case "navy":
         return {
-          headerBg: 'bg-orange-50 shadow-sm border-b-2 border-blue-900',
-          topBarBg: 'bg-blue-900',
-          navBg: 'bg-orange-50'
+          headerBg: "bg-orange-50 shadow-sm border-b-2 border-blue-900",
+          topBarBg: "bg-blue-900",
+          navBg: "bg-orange-50",
         };
       default:
         return {
-          headerBg: 'bg-white shadow-sm border-b-2 border-blue-600',
-          topBarBg: 'bg-gray-800',
-          navBg: 'bg-white'
+          headerBg: "bg-white shadow-sm border-b-2 border-blue-600",
+          topBarBg: "bg-gray-800",
+          navBg: "bg-white",
         };
     }
   };
@@ -194,13 +194,13 @@ export default function Header({ theme = 'original' }: HeaderProps) {
                       setIsMobileMenuOpen(false);
                     }}
                   >
-                    Home
+                    HOME
                   </Button>
 
                   {/* Parent menu pages with potential submenus */}
                   {parentPages.map((page: any) => {
                     const childPages = getChildPages(page.slug);
-                    
+
                     return (
                       <div key={page.slug} className="space-y-1">
                         <Button
@@ -213,7 +213,7 @@ export default function Header({ theme = 'original' }: HeaderProps) {
                         >
                           {page.menuTitle || page.title}
                         </Button>
-                        
+
                         {/* Child pages */}
                         {childPages.map((childPage: any) => (
                           <Button
@@ -239,7 +239,9 @@ export default function Header({ theme = 'original' }: HeaderProps) {
       </div>
 
       {/* Desktop Navigation Menu */}
-      <nav className={`${theme === 'teal' ? 'bg-teal-600' : theme === 'navy' ? 'bg-blue-900' : 'bg-blue-600'} text-white hidden lg:block`}>
+      <nav
+        className={`${theme === "teal" ? "bg-teal-600" : theme === "navy" ? "bg-blue-900" : "bg-blue-600"} text-white hidden lg:block`}
+      >
         <div className="container mx-auto px-4">
           <div className="flex justify-start space-x-8 py-4">
             <Button
@@ -253,7 +255,7 @@ export default function Header({ theme = 'original' }: HeaderProps) {
             {/* Parent menu pages with dropdowns if they have children */}
             {parentPages.map((page: any) => {
               const childPages = getChildPages(page.slug);
-              
+
               if (childPages.length > 0) {
                 // Has children - render as dropdown with clickable parent
                 return (
@@ -279,7 +281,9 @@ export default function Header({ theme = 'original' }: HeaderProps) {
                           {childPages.map((childPage: any) => (
                             <DropdownMenuItem
                               key={childPage.slug}
-                              onClick={() => (window.location.href = `/${childPage.slug}`)}
+                              onClick={() =>
+                                (window.location.href = `/${childPage.slug}`)
+                              }
                             >
                               {childPage.menuTitle || childPage.title}
                             </DropdownMenuItem>
