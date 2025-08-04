@@ -48,7 +48,7 @@ export default function AutoScrollSlider({
           <div className="relative overflow-hidden rounded-lg shadow-lg bg-gray-100 h-full cursor-pointer hover:opacity-95 transition-opacity">
             <div className="h-full">
               <img
-                src={`/uploads/${photos[currentIndex].fileName}`}
+                src={`/api/${photos[currentIndex].filePath}`}
                 alt={photos[currentIndex].title}
                 className="w-full h-full object-contain transition-opacity duration-500"
               />
@@ -71,7 +71,7 @@ export default function AutoScrollSlider({
         <DialogContent className="max-w-4xl w-full h-[90vh] p-0">
           <div className="relative w-full h-full flex items-center justify-center bg-black">
             <img
-              src={`/uploads/${photos[currentIndex].fileName}`}
+              src={`/api/${photos[currentIndex].filePath}`}
               alt={photos[currentIndex].title}
               className="max-w-full max-h-full object-contain"
             />

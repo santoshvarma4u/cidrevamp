@@ -282,7 +282,7 @@ export default function ModernHome() {
                 {latestPhotos.map((photo) => (
                   <div key={photo.id} className="modern-card overflow-hidden aspect-square">
                     <img
-                      src={`/api/uploads/${photo.filePath}`}
+                      src={`/api/${photo.filePath}`}
                       alt={photo.title}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
