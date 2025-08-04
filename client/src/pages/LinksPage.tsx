@@ -37,6 +37,7 @@ import andamanPoliceLogo from "@assets/andaman_1754310318707.jpg";
 import apPoliceLogo from "@assets/ap_1754310336571.jpg";
 import arunachalPoliceLogo from "@assets/ap2_1754310353719.jpg";
 import assamPoliceLogo from "@assets/ap3_1754310367811.jpg";
+import dnhPoliceLogo from "@assets/dnhp_1754310421743.png";
 
 interface LinkItem {
   title: string;
@@ -240,7 +241,8 @@ export default function LinksPage() {
       title: "Dadra and Nagar Haveli Police",
       url: "http://www.dnhpolice.gov.in",
       description: "DNH Police, Silvassa",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: dnhPoliceLogo
     },
     {
       title: "Daman and Diu Police",
