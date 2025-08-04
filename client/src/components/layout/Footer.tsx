@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-white">
       {/* Main Footer */}
       <div className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
           {/* CID Info */}
           <div>
             <div className="flex items-center space-x-3 mb-4">
@@ -41,24 +41,12 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              <li><Link href="/about/history" className="text-gray-300 hover:text-white transition">About CID</Link></li>
-              <li><Link href="/wings/economic-offences" className="text-gray-300 hover:text-white transition">Economic Offences</Link></li>
-              <li><Link href="/wings/cyber-crimes" className="text-gray-300 hover:text-white transition">Cyber Crimes</Link></li>
-              <li><Link href="/wings/women-protection" className="text-gray-300 hover:text-white transition">Women Protection</Link></li>
-              <li><Link href="/wings/general-offences" className="text-gray-300 hover:text-white transition">General Offences</Link></li>
-              <li><Link href="/media/gallery" className="text-gray-300 hover:text-white transition">Media Gallery</Link></li>
-            </ul>
-          </div>
-
-          {/* Citizen Services */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Citizen Services</h4>
-            <ul className="space-y-2">
-              <li><Link href="/citizen/complaint" className="text-gray-300 hover:text-white transition">Lodge Complaint</Link></li>
-              <li><Link href="/citizen/status" className="text-gray-300 hover:text-white transition">Check Status</Link></li>
-              <li><a href="tel:100" className="text-gray-300 hover:text-white transition">Emergency: 100</a></li>
-              <li><a href="tel:1091" className="text-gray-300 hover:text-white transition">Women Helpline: 1091</a></li>
-              <li><a href="tel:181" className="text-gray-300 hover:text-white transition">Women in Distress: 181</a></li>
+              <li><Link href="/about" className="text-gray-300 hover:text-white transition">About CID</Link></li>
+              <li><Link href="/economic-offences" className="text-gray-300 hover:text-white transition">Economic Offences</Link></li>
+              <li><Link href="/cyber-crimes" className="text-gray-300 hover:text-white transition">Cyber Crimes</Link></li>
+              <li><Link href="/women-child-protection" className="text-gray-300 hover:text-white transition">Women Protection</Link></li>
+              <li><Link href="/general-offences" className="text-gray-300 hover:text-white transition">General Offences</Link></li>
+              <li><Link href="/officers" className="text-gray-300 hover:text-white transition">Senior Officers</Link></li>
             </ul>
           </div>
 
