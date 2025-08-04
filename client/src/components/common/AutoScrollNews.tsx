@@ -13,18 +13,18 @@ interface NewsItem {
 }
 
 interface AutoScrollNewsProps {
-  newsItems: NewsItem[];
+  newsItems?: NewsItem[];
   scrollInterval?: number;
 }
 
 export default function AutoScrollNews({ 
-  newsItems, 
+  newsItems = [], 
   scrollInterval = 6000 
 }: AutoScrollNewsProps) {
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    if (newsItems.length <= 1) return;
+    if (!newsItems || newsItems.length <= 1) return;
 
     const interval = setInterval(() => {
       setScrollPosition((prevPosition) => {
@@ -46,9 +46,9 @@ export default function AutoScrollNews({
     }, 50); // Scroll every 50ms for smooth animation
 
     return () => clearInterval(interval);
-  }, [newsItems.length]);
+  }, [newsItems?.length]);
 
-  if (newsItems.length === 0) {
+  if (!newsItems || newsItems.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
         No news available
