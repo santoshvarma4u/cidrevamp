@@ -190,9 +190,9 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-stretch">
             {/* Director General Message */}
             <div
-              className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}
+              className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col border-2 border-amber-300`}
             >
-              <div className="flex flex-col md:flex-row gap-4 flex-1">
+              <div className="flex gap-6 flex-1">
                 {/* Director Photo */}
                 <div className="flex-shrink-0">
                   <div className="w-32 h-36 md:w-36 md:h-40 lg:w-40 lg:h-44 rounded-lg overflow-hidden bg-gray-100 shadow-lg border-2 border-white">
@@ -206,32 +206,30 @@ export default function Home() {
 
                 {/* Director Info and Message */}
                 <div className="flex-1 overflow-hidden">
-                  <div className="mb-2">
-                    <h3 className="text-lg font-bold text-white mb-1">
+                  <div className="mb-3">
+                    <h3 className="text-xl font-bold text-white mb-1">
                       Ms. Charu Sinha, IPS
                     </h3>
                     <p
-                      className={`text-s font-semibold ${themeClasses.textAccent} mb-2`}
+                      className={`text-base font-semibold ${themeClasses.textAccent} mb-2`}
                     >
                       Addl. Director General of Police, CID, Telangana State.
                     </p>
                   </div>
 
                   <div
-                    className={`${currentTheme === "teal" ? "text-teal-100" : currentTheme === "navy" ? "text-blue-100" : "text-blue-100"} leading-relaxed text-s`}
+                    className={`${currentTheme === "teal" ? "text-teal-100" : currentTheme === "navy" ? "text-blue-100" : "text-blue-100"} leading-relaxed text-sm space-y-2`}
                   >
                     <p>
-                      Crime Investigation Department is the premier
-                      investigation agency of Telangana State. Our endeavour is
-                      to provide transparent, impartial and efficient
-                      investigation using state-of-the-art equipment with
-                      quality forensic support.
+                      Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial, efficient and systematic investigation using high end, state of the art equipment with quality forensic support in coordination with national and international agencies.
                     </p>
 
-                    <p className="mt-2">
-                      Our specialized wings include Economic Offences, Cyber
-                      Crimes, Women & Child Protection, and General Offences to
-                      serve justice effectively.
+                    <p>
+                      We follow the principle that 'men may lie but material will not'. Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and mission. Our specialized wings include Economic Offences, General Offences, Child and Women Protection, Protection of Civil Rights and Cyber Crimes. We welcome any feedback from the citizens related to any crime.
+                    </p>
+
+                    <p className="text-xs italic mt-3">
+                      I wish this website paves way for the public awareness about recent crimes and alerts.
                     </p>
                   </div>
                 </div>
