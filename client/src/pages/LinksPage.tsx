@@ -12,6 +12,11 @@ import ncbLogo from "@assets/NarcoticsControlBureau_1754309439374.jpg";
 import niaLogo from "@assets/nia-logo_1754309439374.png";
 import ncrbLogo from "@assets/NCRB-Logo_1754309439374.jpg";
 import svpnpaLogo from "@assets/nationalpoliceacademy_logo_1754309439374.png";
+import westBengalCidLogo from "@assets/WestBengalCID_1754309667445.jpg";
+import jkCidLogo from "@assets/JammuandkashimirCIDLogo_1754309667445.png";
+import maharastraCidLogo from "@assets/MaharastraCID_1754309667446.png";
+import mizoramCidLogo from "@assets/nationalpoliceacademy_logo (1)_1754309667446.png";
+import odishaCidLogo from "@assets/OrissaCID_1754309667446.png";
 
 interface LinkItem {
   title: string;
@@ -92,38 +97,43 @@ export default function LinksPage() {
     {
       title: "Andhra Pradesh CID",
       url: "http://cid.appolice.gov.in/",
-      description: "Criminal Investigation Department, Andhra Pradesh",
+      description: "Criminal Investigation Department, Andhra Pradesh", 
       category: "Other States - CID"
     },
     {
       title: "Jammu Kashmir CID",
       url: "http://crimebranchjkpolice.nic.in/",
       description: "Crime Branch, J&K Police",
-      category: "Other States - CID"
+      category: "Other States - CID",
+      image: jkCidLogo
     },
     {
       title: "Maharashtra CID",
       url: "http://mahacid.com/",
       description: "Criminal Investigation Department, Maharashtra",
-      category: "Other States - CID"
+      category: "Other States - CID",
+      image: maharastraCidLogo
     },
     {
       title: "Mizoram CID",
       url: "https://cidcrime.mizoram.gov.in/",
       description: "Criminal Investigation Department, Mizoram",
-      category: "Other States - CID"
+      category: "Other States - CID",
+      image: mizoramCidLogo
     },
     {
       title: "Odisha CID",
       url: "http://odishapolicecidcb.gov.in/",
       description: "Criminal Investigation Department, Odisha",
-      category: "Other States - CID"
+      category: "Other States - CID",
+      image: odishaCidLogo
     },
     {
       title: "West Bengal CID",
       url: "https://cidwestbengal.gov.in/",
       description: "Criminal Investigation Department, West Bengal",
-      category: "Other States - CID"
+      category: "Other States - CID",
+      image: westBengalCidLogo
     },
 
     // Telangana State
