@@ -98,7 +98,7 @@ export default function ModernHome() {
               <h2 className="text-2xl font-bold text-card-foreground mb-6">
                 Message from the Director General
               </h2>
-              <div className="flex items-start space-x-6">
+              <div className="flex items-start space-x-6 p-6">
                 <div className="relative flex-shrink-0">
                   <img
                     src="/uploads/adgp-photo.png"
@@ -126,29 +126,31 @@ export default function ModernHome() {
 
             {/* Latest Video */}
             <div className="section-container">
-              <h2 className="text-2xl font-bold text-card-foreground mb-6">Latest Video News</h2>
-              {latestVideos.length > 0 ? (
-                <div className="aspect-video rounded-lg overflow-hidden bg-black">
-                  <VideoPlayer
-                    video={{
-                      ...latestVideos[0],
-                      description: latestVideos[0].description || "",
-                      thumbnailPath: latestVideos[0].thumbnailPath || "",
-                      duration: latestVideos[0].duration || 0,
-                      category: latestVideos[0].category || "news",
-                      createdAt: formatDate(latestVideos[0].createdAt),
-                    }}
-                    className="w-full h-full"
-                  />
-                </div>
-              ) : (
-                <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <Play className="h-16 w-16 text-gray-400 mb-4 mx-auto" />
-                    <p className="text-gray-500">No videos available</p>
+              <h2 className="text-2xl font-bold text-card-foreground mb-6 px-6 pt-6">Latest Video News</h2>
+              <div className="px-6 pb-6">
+                {latestVideos.length > 0 ? (
+                  <div className="aspect-video rounded-lg overflow-hidden bg-black">
+                    <VideoPlayer
+                      video={{
+                        ...latestVideos[0],
+                        description: latestVideos[0].description || "",
+                        thumbnailPath: latestVideos[0].thumbnailPath || "",
+                        duration: latestVideos[0].duration || 0,
+                        category: latestVideos[0].category || "news",
+                        createdAt: formatDate(latestVideos[0].createdAt),
+                      }}
+                      className="w-full h-full"
+                    />
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="text-center">
+                      <Play className="h-16 w-16 text-gray-400 mb-4 mx-auto" />
+                      <p className="text-gray-500">No videos available</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
