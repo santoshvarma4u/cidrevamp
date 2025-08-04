@@ -21,6 +21,15 @@ import {
   Clock,
   ArrowRight,
 } from "lucide-react";
+import VideoPlayer from "@/components/media/VideoPlayer";
+import AutoScrollNews from "@/components/common/AutoScrollNews";
+
+// Helper function to safely convert dates to ISO strings
+const formatDate = (date: any): string => {
+  if (!date) return new Date().toISOString();
+  if (typeof date === "string") return date;
+  return new Date(date).toISOString();
+};
 
 export default function ModernHome() {
   const { data: videos = [] } = useQuery<Video[]>({
@@ -82,48 +91,101 @@ export default function ModernHome() {
               Criminal Investigation Department
             </h1>
             <p className="text-xl text-foreground/80 max-w-3xl mx-auto">
-              What is crime investigation and how does our department work? Scroll down to learn more.
+              Premier investigation agency of Telangana State committed to upholding justice and ensuring public safety
             </p>
           </div>
         </div>
       </section>
 
-      {/* Director General Section */}
+      {/* Director General and Latest Video Section */}
       <section className="pb-16">
         <div className="container mx-auto px-4">
-          <div className="section-container">
-            <h2 className="text-3xl font-bold text-card-foreground mb-8 text-center">
-              Message from the Director General
-            </h2>
-            <div className="flex flex-col lg:flex-row items-start space-y-8 lg:space-y-0 lg:space-x-12">
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Director General Message */}
+            <div className="section-container">
+              <h2 className="text-2xl font-bold text-card-foreground mb-6">
+                Message from the Director General
+              </h2>
               <div className="flex items-start space-x-6">
                 <div className="relative flex-shrink-0">
                   <img
                     src="/uploads/adgp-photo.png"
                     alt="Ms. Charu Sinha, IPS"
-                    className="w-32 h-40 object-cover rounded-lg shadow-lg"
+                    className="w-24 h-30 object-cover rounded-lg shadow-lg"
                     data-testid="director-photo"
                   />
                   <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground p-2 rounded-full">
-                    <Users className="h-5 w-5" />
+                    <Users className="h-4 w-4" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-card-foreground mb-2">
+                  <h3 className="text-xl font-bold text-card-foreground mb-2">
                     Ms. Charu Sinha, IPS
                   </h3>
-                  <p className="text-primary font-semibold mb-4">
+                  <p className="text-primary font-semibold mb-3 text-sm">
                     Additional Director General of Police, CID
                   </p>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-muted-foreground leading-relaxed text-sm">
                     "Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial and efficient investigation using state-of-the-art equipment with quality forensic support."
                   </p>
                 </div>
               </div>
             </div>
+
+            {/* Latest Video */}
+            <div className="section-container">
+              <h2 className="text-2xl font-bold text-card-foreground mb-6">Latest Video News</h2>
+              {latestVideos.length > 0 ? (
+                <div className="aspect-video rounded-lg overflow-hidden bg-black">
+                  <VideoPlayer
+                    video={{
+                      ...latestVideos[0],
+                      description: latestVideos[0].description || "",
+                      thumbnailPath: latestVideos[0].thumbnailPath || "",
+                      duration: latestVideos[0].duration || 0,
+                      category: latestVideos[0].category || "news",
+                      createdAt: formatDate(latestVideos[0].createdAt),
+                    }}
+                    className="w-full h-full"
+                  />
+                </div>
+              ) : (
+                <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <Play className="h-16 w-16 text-gray-400 mb-4 mx-auto" />
+                    <p className="text-gray-500">No videos available</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
+
+      {/* Scrolling News Section - Mandatory */}
+      {latestNews.length > 0 && (
+        <section className="pb-16">
+          <div className="container mx-auto px-4">
+            <div className="section-container">
+              <h2 className="text-2xl font-bold text-card-foreground mb-6 text-center">
+                Latest News Updates
+              </h2>
+              <div className="bg-muted/30 rounded-lg p-4">
+                <AutoScrollNews
+                  newsItems={latestNews.map((article) => ({
+                    id: article.id,
+                    title: article.title,
+                    content: article.content,
+                    excerpt: article.excerpt || "",
+                    publishedAt: formatDate(article.createdAt),
+                    borderColor: "border-primary",
+                  }))}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CID Structure Section */}
       <section className="pb-16">
@@ -241,33 +303,7 @@ export default function ModernHome() {
         </section>
       )}
 
-      {/* Latest News Section */}
-      {latestNews.length > 0 && (
-        <section className="pb-16">
-          <div className="container mx-auto px-4">
-            <div className="section-container">
-              <h2 className="text-3xl font-bold text-card-foreground mb-8 text-center">Latest News</h2>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {latestNews.map((article) => (
-                  <div key={article.id} className="modern-card">
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <Badge variant="outline">{article.category}</Badge>
-                        <div className="flex items-center text-sm text-muted-foreground">
-                          <Clock className="h-4 w-4 mr-1" />
-                          {article.createdAt ? new Date(article.createdAt).toLocaleDateString() : "No date"}
-                        </div>
-                      </div>
-                      <h3 className="text-lg font-semibold text-card-foreground mb-3">{article.title}</h3>
-                      <p className="text-muted-foreground text-sm">{article.excerpt}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+
 
       {/* Citizen Services Section */}
       <section className="pb-16">
