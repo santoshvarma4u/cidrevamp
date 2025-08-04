@@ -48,6 +48,11 @@ export default function ModernHome() {
   const latestPhotos = photos.slice(0, 6);
   const latestNews = news.slice(0, 3);
 
+  // Theme classes for consistent styling
+  const themeClasses = {
+    cardBg: "bg-white/90 dark:bg-gray-800/90",
+  };
+
   const specializedWings = [
     {
       title: "Economic Offences Wing",
@@ -103,52 +108,68 @@ export default function ModernHome() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Hero Section */}
-      <section className="pt-24 pb-8">
+      {/* Hero Section - Added spacing for fixed header */}
+      <section className="pt-40 pb-8">
         <div className="container mx-auto px-4"></div>
       </section>
 
       {/* Director General and Latest Video Section */}
-      <section className="pt-24 pb-16">
+      <section className="pt-8 pb-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8">
-            {/* Director General Message */}
-            <div className="section-container">
-              <div className="flex items-start space-x-6 p-6">
-                <div className="relative flex-shrink-0">
+            {/* Director General Message - Updated Design */}
+            <div
+              className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-8 h-auto flex flex-col border-2 border-amber-300`}
+            >
+              <h2 className="text-2xl font-bold text-card-foreground mb-6 text-center">
+                Message from ADGP
+              </h2>
+              <div className="flex flex-col lg:flex-row items-start space-y-6 lg:space-y-0 lg:space-x-8">
+                <div className="relative flex-shrink-0 mx-auto lg:mx-0">
                   <img
-                    src="/uploads/adgp-photo.png"
+                    src="/attached_assets/charu sinha madam_1754318916228.jpeg"
                     alt="Ms. Charu Sinha, IPS"
-                    className="w-24 h-30 object-cover rounded-lg shadow-lg"
+                    className="w-40 h-48 object-cover rounded-xl shadow-xl border-4 border-white"
                     data-testid="director-photo"
                   />
-                  <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground p-2 rounded-full">
-                    <Users className="h-4 w-4" />
+                  <div className="absolute -bottom-3 -right-3 bg-primary text-primary-foreground p-3 rounded-full shadow-lg">
+                    <Users className="h-6 w-6" />
                   </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-card-foreground mb-2">
+                <div className="flex-1 text-center lg:text-left">
+                  <h3 className="text-2xl font-bold text-card-foreground mb-2">
                     Ms. Charu Sinha, IPS
                   </h3>
-                  <p className="text-primary font-semibold mb-3 text-sm">
+                  <p className="text-primary font-bold mb-4 text-lg">
                     Additional Director General of Police, CID
                   </p>
-                  <p className="text-muted-foreground leading-relaxed text-sm">
-                    "Crime Investigation Department is the premier investigation
-                    agency of Telangana State. Our endeavour is to provide
-                    transparent, impartial, efficient and systematic
-                    investigation using high end, state of the art equipment
-                    with quality forensic support in coordination with national
-                    and international agencies. We follow the principle that
-                    'men may lie but material will not'. Our staff is highly
-                    trained, motivated, sincere and hardworking to achieve our
-                    vision and mission. Our specialized wings include Economic
-                    Offences, General Offences, Child and Women Protection,
-                    Protection of Civil Rights and Cyber Crimes. We welcome any
-                    feedback from the citizens related to any crime. I wish this
-                    website paves way for the public awareness about recent
-                    crimes and alerts."
-                  </p>
+                  <div className="bg-muted/20 rounded-lg p-4 mb-4">
+                    <p className="text-card-foreground leading-relaxed">
+                      "Crime Investigation Department is the premier investigation
+                      agency of Telangana State. Our endeavour is to provide
+                      transparent, impartial, efficient and systematic
+                      investigation using state-of-the-art equipment with quality 
+                      forensic support in coordination with national and international agencies."
+                    </p>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-3 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Economic Offences Wing</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Cyber Crimes Division</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>Women & Child Protection</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-primary" />
+                      <span>General Offences Wing</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
