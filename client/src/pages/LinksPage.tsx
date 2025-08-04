@@ -21,6 +21,18 @@ import telanganaStatePoliceLogo from "@assets/police_1754309846963.png";
 import telanganaGovLogo from "@assets/TSLogo_1754309846963.png";
 import cyberabadPoliceLogo from "@assets/HeadLogo_1754309846963.png";
 import hydPoliceLogo from "@assets/hyd-police_1754309846963.png";
+import bpPoliceLogo from "@assets/bp_1754310158218.jpg";
+import chandigarhPoliceLogo from "@assets/chandigarh_1754310158218.jpg";
+import cgPoliceLogo from "@assets/cg_1754310158218.jpg";
+import hpPoliceLogo from "@assets/hp_1754310158218.jpg";
+import ddpPoliceLogo from "@assets/ddp_1754310158218.png";
+import gpPoliceLogo from "@assets/gp_1754310158218.jpg";
+import gp2PoliceLogo from "@assets/gp2_1754310158219.jpg";
+import hp2PoliceLogo from "@assets/hp2_1754310158219.jpg";
+import jkPoliceLogo from "@assets/jk_1754310158219.jpg";
+import jhPoliceLogo from "@assets/jh_1754310158219.jpg";
+import kpPoliceLogo from "@assets/kp_1754310158219.jpg";
+import kePoliceLogo from "@assets/ke_1754310158220.jpg";
 
 interface LinkItem {
   title: string;
@@ -199,19 +211,22 @@ export default function LinksPage() {
       title: "Bihar Police",
       url: "http://www.biharpolice.bih.nic.in",
       description: "Bihar Police, Patna",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: bpPoliceLogo
     },
     {
       title: "Chandigarh Police",
       url: "http://chandigarhpolice.gov.in/",
       description: "Chandigarh Police",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: chandigarhPoliceLogo
     },
     {
       title: "Chhattisgarh Police",
       url: "http://www.cgpolice.gov.in",
       description: "Chhattisgarh Police, Raipur",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: cgPoliceLogo
     },
     {
       title: "Dadra and Nagar Haveli Police",
@@ -223,55 +238,64 @@ export default function LinksPage() {
       title: "Daman and Diu Police",
       url: "http://www.ddpolice.gov.in",
       description: "Daman and Diu Police",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: ddpPoliceLogo
     },
     {
       title: "Goa Police",
       url: "https://www.goapolice.gov.in/",
       description: "Goa Police, Panaji",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: gpPoliceLogo
     },
     {
       title: "Gujarat Police",
       url: "https://police.gujarat.gov.in",
       description: "Gujarat Police, Gandhinagar",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: gp2PoliceLogo
     },
     {
       title: "Haryana Police",
       url: "http://www.haryanapoliceonline.gov.in",
       description: "Haryana Police, Chandigarh",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: hp2PoliceLogo
     },
     {
       title: "Himachal Pradesh Police",
       url: "http://www.citizenportal.hppolice.gov.in",
       description: "Himachal Pradesh Police, Shimla",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: hpPoliceLogo
     },
     {
       title: "Jammu & Kashmir Police",
       url: "http://www.jkpolice.gov.in",
       description: "J&K Police, Srinagar & Jammu",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: jkPoliceLogo
     },
     {
       title: "Jharkhand Police",
       url: "https://jhpolice.gov.in/",
       description: "Jharkhand Police, Ranchi",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: jhPoliceLogo
     },
     {
       title: "Karnataka Police",
       url: "http://www.ksp.gov.in",
       description: "Karnataka State Police, Bangalore",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: kpPoliceLogo
     },
     {
       title: "Kerala Police",
       url: "http://www.keralapolice.org",
       description: "Kerala Police, Thiruvananthapuram",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: kePoliceLogo
     },
     {
       title: "Madhya Pradesh Police",
