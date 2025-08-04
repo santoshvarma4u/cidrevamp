@@ -120,7 +120,7 @@ export default function LinksPage() {
     {
       title: "Andhra Pradesh CID",
       url: "http://cid.appolice.gov.in/",
-      description: "Criminal Investigation Department, Andhra Pradesh", 
+      description: "Crime Investigation Department, Andhra Pradesh", 
       category: "Other States - CID"
     },
     {
@@ -133,28 +133,28 @@ export default function LinksPage() {
     {
       title: "Maharashtra CID",
       url: "http://mahacid.com/",
-      description: "Criminal Investigation Department, Maharashtra",
+      description: "Crime Investigation Department, Maharashtra",
       category: "Other States - CID",
       image: maharastraCidLogo
     },
     {
       title: "Mizoram CID",
       url: "https://cidcrime.mizoram.gov.in/",
-      description: "Criminal Investigation Department, Mizoram",
+      description: "Crime Investigation Department, Mizoram",
       category: "Other States - CID",
       image: mizoramCidLogo
     },
     {
       title: "Odisha CID",
       url: "http://odishapolicecidcb.gov.in/",
-      description: "Criminal Investigation Department, Odisha",
+      description: "Crime Investigation Department, Odisha",
       category: "Other States - CID",
       image: odishaCidLogo
     },
     {
       title: "West Bengal CID",
       url: "https://cidwestbengal.gov.in/",
-      description: "Criminal Investigation Department, West Bengal",
+      description: "Crime Investigation Department, West Bengal",
       category: "Other States - CID",
       image: westBengalCidLogo
     },
@@ -434,7 +434,7 @@ export default function LinksPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-2">CID Office</h3>
-                    <p className="text-gray-600 mb-3 text-sm">Criminal Investigation Department</p>
+                    <p className="text-gray-600 mb-3 text-sm">Crime Investigation Department</p>
                     <div className="text-sm text-gray-700">
                       <p>3rd Floor, DGP Office</p>
                       <p>Lakdikapul, Hyderabad-004</p>

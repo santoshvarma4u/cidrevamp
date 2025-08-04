@@ -2,7 +2,7 @@
 
 ## Overview
 
-This full-stack web application serves as a public information portal and content management system for the Criminal Investigation Department (CID) of Telangana State. It supports law enforcement activities, including specialized wings for various crime types, citizen complaint management, and media galleries. The project aims to provide a streamlined, user-friendly platform for public engagement and internal content management for the CID.
+This full-stack web application serves as a public information portal and content management system for the Crime Investigation Department (CID) of Telangana State. It supports law enforcement activities, including specialized wings for various crime types, citizen complaint management, and media galleries. The project aims to provide a streamlined, user-friendly platform for public engagement and internal content management for the CID.
 
 ## Recent Changes (February 2025)
 

@@ -141,7 +141,7 @@ export function ContactPage() {
               Contact Us
             </h1>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Get in touch with the Criminal Investigation Department offices across Telangana State
+              Get in touch with the Crime Investigation Department offices across Telangana State
             </p>
           </div>
 

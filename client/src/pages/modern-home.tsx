@@ -119,7 +119,7 @@ export default function ModernHome() {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Director General Message - Updated Design */}
             <div
-              className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-8 h-auto flex flex-col border-2 border-amber-300`}
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-8 h-auto flex flex-col border-2 border-amber-300"
             >
               <h2 className="text-2xl font-bold text-card-foreground mb-6 text-center">
                 Message from ADGP

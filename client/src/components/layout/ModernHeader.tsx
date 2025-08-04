@@ -127,7 +127,7 @@ export default function ModernHeader() {
             {/* Center Title */}
             <div className="flex-1 text-center px-6">
               <h1 className="text-3xl md:text-4xl font-bold text-card-foreground leading-tight">
-                Criminal Investigation Department
+                Crime Investigation Department
               </h1>
               <p className="text-lg text-muted-foreground mt-1">
                 Telangana State Police
