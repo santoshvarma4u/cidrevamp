@@ -1,6 +1,6 @@
 import { useParams } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import Header from "@/components/layout/ModernHeader";
+import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Loader2 } from "lucide-react";
 
