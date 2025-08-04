@@ -34,6 +34,7 @@ import jhPoliceLogo from "@assets/jh_1754310158219.jpg";
 import kpPoliceLogo from "@assets/kp_1754310158219.jpg";
 import kePoliceLogo from "@assets/ke_1754310158220.jpg";
 import andamanPoliceLogo from "@assets/andaman_1754310318707.jpg";
+import apPoliceLogo from "@assets/ap_1754310336571.jpg";
 
 interface LinkItem {
   title: string;
@@ -195,7 +196,8 @@ export default function LinksPage() {
       title: "Andhra Pradesh Police",
       url: "http://www.appolice.gov.in",
       description: "Andhra Pradesh Police, Amaravathi",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: apPoliceLogo
     },
     {
       title: "Arunachal Pradesh Police",
