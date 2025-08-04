@@ -188,7 +188,7 @@ export default function Home() {
         />
         <div className="relative container mx-auto px-4 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-stretch">
-            {/* Director General Message */}
+            {/* Director General Message - Updated Design */}
             <div
               className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col border-2 border-amber-300`}
             >

@@ -98,7 +98,7 @@ export default function Header() {
             />
           </div>
 
-          {/* Center Content */}
+          {/* Center Content - Updated Layout */}
           <div className="flex-1 text-center px-6">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
               Criminal Investigation Department
