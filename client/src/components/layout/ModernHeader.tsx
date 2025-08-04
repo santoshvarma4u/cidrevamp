@@ -150,7 +150,7 @@ export default function ModernHeader() {
                           setIsMobileMenuOpen(false);
                         }}
                       >
-                        Home
+                        HOME
                       </Button>
                       {parentPages.map((page: any) => (
                         <Button
@@ -184,7 +184,7 @@ export default function ModernHeader() {
               onClick={() => (window.location.href = "/")}
               data-testid="nav-home"
             >
-              Home
+              HOME
             </Button>
 
             {parentPages.map((page: any) => (

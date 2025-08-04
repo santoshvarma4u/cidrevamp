@@ -95,9 +95,6 @@ export default function ModernHome() {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Director General Message */}
             <div className="section-container">
-              <h2 className="text-2xl font-bold text-card-foreground mb-6">
-                Message from the Director General
-              </h2>
               <div className="flex items-start space-x-6 p-6">
                 <div className="relative flex-shrink-0">
                   <img
@@ -118,7 +115,7 @@ export default function ModernHome() {
                     Additional Director General of Police, CID
                   </p>
                   <p className="text-muted-foreground leading-relaxed text-sm">
-                    "Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial and efficient investigation using state-of-the-art equipment with quality forensic support."
+                    "Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial, efficient and systematic investigation using high end, state of the art equipment with quality forensic support in coordination with national and international agencies. We follow the principle that 'men may lie but material will not'. Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and mission. Our specialized wings include Economic Offences, General Offences, Child and Women Protection, Protection of Civil Rights and Cyber Crimes. We welcome any feedback from the citizens related to any crime. I wish this website paves way for the public awareness about recent crimes and alerts."
                   </p>
                 </div>
               </div>
