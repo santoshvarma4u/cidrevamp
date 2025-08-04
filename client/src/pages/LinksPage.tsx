@@ -3,12 +3,14 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { ExternalLink, Shield, Globe, Building, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import bprdLogo from "@assets/logo-bprd_1754309296617.png";
 
 interface LinkItem {
   title: string;
   url: string;
   description?: string;
   category: string;
+  image?: string;
 }
 
 export default function LinksPage() {
@@ -18,7 +20,8 @@ export default function LinksPage() {
       title: "BPRD",
       url: "http://www.bprd.nic.in/",
       description: "Bureau of Police Research and Development",
-      category: "Central Agencies"
+      category: "Central Agencies",
+      image: bprdLogo
     },
     {
       title: "Central Bureau of Investigation",
@@ -296,8 +299,17 @@ export default function LinksPage() {
                   {links
                     .filter(link => link.category === category)
                     .map((link, index) => (
-                      <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 border-0 rounded-xl">
+                      <Card key={index} className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 border-0 rounded-xl overflow-hidden">
                         <CardHeader className="pb-3">
+                          {link.image && (
+                            <div className="flex justify-center mb-3 bg-gray-50 rounded-lg p-3">
+                              <img 
+                                src={link.image} 
+                                alt={`${link.title} logo`}
+                                className="h-16 w-auto object-contain"
+                              />
+                            </div>
+                          )}
                           <CardTitle className="text-base text-gray-900 flex items-start gap-2 leading-tight">
                             <ExternalLink className="h-4 w-4 text-teal-600 mt-1 flex-shrink-0" />
                             <span className="line-clamp-2">{link.title}</span>
