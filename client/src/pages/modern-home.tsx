@@ -107,12 +107,9 @@ export default function ModernHome() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
-      {/* Spacer for fixed header */}
-      <div className="h-32 bg-transparent"></div>
 
       {/* Director General and Latest Video Section */}
-      <section className="pt-16 pb-16">
+      <section className="mt-60 pt-8 pb-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Director General Message - Updated Design */}
