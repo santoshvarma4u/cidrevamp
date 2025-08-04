@@ -114,26 +114,35 @@ export default function ModernHeader() {
       <div className="bg-card py-4">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
-            {/* Logos and Title */}
-            <div className="flex items-center space-x-6">
+            {/* Left Logo */}
+            <div className="flex-shrink-0">
               <img
                 src={leftLogoSrc}
                 alt="Telangana Government"
-                className="h-16 w-auto"
+                className="h-20 w-20 object-contain"
                 data-testid="telangana-logo"
               />
-              <div className="text-center">
-                <h1 className="text-2xl font-bold text-card-foreground">
-                  Criminal Investigation Department
-                </h1>
-                <p className="text-muted-foreground text-sm">
-                  Telangana State Police
-                </p>
-              </div>
+            </div>
+
+            {/* Center Title */}
+            <div className="flex-1 text-center px-6">
+              <h1 className="text-3xl md:text-4xl font-bold text-card-foreground leading-tight">
+                Criminal Investigation Department
+              </h1>
+              <p className="text-lg text-muted-foreground mt-1">
+                Telangana State Police
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                3rd Floor, DGP Office, Lakadikapul, Hyderabad-004
+              </p>
+            </div>
+
+            {/* Right Logo */}
+            <div className="flex-shrink-0">
               <img
                 src={rightLogoSrc}
                 alt="Telangana State Police"
-                className="h-16 w-auto"
+                className="h-20 w-20 object-contain"
                 data-testid="police-logo"
               />
             </div>
