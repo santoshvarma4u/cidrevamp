@@ -5,6 +5,13 @@ import { ExternalLink, Shield, Globe, Building, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import bprdLogo from "@assets/logo-bprd_1754309296617.png";
 import cbiLogo from "@assets/cbi_logo-1_1754309364119.png";
+import cyberDostLogo from "@assets/cyber_dost_1754309439375.jpg";
+import cybercrimeLogo from "@assets/cybercrime_1754309439375.jpg";
+import mhaLogo from "@assets/MinistryofHomeAffairs_1754309439374.png";
+import ncbLogo from "@assets/NarcoticsControlBureau_1754309439374.jpg";
+import niaLogo from "@assets/nia-logo_1754309439374.png";
+import ncrbLogo from "@assets/NCRB-Logo_1754309439374.jpg";
+import svpnpaLogo from "@assets/nationalpoliceacademy_logo_1754309439374.png";
 
 interface LinkItem {
   title: string;
@@ -35,43 +42,50 @@ export default function LinksPage() {
       title: "@Cyber Dost 2018",
       url: "https://twitter.com/cyberdost?lang=en",
       description: "Cyber security awareness initiative",
-      category: "Central Agencies"
+      category: "Central Agencies",
+      image: cyberDostLogo
     },
     {
       title: "Cybercrime.gov.in",
       url: "https://cybercrime.gov.in/cybercitizen/home.htm",
       description: "National cybercrime reporting portal",
-      category: "Central Agencies"
+      category: "Central Agencies",
+      image: cybercrimeLogo
     },
     {
       title: "Ministry of Home Affairs",
       url: "https://mha.gov.in/",
       description: "Government of India, Ministry of Home Affairs",
-      category: "Central Agencies"
+      category: "Central Agencies",
+      image: mhaLogo
     },
     {
       title: "Narcotics Control Bureau",
       url: "http://narcoticsindia.nic.in/",
       description: "Nodal drug law enforcement agency",
-      category: "Central Agencies"
+      category: "Central Agencies",
+      image: ncbLogo
     },
     {
       title: "National Investigation Agency",
       url: "http://www.nia.gov.in/",
       description: "Counter-terrorism task force of India",
-      category: "Central Agencies"
+      category: "Central Agencies",
+      image: niaLogo
     },
     {
       title: "National Crime Records Bureau",
       url: "http://ncrb.gov.in/",
       description: "Repository of information on crime and criminals",
-      category: "Central Agencies"
+      category: "Central Agencies",
+      image: ncrbLogo
     },
     {
       title: "Sardar Vallabhbhai Patel National Police Academy",
       url: "http://www.svpnpa.gov.in/",
       description: "Premier police training academy",
-      category: "Central Agencies"
+      category: "Central Agencies",
+      image: svpnpaLogo
     },
 
     // Other States - CID
