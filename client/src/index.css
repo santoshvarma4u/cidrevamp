@@ -1,127 +1,194 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 9% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
+:root {
+  --background: hsl(178, 50%, 45%);
+  --foreground: hsl(0, 0%, 100%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(213, 15%, 25%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(213, 15%, 25%);
+  --primary: hsl(178, 78%, 35%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(178, 25%, 92%);
+  --secondary-foreground: hsl(213, 15%, 25%);
+  --muted: hsl(178, 20%, 95%);
+  --muted-foreground: hsl(213, 10%, 60%);
+  --accent: hsl(178, 50%, 95%);
+  --accent-foreground: hsl(213, 15%, 25%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --border: hsl(178, 20%, 85%);
+  --input: hsl(0, 0%, 100%);
+  --ring: hsl(178, 78%, 35%);
+  --chart-1: hsl(178, 78%, 35%);
+  --chart-2: hsl(178, 60%, 55%);
+  --chart-3: hsl(178, 40%, 75%);
+  --chart-4: hsl(43, 74%, 66%);
+  --chart-5: hsl(27, 87%, 67%);
+  --radius: 0.75rem;
+  
+  /* Custom government colors */
+  --gov-blue: hsl(221, 83%, 53%);
+  --gov-light-blue: hsl(213, 94%, 68%);
+  --gov-dark: hsl(218, 11%, 15%);
+  --gov-gray: hsl(215, 16%, 47%);
+  --emergency: hsl(0, 84%, 60%);
+  --success: hsl(142, 76%, 36%);
+  
+  /* Teal & Cream Theme */
+  --teal-primary: hsl(178, 78%, 35%);
+  --teal-secondary: hsl(178, 100%, 25%);
+  --cream: hsl(47, 100%, 95%);
+  --cream-dark: hsl(45, 65%, 85%);
+  --light-beige: hsl(42, 78%, 90%);
+  
+  /* Navy Blue Theme */
+  --navy-primary: hsl(213, 100%, 20%);
+  --navy-secondary: hsl(213, 100%, 15%);
+  --navy-light: hsl(213, 50%, 30%);
+  --navy-accent: hsl(213, 80%, 40%);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  }
+.dark {
+  --background: hsl(178, 30%, 15%);
+  --foreground: hsl(0, 0%, 98%);
+  --card: hsl(178, 20%, 20%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --popover: hsl(178, 20%, 20%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --primary: hsl(178, 78%, 45%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(178, 15%, 25%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --muted: hsl(178, 10%, 30%);
+  --muted-foreground: hsl(178, 5%, 70%);
+  --accent: hsl(178, 25%, 25%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --border: hsl(178, 15%, 35%);
+  --input: hsl(178, 15%, 35%);
+  --ring: hsl(178, 78%, 45%);
+  --chart-1: hsl(178, 78%, 45%);
+  --chart-2: hsl(178, 60%, 65%);
+  --chart-3: hsl(178, 40%, 85%);
+  --chart-4: hsl(280, 65%, 60%);
+  --chart-5: hsl(340, 75%, 55%);
 }
 
-/* Custom animations for enhanced interactivity */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+* {
+  border-color: hsl(var(--border));
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.6); }
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  line-height: 1.6;
+  font-size: 16px;
 }
 
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-weight: 600;
+  color: hsl(213, 15%, 25%);
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
+/* Consistent heading sizes */
+h1 { font-size: 2.25rem; line-height: 2.5rem; font-weight: 700; }
+h2 { font-size: 1.875rem; line-height: 2.25rem; font-weight: 600; }
+h3 { font-size: 1.5rem; line-height: 2rem; font-weight: 600; }
+h4 { font-size: 1.25rem; line-height: 1.75rem; font-weight: 600; }
+h5 { font-size: 1.125rem; line-height: 1.625rem; font-weight: 500; }
+h6 { font-size: 1rem; line-height: 1.5rem; font-weight: 500; }
 
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
+/* Consistent text colors */
+.text-primary { color: hsl(178, 78%, 35%); }
+.text-secondary { color: hsl(213, 15%, 25%); }
+.text-body { color: hsl(213, 10%, 40%); }
+.text-muted { color: hsl(213, 10%, 60%); }
 
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 4s ease infinite;
-}
-
-/* Enhanced card hover effects */
-.gov-card-hover {
+/* Modern Card Styling - consistent across all pages */
+.modern-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   transition: all 0.3s ease;
+  border: 1px solid hsl(178, 20%, 85%);
 }
 
-.gov-card-hover:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+.modern-card:hover {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  transform: translateY(-2px);
 }
 
-/* Smooth scrolling for the entire page */
-html {
-  scroll-behavior: smooth;
+/* Consistent card patterns for all pages */
+.content-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+  border: 1px solid hsl(178, 20%, 85%);
+  margin-bottom: 1.5rem;
 }
 
-/* Loading states */
-.skeleton {
-  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+.info-card {
+  background: hsl(178, 50%, 98%);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid hsl(178, 30%, 88%);
+  margin-top: 2rem;
+}
+
+.modern-button {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.modern-button:hover {
+  background: hsl(var(--primary) / 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.15);
+}
+
+.section-container {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.05);
+}
+
+/* Teal gradient backgrounds */
+.teal-gradient {
+  background: linear-gradient(135deg, hsl(178, 78%, 35%) 0%, hsl(178, 60%, 45%) 100%);
+}
+
+.teal-light-gradient {
+  background: linear-gradient(135deg, hsl(178, 50%, 95%) 0%, hsl(178, 30%, 98%) 100%);
+}
+
+/* Interactive elements styling */
+.interactive-element {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.interactive-element:hover {
+  background: hsl(178, 50%, 95%);
+  transform: scale(1.02);
 }
 
 /* Custom scrollbar */
@@ -130,13 +197,144 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  background: hsl(var(--muted));
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-400 rounded-full;
+  background: hsl(var(--primary));
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-500;
+  background: hsl(var(--primary) / 0.8);
+}
+
+/* Government website specific styles */
+.gov-gradient {
+  background: linear-gradient(135deg, hsl(var(--gov-blue)) 0%, hsl(var(--gov-light-blue)) 100%);
+}
+
+.gov-header-shadow {
+  box-shadow: 0 2px 10px rgba(30, 64, 175, 0.1);
+}
+
+.gov-card-hover {
+  transition: all 0.3s ease;
+}
+
+.gov-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Video player styles */
+.video-player {
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Photo gallery styles */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.photo-item {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.photo-item:hover img {
+  transform: scale(1.05);
+}
+
+/* Admin panel styles */
+.admin-sidebar {
+  background: linear-gradient(180deg, hsl(178, 78%, 35%) 0%, hsl(178, 100%, 25%) 100%);
+}
+
+.admin-nav-item {
+  transition: all 0.2s ease;
+}
+
+.admin-nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  padding-left: 1.5rem;
+}
+
+/* Rich text editor styles */
+.editor-content {
+  min-height: 200px;
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+}
+
+.editor-content:focus {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Form styles */
+.form-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: hsl(var(--gov-blue));
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Loading animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .mobile-menu-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--gov-gray));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--gov-blue));
+}
+
+/* Dropdown menu positioning */
+[data-radix-dropdown-menu-content] {
+  z-index: 50;
 }
