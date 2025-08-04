@@ -33,6 +33,7 @@ import jkPoliceLogo from "@assets/jk_1754310158219.jpg";
 import jhPoliceLogo from "@assets/jh_1754310158219.jpg";
 import kpPoliceLogo from "@assets/kp_1754310158219.jpg";
 import kePoliceLogo from "@assets/ke_1754310158220.jpg";
+import andamanPoliceLogo from "@assets/andaman_1754310318707.jpg";
 
 interface LinkItem {
   title: string;
@@ -187,7 +188,8 @@ export default function LinksPage() {
       title: "Andaman and Nicobar Islands Police",
       url: "http://www.police.andaman.gov.in",
       description: "Police Department, Port Blair",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: andamanPoliceLogo
     },
     {
       title: "Andhra Pradesh Police",
