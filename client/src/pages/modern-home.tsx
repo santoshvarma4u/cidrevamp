@@ -108,22 +108,14 @@ export default function ModernHome() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Hero Section - Added spacing for fixed header */}
-      <section className="pt-40 pb-8">
-        <div className="container mx-auto px-4"></div>
-      </section>
-
-      {/* Director General and Latest Video Section */}
-      <section className="pt-8 pb-16">
+      {/* Director General and Latest Video Section - Proper spacing for fixed header */}
+      <section className="pt-48 pb-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Director General Message - Updated Design */}
             <div
               className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-8 h-auto flex flex-col border-2 border-amber-300"
             >
-              <h2 className="text-2xl font-bold text-card-foreground mb-6 text-center">
-                Message from ADGP
-              </h2>
               <div className="flex flex-col lg:flex-row items-start space-y-6 lg:space-y-0 lg:space-x-8">
                 <div className="relative flex-shrink-0 mx-auto lg:mx-0">
                   <img
