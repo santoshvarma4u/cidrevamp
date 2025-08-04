@@ -111,10 +111,10 @@ export default function ModernHome() {
       {/* Director General and Latest Video Section */}
       <section className="mt-60 pt-8 pb-16">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
             {/* Director General Message - Updated Design */}
             <div
-              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-8 h-auto flex flex-col border-2 border-amber-300"
+              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-8 h-full flex flex-col border-2 border-amber-300"
             >
               <div className="flex flex-col lg:flex-row items-start space-y-6 lg:space-y-0 lg:space-x-8">
                 <div className="relative flex-shrink-0 mx-auto lg:mx-0">
@@ -150,11 +150,11 @@ export default function ModernHome() {
             </div>
 
             {/* Latest Video */}
-            <div className="section-container">
-              <h2 className="text-2xl font-bold text-card-foreground mb-6 px-6 pt-6">
+            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-8 h-full flex flex-col border-2 border-teal-300">
+              <h2 className="text-2xl font-bold text-card-foreground mb-6">
                 Latest Video News
               </h2>
-              <div className="px-6 pb-6">
+              <div className="flex-1">
                 {latestVideos.length > 0 ? (
                   <div className="aspect-video rounded-lg overflow-hidden bg-black">
                     <VideoPlayer
