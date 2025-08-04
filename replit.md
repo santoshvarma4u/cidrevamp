@@ -4,6 +4,17 @@
 
 This full-stack web application serves as a public information portal and content management system for the Criminal Investigation Department (CID) of Telangana State. It supports law enforcement activities, including specialized wings for various crime types, citizen complaint management, and media galleries. The project aims to provide a streamlined, user-friendly platform for public engagement and internal content management for the CID.
 
+## Recent Changes (February 2025)
+
+- **Complete Senior Officers Directory**: Added all 13 senior officers with authentic photos and contact details, including Sri M. DHARMA TATA RAO (Director, FPB) and SMT VENKATA LAXMI KOLLI (SP, EOW)
+- **CID Structure Pages**: Created comprehensive pages for all four specialized wings:
+  - Economic Offences Wing (EOW) - handling financial frauds and economic crimes
+  - Cyber Crimes - digital investigations and IT Act violations
+  - Women & Child Protection - crimes against women and children
+  - General Offences Wing - grave crimes with state-level ramifications
+- **Navigation Structure**: Organized CID Structure as parent page with wing pages as children for proper menu hierarchy
+- **Authentic Content**: All content extracted from original CID website HTML files for accuracy
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
