@@ -35,6 +35,7 @@ import kpPoliceLogo from "@assets/kp_1754310158219.jpg";
 import kePoliceLogo from "@assets/ke_1754310158220.jpg";
 import andamanPoliceLogo from "@assets/andaman_1754310318707.jpg";
 import apPoliceLogo from "@assets/ap_1754310336571.jpg";
+import arunachalPoliceLogo from "@assets/ap2_1754310353719.jpg";
 
 interface LinkItem {
   title: string;
@@ -203,7 +204,8 @@ export default function LinksPage() {
       title: "Arunachal Pradesh Police",
       url: "http://www.arunpol.nic.in",
       description: "Arunachal Pradesh Police, Itanagar",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: arunachalPoliceLogo
     },
     {
       title: "Assam Police",
