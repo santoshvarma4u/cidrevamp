@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { motion } from "framer-motion";
 import {
   Phone,
   FileText,
@@ -178,47 +179,74 @@ export default function Home() {
       <section
         className={`relative ${themeClasses.heroGradient} text-white overflow-hidden`}
       >
-        <div
+        <motion.div
           className="absolute inset-0 bg-black bg-opacity-40"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1577962917302-cd874c99c7c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
         />
         <div className="relative container mx-auto px-4 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-stretch">
             {/* Director General Message */}
-            <div
+            <motion.div
               className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div className="flex flex-col md:flex-row gap-4 flex-1">
                 {/* Director Photo */}
-                <div className="flex-shrink-0">
-                  <div className="w-32 h-36 md:w-36 md:h-40 lg:w-40 lg:h-44 rounded-lg overflow-hidden bg-gray-100 shadow-lg border-2 border-white">
+                <motion.div 
+                  className="flex-shrink-0"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  <div className="w-32 h-36 md:w-36 md:h-40 lg:w-40 lg:h-44 rounded-lg overflow-hidden bg-gray-100 shadow-lg border-2 border-white hover:shadow-xl hover:scale-105 transition-all duration-300">
                     <img
                       src="/uploads/adgp-photo.png"
                       alt="Ms. Charu Sinha, IPS"
                       className="w-full h-full object-cover"
                     />
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Director Info and Message */}
-                <div className="flex-1 overflow-hidden">
+                <motion.div 
+                  className="flex-1 overflow-hidden"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                >
                   <div className="mb-2">
-                    <h3 className="text-lg font-bold text-white mb-1">
+                    <motion.h3 
+                      className="text-lg font-bold text-white mb-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 0.8 }}
+                    >
                       Ms. Charu Sinha, IPS
-                    </h3>
-                    <p
+                    </motion.h3>
+                    <motion.p
                       className={`text-s font-semibold ${themeClasses.textAccent} mb-2`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5, delay: 1 }}
                     >
                       Addl. Director General of Police, CID, Telangana State.
-                    </p>
+                    </motion.p>
                   </div>
 
-                  <div
+                  <motion.div
                     className={`${currentTheme === "teal" ? "text-teal-100" : currentTheme === "navy" ? "text-blue-100" : "text-blue-100"} leading-relaxed text-s`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.6, delay: 1.2 }}
                   >
                     <p>
                       Crime Investigation Department is the premier
@@ -233,13 +261,16 @@ export default function Home() {
                       Crimes, Women & Child Protection, and General Offences to
                       serve justice effectively.
                     </p>
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
 
-            <div
+            <motion.div
               className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
               <h3 className="text-xl font-bold mb-3">Latest Video News</h3>
               <div className="flex-1 flex flex-col">
@@ -288,8 +319,14 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Photo Gallery */}
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-96 flex flex-col">
+            <motion.div 
+              className="lg:col-span-2"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-96 flex flex-col hover:shadow-xl transition-shadow duration-300">
                 <h3 className="text-xl font-bold text-blue-800 mb-3 text-center">
                   Latest Photo Gallery
                 </h3>
@@ -310,11 +347,17 @@ export default function Home() {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* News Section */}
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-blue-200 h-96">
+            <motion.div 
+              className="lg:col-span-1"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-2 border-blue-200 h-96 hover:shadow-xl transition-shadow duration-300">
                 {/* News Header */}
                 <div className="bg-blue-800 text-white px-6 py-3">
                   <h3 className="text-lg font-bold text-center">News</h3>
@@ -350,7 +393,7 @@ export default function Home() {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -360,7 +403,13 @@ export default function Home() {
         className={`py-16 ${currentTheme === "teal" ? "bg-orange-100" : currentTheme === "navy" ? "bg-orange-100" : "bg-gray-50"}`}
       >
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Specialized Wings
             </h2>
@@ -368,14 +417,21 @@ export default function Home() {
               Our specialized departments handle diverse criminal investigations
               with expert knowledge and advanced technology
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-8">
             {specializedWings.map((wing, index) => (
-              <Card
+              <motion.div
                 key={index}
-                className="border-l-4 border-l-blue-600 hover:shadow-xl transition-shadow gov-card-hover"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
               >
+                <Card
+                  className="border-l-4 border-l-blue-600 hover:shadow-xl transition-all duration-300 gov-card-hover h-full"
+                >
                 <CardContent className="p-8">
                   <div className="flex items-start space-x-4">
                     <div className={`bg-${wing.color}-100 p-3 rounded-lg`}>
@@ -408,7 +464,8 @@ export default function Home() {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -417,10 +474,20 @@ export default function Home() {
       {/* Public Safety Alerts */}
       <section className="py-16 bg-yellow-50 border-l-4 border-yellow-400">
         <div className="container mx-auto px-4">
-          <div className="flex items-start space-x-4 mb-8">
-            <div className="bg-yellow-400 p-3 rounded-lg">
+          <motion.div 
+            className="flex items-start space-x-4 mb-8"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <motion.div 
+              className="bg-yellow-400 p-3 rounded-lg"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              transition={{ duration: 0.2 }}
+            >
               <TriangleAlert className="h-6 w-6 text-yellow-900" />
-            </div>
+            </motion.div>
             <div>
               <h2 className="text-3xl font-bold text-yellow-900 mb-2">
                 Public Safety Alerts
@@ -430,12 +497,20 @@ export default function Home() {
                 guidelines
               </p>
             </div>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {safetyAlerts.map((alert, index) => (
-              <Card key={index} className="bg-white shadow-md">
-                <CardContent className="p-6">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -3, scale: 1.02 }}
+              >
+                <Card className="bg-white shadow-md hover:shadow-lg transition-shadow duration-300 h-full">
+                  <CardContent className="p-6">
                   <div className="flex items-center space-x-3 mb-4">
                     <alert.icon
                       className={`h-5 w-5 text-${alert.color === "red" ? "red" : alert.color === "yellow" ? "yellow" : "green"}-600`}
@@ -456,8 +531,9 @@ export default function Home() {
                   >
                     {alert.priority}
                   </Badge>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -467,21 +543,32 @@ export default function Home() {
       {latestNews.length > 0 && (
         <section className="py-16 bg-gray-100">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
+            <motion.div 
+              className="text-center mb-12"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
                 Latest News
               </h2>
               <p className="text-xl text-gray-600">
                 Stay updated with recent developments and announcements
               </p>
-            </div>
+            </motion.div>
 
             <div className="grid lg:grid-cols-3 gap-8">
-              {latestNews.map((article) => (
-                <Card
+              {latestNews.map((article, index) => (
+                <motion.div
                   key={article.id}
-                  className="hover:shadow-lg transition-shadow"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5, scale: 1.02 }}
                 >
+                  <Card className="hover:shadow-lg transition-all duration-300 h-full">
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
                       <Badge variant="outline">{article.category}</Badge>
@@ -497,7 +584,8 @@ export default function Home() {
                   <CardContent>
                     <p className="text-gray-600 text-sm">{article.excerpt}</p>
                   </CardContent>
-                </Card>
+                  </Card>
+                </motion.div>
               ))}
             </div>
           </div>
