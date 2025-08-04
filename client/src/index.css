@@ -90,25 +90,59 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   font-feature-settings: "rlig" 1, "calt" 1;
   line-height: 1.6;
+  font-size: 16px;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   font-weight: 600;
+  color: hsl(213, 15%, 25%);
 }
 
-/* Modern Card Styling inspired by weedensenteret.no */
+/* Consistent heading sizes */
+h1 { font-size: 2.25rem; line-height: 2.5rem; font-weight: 700; }
+h2 { font-size: 1.875rem; line-height: 2.25rem; font-weight: 600; }
+h3 { font-size: 1.5rem; line-height: 2rem; font-weight: 600; }
+h4 { font-size: 1.25rem; line-height: 1.75rem; font-weight: 600; }
+h5 { font-size: 1.125rem; line-height: 1.625rem; font-weight: 500; }
+h6 { font-size: 1rem; line-height: 1.5rem; font-weight: 500; }
+
+/* Consistent text colors */
+.text-primary { color: hsl(178, 78%, 35%); }
+.text-secondary { color: hsl(213, 15%, 25%); }
+.text-body { color: hsl(213, 10%, 40%); }
+.text-muted { color: hsl(213, 10%, 60%); }
+
+/* Modern Card Styling - consistent across all pages */
 .modern-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 0.75rem;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   transition: all 0.3s ease;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid hsl(178, 20%, 85%);
 }
 
 .modern-card:hover {
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   transform: translateY(-2px);
+}
+
+/* Consistent card patterns for all pages */
+.content-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+  border: 1px solid hsl(178, 20%, 85%);
+  margin-bottom: 1.5rem;
+}
+
+.info-card {
+  background: hsl(178, 50%, 98%);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid hsl(178, 30%, 88%);
+  margin-top: 2rem;
 }
 
 .modern-button {

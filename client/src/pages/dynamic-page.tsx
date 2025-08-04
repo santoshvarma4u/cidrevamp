@@ -59,27 +59,40 @@ export default function DynamicPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-teal-100 to-cyan-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-teal-50">
       <Header />
       
       <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 max-w-7xl">
           {/* Page Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 font-['Poppins']">
               {page.title}
             </h1>
             {page.metaDescription && (
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto font-['Inter']">
                 {page.metaDescription}
               </p>
             )}
           </div>
 
           {/* Content Section */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
+          <div className="bg-white rounded-xl shadow-lg p-8 border border-teal-100">
             <div 
-              className="prose prose-lg max-w-none"
+              className="prose prose-lg max-w-none 
+                [&_h1]:text-gray-800 [&_h1]:font-['Poppins'] [&_h1]:font-bold [&_h1]:text-3xl [&_h1]:mb-6
+                [&_h2]:text-gray-800 [&_h2]:font-['Poppins'] [&_h2]:font-semibold [&_h2]:text-2xl [&_h2]:mb-4
+                [&_h3]:text-teal-700 [&_h3]:font-['Poppins'] [&_h3]:font-semibold [&_h3]:text-lg [&_h3]:mb-3
+                [&_p]:text-gray-700 [&_p]:font-['Inter'] [&_p]:leading-relaxed [&_p]:mb-4
+                [&_ul]:text-gray-700 [&_ul]:font-['Inter']
+                [&_li]:text-gray-700 [&_li]:font-['Inter']
+                [&_strong]:text-gray-800 [&_strong]:font-semibold
+                [&_table]:shadow-lg [&_table]:border-collapse [&_table]:w-full
+                [&_th]:bg-teal-700 [&_th]:text-white [&_th]:font-['Poppins'] [&_th]:font-semibold [&_th]:p-4 [&_th]:border [&_th]:border-gray-300
+                [&_td]:text-gray-700 [&_td]:font-['Inter'] [&_td]:p-4 [&_td]:border [&_td]:border-gray-300
+                [&_tr:hover]:bg-gray-50
+                [&_.bg-white]:shadow-lg [&_.bg-white]:border [&_.bg-white]:border-teal-100
+                [&_.bg-teal-50]:bg-teal-50 [&_.bg-teal-50]:border [&_.bg-teal-50]:border-teal-200"
               dangerouslySetInnerHTML={{ __html: page.content }}
             />
           </div>
