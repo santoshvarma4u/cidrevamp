@@ -89,28 +89,32 @@ export default function Header() {
       {/* Main Header */}
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4 flex-1">
+          {/* Left Logo */}
+          <div className="flex-shrink-0">
             <img
               src={leftLogoSrc}
               alt="Government of Telangana"
-              className="w-16 h-16 object-contain"
+              className="w-20 h-20 object-contain"
             />
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                Crime Investigation Department
-              </h1>
-              <p className="text-gray-600">Telangana State Police</p>
-              <p className="text-sm text-gray-500">
-                3rd Floor, DGP Office, Lakadikapul, Hyderabad-004
-              </p>
-            </div>
           </div>
 
-          <div className="hidden md:flex items-center space-x-4">
+          {/* Center Content */}
+          <div className="flex-1 text-center px-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+              Criminal Investigation Department
+            </h1>
+            <p className="text-lg text-gray-600 mt-1">Telangana State Police</p>
+            <p className="text-sm text-gray-500 mt-1">
+              3rd Floor, DGP Office, Lakadikapul, Hyderabad-004
+            </p>
+          </div>
+
+          {/* Right Logo and User Menu */}
+          <div className="flex-shrink-0 flex items-center space-x-4">
             <img
               src={rightLogoSrc}
               alt="Telangana State Police"
-              className="w-16 h-16 object-contain mr-4"
+              className="w-20 h-20 object-contain"
             />
 
             {isAuthenticated && user ? (
