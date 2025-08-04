@@ -17,6 +17,10 @@ import jkCidLogo from "@assets/JammuandkashimirCIDLogo_1754309667445.png";
 import maharastraCidLogo from "@assets/MaharastraCID_1754309667446.png";
 import mizoramCidLogo from "@assets/nationalpoliceacademy_logo (1)_1754309667446.png";
 import odishaCidLogo from "@assets/OrissaCID_1754309667446.png";
+import telanganaStatePoliceLogo from "@assets/police_1754309846963.png";
+import telanganaGovLogo from "@assets/TSLogo_1754309846963.png";
+import cyberabadPoliceLogo from "@assets/HeadLogo_1754309846963.png";
+import hydPoliceLogo from "@assets/hyd-police_1754309846963.png";
 
 interface LinkItem {
   title: string;
@@ -141,25 +145,29 @@ export default function LinksPage() {
       title: "Cyberabad Metropolitan Police",
       url: "http://www.cyberabadpolice.gov.in/",
       description: "Cyberabad Police Commissionerate",
-      category: "Telangana State"
+      category: "Telangana State",
+      image: cyberabadPoliceLogo
     },
     {
       title: "Hyderabad Police",
       url: "http://www.hyderabadpolice.gov.in/",
       description: "Hyderabad City Police",
-      category: "Telangana State"
+      category: "Telangana State",
+      image: hydPoliceLogo
     },
     {
       title: "Telangana State Police",
       url: "http://www.tspolice.gov.in/",
       description: "Official website of Telangana State Police",
-      category: "Telangana State"
+      category: "Telangana State",
+      image: telanganaStatePoliceLogo
     },
     {
       title: "Telangana State Government",
       url: "http://www.telangana.gov.in/",
       description: "Official website of Government of Telangana",
-      category: "Telangana State"
+      category: "Telangana State",
+      image: telanganaGovLogo
     },
 
     // Other States - Police (Major states only for brevity)
