@@ -41,7 +41,7 @@ export default function ModernHeader() {
   return (
     <header className="bg-card shadow-sm border-b border-border fixed top-0 left-0 right-0 z-50">
       {/* Top Bar */}
-      <div className="bg-primary text-primary-foreground py-2">
+      <div className="bg-teal-600 text-white py-2">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center space-x-6">
@@ -61,7 +61,7 @@ export default function ModernHeader() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-primary-foreground hover:text-primary-foreground/80"
+                      className="text-white hover:text-white/80"
                     >
                       <User className="h-4 w-4 mr-2" />
                       {user?.username}
@@ -91,7 +91,7 @@ export default function ModernHeader() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-primary-foreground hover:text-primary-foreground/80"
+                    className="text-white hover:text-white/80"
                   >
                     <User className="h-4 w-4 mr-2" />
                     Admin Login
@@ -175,12 +175,12 @@ export default function ModernHeader() {
       </div>
 
       {/* Desktop Navigation Menu */}
-      <nav className="bg-primary text-primary-foreground hidden lg:block">
+      <nav className="bg-teal-700 text-white hidden lg:block">
         <div className="container mx-auto px-4">
           <div className="flex justify-start space-x-8 py-4">
             <Button
               variant="ghost"
-              className="text-primary-foreground hover:text-primary-foreground/80 hover:bg-primary/80 transition px-3 py-2"
+              className="text-white hover:text-white/90 hover:bg-teal-600/50 transition px-3 py-2"
               onClick={() => (window.location.href = "/")}
               data-testid="nav-home"
             >
@@ -191,7 +191,7 @@ export default function ModernHeader() {
               <Button
                 key={page.slug}
                 variant="ghost"
-                className="text-primary-foreground hover:text-primary-foreground/80 hover:bg-primary/80 transition px-3 py-2"
+                className="text-white hover:text-white/90 hover:bg-teal-600/50 transition px-3 py-2"
                 onClick={() => (window.location.href = `/${page.slug}`)}
                 data-testid={`nav-${page.slug}`}
               >
