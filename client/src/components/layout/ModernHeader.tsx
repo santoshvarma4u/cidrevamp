@@ -38,6 +38,13 @@ export default function ModernHeader() {
     .filter((page: any) => !page.menuParent)
     .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
 
+  // Get child pages for each parent
+  const getChildPages = (parentSlug: string) => {
+    return allMenuPages
+      .filter((page: any) => page.menuParent === parentSlug)
+      .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
+  };
+
   return (
     <header className="bg-card shadow-sm border-b border-border fixed top-0 left-0 right-0 z-50">
       {/* Top Bar */}
@@ -152,19 +159,44 @@ export default function ModernHeader() {
                       >
                         HOME
                       </Button>
-                      {parentPages.map((page: any) => (
-                        <Button
-                          key={page.slug}
-                          variant="ghost"
-                          className="w-full justify-start text-lg font-semibold"
-                          onClick={() => {
-                            window.location.href = `/${page.slug}`;
-                            setIsMobileMenuOpen(false);
-                          }}
-                        >
-                          {page.menuTitle || page.title}
-                        </Button>
-                      ))}
+                      {parentPages.map((page: any) => {
+                        const childPages = getChildPages(page.slug);
+                        
+                        return (
+                          <div key={page.slug} className="space-y-2">
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start text-lg font-semibold"
+                              onClick={() => {
+                                if (childPages.length === 0) {
+                                  window.location.href = `/${page.slug}`;
+                                  setIsMobileMenuOpen(false);
+                                }
+                              }}
+                            >
+                              {page.menuTitle || page.title}
+                              {childPages.length > 0 && <ChevronDown className="h-4 w-4 ml-auto" />}
+                            </Button>
+                            {childPages.length > 0 && (
+                              <div className="ml-4 space-y-1">
+                                {childPages.map((child: any) => (
+                                  <Button
+                                    key={child.slug}
+                                    variant="ghost"
+                                    className="w-full justify-start text-sm"
+                                    onClick={() => {
+                                      window.location.href = `/${child.slug}`;
+                                      setIsMobileMenuOpen(false);
+                                    }}
+                                  >
+                                    {child.menuTitle || child.title}
+                                  </Button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </SheetContent>
@@ -187,17 +219,52 @@ export default function ModernHeader() {
               HOME
             </Button>
 
-            {parentPages.map((page: any) => (
-              <Button
-                key={page.slug}
-                variant="ghost"
-                className="text-white hover:text-white/90 hover:bg-teal-600/50 transition px-3 py-2"
-                onClick={() => (window.location.href = `/${page.slug}`)}
-                data-testid={`nav-${page.slug}`}
-              >
-                {page.menuTitle || page.title}
-              </Button>
-            ))}
+            {parentPages.map((page: any) => {
+              const childPages = getChildPages(page.slug);
+              
+              if (childPages.length > 0) {
+                // Parent page with dropdown
+                return (
+                  <DropdownMenu key={page.slug}>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className="text-white hover:text-white/90 hover:bg-teal-600/50 transition px-3 py-2"
+                        data-testid={`nav-${page.slug}`}
+                      >
+                        {page.menuTitle || page.title}
+                        <ChevronDown className="h-4 w-4 ml-1" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="bg-white">
+                      {childPages.map((child: any) => (
+                        <DropdownMenuItem key={child.slug} asChild>
+                          <Link 
+                            href={`/${child.slug}`}
+                            className="cursor-pointer"
+                          >
+                            {child.menuTitle || child.title}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                );
+              } else {
+                // Single page without dropdown  
+                return (
+                  <Button
+                    key={page.slug}
+                    variant="ghost"
+                    className="text-white hover:text-white/90 hover:bg-teal-600/50 transition px-3 py-2"
+                    onClick={() => (window.location.href = `/${page.slug}`)}
+                    data-testid={`nav-${page.slug}`}
+                  >
+                    {page.menuTitle || page.title}
+                  </Button>
+                );
+              }
+            })}
           </div>
         </div>
       </nav>
