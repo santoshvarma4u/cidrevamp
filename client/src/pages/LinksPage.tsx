@@ -39,6 +39,7 @@ import arunachalPoliceLogo from "@assets/ap2_1754310353719.jpg";
 import assamPoliceLogo from "@assets/ap3_1754310367811.jpg";
 import dnhPoliceLogo from "@assets/dnhp_1754310421743.png";
 import mpPoliceLogo from "@assets/mp_1754310449139.jpg";
+import mahPoliceLogo from "@assets/mah_1754310460101.jpg";
 
 interface LinkItem {
   title: string;
@@ -319,7 +320,8 @@ export default function LinksPage() {
       title: "Maharashtra Police",
       url: "http://www.mahapolice.gov.in",
       description: "Maharashtra Police, Mumbai",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: mahPoliceLogo
     }
   ];
 
