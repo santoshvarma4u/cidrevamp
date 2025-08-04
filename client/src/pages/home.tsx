@@ -195,7 +195,7 @@ export default function Home() {
               <div className="flex flex-col md:flex-row gap-4 flex-1">
                 {/* Director Photo */}
                 <div className="flex-shrink-0">
-                  <div className="w-24 h-28 md:w-28 md:h-32 rounded-lg overflow-hidden bg-gray-100">
+                  <div className="w-32 h-36 md:w-36 md:h-40 lg:w-40 lg:h-44 rounded-lg overflow-hidden bg-gray-100 shadow-lg border-2 border-white">
                     <img
                       src="/uploads/adgp-photo.png"
                       alt="Ms. Charu Sinha, IPS"
