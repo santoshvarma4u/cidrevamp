@@ -119,7 +119,7 @@ export default function ModernHome() {
               <div className="flex flex-col lg:flex-row items-start space-y-6 lg:space-y-0 lg:space-x-8">
                 <div className="relative flex-shrink-0 mx-auto lg:mx-0">
                   <img
-                    src="/uploads/officers/charu-sinha-adgp.jpeg"
+                    src="/uploads/officers/adgp-2_1754322501002.png"
                     alt="Ms. Charu Sinha, IPS"
                     className="w-40 h-48 object-cover rounded-xl shadow-xl border-4 border-white"
                     data-testid="director-photo"
