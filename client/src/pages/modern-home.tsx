@@ -51,31 +51,51 @@ export default function ModernHome() {
   const specializedWings = [
     {
       title: "Economic Offences Wing",
-      description: "Handles financial crimes including banking frauds, counterfeit currency, MLM schemes, and money circulation frauds.",
+      description:
+        "Handles financial crimes including banking frauds, counterfeit currency, MLM schemes, and money circulation frauds.",
       icon: ChartLine,
       href: "/wings/economic-offences",
-      features: ["FICN Nodal Agency", "PMLA & FEMA Reporting", "Banking Fraud Investigation"],
+      features: [
+        "FICN Nodal Agency",
+        "PMLA & FEMA Reporting",
+        "Banking Fraud Investigation",
+      ],
     },
     {
-      title: "Cyber Crimes Wing", 
-      description: "Specialized unit for cybercrime investigation, IT Act violations, video piracy, and digital forensics.",
+      title: "Cyber Crimes Wing",
+      description:
+        "Specialized unit for cybercrime investigation, IT Act violations, video piracy, and digital forensics.",
       icon: Shield,
       href: "/wings/cyber-crimes",
-      features: ["State-wide Jurisdiction", "Public Awareness Programs", "Training & Capacity Building"],
+      features: [
+        "State-wide Jurisdiction",
+        "Public Awareness Programs",
+        "Training & Capacity Building",
+      ],
     },
     {
       title: "Women & Child Protection",
-      description: "Comprehensive protection services including SHE Teams, anti-trafficking unit, and NRI women safety cell.",
+      description:
+        "Comprehensive protection services including SHE Teams, anti-trafficking unit, and NRI women safety cell.",
       icon: Heart,
-      href: "/wings/women-protection", 
-      features: ["SHE Teams & SHE Bharosa", "Anti Human Trafficking", "Missing Persons Monitoring"],
+      href: "/wings/women-protection",
+      features: [
+        "SHE Teams & SHE Bharosa",
+        "Anti Human Trafficking",
+        "Missing Persons Monitoring",
+      ],
     },
     {
       title: "General Offences Wing",
-      description: "Handles serious criminal investigations including murder, robbery, and complex inter-district matters.",
+      description:
+        "Handles serious criminal investigations including murder, robbery, and complex inter-district matters.",
       icon: Gavel,
       href: "/wings/general-offences",
-      features: ["Murder Investigations", "Serious Crime Cases", "Inter-district Coordination"],
+      features: [
+        "Murder Investigations",
+        "Serious Crime Cases",
+        "Inter-district Coordination",
+      ],
     },
   ];
 
@@ -85,8 +105,7 @@ export default function ModernHome() {
 
       {/* Hero Section */}
       <section className="pt-24 pb-8">
-        <div className="container mx-auto px-4">
-        </div>
+        <div className="container mx-auto px-4"></div>
       </section>
 
       {/* Director General and Latest Video Section */}
@@ -115,7 +134,20 @@ export default function ModernHome() {
                     Additional Director General of Police, CID
                   </p>
                   <p className="text-muted-foreground leading-relaxed text-sm">
-                    "Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial, efficient and systematic investigation using high end, state of the art equipment with quality forensic support in coordination with national and international agencies. We follow the principle that 'men may lie but material will not'. Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and mission. Our specialized wings include Economic Offences, General Offences, Child and Women Protection, Protection of Civil Rights and Cyber Crimes. We welcome any feedback from the citizens related to any crime. I wish this website paves way for the public awareness about recent crimes and alerts."
+                    "Crime Investigation Department is the premier investigation
+                    agency of Telangana State. Our endeavour is to provide
+                    transparent, impartial, efficient and systematic
+                    investigation using high end, state of the art equipment
+                    with quality forensic support in coordination with national
+                    and international agencies. We follow the principle that
+                    'men may lie but material will not'. Our staff is highly
+                    trained, motivated, sincere and hardworking to achieve our
+                    vision and mission. Our specialized wings include Economic
+                    Offences, General Offences, Child and Women Protection,
+                    Protection of Civil Rights and Cyber Crimes. We welcome any
+                    feedback from the citizens related to any crime. I wish this
+                    website paves way for the public awareness about recent
+                    crimes and alerts."
                   </p>
                 </div>
               </div>
@@ -123,7 +155,9 @@ export default function ModernHome() {
 
             {/* Latest Video */}
             <div className="section-container">
-              <h2 className="text-2xl font-bold text-card-foreground mb-6 px-6 pt-6">Latest Video News</h2>
+              <h2 className="text-2xl font-bold text-card-foreground mb-6 px-6 pt-6">
+                Latest Video News
+              </h2>
               <div className="px-6 pb-6">
                 {latestVideos.length > 0 ? (
                   <div className="aspect-video rounded-lg overflow-hidden bg-black">
@@ -186,11 +220,18 @@ export default function ModernHome() {
               This is our CID Structure
             </h2>
             <p className="text-center text-muted-foreground mb-12 max-w-4xl mx-auto">
-              CID is a comprehensive investigation agency comprising multiple specialized wings. It is primarily the investigation departments and administrative units that handle different types of crimes. These departments work together to ensure effective law enforcement across Telangana State.
+              CID is a comprehensive investigation agency comprising multiple
+              specialized wings. It is primarily the investigation departments
+              and administrative units that handle different types of crimes.
+              These departments work together to ensure effective law
+              enforcement across Telangana State.
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {specializedWings.map((wing, index) => (
-                <div key={index} className="interactive-element modern-card p-6">
+                <div
+                  key={index}
+                  className="interactive-element modern-card p-6"
+                >
                   <div className="text-center">
                     <div className="bg-primary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                       <wing.icon className="h-8 w-8 text-primary" />
@@ -205,7 +246,9 @@ export default function ModernHome() {
                       {wing.features.map((feature, idx) => (
                         <div key={idx} className="flex items-center text-sm">
                           <CheckCircle className="h-3 w-3 text-primary mr-2 flex-shrink-0" />
-                          <span className="text-muted-foreground">{feature}</span>
+                          <span className="text-muted-foreground">
+                            {feature}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -228,7 +271,9 @@ export default function ModernHome() {
           <div className="container mx-auto px-4">
             <div className="section-container">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-bold text-card-foreground">Latest Videos</h2>
+                <h2 className="text-3xl font-bold text-card-foreground">
+                  Latest Videos
+                </h2>
                 <Link href="/video-gallery">
                   <Button variant="outline" className="flex items-center">
                     <Play className="h-4 w-4 mr-2" />
@@ -253,8 +298,12 @@ export default function ModernHome() {
                       )}
                     </div>
                     <div className="p-4">
-                      <h3 className="font-semibold text-card-foreground mb-2">{video.title}</h3>
-                      <p className="text-sm text-muted-foreground">{video.description}</p>
+                      <h3 className="font-semibold text-card-foreground mb-2">
+                        {video.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {video.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -270,7 +319,9 @@ export default function ModernHome() {
           <div className="container mx-auto px-4">
             <div className="section-container">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-bold text-card-foreground">Photo Gallery</h2>
+                <h2 className="text-3xl font-bold text-card-foreground">
+                  Photo Gallery
+                </h2>
                 <Link href="/photo-gallery">
                   <Button variant="outline" className="flex items-center">
                     <Images className="h-4 w-4 mr-2" />
@@ -280,7 +331,10 @@ export default function ModernHome() {
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {latestPhotos.map((photo) => (
-                  <div key={photo.id} className="modern-card overflow-hidden aspect-square">
+                  <div
+                    key={photo.id}
+                    className="modern-card overflow-hidden aspect-square"
+                  >
                     <img
                       src={`/${photo.filePath}`}
                       alt={photo.title}
@@ -294,10 +348,8 @@ export default function ModernHome() {
         </section>
       )}
 
-
-
       {/* Citizen Services Section */}
-      <section className="pb-16">
+      {/* <section className="pb-16">
         <div className="container mx-auto px-4">
           <div className="section-container">
             <h2 className="text-3xl font-bold text-card-foreground mb-8 text-center">
@@ -330,7 +382,7 @@ export default function ModernHome() {
           </div>
         </div>
       </section>
-
+ */}
       <Footer />
     </div>
   );
