@@ -1,0 +1,310 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import Header from "@/components/layout/ModernHeader";
+import Footer from "@/components/layout/Footer";
+import type { Video, Photo, News } from "@shared/schema";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
+import {
+  Shield,
+  Heart,
+  Gavel,
+  ChartLine,
+  Users,
+  Phone,
+  FileText,
+  CheckCircle,
+  Play,
+  Images,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
+
+export default function ModernHome() {
+  const { data: videos = [] } = useQuery<Video[]>({
+    queryKey: ["/api/videos", { published: true }],
+  });
+
+  const { data: photos = [] } = useQuery<Photo[]>({
+    queryKey: ["/api/photos", { published: true }],
+  });
+
+  const { data: news = [] } = useQuery<News[]>({
+    queryKey: ["/api/news", { published: true }],
+  });
+
+  const latestVideos = videos.slice(0, 3);
+  const latestPhotos = photos.slice(0, 6);
+  const latestNews = news.slice(0, 3);
+
+  const specializedWings = [
+    {
+      title: "Economic Offences Wing",
+      description: "Handles financial crimes including banking frauds, counterfeit currency, MLM schemes, and money circulation frauds.",
+      icon: ChartLine,
+      href: "/wings/economic-offences",
+      features: ["FICN Nodal Agency", "PMLA & FEMA Reporting", "Banking Fraud Investigation"],
+    },
+    {
+      title: "Cyber Crimes Wing", 
+      description: "Specialized unit for cybercrime investigation, IT Act violations, video piracy, and digital forensics.",
+      icon: Shield,
+      href: "/wings/cyber-crimes",
+      features: ["State-wide Jurisdiction", "Public Awareness Programs", "Training & Capacity Building"],
+    },
+    {
+      title: "Women & Child Protection",
+      description: "Comprehensive protection services including SHE Teams, anti-trafficking unit, and NRI women safety cell.",
+      icon: Heart,
+      href: "/wings/women-protection", 
+      features: ["SHE Teams & SHE Bharosa", "Anti Human Trafficking", "Missing Persons Monitoring"],
+    },
+    {
+      title: "General Offences Wing",
+      description: "Handles serious criminal investigations including murder, robbery, and complex inter-district matters.",
+      icon: Gavel,
+      href: "/wings/general-offences",
+      features: ["Murder Investigations", "Serious Crime Cases", "Inter-district Coordination"],
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      {/* Hero Section */}
+      <section className="pt-24 pb-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+              Criminal Investigation Department
+            </h1>
+            <p className="text-xl text-foreground/80 max-w-3xl mx-auto">
+              What is crime investigation and how does our department work? Scroll down to learn more.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Director General Section */}
+      <section className="pb-16">
+        <div className="container mx-auto px-4">
+          <div className="section-container">
+            <h2 className="text-3xl font-bold text-card-foreground mb-8 text-center">
+              Message from the Director General
+            </h2>
+            <div className="flex flex-col lg:flex-row items-start space-y-8 lg:space-y-0 lg:space-x-12">
+              <div className="flex items-start space-x-6">
+                <div className="relative flex-shrink-0">
+                  <img
+                    src="/uploads/adgp-photo.png"
+                    alt="Ms. Charu Sinha, IPS"
+                    className="w-32 h-40 object-cover rounded-lg shadow-lg"
+                    data-testid="director-photo"
+                  />
+                  <div className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground p-2 rounded-full">
+                    <Users className="h-5 w-5" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-card-foreground mb-2">
+                    Ms. Charu Sinha, IPS
+                  </h3>
+                  <p className="text-primary font-semibold mb-4">
+                    Additional Director General of Police, CID
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed">
+                    "Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial and efficient investigation using state-of-the-art equipment with quality forensic support."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CID Structure Section */}
+      <section className="pb-16">
+        <div className="container mx-auto px-4">
+          <div className="section-container">
+            <h2 className="text-3xl font-bold text-card-foreground mb-8 text-center">
+              This is our CID Structure
+            </h2>
+            <p className="text-center text-muted-foreground mb-12 max-w-4xl mx-auto">
+              CID is a comprehensive investigation agency comprising multiple specialized wings. It is primarily the investigation departments and administrative units that handle different types of crimes. These departments work together to ensure effective law enforcement across Telangana State.
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {specializedWings.map((wing, index) => (
+                <div key={index} className="interactive-element modern-card p-6">
+                  <div className="text-center">
+                    <div className="bg-primary/10 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                      <wing.icon className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-card-foreground mb-3">
+                      {wing.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {wing.description}
+                    </p>
+                    <div className="space-y-2 mb-6">
+                      {wing.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center text-sm">
+                          <CheckCircle className="h-3 w-3 text-primary mr-2 flex-shrink-0" />
+                          <span className="text-muted-foreground">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <Link href={wing.href}>
+                      <Button className="modern-button w-full">
+                        Learn More <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Latest Videos Section */}
+      {latestVideos.length > 0 && (
+        <section className="pb-16">
+          <div className="container mx-auto px-4">
+            <div className="section-container">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-bold text-card-foreground">Latest Videos</h2>
+                <Link href="/video-gallery">
+                  <Button variant="outline" className="flex items-center">
+                    <Play className="h-4 w-4 mr-2" />
+                    View All Videos
+                  </Button>
+                </Link>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {latestVideos.map((video) => (
+                  <div key={video.id} className="modern-card overflow-hidden">
+                    <div className="aspect-video bg-gray-100 relative">
+                      {video.thumbnailPath ? (
+                        <img
+                          src={`/api/uploads/${video.thumbnailPath}`}
+                          alt={video.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Play className="h-12 w-12 text-gray-400" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold text-card-foreground mb-2">{video.title}</h3>
+                      <p className="text-sm text-muted-foreground">{video.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Photo Gallery Section */}
+      {latestPhotos.length > 0 && (
+        <section className="pb-16">
+          <div className="container mx-auto px-4">
+            <div className="section-container">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-bold text-card-foreground">Photo Gallery</h2>
+                <Link href="/photo-gallery">
+                  <Button variant="outline" className="flex items-center">
+                    <Images className="h-4 w-4 mr-2" />
+                    View All Photos
+                  </Button>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {latestPhotos.map((photo) => (
+                  <div key={photo.id} className="modern-card overflow-hidden aspect-square">
+                    <img
+                      src={`/api/uploads/${photo.filePath}`}
+                      alt={photo.title}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Latest News Section */}
+      {latestNews.length > 0 && (
+        <section className="pb-16">
+          <div className="container mx-auto px-4">
+            <div className="section-container">
+              <h2 className="text-3xl font-bold text-card-foreground mb-8 text-center">Latest News</h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {latestNews.map((article) => (
+                  <div key={article.id} className="modern-card">
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <Badge variant="outline">{article.category}</Badge>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Clock className="h-4 w-4 mr-1" />
+                          {article.createdAt ? new Date(article.createdAt).toLocaleDateString() : "No date"}
+                        </div>
+                      </div>
+                      <h3 className="text-lg font-semibold text-card-foreground mb-3">{article.title}</h3>
+                      <p className="text-muted-foreground text-sm">{article.excerpt}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Citizen Services Section */}
+      <section className="pb-16">
+        <div className="container mx-auto px-4">
+          <div className="section-container">
+            <h2 className="text-3xl font-bold text-card-foreground mb-8 text-center">
+              Citizen Services
+            </h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              <Link href="/citizen/complaint">
+                <div className="interactive-element modern-card p-8 text-center">
+                  <FileText className="h-12 w-12 text-primary mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-card-foreground mb-3">
+                    File a Complaint
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Submit your complaint online and track its status through our secure portal.
+                  </p>
+                </div>
+              </Link>
+              <Link href="/citizen/status">
+                <div className="interactive-element modern-card p-8 text-center">
+                  <Phone className="h-12 w-12 text-primary mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-card-foreground mb-3">
+                    Track Complaint Status
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Check the current status of your complaint using your reference number.
+                  </p>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+}

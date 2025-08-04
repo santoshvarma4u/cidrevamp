@@ -171,8 +171,8 @@ export default function Home() {
   const themeClasses = getThemeClasses();
 
   return (
-    <div className={`min-h-screen ${themeClasses.background}`}>
-      <Header theme={currentTheme} />
+    <div className="min-h-screen bg-background">
+      <Header />
 
       {/* Hero Section */}
       <section
