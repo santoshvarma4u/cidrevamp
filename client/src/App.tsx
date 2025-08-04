@@ -19,6 +19,7 @@ import PhotoGallery from "@/pages/PhotoGallery";
 import VideoGallery from "@/pages/VideoGallery";
 import LinksPage from "@/pages/LinksPage";
 import { RTIPage } from "@/pages/RTIPage";
+import { ContactPage } from "@/pages/ContactPage";
 import DynamicPage from "@/pages/dynamic-page";
 
 // Admin pages
@@ -60,6 +61,7 @@ function Router() {
       <Route path="/video-gallery" component={VideoGallery} />
       <Route path="/links" component={LinksPage} />
       <Route path="/rti" component={RTIPage} />
+      <Route path="/contact" component={ContactPage} />
 
       {/* Admin auth route (public) */}
       <Route path="/admin/login" component={AdminAuth} />
