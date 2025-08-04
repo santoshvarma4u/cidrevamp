@@ -224,7 +224,7 @@ export default function Header() {
               className="text-white hover:text-blue-200 hover:bg-blue-700 transition px-3 py-2"
               onClick={() => (window.location.href = "/")}
             >
-              Home
+              HOME
             </Button>
 
             {/* Parent menu pages with dropdowns if they have children */}
