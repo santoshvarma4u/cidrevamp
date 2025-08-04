@@ -4,6 +4,7 @@ import Footer from "@/components/layout/Footer";
 import { ExternalLink, Shield, Globe, Building, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import bprdLogo from "@assets/logo-bprd_1754309296617.png";
+import cbiLogo from "@assets/cbi_logo-1_1754309364119.png";
 
 interface LinkItem {
   title: string;
@@ -27,7 +28,8 @@ export default function LinksPage() {
       title: "Central Bureau of Investigation",
       url: "http://cbi.gov.in/",
       description: "Premier investigating agency of India",
-      category: "Central Agencies"
+      category: "Central Agencies",
+      image: cbiLogo
     },
     {
       title: "@Cyber Dost 2018",
