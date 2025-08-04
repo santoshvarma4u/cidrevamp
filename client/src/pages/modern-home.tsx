@@ -109,7 +109,7 @@ export default function ModernHome() {
       <Header />
 
       {/* Director General and Latest Video Section - Proper spacing for fixed header */}
-      <section className="pt-48 pb-16">
+      <section className="pt-56 pb-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8">
             {/* Director General Message - Updated Design */}
@@ -119,7 +119,7 @@ export default function ModernHome() {
               <div className="flex flex-col lg:flex-row items-start space-y-6 lg:space-y-0 lg:space-x-8">
                 <div className="relative flex-shrink-0 mx-auto lg:mx-0">
                   <img
-                    src="/attached_assets/charu sinha madam_1754318916228.jpeg"
+                    src="/uploads/officers/charu-sinha-adgp.jpeg"
                     alt="Ms. Charu Sinha, IPS"
                     className="w-40 h-48 object-cover rounded-xl shadow-xl border-4 border-white"
                     data-testid="director-photo"
@@ -135,32 +135,15 @@ export default function ModernHome() {
                   <p className="text-primary font-bold mb-4 text-lg">
                     Additional Director General of Police, CID
                   </p>
-                  <div className="bg-muted/20 rounded-lg p-4 mb-4">
+                  <div className="bg-muted/20 rounded-lg p-4">
                     <p className="text-card-foreground leading-relaxed">
                       "Crime Investigation Department is the premier investigation
                       agency of Telangana State. Our endeavour is to provide
                       transparent, impartial, efficient and systematic
                       investigation using state-of-the-art equipment with quality 
-                      forensic support in coordination with national and international agencies."
+                      forensic support in coordination with national and international agencies.
+                      We follow the principle that 'men may lie but material will not'."
                     </p>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-3 text-sm">
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Economic Offences Wing</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Cyber Crimes Division</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Women & Child Protection</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>General Offences Wing</span>
-                    </div>
                   </div>
                 </div>
               </div>
