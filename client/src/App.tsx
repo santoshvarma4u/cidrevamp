@@ -17,6 +17,7 @@ import OrganizationStructure from "@/pages/about/structure";
 import MediaGallery from "@/pages/media/gallery";
 import PhotoGallery from "@/pages/PhotoGallery";
 import VideoGallery from "@/pages/VideoGallery";
+import LinksPage from "@/pages/LinksPage";
 import DynamicPage from "@/pages/dynamic-page";
 
 // Admin pages
@@ -56,6 +57,7 @@ function Router() {
       <Route path="/media/gallery" component={MediaGallery} />
       <Route path="/photo-gallery" component={PhotoGallery} />
       <Route path="/video-gallery" component={VideoGallery} />
+      <Route path="/links" component={LinksPage} />
 
       {/* Admin auth route (public) */}
       <Route path="/admin/login" component={AdminAuth} />
