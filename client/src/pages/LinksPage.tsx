@@ -36,6 +36,7 @@ import kePoliceLogo from "@assets/ke_1754310158220.jpg";
 import andamanPoliceLogo from "@assets/andaman_1754310318707.jpg";
 import apPoliceLogo from "@assets/ap_1754310336571.jpg";
 import arunachalPoliceLogo from "@assets/ap2_1754310353719.jpg";
+import assamPoliceLogo from "@assets/ap3_1754310367811.jpg";
 
 interface LinkItem {
   title: string;
@@ -211,7 +212,8 @@ export default function LinksPage() {
       title: "Assam Police",
       url: "http://www.assampolice.gov.in",
       description: "Assam Police, Dispur",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: assamPoliceLogo
     },
     {
       title: "Bihar Police",
