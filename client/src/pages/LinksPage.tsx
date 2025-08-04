@@ -38,6 +38,7 @@ import apPoliceLogo from "@assets/ap_1754310336571.jpg";
 import arunachalPoliceLogo from "@assets/ap2_1754310353719.jpg";
 import assamPoliceLogo from "@assets/ap3_1754310367811.jpg";
 import dnhPoliceLogo from "@assets/dnhp_1754310421743.png";
+import mpPoliceLogo from "@assets/mp_1754310449139.jpg";
 
 interface LinkItem {
   title: string;
@@ -311,7 +312,8 @@ export default function LinksPage() {
       title: "Madhya Pradesh Police",
       url: "http://www.mppolice.gov.in",
       description: "Madhya Pradesh Police, Bhopal",
-      category: "Other States - Police"
+      category: "Other States - Police",
+      image: mpPoliceLogo
     },
     {
       title: "Maharashtra Police",
