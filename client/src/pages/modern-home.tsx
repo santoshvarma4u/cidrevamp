@@ -84,13 +84,8 @@ export default function ModernHome() {
       <Header />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16">
+      <section className="pt-24 pb-8">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-              Criminal Investigation Department
-            </h1>
-          </div>
         </div>
       </section>
 
