@@ -184,7 +184,7 @@ export default function ModernHome() {
       </section>
 
       {/* NEWS TICKER - positioned between DGP message and Latest News */}
-      <div className="mb-8">
+      <div className="mt-16 mb-8">
         <NewsTicker />
       </div>
 
