@@ -151,7 +151,7 @@ export function setupAuth(app: Express) {
       return res.status(400).json({ message: "CAPTCHA verification required" });
     }
     
-    const isCaptchaValid = verifyCaptcha(captchaSessionId, captchaInput);
+    const isCaptchaValid = verifyCaptcha(captchaSessionId, captchaInput, true);
     if (!isCaptchaValid) {
       console.log("CAPTCHA verification failed for login attempt");
       return res.status(400).json({ message: "Invalid CAPTCHA. Please try again." });

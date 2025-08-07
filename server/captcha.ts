@@ -6,6 +6,7 @@ interface CaptchaSession {
   text: string;
   createdAt: Date;
   attempts: number;
+  verified: boolean;
 }
 
 // In-memory store for CAPTCHA sessions (in production, use Redis or database)
@@ -14,12 +15,12 @@ const captchaSessions = new Map<string, CaptchaSession>();
 // Clean up expired sessions every 5 minutes
 setInterval(() => {
   const now = new Date();
-  for (const [id, session] of captchaSessions.entries()) {
+  captchaSessions.forEach((session, id) => {
     const expiryTime = new Date(session.createdAt.getTime() + 5 * 60 * 1000); // 5 minutes
     if (now > expiryTime) {
       captchaSessions.delete(id);
     }
-  }
+  });
 }, 5 * 60 * 1000);
 
 export function generateCaptcha(): { id: string; svg: string } {
@@ -43,6 +44,7 @@ export function generateCaptcha(): { id: string; svg: string } {
     text: captcha.text.toUpperCase(),
     createdAt: new Date(),
     attempts: 0,
+    verified: false,
   });
 
   return {
@@ -51,7 +53,7 @@ export function generateCaptcha(): { id: string; svg: string } {
   };
 }
 
-export function verifyCaptcha(sessionId: string, userInput: string): boolean {
+export function verifyCaptcha(sessionId: string, userInput: string, markAsUsed: boolean = false): boolean {
   const session = captchaSessions.get(sessionId);
   
   if (!session) {
@@ -79,8 +81,13 @@ export function verifyCaptcha(sessionId: string, userInput: string): boolean {
   const isValid = session.text.toLowerCase() === userInput.toLowerCase();
   
   if (isValid) {
-    // Remove session after successful verification
-    captchaSessions.delete(sessionId);
+    if (markAsUsed) {
+      // Remove session after successful verification during login
+      captchaSessions.delete(sessionId);
+    } else {
+      // Mark as verified but keep session for login
+      session.verified = true;
+    }
   }
 
   return isValid;
@@ -106,4 +113,10 @@ export function getCaptchaSession(sessionId: string): CaptchaSession | undefined
 // Clean up specific session
 export function deleteCaptchaSession(sessionId: string): boolean {
   return captchaSessions.delete(sessionId);
+}
+
+// Check if CAPTCHA is already verified
+export function isCaptchaVerified(sessionId: string): boolean {
+  const session = captchaSessions.get(sessionId);
+  return session ? session.verified : false;
 }
