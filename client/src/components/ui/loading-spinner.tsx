@@ -17,7 +17,7 @@ export default function LoadingSpinner({ size = "md", className }: LoadingSpinne
     <div className={cn("flex items-center justify-center", className)}>
       <div 
         className={cn(
-          "animate-spin duration-1000",
+          "animate-pulse duration-1000",
           sizeClasses[size]
         )}
         style={{

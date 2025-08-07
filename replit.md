@@ -16,6 +16,8 @@ This full-stack web application serves as a public information portal and conten
 - **Authentic Content**: All content extracted from original CID website HTML files for accuracy
 - **Docker Deployment**: Complete containerization setup with PostgreSQL, multi-stage builds, Nginx proxy, and health checks
 - **Database Export**: Updated database export (database_export.sql) with latest schema and data for Docker initialization
+- **Enhanced Security**: Added comprehensive CAPTCHA support to admin login with svg-captcha, session management, and attempt limits
+- **Loading Animations**: Replaced all loading spinners with pulsing police logo animation for consistent government branding
 
 ## User Preferences
 
