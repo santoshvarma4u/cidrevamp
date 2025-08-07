@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import {
   Heart,
   Shield,
@@ -83,6 +85,7 @@ export default function WomenProtection() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Header />
       {/* Header Section */}
       <section className="bg-gradient-to-r from-pink-600 to-pink-700 text-white py-16">
         <div className="container mx-auto px-4">
@@ -353,6 +356,7 @@ export default function WomenProtection() {
           </Card>
         </section>
       </div>
+      <Footer />
     </div>
   );
 }
