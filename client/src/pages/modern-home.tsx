@@ -108,25 +108,9 @@ export default function ModernHome() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
-      {/* DEBUG: Test if this renders - positioned absolutely to avoid header overlap */}
-      <div 
-        className="bg-purple-600 text-white text-center py-4 border-4 border-yellow-400 fixed top-32 left-0 right-0 z-[9999]"
-        style={{ position: 'fixed', top: '200px', left: '0', right: '0', zIndex: 9999 }}
-      >
-        <h1 className="text-2xl font-bold">DEBUG: This should appear after header</h1>
-      </div>
-      
-      {/* NEWS TICKER - positioned absolutely to be visible */}
-      <div 
-        className="fixed top-48 left-0 right-0 z-[9998]"
-        style={{ position: 'fixed', top: '250px', left: '0', right: '0', zIndex: 9998 }}
-      >
-        <NewsTicker />
-      </div>
 
       {/* Director General and Latest Video Section */}
-      <section className="pt-8 pb-16 mt-96">
+      <section className="pt-8 pb-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 items-stretch">
             {/* Director General Message - Updated Design */}
@@ -199,6 +183,9 @@ export default function ModernHome() {
           </div>
         </div>
       </section>
+
+      {/* NEWS TICKER - positioned between DGP message and Latest News */}
+      <NewsTicker />
 
       {/* Scrolling News Section - Mandatory */}
       {latestNews.length > 0 && (
