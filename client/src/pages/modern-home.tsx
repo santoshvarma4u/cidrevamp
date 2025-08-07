@@ -184,7 +184,9 @@ export default function ModernHome() {
       </section>
 
       {/* NEWS TICKER - positioned between DGP message and Latest News */}
-      <NewsTicker />
+      <div className="mb-8">
+        <NewsTicker />
+      </div>
 
       {/* Scrolling News Section - Mandatory */}
       {latestNews.length > 0 && (

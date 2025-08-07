@@ -20,8 +20,8 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
       : "No news updates available at this time";
     
     return (
-      <div className={`w-full px-6 py-4 ${className}`}>
-        <div className="bg-white rounded-lg shadow-md p-4 overflow-hidden">
+      <div className={`container mx-auto px-4 ${className}`}>
+        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-6 shadow-md border-2 border-teal-300 overflow-hidden">
           <div className="whitespace-nowrap">
             <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow">
               {placeholderText} • {placeholderText} • {placeholderText} • {placeholderText}
@@ -37,8 +37,8 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   const repeatedText = `${allTickerText} • ${allTickerText} • ${allTickerText}`;
 
   return (
-    <div className={`w-full px-6 py-4 ${className}`}>
-      <div className="bg-white rounded-lg shadow-md p-4 overflow-hidden">
+    <div className={`container mx-auto px-4 ${className}`}>
+      <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-6 shadow-md border-2 border-teal-300 overflow-hidden">
         <div className="whitespace-nowrap">
           <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow">
             {repeatedText}
