@@ -125,7 +125,7 @@ export default function CaptchaInput({ onCaptchaChange, onValidationChange, erro
 
   return (
     <div className="space-y-3">
-      <Label htmlFor="captcha-input">Security Verification</Label>
+      <Label htmlFor="captcha-input" className="text-sm font-medium text-gray-700">Security Verification</Label>
       
       {/* CAPTCHA Image */}
       <div className="relative">
@@ -167,7 +167,7 @@ export default function CaptchaInput({ onCaptchaChange, onValidationChange, erro
           value={userInput}
           onChange={(e) => handleInputChange(e.target.value.toUpperCase())}
           maxLength={5}
-          className={`text-center text-lg font-mono ${
+          className={`text-center text-lg font-mono placeholder:text-white/70 ${
             error ? 'border-red-500' : 
             verifyMutation.data?.valid ? 'border-green-500' : ''
           }`}
