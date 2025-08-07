@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/useAuth";
+import AdminSidebar from "@/components/admin/Sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +14,10 @@ import { Plus, Edit, Trash2, Megaphone, Clock, Calendar } from "lucide-react";
 import type { NewsTicker, InsertNewsTicker } from "@shared/schema";
 import { format } from "date-fns";
 
-interface TickerFormData extends Omit<InsertNewsTicker, 'createdBy'> {
+interface TickerFormData {
+  text: string;
+  isActive: boolean;
+  priority: number;
   startDate?: string;
   endDate?: string;
 }
@@ -32,7 +37,7 @@ export default function AdminNewsTicker() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: tickers = [], isLoading } = useQuery<NewsTicker[]>({
+  const { data: tickers = [], isLoading: tickersLoading } = useQuery<NewsTicker[]>({
     queryKey: ["/api/admin/news-ticker"],
     queryFn: () => fetch('/api/admin/news-ticker', { credentials: 'include' }).then(res => res.json()),
   });
@@ -190,8 +195,21 @@ export default function AdminNewsTicker() {
     ticker.text.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <div>Access denied</div>;
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="flex min-h-screen">
+      <AdminSidebar />
+      
+      <div className="flex-1 lg:ml-64 p-8 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -234,7 +252,7 @@ export default function AdminNewsTicker() {
                     id="priority"
                     type="number"
                     placeholder="0"
-                    value={formData.priority}
+                    value={formData.priority.toString()}
                     onChange={(e) => setFormData({ ...formData, priority: parseInt(e.target.value) || 0 })}
                     min="0"
                     max="999"
@@ -309,7 +327,7 @@ export default function AdminNewsTicker() {
       </Card>
 
       {/* Tickers List */}
-      {isLoading ? (
+      {tickersLoading ? (
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading tickers...</p>
@@ -334,7 +352,7 @@ export default function AdminNewsTicker() {
                       }`}>
                         {ticker.isActive ? 'Active' : 'Inactive'}
                       </span>
-                      {ticker.priority > 0 && (
+                      {(ticker.priority || 0) > 0 && (
                         <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           Priority: {ticker.priority}
                         </span>
@@ -356,10 +374,12 @@ export default function AdminNewsTicker() {
                           End: {format(new Date(ticker.endDate), 'MMM dd, yyyy')}
                         </div>
                       )}
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        Created: {format(new Date(ticker.createdAt), 'MMM dd, yyyy')}
-                      </div>
+                      {ticker.createdAt && (
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          Created: {format(new Date(ticker.createdAt), 'MMM dd, yyyy')}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -386,6 +406,7 @@ export default function AdminNewsTicker() {
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }
