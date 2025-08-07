@@ -59,7 +59,7 @@ export default function ModernHome() {
       description:
         "Handles financial crimes including banking frauds, counterfeit currency, MLM schemes, and money circulation frauds.",
       icon: ChartLine,
-      href: "/wings/economic-offences",
+      href: "/economic-offences",
       features: [
         "FICN Nodal Agency",
         "PMLA & FEMA Reporting",
@@ -71,7 +71,7 @@ export default function ModernHome() {
       description:
         "Specialized unit for cybercrime investigation, IT Act violations, video piracy, and digital forensics.",
       icon: Shield,
-      href: "/wings/cyber-crimes",
+      href: "/cyber-crimes",
       features: [
         "State-wide Jurisdiction",
         "Public Awareness Programs",
@@ -83,7 +83,7 @@ export default function ModernHome() {
       description:
         "Comprehensive protection services including SHE Teams, anti-trafficking unit, and NRI women safety cell.",
       icon: Heart,
-      href: "/wings/women-protection",
+      href: "/women-child-protection",
       features: [
         "SHE Teams & SHE Bharosa",
         "Anti Human Trafficking",
@@ -95,7 +95,7 @@ export default function ModernHome() {
       description:
         "Handles serious criminal investigations including murder, robbery, and complex inter-district matters.",
       icon: Gavel,
-      href: "/wings/general-offences",
+      href: "/general-offences",
       features: [
         "Murder Investigations",
         "Serious Crime Cases",
