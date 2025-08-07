@@ -33,8 +33,22 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
     return () => clearInterval(interval);
   }, [tickers.length]);
 
-  // Don't render if no active tickers or loading
-  if (isLoading || tickers.length === 0) {
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className={`bg-red-600 text-white overflow-hidden ${className}`}>
+        <div className="flex items-center">
+          <div className="bg-red-800 px-4 py-2 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
+            <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+            Loading News...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if no active tickers
+  if (tickers.length === 0) {
     return null;
   }
 

@@ -174,9 +174,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
-      {/* News Ticker */}
-      <NewsTicker />
 
       {/* Hero Section */}
       <section
@@ -284,6 +281,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* News Ticker */}
+      <NewsTicker className="sticky top-0 z-50" />
 
       {/* Photo Gallery & News */}
       <section className={`py-12 ${themeClasses.sectionBg}`}>
