@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: cid-postgres
+    environment:
+      POSTGRES_DB: ciddb
+      POSTGRES_USER: ciduser
+      POSTGRES_PASSWORD: cidpassword
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database_export.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - cid-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ciduser -d ciddb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # CID Web Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: cid-app
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DATABASE_URL: postgresql://ciduser:cidpassword@postgres:5432/ciddb
+      SESSION_SECRET: your-super-secret-session-key-change-this-in-production
+    ports:
+      - "5000:5000"
+    volumes:
+      - app_uploads:/app/uploads
+    networks:
+      - cid-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Nginx Reverse Proxy (Optional - for production)
+  nginx:
+    image: nginx:alpine
+    container_name: cid-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    networks:
+      - cid-network
+    depends_on:
+      - app
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+    driver: local
+  app_uploads:
+    driver: local
+
+networks:
+  cid-network:
+    driver: bridge

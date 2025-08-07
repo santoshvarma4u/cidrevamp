@@ -1,5 +1,15 @@
 import { Link } from "wouter";
-import { Shield, Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import {
+  Shield,
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+} from "lucide-react";
 
 export default function Footer() {
   return (
@@ -15,38 +25,70 @@ export default function Footer() {
               </div>
               <div>
                 <h3 className="text-xl font-bold">CID Telangana</h3>
-                <p className="text-gray-400 text-sm">Crime Investigation Department</p>
+                <p className="text-gray-400 text-sm">
+                  Crime Investigation Department
+                </p>
               </div>
             </div>
             <p className="text-gray-300 mb-4">
-              Premier investigation agency of Telangana State committed to transparent, impartial, and efficient investigation using state-of-the-art technology.
+              Premier investigation agency of Telangana State committed to
+              transparent, impartial, and efficient investigation using
+              state-of-the-art technology.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition">
-                <Youtube className="h-5 w-5" />
-              </a>
-            </div>
           </div>
 
           {/* Quick Links */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              <li><Link href="/about" className="text-gray-300 hover:text-white transition">About CID</Link></li>
-              <li><Link href="/economic-offences" className="text-gray-300 hover:text-white transition">Economic Offences</Link></li>
-              <li><Link href="/cyber-crimes" className="text-gray-300 hover:text-white transition">Cyber Crimes</Link></li>
-              <li><Link href="/women-child-protection" className="text-gray-300 hover:text-white transition">Women Protection</Link></li>
-              <li><Link href="/general-offences" className="text-gray-300 hover:text-white transition">General Offences</Link></li>
-              <li><Link href="/officers" className="text-gray-300 hover:text-white transition">Senior Officers</Link></li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-gray-300 hover:text-white transition"
+                >
+                  About CID
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/economic-offences"
+                  className="text-gray-300 hover:text-white transition"
+                >
+                  Economic Offences
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/cyber-crimes"
+                  className="text-gray-300 hover:text-white transition"
+                >
+                  Cyber Crimes
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/women-child-protection"
+                  className="text-gray-300 hover:text-white transition"
+                >
+                  Women Protection
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/general-offences"
+                  className="text-gray-300 hover:text-white transition"
+                >
+                  General Offences
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/officers"
+                  className="text-gray-300 hover:text-white transition"
+                >
+                  Senior Officers
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -57,9 +99,13 @@ export default function Footer() {
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-gray-400 mt-0.5" />
                 <div>
-                  <p className="text-gray-300">Crime Investigation Department</p>
+                  <p className="text-gray-300">
+                    Crime Investigation Department
+                  </p>
                   <p className="text-gray-300">3rd Floor, DGP Office</p>
-                  <p className="text-gray-300">Lakadikapul, Hyderabad - 500004</p>
+                  <p className="text-gray-300">
+                    Lakadikapul, Hyderabad - 500004
+                  </p>
                   <p className="text-gray-300">Telangana, India</p>
                 </div>
               </div>
@@ -89,13 +135,29 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-gray-400">
-                © 2025 Crime Investigation Department, Telangana State Police. All rights reserved.
+                © 2025 Crime Investigation Department, Telangana State Police.
+                All rights reserved.
               </p>
             </div>
             <div className="flex space-x-6">
-              <Link href="/privacy-policy" className="text-gray-400 hover:text-white transition text-sm">Privacy Policy</Link>
-              <Link href="/terms-of-service" className="text-gray-400 hover:text-white transition text-sm">Terms of Service</Link>
-              <Link href="/accessibility" className="text-gray-400 hover:text-white transition text-sm">Accessibility</Link>
+              <Link
+                href="/privacy-policy"
+                className="text-gray-400 hover:text-white transition text-sm"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms-of-service"
+                className="text-gray-400 hover:text-white transition text-sm"
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/accessibility"
+                className="text-gray-400 hover:text-white transition text-sm"
+              >
+                Accessibility
+              </Link>
             </div>
           </div>
         </div>

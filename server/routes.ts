@@ -22,6 +22,15 @@ const storage_multer = multer.diskStorage({
 const upload = multer({ storage: storage_multer });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Health check endpoint for Docker
+  app.get('/api/health', (req, res) => {
+    res.status(200).json({ 
+      status: 'healthy', 
+      timestamp: new Date().toISOString(),
+      service: 'CID Telangana Web Application'
+    });
+  });
+
   // Serve static files from uploads directory
   app.use('/uploads', express.static('uploads'));
   
