@@ -3,7 +3,7 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
-import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema } from "@shared/schema";
+import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
 import multer from "multer";
 import path from "path";
@@ -222,6 +222,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching news:", error);
       res.status(500).json({ message: "Failed to fetch news" });
+    }
+  });
+
+  // News ticker routes
+  app.get('/api/news-ticker', async (req, res) => {
+    try {
+      const tickers = await storage.getActiveNewsTickers();
+      res.json(tickers);
+    } catch (error) {
+      console.error("Error fetching news tickers:", error);
+      res.status(500).json({ message: "Failed to fetch news tickers" });
     }
   });
 
@@ -488,6 +499,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting news:", error);
       res.status(500).json({ message: "Failed to delete news" });
+    }
+  });
+
+  // Admin News Ticker routes
+  app.get('/api/admin/news-ticker', requireAdmin, async (req, res) => {
+    try {
+      const tickers = await storage.getAllNewsTickers();
+      res.json(tickers);
+    } catch (error) {
+      console.error("Error fetching news tickers:", error);
+      res.status(500).json({ message: "Failed to fetch news tickers" });
+    }
+  });
+
+  app.post('/api/admin/news-ticker', requireAdmin, async (req: any, res) => {
+    try {
+      const validatedData = insertNewsTickerSchema.parse({
+        ...req.body,
+        createdBy: req.user.id
+      });
+      const ticker = await storage.createNewsTicker(validatedData);
+      res.json(ticker);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating news ticker:", error);
+      res.status(500).json({ message: "Failed to create news ticker" });
+    }
+  });
+
+  app.patch('/api/admin/news-ticker/:id', requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertNewsTickerSchema.partial().parse(req.body);
+      const ticker = await storage.updateNewsTicker(id, validatedData);
+      res.json(ticker);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating news ticker:", error);
+      res.status(500).json({ message: "Failed to update news ticker" });
+    }
+  });
+
+  app.delete('/api/admin/news-ticker/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteNewsTicker(id);
+      res.json({ message: "News ticker deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting news ticker:", error);
+      res.status(500).json({ message: "Failed to delete news ticker" });
     }
   });
 

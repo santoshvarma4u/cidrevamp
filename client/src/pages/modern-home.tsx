@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import VideoPlayer from "@/components/media/VideoPlayer";
 import AutoScrollNews from "@/components/common/AutoScrollNews";
+import NewsTicker from "@/components/home/NewsTicker";
 
 // Helper function to safely convert dates to ISO strings
 const formatDate = (date: any): string => {
@@ -107,6 +108,7 @@ export default function ModernHome() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <NewsTicker />
 
       {/* Director General and Latest Video Section */}
       <section className="mt-60 pt-8 pb-16">

@@ -16,6 +16,7 @@ import {
   LogOut,
   Menu,
   FolderOpen,
+  Megaphone,
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -36,6 +37,7 @@ export default function AdminSidebar() {
         { title: "Videos", href: "/admin/content/videos", icon: Video },
         { title: "Photos", href: "/admin/content/photos", icon: Image },
         { title: "News", href: "/admin/content/news", icon: Newspaper },
+        { title: "News Ticker", href: "/admin/news-ticker", icon: Megaphone },
       ],
     },
     {

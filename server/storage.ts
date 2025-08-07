@@ -6,6 +6,7 @@ import {
   photoAlbums,
   complaints,
   news,
+  newsTicker,
   menuItems,
   type User,
   type InsertUser,
@@ -19,6 +20,8 @@ import {
   type Complaint,
   type InsertNews,
   type News,
+  type InsertNewsTicker,
+  type NewsTicker,
   type PhotoAlbum,
   type MenuItem,
 } from "@shared/schema";
@@ -72,6 +75,14 @@ export interface IStorage {
   deleteNews(id: number): Promise<void>;
   getNews(id: number): Promise<News | undefined>;
   getAllNews(published?: boolean): Promise<News[]>;
+
+  // News ticker operations
+  createNewsTicker(ticker: InsertNewsTicker): Promise<NewsTicker>;
+  updateNewsTicker(id: number, ticker: Partial<InsertNewsTicker>): Promise<NewsTicker>;
+  deleteNewsTicker(id: number): Promise<void>;
+  getNewsTicker(id: number): Promise<NewsTicker | undefined>;
+  getActiveNewsTickers(): Promise<NewsTicker[]>;
+  getAllNewsTickers(): Promise<NewsTicker[]>;
 
   // Menu operations
   getMenuItems(): Promise<MenuItem[]>;
@@ -303,6 +314,48 @@ export class DatabaseStorage implements IStorage {
     }
     return await db.select().from(news)
       .orderBy(desc(news.createdAt));
+  }
+
+  // News ticker operations
+  async createNewsTicker(tickerData: InsertNewsTicker): Promise<NewsTicker> {
+    const [newTicker] = await db.insert(newsTicker).values(tickerData).returning();
+    return newTicker;
+  }
+
+  async updateNewsTicker(id: number, tickerData: Partial<InsertNewsTicker>): Promise<NewsTicker> {
+    const [updatedTicker] = await db
+      .update(newsTicker)
+      .set({ ...tickerData, updatedAt: new Date() })
+      .where(eq(newsTicker.id, id))
+      .returning();
+    return updatedTicker;
+  }
+
+  async deleteNewsTicker(id: number): Promise<void> {
+    await db.delete(newsTicker).where(eq(newsTicker.id, id));
+  }
+
+  async getNewsTicker(id: number): Promise<NewsTicker | undefined> {
+    const [ticker] = await db.select().from(newsTicker).where(eq(newsTicker.id, id));
+    return ticker;
+  }
+
+  async getActiveNewsTickers(): Promise<NewsTicker[]> {
+    const now = new Date();
+    return await db.select().from(newsTicker)
+      .where(
+        and(
+          eq(newsTicker.isActive, true),
+          sql`(${newsTicker.startDate} IS NULL OR ${newsTicker.startDate} <= ${now})`,
+          sql`(${newsTicker.endDate} IS NULL OR ${newsTicker.endDate} >= ${now})`
+        )
+      )
+      .orderBy(desc(newsTicker.priority), desc(newsTicker.createdAt));
+  }
+
+  async getAllNewsTickers(): Promise<NewsTicker[]> {
+    return await db.select().from(newsTicker)
+      .orderBy(desc(newsTicker.priority), desc(newsTicker.createdAt));
   }
 
   // Menu operations

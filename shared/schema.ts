@@ -147,6 +147,19 @@ export const news = pgTable("news", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// News ticker/scrolling text announcements
+export const newsTicker = pgTable("news_ticker", {
+  id: serial("id").primaryKey(),
+  text: text("text").notNull(),
+  isActive: boolean("is_active").default(true),
+  priority: integer("priority").default(0), // Higher number = higher priority
+  startDate: timestamp("start_date"),
+  endDate: timestamp("end_date"),
+  createdBy: varchar("created_by").references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Menu items table
 export const menuItems = pgTable("menu_items", {
   id: serial("id").primaryKey(),
@@ -226,6 +239,13 @@ export const newsRelations = relations(news, ({ one }) => ({
   }),
 }));
 
+export const newsTickerRelations = relations(newsTicker, ({ one }) => ({
+  createdBy: one(users, {
+    fields: [newsTicker.createdBy],
+    references: [users.id],
+  }),
+}));
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -271,6 +291,15 @@ export const insertNewsSchema = createInsertSchema(news, {
   updatedAt: true,
 });
 
+export const insertNewsTickerSchema = createInsertSchema(newsTicker, {
+  startDate: z.string().datetime().nullable().transform((val) => val ? new Date(val) : null),
+  endDate: z.string().datetime().nullable().transform((val) => val ? new Date(val) : null),
+}).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
@@ -285,5 +314,7 @@ export type InsertComplaint = z.infer<typeof insertComplaintSchema>;
 export type Complaint = typeof complaints.$inferSelect;
 export type InsertNews = z.infer<typeof insertNewsSchema>;
 export type News = typeof news.$inferSelect;
+export type InsertNewsTicker = z.infer<typeof insertNewsTickerSchema>;
+export type NewsTicker = typeof newsTicker.$inferSelect;
 export type PhotoAlbum = typeof photoAlbums.$inferSelect;
 export type MenuItem = typeof menuItems.$inferSelect;

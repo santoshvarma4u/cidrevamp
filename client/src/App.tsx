@@ -32,6 +32,7 @@ import AdminVideos from "@/pages/admin/content/videos";
 import AdminPhotos from "@/pages/admin/content/photos";
 import AdminNews from "@/pages/admin/content/news";
 import AdminComplaints from "@/pages/admin/complaints/list";
+import AdminNewsTicker from "@/pages/admin/news-ticker";
 
 import queryClient from "@/lib/queryClient";
 
@@ -82,6 +83,7 @@ function Router() {
           <Route path="/admin/content/photos" component={AdminPhotos} />
           <Route path="/admin/content/news" component={AdminNews} />
           <Route path="/admin/complaints" component={AdminComplaints} />
+          <Route path="/admin/news-ticker" component={AdminNewsTicker} />
         </>
       )}
 
