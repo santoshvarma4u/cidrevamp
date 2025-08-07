@@ -11,6 +11,7 @@ import { Shield, Lock, User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import CaptchaInput from "@/components/auth/CaptchaInput";
 import type { LoginData } from "@shared/schema";
 
 export default function AdminAuth() {
@@ -21,6 +22,10 @@ export default function AdminAuth() {
     username: "",
     password: "",
   });
+  const [captchaSessionId, setCaptchaSessionId] = useState("");
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [isCaptchaValid, setIsCaptchaValid] = useState(false);
+  const [captchaError, setCaptchaError] = useState("");
 
   // Redirect if already logged in
   useEffect(() => {
@@ -30,7 +35,7 @@ export default function AdminAuth() {
   }, [user, isLoading, setLocation]);
 
   const loginMutation = useMutation({
-    mutationFn: async (credentials: LoginData) => {
+    mutationFn: async (credentials: LoginData & { captchaSessionId: string; captchaInput: string }) => {
       console.log("Making fetch request to /api/login");
       const res = await fetch('/api/login', {
         method: 'POST',
@@ -91,7 +96,32 @@ export default function AdminAuth() {
     }
     
     console.log("Calling loginMutation.mutate");
-    loginMutation.mutate(formData);
+    // Reset CAPTCHA error
+    setCaptchaError("");
+    
+    // Validate CAPTCHA
+    if (!isCaptchaValid) {
+      setCaptchaError("Please complete the CAPTCHA verification");
+      return;
+    }
+    
+    loginMutation.mutate({
+      ...formData,
+      captchaSessionId,
+      captchaInput,
+    });
+  };
+
+  const handleCaptchaChange = (sessionId: string, userInput: string) => {
+    setCaptchaSessionId(sessionId);
+    setCaptchaInput(userInput);
+  };
+
+  const handleCaptchaValidation = (isValid: boolean) => {
+    setIsCaptchaValid(isValid);
+    if (isValid) {
+      setCaptchaError("");
+    }
   };
 
   if (isLoading) {
@@ -166,6 +196,13 @@ export default function AdminAuth() {
                 </div>
               </div>
 
+              {/* CAPTCHA Component */}
+              <CaptchaInput
+                onCaptchaChange={handleCaptchaChange}
+                onValidationChange={handleCaptchaValidation}
+                error={captchaError}
+              />
+
               <Button
                 type="submit"
                 onClick={(e) => {
@@ -173,7 +210,7 @@ export default function AdminAuth() {
                   // Don't prevent default here, let form submission handle it
                 }}
                 className="w-full !bg-blue-600 hover:!bg-blue-700 !text-white !py-3 !px-4 !rounded-md !font-medium !transition-colors !shadow-lg !border-blue-600 hover:!border-blue-700"
-                disabled={loginMutation.isPending}
+                disabled={loginMutation.isPending || !isCaptchaValid}
                 style={{
                   backgroundColor: '#2563eb',
                   color: 'white',

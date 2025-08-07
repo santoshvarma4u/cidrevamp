@@ -4,6 +4,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
 import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema } from "@shared/schema";
+import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
 import multer from "multer";
 import path from "path";
 import { z } from "zod";
@@ -29,6 +30,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
       timestamp: new Date().toISOString(),
       service: 'CID Telangana Web Application'
     });
+  });
+
+  // CAPTCHA endpoints
+  app.get('/api/captcha', (req, res) => {
+    try {
+      const captcha = generateCaptcha();
+      res.json(captcha);
+    } catch (error) {
+      console.error('Error generating CAPTCHA:', error);
+      res.status(500).json({ message: 'Failed to generate CAPTCHA' });
+    }
+  });
+
+  app.post('/api/captcha/verify', (req, res) => {
+    try {
+      const { sessionId, userInput } = req.body;
+      
+      if (!sessionId || !userInput) {
+        return res.status(400).json({ message: 'Session ID and user input are required' });
+      }
+
+      const isValid = verifyCaptcha(sessionId, userInput);
+      res.json({ valid: isValid });
+    } catch (error) {
+      console.error('Error verifying CAPTCHA:', error);
+      res.status(500).json({ message: 'Failed to verify CAPTCHA' });
+    }
+  });
+
+  app.post('/api/captcha/refresh', (req, res) => {
+    try {
+      const { sessionId } = req.body;
+      const newCaptcha = refreshCaptcha(sessionId);
+      
+      if (!newCaptcha) {
+        return res.status(400).json({ message: 'Failed to refresh CAPTCHA' });
+      }
+
+      res.json(newCaptcha);
+    } catch (error) {
+      console.error('Error refreshing CAPTCHA:', error);
+      res.status(500).json({ message: 'Failed to refresh CAPTCHA' });
+    }
   });
 
   // Serve static files from uploads directory

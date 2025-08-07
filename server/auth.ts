@@ -5,6 +5,7 @@ import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
+import { verifyCaptcha } from "./captcha";
 import { User as SelectUser, LoginData } from "@shared/schema";
 import connectPg from "connect-pg-simple";
 import createMemoryStore from "memorystore";
@@ -143,6 +144,21 @@ export function setupAuth(app: Express) {
 
   app.post("/api/login", (req, res, next) => {
     console.log("Login request received:", req.method, req.path, req.body);
+    
+    // Verify CAPTCHA first
+    const { captchaSessionId, captchaInput } = req.body;
+    if (!captchaSessionId || !captchaInput) {
+      return res.status(400).json({ message: "CAPTCHA verification required" });
+    }
+    
+    const isCaptchaValid = verifyCaptcha(captchaSessionId, captchaInput);
+    if (!isCaptchaValid) {
+      console.log("CAPTCHA verification failed for login attempt");
+      return res.status(400).json({ message: "Invalid CAPTCHA. Please try again." });
+    }
+    
+    console.log("CAPTCHA verification successful, proceeding with authentication");
+    
     passport.authenticate("local", (err: any, user: SelectUser | false, info: any) => {
       if (err) {
         console.error("Authentication error:", err);
