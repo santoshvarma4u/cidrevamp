@@ -108,6 +108,12 @@ export default function ModernHome() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      
+      {/* DEBUG: Test if this renders */}
+      <div className="bg-purple-600 text-white text-center py-4 border-4 border-yellow-400">
+        <h1 className="text-2xl font-bold">DEBUG: This should appear after header</h1>
+      </div>
+      
       <NewsTicker />
 
       {/* Director General and Latest Video Section */}

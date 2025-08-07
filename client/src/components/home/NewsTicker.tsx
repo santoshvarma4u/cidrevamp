@@ -10,46 +10,18 @@ interface NewsTickerProps {
 }
 
 export default function NewsTicker({ className = "" }: NewsTickerProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const { data: tickers = [], isLoading } = useQuery<NewsTickerType[]>({
-    queryKey: ['/api/news-ticker'],
-    refetchInterval: 60000, // Refresh every minute
-  });
-
-  // Auto-scroll through tickers
-  useEffect(() => {
-    if (tickers.length === 0) return;
-
-    const interval = setInterval(() => {
-      setIsAnimating(true);
-      
-      setTimeout(() => {
-        setCurrentIndex((prevIndex) => 
-          prevIndex === tickers.length - 1 ? 0 : prevIndex + 1
-        );
-        setIsAnimating(false);
-      }, 500); // Half-second for slide out animation
-    }, 4000); // Change every 4 seconds
-
-    return () => clearInterval(interval);
-  }, [tickers.length]);
-
-  // Debug mode - always show component
-  if (DEBUG_MODE) {
-    return (
-      <div className="bg-purple-600 text-white w-full min-h-[60px] flex items-center border-4 border-yellow-400">
-        <div className="bg-purple-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
-          <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
-          DEBUG: NEWS TICKER WORKS!
-        </div>
-        <div className="flex-1 px-8 text-sm">
-          Data loaded: {tickers.length} items | Loading: {isLoading ? 'YES' : 'NO'}
-        </div>
+  // Simplified version - just return a visible element
+  return (
+    <div className="bg-red-600 text-white w-full min-h-[60px] flex items-center border-4 border-yellow-400">
+      <div className="bg-red-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
+        <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+        SIMPLE NEWS TICKER TEST
       </div>
-    );
-  }
+      <div className="flex-1 px-8 text-sm">
+        This is a simplified test to see if component renders at all
+      </div>
+    </div>
+  );
 
   // Always show something for debugging
   if (isLoading) {
