@@ -22,7 +22,7 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
     return (
       <div className={`w-full py-4 overflow-hidden ${className}`}>
         <div className="whitespace-nowrap">
-          <div className="inline-block text-white text-lg font-bold animate-scroll-slow">
+          <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow news-ticker-text">
             {placeholderText} • {placeholderText}
           </div>
         </div>
@@ -36,7 +36,7 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   return (
     <div className={`w-full py-4 overflow-hidden ${className}`}>
       <div className="whitespace-nowrap">
-        <div className="inline-block text-white text-lg font-bold animate-scroll-slow">
+        <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow news-ticker-text">
           {allTickerText} • {allTickerText}
         </div>
       </div>
