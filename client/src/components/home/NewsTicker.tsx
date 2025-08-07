@@ -20,10 +20,12 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
       : "No news updates available at this time";
     
     return (
-      <div className={`w-full py-4 overflow-hidden ${className}`}>
-        <div className="whitespace-nowrap">
-          <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow news-ticker-text">
-            {placeholderText} • {placeholderText} • {placeholderText} • {placeholderText}
+      <div className={`w-full px-6 py-4 ${className}`}>
+        <div className="bg-white rounded-lg shadow-md p-4 overflow-hidden">
+          <div className="whitespace-nowrap">
+            <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow">
+              {placeholderText} • {placeholderText} • {placeholderText} • {placeholderText}
+            </div>
           </div>
         </div>
       </div>
@@ -35,10 +37,12 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   const repeatedText = `${allTickerText} • ${allTickerText} • ${allTickerText}`;
 
   return (
-    <div className={`w-full py-4 overflow-hidden ${className}`}>
-      <div className="whitespace-nowrap">
-        <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow news-ticker-text">
-          {repeatedText}
+    <div className={`w-full px-6 py-4 ${className}`}>
+      <div className="bg-white rounded-lg shadow-md p-4 overflow-hidden">
+        <div className="whitespace-nowrap">
+          <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow">
+            {repeatedText}
+          </div>
         </div>
       </div>
     </div>
