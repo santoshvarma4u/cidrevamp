@@ -7,6 +7,7 @@ import VideoPlayer from "@/components/media/VideoPlayer";
 import PhotoGallery from "@/components/media/PhotoGallery";
 import AutoScrollSlider from "@/components/common/AutoScrollSlider";
 import AutoScrollNews from "@/components/common/AutoScrollNews";
+import NewsTicker from "@/components/home/NewsTicker";
 import { ThemeSelector, Theme } from "@/components/ThemeSelector";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -173,6 +174,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      
+      {/* News Ticker */}
+      <NewsTicker />
 
       {/* Hero Section */}
       <section
