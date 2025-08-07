@@ -110,7 +110,7 @@ export default function ModernHome() {
       <Header />
 
       {/* Director General and Latest Video Section */}
-      <section className="pt-8 pb-16">
+      <section className="pt-32 pb-16">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 items-stretch">
             {/* Director General Message - Updated Design */}
