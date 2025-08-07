@@ -172,7 +172,7 @@ export default function AdminAuth() {
                     placeholder="Enter your username"
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                    className="pl-10"
+                    className="pl-10 placeholder:text-white/70"
                     required
                   />
                 </div>
@@ -190,7 +190,7 @@ export default function AdminAuth() {
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-10"
+                    className="pl-10 placeholder:text-white/70"
                     required
                   />
                 </div>
