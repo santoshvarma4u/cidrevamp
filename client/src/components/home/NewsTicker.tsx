@@ -9,7 +9,7 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   const { data: tickers = [], isLoading } = useQuery<NewsTickerType[]>({
     queryKey: ['/api/news-ticker'],
     refetchInterval: 60000, // Refresh every minute
-    staleTime: 0, // Always fetch fresh data
+    staleTime: 30000, // Cache for 30 seconds
     refetchOnMount: true, // Refetch when component mounts
   });
 
