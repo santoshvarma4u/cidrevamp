@@ -8,6 +8,7 @@
   0% {
     transform: translateX(100%);
   }
+
   100% {
     transform: translateX(-100%);
   }
@@ -18,7 +19,7 @@
 }
 
 .animate-scroll-slow {
-  animation: scroll 60s linear infinite;
+  animation: scroll 120s linear infinite;
 }
 
 /* Watermark styles */
@@ -85,7 +86,7 @@
   --chart-4: hsl(43, 74%, 66%);
   --chart-5: hsl(27, 87%, 67%);
   --radius: 0.75rem;
-  
+
   /* Custom government colors */
   --gov-blue: hsl(221, 83%, 53%);
   --gov-light-blue: hsl(213, 94%, 68%);
@@ -93,14 +94,14 @@
   --gov-gray: hsl(215, 16%, 47%);
   --emergency: hsl(0, 84%, 60%);
   --success: hsl(142, 76%, 36%);
-  
+
   /* Teal & Cream Theme */
   --teal-primary: hsl(178, 78%, 35%);
   --teal-secondary: hsl(178, 100%, 25%);
   --cream: hsl(47, 100%, 95%);
   --cream-dark: hsl(45, 65%, 85%);
   --light-beige: hsl(42, 78%, 90%);
-  
+
   /* Navy Blue Theme */
   --navy-primary: hsl(213, 100%, 20%);
   --navy-secondary: hsl(213, 100%, 15%);
@@ -144,6 +145,7 @@
   0% {
     transform: translateX(100%);
   }
+
   100% {
     transform: translateX(-100%);
   }
@@ -162,25 +164,70 @@ body {
   font-size: 16px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   font-weight: 600;
   color: hsl(213, 15%, 25%);
 }
 
 /* Consistent heading sizes */
-h1 { font-size: 2.25rem; line-height: 2.5rem; font-weight: 700; }
-h2 { font-size: 1.875rem; line-height: 2.25rem; font-weight: 600; }
-h3 { font-size: 1.5rem; line-height: 2rem; font-weight: 600; }
-h4 { font-size: 1.25rem; line-height: 1.75rem; font-weight: 600; }
-h5 { font-size: 1.125rem; line-height: 1.625rem; font-weight: 500; }
-h6 { font-size: 1rem; line-height: 1.5rem; font-weight: 500; }
+h1 {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+}
+
+h5 {
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 500;
+}
+
+h6 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+}
 
 /* Consistent text colors */
-.text-primary { color: hsl(178, 78%, 35%); }
-.text-secondary { color: hsl(213, 15%, 25%); }
-.text-body { color: hsl(213, 10%, 40%); }
-.text-muted { color: hsl(213, 10%, 60%); }
+.text-primary {
+  color: hsl(178, 78%, 35%);
+}
+
+.text-secondary {
+  color: hsl(213, 15%, 25%);
+}
+
+.text-body {
+  color: hsl(213, 10%, 40%);
+}
+
+.text-muted {
+  color: hsl(213, 10%, 60%);
+}
 
 /* Modern Card Styling - consistent across all pages */
 .modern-card {
@@ -362,8 +409,13 @@ h6 { font-size: 1rem; line-height: 1.5rem; font-weight: 500; }
 
 /* Loading animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .fade-in {
@@ -413,6 +465,7 @@ h6 { font-size: 1rem; line-height: 1.5rem; font-weight: 500; }
   0% {
     transform: translateX(100%);
   }
+
   100% {
     transform: translateX(-100%);
   }

@@ -22,7 +22,7 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   return (
     <div className={`w-full py-4 overflow-hidden ${className}`}>
       <div className="whitespace-nowrap">
-        <div className="inline-block text-red-500 text-base font-bold animate-scroll-slow">
+        <div className="inline-block text-red-500 text-lg font-bold animate-scroll-slow">
           {allTickerText} • {allTickerText}
         </div>
       </div>

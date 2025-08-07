@@ -110,13 +110,11 @@ export default function ModernHome() {
       <Header />
 
       {/* Director General and Latest Video Section */}
-      <section className="pt-48 pb-16">
+      <section className="pt-72 pb-18">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 items-stretch">
             {/* Director General Message - Updated Design */}
-            <div
-              className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-8 h-full flex flex-col border-2 border-amber-300"
-            >
+            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-8 h-full flex flex-col border-2 border-amber-300">
               <div className="flex flex-col lg:flex-row items-start space-y-6 lg:space-y-0 lg:space-x-8">
                 <div className="relative flex-shrink-0 mx-auto lg:mx-0">
                   <img
@@ -138,12 +136,13 @@ export default function ModernHome() {
                   </p>
                   <div className="bg-muted/20 rounded-lg p-4">
                     <p className="text-card-foreground leading-relaxed">
-                      "Crime Investigation Department is the premier investigation
-                      agency of Telangana State. Our endeavour is to provide
-                      transparent, impartial, efficient and systematic
-                      investigation using state-of-the-art equipment with quality 
-                      forensic support in coordination with national and international agencies.
-                      We follow the principle that 'men may lie but material will not'."
+                      "Crime Investigation Department is the premier
+                      investigation agency of Telangana State. Our endeavour is
+                      to provide transparent, impartial, efficient and
+                      systematic investigation using state-of-the-art equipment
+                      with quality forensic support in coordination with
+                      national and international agencies. We follow the
+                      principle that 'men may lie but material will not'."
                     </p>
                   </div>
                 </div>
