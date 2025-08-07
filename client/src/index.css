@@ -6,7 +6,7 @@
 
 @keyframes scroll {
   0% {
-    transform: translateX(100%);
+    transform: translateX(0%);
   }
 
   100% {
@@ -19,7 +19,8 @@
 }
 
 .animate-scroll-slow {
-  animation: scroll 60s linear infinite;
+  animation: scroll 120s linear infinite;
+  animation-delay: 0s;
 }
 
 .news-ticker-text {
