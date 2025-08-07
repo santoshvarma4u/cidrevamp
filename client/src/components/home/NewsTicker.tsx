@@ -20,9 +20,9 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   const allTickerText = tickers.map(ticker => ticker.text).join(' • ');
 
   return (
-    <div className={`w-full py-3 overflow-hidden ${className}`}>
+    <div className={`w-full py-4 overflow-hidden ${className}`}>
       <div className="whitespace-nowrap">
-        <div className="inline-block text-red-600 text-sm font-medium animate-scroll">
+        <div className="inline-block text-red-500 text-base font-bold animate-scroll-slow">
           {allTickerText} • {allTickerText}
         </div>
       </div>

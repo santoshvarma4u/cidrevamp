@@ -17,6 +17,10 @@
   animation: scroll 30s linear infinite;
 }
 
+.animate-scroll-slow {
+  animation: scroll 60s linear infinite;
+}
+
 /* Watermark styles */
 .watermark {
   position: fixed;
