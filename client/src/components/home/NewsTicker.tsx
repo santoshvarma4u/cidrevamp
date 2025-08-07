@@ -36,9 +36,9 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   // Show loading state
   if (isLoading) {
     return (
-      <div className={`bg-red-600 text-white overflow-hidden ${className}`}>
-        <div className="flex items-center">
-          <div className="bg-red-800 px-4 py-2 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
+      <div className={`bg-red-600 text-white overflow-hidden w-full h-16 border-4 border-yellow-400 ${className || ''}`}>
+        <div className="flex items-center h-full">
+          <div className="bg-red-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
             <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
             Loading News...
           </div>
@@ -55,16 +55,16 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   const currentTicker = tickers[currentIndex];
 
   return (
-    <div className={`bg-red-600 text-white overflow-hidden ${className}`}>
-      <div className="flex items-center">
+    <div className={`bg-red-600 text-white overflow-hidden w-full h-16 relative z-10 border-4 border-yellow-400 ${className || ''}`}>
+      <div className="flex items-center h-full">
         {/* Breaking News Label */}
-        <div className="bg-red-800 px-4 py-2 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
+        <div className="bg-red-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
           <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
           Breaking News
         </div>
         
         {/* Scrolling Text Container */}
-        <div className="flex-1 py-2 relative overflow-hidden">
+        <div className="flex-1 py-3 relative overflow-hidden">
           <div 
             className={`transition-all duration-500 ease-in-out ${
               isAnimating ? 'transform translate-x-full opacity-0' : 'transform translate-x-0 opacity-100'
@@ -73,7 +73,7 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
             {/* Horizontal scrolling text */}
             <div className="whitespace-nowrap">
               <span className="px-8 text-sm font-medium animate-marquee inline-block">
-                {currentTicker?.text}
+                {currentTicker?.text || 'Loading news...'}
               </span>
             </div>
           </div>
@@ -81,13 +81,11 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
 
         {/* Ticker count indicator */}
         {tickers.length > 1 && (
-          <div className="px-4 py-2 text-xs bg-red-800 flex-shrink-0">
+          <div className="px-4 py-3 text-xs bg-red-800 flex-shrink-0">
             {currentIndex + 1} / {tickers.length}
           </div>
         )}
       </div>
-
-
     </div>
   );
 }

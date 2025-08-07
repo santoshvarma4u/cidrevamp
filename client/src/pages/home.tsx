@@ -283,7 +283,13 @@ export default function Home() {
       </section>
 
       {/* News Ticker */}
-      <NewsTicker className="sticky top-0 z-50" />
+      <div className="bg-blue-600 text-white text-center py-2">
+        DEBUG: News Ticker Should Appear Below This
+      </div>
+      <NewsTicker />
+      <div className="bg-green-600 text-white text-center py-2">
+        DEBUG: News Ticker Should Appear Above This
+      </div>
 
       {/* Photo Gallery & News */}
       <section className={`py-12 ${themeClasses.sectionBg}`}>
