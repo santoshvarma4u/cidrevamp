@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { apiRequest } from "@/lib/queryClient";
 import AdminSidebar from "@/components/admin/Sidebar";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -260,7 +261,7 @@ export default function AdminComplaintsList() {
               <CardContent>
                 {complaintsLoading ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                    <LoadingSpinner size="sm" />
                   </div>
                 ) : filteredComplaints.length > 0 ? (
                   <Table>

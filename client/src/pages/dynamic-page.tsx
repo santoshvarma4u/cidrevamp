@@ -2,7 +2,7 @@ import { useParams } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { Loader2 } from "lucide-react";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 export default function DynamicPage() {
   const params = useParams<{ slug: string }>();
@@ -26,7 +26,7 @@ export default function DynamicPage() {
         <Header />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-teal-600" />
+            <LoadingSpinner size="md" className="mx-auto mb-4" />
             <p className="text-gray-600">Loading page...</p>
           </div>
         </div>

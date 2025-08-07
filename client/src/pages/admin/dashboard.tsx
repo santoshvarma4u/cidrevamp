@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import AdminSidebar from "@/components/admin/Sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 import {
   Users,
   FileText,
@@ -64,7 +65,10 @@ export default function AdminDashboard() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="text-center">
+          <LoadingSpinner size="xl" />
+          <p className="mt-4 text-lg text-gray-600 font-medium">Loading dashboard...</p>
+        </div>
       </div>
     );
   }

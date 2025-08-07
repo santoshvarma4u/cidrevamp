@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Image, Plus, Edit, Trash2, Upload } from "lucide-react";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 import type { Photo } from "@shared/schema";
 
 interface PhotoFormData {
@@ -360,7 +361,7 @@ export default function AdminPhotos() {
       {/* Photos Grid */}
       {isLoading ? (
         <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gov-blue mx-auto"></div>
+          <LoadingSpinner size="xl" className="mx-auto" />
           <p className="mt-4 text-gray-600">Loading photos...</p>
         </div>
       ) : filteredPhotos.length === 0 ? (

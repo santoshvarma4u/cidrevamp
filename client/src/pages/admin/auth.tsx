@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Shield, Lock, User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 import type { LoginData } from "@shared/schema";
 
 export default function AdminAuth() {
@@ -96,7 +97,10 @@ export default function AdminAuth() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="text-center">
+          <LoadingSpinner size="xl" />
+          <p className="mt-4 text-lg text-gray-600 font-medium">Authenticating...</p>
+        </div>
       </div>
     );
   }

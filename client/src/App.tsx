@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/toaster";
 import Watermark from "@/components/layout/Watermark";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 
 // Public pages
 import Home from "@/pages/modern-home";
@@ -39,8 +40,11 @@ function Router() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-blue-50">
+        <div className="text-center">
+          <LoadingSpinner size="xl" />
+          <p className="mt-4 text-lg text-gray-600 font-medium">Loading CID Telangana...</p>
+        </div>
       </div>
     );
   }
