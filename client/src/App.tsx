@@ -2,6 +2,7 @@ import { Switch, Route } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/toaster";
+import Watermark from "@/components/layout/Watermark";
 
 // Public pages
 import Home from "@/pages/modern-home";
@@ -92,6 +93,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen bg-background">
+        <Watermark type="pattern" opacity={0.015} size={120} />
         <Router />
         <Toaster />
       </div>
