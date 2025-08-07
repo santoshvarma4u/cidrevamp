@@ -18,7 +18,7 @@ This full-stack web application serves as a public information portal and conten
 - **Database Export**: Updated database export (database_export.sql) with latest schema and data for Docker initialization
 - **Enhanced Security**: Added comprehensive CAPTCHA support to admin login with svg-captcha, session management, and attempt limits
 - **Loading Animations**: Replaced all loading spinners with pulsing police logo animation for consistent government branding
-- **News Ticker Integration**: Successfully implemented and positioned news ticker between DGP message and Latest News Updates sections with authentic API data, scrolling animations, and proper red "Breaking News" styling
+- **News Ticker Integration**: Successfully implemented and positioned news ticker between DGP message and Latest News Updates sections with authentic API data, optimized scrolling animations (120s cycle with immediate start), and red text with white outline for optimal readability
 - **Admin UI Improvements**: Enhanced admin login with white placeholder text and removed demo credentials for professional appearance
 
 ## User Preferences
