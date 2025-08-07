@@ -14,6 +14,8 @@ This full-stack web application serves as a public information portal and conten
   - General Offences Wing - grave crimes with state-level ramifications
 - **Navigation Structure**: Organized CID Structure as parent page with wing pages as children for proper menu hierarchy
 - **Authentic Content**: All content extracted from original CID website HTML files for accuracy
+- **Docker Deployment**: Complete containerization setup with PostgreSQL, multi-stage builds, Nginx proxy, and health checks
+- **Database Export**: Updated database export (database_export.sql) with latest schema and data for Docker initialization
 
 ## User Preferences
 
