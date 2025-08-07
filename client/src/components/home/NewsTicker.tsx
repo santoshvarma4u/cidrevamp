@@ -9,11 +9,25 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   const { data: tickers = [], isLoading } = useQuery<NewsTickerType[]>({
     queryKey: ['/api/news-ticker'],
     refetchInterval: 60000, // Refresh every minute
+    staleTime: 0, // Always fetch fresh data
+    refetchOnMount: true, // Refetch when component mounts
   });
 
-  // Don't render if no tickers available
-  if (tickers.length === 0) {
-    return null;
+  // Show placeholder text while loading to start animation immediately
+  if (isLoading || tickers.length === 0) {
+    const placeholderText = isLoading 
+      ? "Loading latest updates from CID Telangana..." 
+      : "No news updates available at this time";
+    
+    return (
+      <div className={`w-full py-4 overflow-hidden ${className}`}>
+        <div className="whitespace-nowrap">
+          <div className="inline-block text-red-500 text-lg font-bold animate-scroll-slow">
+            {placeholderText} • {placeholderText}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   // Create continuous scrolling text from all tickers
