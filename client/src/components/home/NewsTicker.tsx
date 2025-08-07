@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { NewsTicker as NewsTickerType } from "@shared/schema";
 
 // Debug: Always render a visible ticker component for testing
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 
 interface NewsTickerProps {
   className?: string;
@@ -12,23 +12,6 @@ interface NewsTickerProps {
 export default function NewsTicker({ className = "" }: NewsTickerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-
-  // Debug: Always show component for testing
-  if (DEBUG_MODE) {
-    return (
-      <div className={`bg-purple-600 text-white overflow-hidden w-full h-16 border-4 border-yellow-400 ${className}`}>
-        <div className="flex items-center h-full">
-          <div className="bg-purple-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
-            <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
-            DEBUG MODE: Component Rendering
-          </div>
-          <div className="flex-1 px-8 text-sm">
-            This proves the NewsTicker component is working!
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   const { data: tickers = [], isLoading } = useQuery<NewsTickerType[]>({
     queryKey: ['/api/news-ticker'],
@@ -53,29 +36,24 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
     return () => clearInterval(interval);
   }, [tickers.length]);
 
-  // Show loading state
+  // Always show something for debugging
   if (isLoading) {
     return (
-      <div className={`bg-red-600 text-white overflow-hidden w-full h-16 border-4 border-yellow-400 ${className || ''}`}>
-        <div className="flex items-center h-full">
-          <div className="bg-red-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
-            <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
-            Loading News...
-          </div>
+      <div className="bg-red-600 text-white w-full min-h-[60px] flex items-center">
+        <div className="bg-red-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
+          <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+          Loading News...
         </div>
       </div>
     );
   }
 
-  // Debug: Always show something even if no tickers
   if (tickers.length === 0) {
     return (
-      <div className={`bg-orange-600 text-white overflow-hidden w-full h-16 border-4 border-yellow-400 ${className || ''}`}>
-        <div className="flex items-center h-full">
-          <div className="bg-orange-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
-            <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
-            No News Available
-          </div>
+      <div className="bg-orange-600 text-white w-full min-h-[60px] flex items-center">
+        <div className="bg-orange-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
+          <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
+          No News Available
         </div>
       </div>
     );
@@ -84,7 +62,7 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
   const currentTicker = tickers[currentIndex];
 
   return (
-    <div className={`bg-red-600 text-white overflow-hidden w-full h-16 relative z-10 border-4 border-yellow-400 ${className || ''}`}>
+    <div className={`bg-red-600 text-white overflow-hidden w-full min-h-[60px] relative ${className || ''}`}>
       <div className="flex items-center h-full">
         {/* Breaking News Label */}
         <div className="bg-red-800 px-4 py-3 font-bold text-sm uppercase tracking-wide flex-shrink-0 flex items-center">
@@ -102,7 +80,7 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
             {/* Horizontal scrolling text */}
             <div className="whitespace-nowrap">
               <span className="px-8 text-sm font-medium animate-marquee inline-block">
-                {currentTicker?.text || 'Loading news...'}
+                {currentTicker?.text}
               </span>
             </div>
           </div>
