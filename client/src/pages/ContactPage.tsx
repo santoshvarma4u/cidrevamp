@@ -130,7 +130,7 @@ export function ContactPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-teal-100 to-cyan-50">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <main className="pt-24 pb-16">
@@ -148,7 +148,7 @@ export function ContactPage() {
           {/* Regional Offices */}
           <div className="mb-16">
             <div className="flex items-center mb-8">
-              <Building className="h-6 w-6 text-teal-600 mr-3" />
+              <Building className="h-6 w-6 text-primary mr-3" />
               <h2 className="text-3xl font-bold text-gray-900">Regional Offices</h2>
             </div>
             
@@ -161,7 +161,7 @@ export function ContactPage() {
                       href={office.mapUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-teal-600 hover:text-teal-700"
+                      className="text-primary hover:text-primary/80"
                     >
                       <MapPin className="h-5 w-5" />
                     </a>

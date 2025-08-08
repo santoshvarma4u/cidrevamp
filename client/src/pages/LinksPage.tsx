@@ -330,20 +330,20 @@ export default function LinksPage() {
   const getIconForCategory = (category: string) => {
     switch (category) {
       case "Central Agencies":
-        return <Shield className="h-5 w-5 text-teal-600" />;
+        return <Shield className="h-5 w-5 text-primary" />;
       case "Other States - CID":
-        return <Shield className="h-5 w-5 text-teal-600" />;
+        return <Shield className="h-5 w-5 text-primary" />;
       case "Telangana State":
-        return <Building className="h-5 w-5 text-teal-600" />;
+        return <Building className="h-5 w-5 text-primary" />;
       case "Other States - Police":
-        return <MapPin className="h-5 w-5 text-teal-600" />;
+        return <MapPin className="h-5 w-5 text-primary" />;
       default:
-        return <ExternalLink className="h-5 w-5 text-teal-600" />;
+        return <ExternalLink className="h-5 w-5 text-primary" />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-teal-100 to-cyan-50">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <main className="pt-24 pb-16">

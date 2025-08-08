@@ -61,7 +61,7 @@ export function RTIPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-teal-100 to-cyan-50">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <main className="pt-24 pb-16">
@@ -80,14 +80,14 @@ export function RTIPage() {
           <div className="mb-16">
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="flex items-center mb-6">
-                <Shield className="h-6 w-6 text-teal-600 mr-3" />
+                <Shield className="h-6 w-6 text-primary mr-3" />
                 <h2 className="text-2xl font-bold text-gray-900">RTI Officers</h2>
               </div>
               
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse border border-gray-300">
                   <thead>
-                    <tr className="bg-teal-600 text-white">
+                    <tr className="bg-primary text-primary-foreground">
                       <th className="border border-gray-300 px-4 py-3 text-left">S.No</th>
                       <th className="border border-gray-300 px-4 py-3 text-left">Name of Officer</th>
                       <th className="border border-gray-300 px-4 py-3 text-left">Name & Designation of Public Information Officer</th>
@@ -111,7 +111,7 @@ export function RTIPage() {
                         </td>
                         <td className="border border-gray-300 px-4 py-3">
                           <div className="flex items-center">
-                            <Phone className="h-4 w-4 text-teal-600 mr-2" />
+                            <Phone className="h-4 w-4 text-primary mr-2" />
                             <span className="font-mono">{officer.phone}</span>
                           </div>
                         </td>
@@ -127,14 +127,14 @@ export function RTIPage() {
           <div className="mb-16">
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="flex items-center mb-6">
-                <Users className="h-6 w-6 text-teal-600 mr-3" />
+                <Users className="h-6 w-6 text-primary mr-3" />
                 <h2 className="text-2xl font-bold text-gray-900">Staff Scale Of Pay</h2>
               </div>
               
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse border border-gray-300 text-sm">
                   <thead>
-                    <tr className="bg-teal-600 text-white">
+                    <tr className="bg-primary text-primary-foreground">
                       <th className="border border-gray-300 px-3 py-3 text-center">Sl. No</th>
                       <th className="border border-gray-300 px-3 py-3 text-left">Category</th>
                       <th className="border border-gray-300 px-3 py-3 text-center">Scale of Pay</th>

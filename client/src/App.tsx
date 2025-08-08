@@ -41,7 +41,7 @@ function Router() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-blue-50">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <LoadingSpinner size="xl" />
           <p className="mt-4 text-lg text-gray-600 font-medium">Loading CID Telangana...</p>

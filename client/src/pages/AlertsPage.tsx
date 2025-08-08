@@ -50,7 +50,7 @@ export function AlertsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-teal-100 to-cyan-50">
+    <div className="min-h-screen bg-background">
       <Header />
       
       <main className="pt-24 pb-16">
@@ -128,7 +128,7 @@ export function AlertsPage() {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow-lg p-6 sticky top-28">
                 <div className="flex items-center mb-6">
-                  <Shield className="h-6 w-6 text-teal-600 mr-3" />
+                  <Shield className="h-6 w-6 text-primary mr-3" />
                   <h3 className="text-2xl font-bold text-gray-900">Citizen's Corner</h3>
                 </div>
                 
@@ -136,7 +136,7 @@ export function AlertsPage() {
                   {/* Protect Yourself Section */}
                   <div>
                     <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                      <Shield className="h-5 w-5 text-teal-600 mr-2" />
+                      <Shield className="h-5 w-5 text-primary mr-2" />
                       Protect Yourself
                     </h4>
                     

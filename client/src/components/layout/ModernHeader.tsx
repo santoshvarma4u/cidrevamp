@@ -216,7 +216,7 @@ export default function ModernHeader() {
       </div>
 
       {/* Desktop Navigation Menu */}
-      <nav className="bg-teal-700 text-white hidden lg:block">
+      <nav className="bg-primary text-primary-foreground hidden lg:block">
         <div className="container mx-auto px-4">
           <div className="flex justify-start space-x-8 py-4">
             <Button
