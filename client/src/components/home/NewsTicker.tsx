@@ -21,7 +21,7 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
 
     return (
       <div className={`container mx-auto px-4 ${className}`}>
-        <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-6 shadow-md border-2 border-teal-300 overflow-hidden">
+        <div className="bg-card backdrop-blur-sm rounded-xl p-6 shadow-md border-2 border-border overflow-hidden">
           <div className="whitespace-nowrap">
             <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow">
               {placeholderText} • {placeholderText} • {placeholderText} •{" "}
@@ -39,7 +39,7 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
 
   return (
     <div className={`container mx-auto px-4 ${className}`}>
-      <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-4 shadow-md border-2 border-teal-300 overflow-hidden">
+      <div className="bg-card backdrop-blur-sm rounded-xl p-4 shadow-md border-2 border-border overflow-hidden">
         <div className="whitespace-nowrap">
           <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow">
             {repeatedText}

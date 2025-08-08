@@ -34,7 +34,7 @@ const formatDate = (date: any): string => {
 };
 
 export default function ModernHome() {
-  const [currentTheme, setCurrentTheme] = useState<Theme>('teal');
+  const [currentTheme, setCurrentTheme] = useState<Theme>('light-teal');
   const { data: videos = [] } = useQuery<Video[]>({
     queryKey: ["/api/videos", { published: true }],
   });
