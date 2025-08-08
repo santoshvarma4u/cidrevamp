@@ -139,7 +139,7 @@ export default function CyberCrimes() {
               <div className="grid md:grid-cols-2 gap-4">
                 {keyJurisdictions.map((jurisdiction, index) => (
                   <div key={index} className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">{jurisdiction}</span>
                   </div>
                 ))}
@@ -232,7 +232,7 @@ export default function CyberCrimes() {
                 <ul className="space-y-3">
                   {cyberSecurityServices.slice(0, 4).map((service, index) => (
                     <li key={index} className="flex items-start space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                      <CheckCircle className="h-5 w-5 text-primary mt-0.5" />
                       <span className="text-sm">{service}</span>
                     </li>
                   ))}
@@ -255,7 +255,7 @@ export default function CyberCrimes() {
                 <ul className="space-y-3">
                   {cyberSecurityServices.slice(4).map((service, index) => (
                     <li key={index} className="flex items-start space-x-3">
-                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                      <CheckCircle className="h-5 w-5 text-primary mt-0.5" />
                       <span className="text-sm">{service}</span>
                     </li>
                   ))}

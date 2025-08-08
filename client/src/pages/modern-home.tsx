@@ -169,10 +169,10 @@ export default function ModernHome() {
                     />
                   </div>
                 ) : (
-                  <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+                  <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
                     <div className="text-center">
-                      <Play className="h-16 w-16 text-gray-400 mb-4 mx-auto" />
-                      <p className="text-gray-500">No videos available</p>
+                      <Play className="h-16 w-16 text-muted-foreground mb-4 mx-auto" />
+                      <p className="text-muted-foreground">No videos available</p>
                     </div>
                   </div>
                 )}

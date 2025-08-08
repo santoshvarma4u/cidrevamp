@@ -126,7 +126,7 @@ export default function WomenProtection() {
               <div className="grid md:grid-cols-2 gap-4">
                 {keyServices.map((service, index) => (
                   <div key={index} className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">{service}</span>
                   </div>
                 ))}
@@ -212,7 +212,7 @@ export default function WomenProtection() {
                     <ul className="space-y-1">
                       {app.features.map((feature, idx) => (
                         <li key={idx} className="flex items-center space-x-2">
-                          <CheckCircle className="h-4 w-4 text-green-600" />
+                          <CheckCircle className="h-4 w-4 text-primary" />
                           <span className="text-sm">{feature}</span>
                         </li>
                       ))}
