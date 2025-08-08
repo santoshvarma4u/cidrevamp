@@ -39,7 +39,7 @@ const formatDate = (date: any): string => {
 };
 
 export default function Home() {
-  const [currentTheme, setCurrentTheme] = useState<Theme>("original");
+  const [currentTheme, setCurrentTheme] = useState<Theme>("light-teal");
 
   const { data: videos = [] } = useQuery<Video[]>({
     queryKey: ["/api/videos", { published: true }],
@@ -141,32 +141,14 @@ export default function Home() {
 
   // Get theme-specific classes
   const getThemeClasses = () => {
-    switch (currentTheme) {
-      case "teal":
-        return {
-          background: "bg-gradient-to-br from-orange-50 to-amber-50",
-          heroGradient: "bg-gradient-to-r from-teal-600 to-teal-700",
-          cardBg: "bg-white bg-opacity-20",
-          textAccent: "text-teal-200",
-          sectionBg: "bg-gradient-to-br from-orange-50 to-amber-50",
-        };
-      case "navy":
-        return {
-          background: "bg-gradient-to-br from-orange-50 to-amber-50",
-          heroGradient: "bg-gradient-to-r from-blue-900 to-blue-800",
-          cardBg: "bg-white bg-opacity-15",
-          textAccent: "text-blue-200",
-          sectionBg: "bg-gradient-to-br from-orange-50 to-amber-50",
-        };
-      default:
-        return {
-          background: "bg-gray-50",
-          heroGradient: "bg-gradient-to-r from-blue-600 to-blue-700",
-          cardBg: "bg-white bg-opacity-10",
-          textAccent: "text-blue-200",
-          sectionBg: "bg-gray-50",
-        };
-    }
+    // Use theme-aware CSS variables instead of hardcoded colors
+    return {
+      background: "bg-background",
+      heroGradient: "bg-primary",
+      cardBg: "bg-card/80 backdrop-blur-sm",
+      textAccent: "text-primary-foreground",
+      sectionBg: "bg-muted/50",
+    };
   };
 
   const themeClasses = getThemeClasses();
@@ -219,7 +201,7 @@ export default function Home() {
                   </div>
 
                   <div
-                    className={`${currentTheme === "teal" ? "text-teal-100" : currentTheme === "navy" ? "text-blue-100" : "text-blue-100"} leading-relaxed text-sm space-y-2`}
+                    className="text-primary-foreground/90 leading-relaxed text-sm space-y-2"
                   >
                     <p>
                       Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial, efficient and systematic investigation using high end, state of the art equipment with quality forensic support in coordination with national and international agencies.
@@ -359,7 +341,7 @@ export default function Home() {
 
       {/* Specialized Wings */}
       <section
-        className={`py-16 ${currentTheme === "teal" ? "bg-orange-100" : currentTheme === "navy" ? "bg-orange-100" : "bg-gray-50"}`}
+        className="py-16 bg-muted/30"
       >
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
