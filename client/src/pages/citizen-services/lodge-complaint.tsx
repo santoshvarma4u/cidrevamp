@@ -106,17 +106,17 @@ export default function LodgeComplaint() {
         <section className="py-12">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto">
-              <Card className="border-green-200 bg-green-50">
+              <Card className="border-primary/20 bg-primary/5">
                 <CardContent className="pt-6 text-center">
-                  <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-                  <h2 className="text-2xl font-bold text-green-800 mb-2">
+                  <CheckCircle className="h-16 w-16 text-primary mx-auto mb-4" />
+                  <h2 className="text-2xl font-bold text-primary mb-2">
                     Complaint Submitted Successfully
                   </h2>
-                  <p className="text-green-700 mb-6">
+                  <p className="text-primary/80 mb-6">
                     Your complaint has been registered and will be reviewed by our team.
                   </p>
                   
-                  <div className="bg-white border border-green-200 rounded-lg p-6 mb-6">
+                  <div className="bg-card border border-border rounded-lg p-6 mb-6">
                     <h3 className="font-semibold text-gray-900 mb-2">Your Complaint Number:</h3>
                     <div className="text-2xl font-bold text-gov-blue bg-blue-50 py-3 px-4 rounded border">
                       {complaintNumber}

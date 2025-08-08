@@ -78,14 +78,14 @@ export function AlertsPage() {
                 {/* DO's Section */}
                 <div className="mb-8">
                   <div className="flex items-center mb-4">
-                    <Check className="h-6 w-6 text-green-600 mr-2" />
-                    <h3 className="text-2xl font-bold text-green-700">DO's</h3>
+                    <Check className="h-6 w-6 text-primary mr-2" />
+                    <h3 className="text-2xl font-bold text-primary">DO's</h3>
                   </div>
                   <div className="bg-green-50 rounded-lg p-6">
                     <ul className="space-y-3">
                       {dos.map((item, index) => (
                         <li key={index} className="flex items-start">
-                          <Check className="h-5 w-5 text-green-600 mr-3 mt-0.5 flex-shrink-0" />
+                          <Check className="h-5 w-5 text-primary mr-3 mt-0.5 flex-shrink-0" />
                           <span className="text-gray-700">{item}</span>
                         </li>
                       ))}

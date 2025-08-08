@@ -68,7 +68,7 @@ export default function ModernHeader() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-white hover:text-white/80"
+                      className="text-primary-foreground hover:text-primary-foreground/80"
                     >
                       <User className="h-4 w-4 mr-2" />
                       {user?.username}
@@ -98,7 +98,7 @@ export default function ModernHeader() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-white hover:text-white/80"
+                    className="text-primary-foreground hover:text-primary-foreground/80"
                   >
                     <User className="h-4 w-4 mr-2" />
                     Admin Login

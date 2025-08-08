@@ -394,7 +394,7 @@ export default function Home() {
                             key={idx}
                             className="flex items-center space-x-2"
                           >
-                            <CheckCircle className="h-4 w-4 text-green-600" />
+                            <CheckCircle className="h-4 w-4 text-primary" />
                             <span className="text-sm">{feature}</span>
                           </div>
                         ))}

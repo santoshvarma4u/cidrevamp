@@ -284,7 +284,7 @@ export default function ModernHome() {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {latestVideos.map((video) => (
                   <div key={video.id} className="modern-card overflow-hidden">
-                    <div className="aspect-video bg-gray-100 relative">
+                    <div className="aspect-video bg-muted relative">
                       {video.thumbnailPath ? (
                         <img
                           src={`/api/uploads/${video.thumbnailPath}`}
@@ -293,7 +293,7 @@ export default function ModernHome() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Play className="h-12 w-12 text-gray-400" />
+                          <Play className="h-12 w-12 text-muted-foreground" />
                         </div>
                       )}
                     </div>
