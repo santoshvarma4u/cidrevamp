@@ -220,12 +220,12 @@ export default function Header() {
       </div>
 
       {/* Desktop Navigation Menu */}
-      <nav className={`${headerClasses.navBg} text-white hidden lg:block`}>
+      <nav className={`${headerClasses.navBg} text-primary-foreground hidden lg:block`}>
         <div className="container mx-auto px-4">
           <div className="flex justify-start space-x-8 py-4">
             <Button
               variant="ghost"
-              className="text-white hover:text-teal-200 hover:bg-teal-700 transition px-3 py-2"
+              className="text-primary-foreground hover:text-primary-foreground/80 hover:bg-primary/90 transition px-3 py-2"
               onClick={() => (window.location.href = "/")}
             >
               HOME
@@ -242,7 +242,7 @@ export default function Header() {
                     <div className="flex items-center">
                       <Button
                         variant="ghost"
-                        className="text-white hover:text-teal-200 hover:bg-teal-700 transition px-3 py-2"
+                        className="text-primary-foreground hover:text-primary-foreground/80 hover:bg-primary/90 transition px-3 py-2"
                         onClick={() => (window.location.href = `/${page.slug}`)}
                       >
                         {page.menuTitle || page.title}
@@ -251,7 +251,7 @@ export default function Header() {
                         <DropdownMenuTrigger asChild>
                           <Button
                             variant="ghost"
-                            className="text-white hover:text-teal-200 hover:bg-teal-700 transition px-1 py-2"
+                            className="text-primary-foreground hover:text-primary-foreground/80 hover:bg-primary/90 transition px-1 py-2"
                           >
                             <ChevronDown className="h-4 w-4" />
                           </Button>
@@ -278,7 +278,7 @@ export default function Header() {
                   <Button
                     key={page.slug}
                     variant="ghost"
-                    className="text-white hover:text-teal-200 hover:bg-teal-700 transition px-3 py-2"
+                    className="text-primary-foreground hover:text-primary-foreground/80 hover:bg-primary/90 transition px-3 py-2"
                     onClick={() => (window.location.href = `/${page.slug}`)}
                   >
                     {page.menuTitle || page.title}
