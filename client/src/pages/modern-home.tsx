@@ -24,6 +24,7 @@ import {
 import VideoPlayer from "@/components/media/VideoPlayer";
 import AutoScrollNews from "@/components/common/AutoScrollNews";
 import NewsTicker from "@/components/home/NewsTicker";
+import { ThemeSelector, type Theme } from "@/components/ThemeSelector";
 
 // Helper function to safely convert dates to ISO strings
 const formatDate = (date: any): string => {
@@ -33,6 +34,7 @@ const formatDate = (date: any): string => {
 };
 
 export default function ModernHome() {
+  const [currentTheme, setCurrentTheme] = useState<Theme>('teal');
   const { data: videos = [] } = useQuery<Video[]>({
     queryKey: ["/api/videos", { published: true }],
   });
@@ -50,9 +52,84 @@ export default function ModernHome() {
   const latestNews = news.slice(0, 3);
 
   // Theme classes for consistent styling
-  const themeClasses = {
-    cardBg: "bg-white/90 dark:bg-gray-800/90",
+  const getThemeClasses = () => {
+    switch (currentTheme) {
+      case "teal":
+        return {
+          background: "bg-gradient-to-br from-teal-50 to-emerald-50",
+          headerBg: "bg-teal-600",
+          cardBg: "bg-white/90 dark:bg-gray-800/90",
+          border: "border-teal-300",
+          textAccent: "text-teal-700",
+          primary: "bg-teal-600 hover:bg-teal-700",
+        };
+      case "navy":
+        return {
+          background: "bg-gradient-to-br from-blue-50 to-indigo-50",
+          headerBg: "bg-blue-900",
+          cardBg: "bg-white/90 dark:bg-gray-800/90",
+          border: "border-blue-300",
+          textAccent: "text-blue-900",
+          primary: "bg-blue-900 hover:bg-blue-800",
+        };
+      case "dark":
+        return {
+          background: "bg-gradient-to-br from-gray-900 to-black",
+          headerBg: "bg-gray-900",
+          cardBg: "bg-gray-800/90 dark:bg-gray-900/90",
+          border: "border-gray-600",
+          textAccent: "text-gray-100",
+          primary: "bg-gray-700 hover:bg-gray-600",
+        };
+      case "purple":
+        return {
+          background: "bg-gradient-to-br from-purple-50 to-violet-50",
+          headerBg: "bg-purple-600",
+          cardBg: "bg-white/90 dark:bg-gray-800/90",
+          border: "border-purple-300",
+          textAccent: "text-purple-700",
+          primary: "bg-purple-600 hover:bg-purple-700",
+        };
+      case "green":
+        return {
+          background: "bg-gradient-to-br from-green-50 to-emerald-50",
+          headerBg: "bg-green-600",
+          cardBg: "bg-white/90 dark:bg-gray-800/90",
+          border: "border-green-300",
+          textAccent: "text-green-700",
+          primary: "bg-green-600 hover:bg-green-700",
+        };
+      case "orange":
+        return {
+          background: "bg-gradient-to-br from-orange-50 to-amber-50",
+          headerBg: "bg-orange-600",
+          cardBg: "bg-white/90 dark:bg-gray-800/90",
+          border: "border-orange-300",
+          textAccent: "text-orange-700",
+          primary: "bg-orange-600 hover:bg-orange-700",
+        };
+      case "red":
+        return {
+          background: "bg-gradient-to-br from-red-50 to-rose-50",
+          headerBg: "bg-red-600",
+          cardBg: "bg-white/90 dark:bg-gray-800/90",
+          border: "border-red-300",
+          textAccent: "text-red-700",
+          primary: "bg-red-600 hover:bg-red-700",
+        };
+      default: // original
+        return {
+          background: "bg-gradient-to-br from-blue-50 to-cyan-50",
+          headerBg: "bg-blue-600",
+          cardBg: "bg-white/90 dark:bg-gray-800/90",
+          border: "border-blue-300",
+          textAccent: "text-blue-700",
+          primary: "bg-blue-600 hover:bg-blue-700",
+        };
+    }
   };
+
+  const themeClasses = getThemeClasses();
 
   const specializedWings = [
     {
@@ -106,7 +183,7 @@ export default function ModernHome() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen ${themeClasses.background}`}>
       <Header />
 
       {/* Director General and Latest Video Section */}
@@ -114,7 +191,7 @@ export default function ModernHome() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 items-stretch">
             {/* Director General Message - Updated Design */}
-            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-8 h-full flex flex-col border-2 border-amber-300">
+            <div className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-8 h-full flex flex-col border-2 ${themeClasses.border}`}>
               <div className="flex flex-col lg:flex-row items-start space-y-6 lg:space-y-0 lg:space-x-8">
                 <div className="relative flex-shrink-0 mx-auto lg:mx-0">
                   <img
@@ -150,7 +227,7 @@ export default function ModernHome() {
             </div>
 
             {/* Latest Video */}
-            <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl p-8 h-full flex flex-col border-2 border-teal-300">
+            <div className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-8 h-full flex flex-col border-2 ${themeClasses.border}`}>
               <h2 className="text-2xl font-bold text-card-foreground mb-6">
                 Latest Video News
               </h2>
@@ -254,7 +331,7 @@ export default function ModernHome() {
                       ))}
                     </div>
                     <Link href={wing.href}>
-                      <Button className="modern-button w-full">
+                      <Button className={`modern-button w-full ${themeClasses.primary} text-white`}>
                         Learn More <ArrowRight className="h-4 w-4 ml-2" />
                       </Button>
                     </Link>
@@ -276,7 +353,7 @@ export default function ModernHome() {
                   Latest Videos
                 </h2>
                 <Link href="/video-gallery">
-                  <Button variant="outline" className="flex items-center">
+                  <Button variant="outline" className={`flex items-center ${themeClasses.border} ${themeClasses.textAccent}`}>
                     <Play className="h-4 w-4 mr-2" />
                     View All Videos
                   </Button>
@@ -324,7 +401,7 @@ export default function ModernHome() {
                   Photo Gallery
                 </h2>
                 <Link href="/photo-gallery">
-                  <Button variant="outline" className="flex items-center">
+                  <Button variant="outline" className={`flex items-center ${themeClasses.border} ${themeClasses.textAccent}`}>
                     <Images className="h-4 w-4 mr-2" />
                     View All Photos
                   </Button>
@@ -385,6 +462,9 @@ export default function ModernHome() {
       </section>
  */}
       <Footer />
+      
+      {/* Theme Selector */}
+      <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
     </div>
   );
 }

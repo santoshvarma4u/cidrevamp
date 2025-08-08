@@ -110,6 +110,36 @@
   --navy-secondary: hsl(213, 100%, 15%);
   --navy-light: hsl(213, 50%, 30%);
   --navy-accent: hsl(213, 80%, 40%);
+
+  /* Dark Mode Theme */
+  --dark-primary: hsl(0, 0%, 9%);
+  --dark-secondary: hsl(0, 0%, 14%);
+  --dark-accent: hsl(0, 0%, 20%);
+  --dark-foreground: hsl(0, 0%, 95%);
+
+  /* Royal Purple Theme */
+  --purple-primary: hsl(262, 83%, 58%);
+  --purple-secondary: hsl(262, 83%, 40%);
+  --purple-light: hsl(262, 50%, 70%);
+  --purple-accent: hsl(262, 90%, 85%);
+
+  /* Forest Green Theme */
+  --green-primary: hsl(142, 76%, 36%);
+  --green-secondary: hsl(142, 76%, 25%);
+  --green-light: hsl(142, 50%, 50%);
+  --green-accent: hsl(142, 30%, 85%);
+
+  /* Sunset Orange Theme */
+  --orange-primary: hsl(24, 95%, 53%);
+  --orange-secondary: hsl(24, 95%, 40%);
+  --orange-light: hsl(24, 70%, 65%);
+  --orange-accent: hsl(24, 50%, 90%);
+
+  /* Crimson Red Theme */
+  --red-primary: hsl(348, 83%, 47%);
+  --red-secondary: hsl(348, 83%, 35%);
+  --red-light: hsl(348, 60%, 60%);
+  --red-accent: hsl(348, 40%, 90%);
 }
 
 .dark {
