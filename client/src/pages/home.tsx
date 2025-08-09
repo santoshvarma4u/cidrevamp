@@ -6,6 +6,7 @@ import AutoScrollNews from "@/components/common/AutoScrollNews";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ThemeSelector } from "@/components/ThemeSelector";
 import { Link } from "wouter";
 import {
@@ -26,6 +27,8 @@ import {
   Play,
   FileText,
   Phone,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import adgpImagePath from "@assets/adgpImage_1753520299812.png";
 // Removed unused import
@@ -33,6 +36,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
   const [currentTheme, setCurrentTheme] = useState("light-teal");
+  const [currentPhotoSlide, setCurrentPhotoSlide] = useState(0);
 
   useEffect(() => {
     localStorage.setItem("theme", currentTheme);
@@ -244,18 +248,75 @@ export default function Home() {
                 <h3 className="text-xl font-bold text-blue-800 mb-3 text-center">
                   Latest Photo Gallery
                 </h3>
-                <div className="flex-1 min-h-0 overflow-hidden">
+                <div className="flex-1 min-h-0 overflow-hidden relative">
                   {latestPhotos.length > 0 ? (
-                    <div className="grid grid-cols-2 gap-3 h-full overflow-y-auto">
-                      {latestPhotos.slice(0, 4).map((photo: any) => (
-                        <div key={photo.id} className="aspect-square rounded-lg overflow-hidden shadow-md">
-                          <img 
-                            src={`/${photo.filePath}`}
-                            alt={photo.title || 'CID Photo'}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
-                          />
+                    <div className="h-full relative">
+                      {/* Photo Grid */}
+                      <div className="grid grid-cols-2 gap-3 h-full p-2">
+                        {latestPhotos.slice(currentPhotoSlide * 4, (currentPhotoSlide * 4) + 4).map((photo: any, index: number) => (
+                          <Dialog key={photo.id}>
+                            <DialogTrigger asChild>
+                              <div className="aspect-square rounded-lg overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-all">
+                                <img 
+                                  src={`/${photo.filePath}`}
+                                  alt={photo.title || 'CID Photo'}
+                                  className="w-full h-full object-cover hover:scale-105 transition-transform"
+                                />
+                              </div>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl max-h-[90vh] p-4">
+                              <div className="relative">
+                                <img 
+                                  src={`/${photo.filePath}`}
+                                  alt={photo.title || 'CID Photo'}
+                                  className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                                />
+                                {photo.title && (
+                                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4 rounded-b-lg">
+                                    <h3 className="text-lg font-semibold">{photo.title}</h3>
+                                    {photo.description && (
+                                      <p className="text-sm text-gray-200">{photo.description}</p>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        ))}
+                      </div>
+                      
+                      {/* Navigation Arrows */}
+                      {latestPhotos.length > 4 && (
+                        <>
+                          <button
+                            onClick={() => setCurrentPhotoSlide(prev => prev > 0 ? prev - 1 : Math.ceil(latestPhotos.length / 4) - 1)}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => setCurrentPhotoSlide(prev => prev < Math.ceil(latestPhotos.length / 4) - 1 ? prev + 1 : 0)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </button>
+                        </>
+                      )}
+                      
+                      {/* Slide Indicators */}
+                      {latestPhotos.length > 4 && (
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2">
+                          {Array.from({ length: Math.ceil(latestPhotos.length / 4) }).map((_, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setCurrentPhotoSlide(index)}
+                              className={`w-2 h-2 rounded-full transition-colors ${
+                                currentPhotoSlide === index ? 'bg-blue-600' : 'bg-gray-300'
+                              }`}
+                            />
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
                   ) : (
                     <div className="text-center h-full flex items-center justify-center">
