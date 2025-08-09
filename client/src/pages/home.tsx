@@ -170,142 +170,121 @@ export default function Home() {
           }}
         />
         <div className="relative container mx-auto px-4 py-20">
-          {/* ASYMMETRIC THREE-CARD LAYOUT - CLEAR DEMO VERSION */}
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-yellow-300 mb-2">🔥 THREE CARD ASYMMETRIC DEMO 🔥</h2>
-            <p className="text-white text-lg">You should see: BLUE (large) + GREEN + PURPLE cards</p>
-          </div>
-          
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
-            {/* 🔵 CARD 1: Director Card (BLUE) */}
-            <div className="order-1">
-              <div
-                className="bg-gradient-to-br from-blue-600 to-blue-800 backdrop-blur-sm rounded-xl p-6 h-96 flex flex-col border-8 border-yellow-400 shadow-2xl"
-              >
-              <div className="flex gap-6 flex-1">
-                {/* Director Photo */}
-                <div className="flex-shrink-0">
-                  <div className="w-32 h-36 md:w-36 md:h-40 lg:w-40 lg:h-44 rounded-lg overflow-hidden bg-gray-100 shadow-lg border-2 border-white">
-                    <img
-                      src="/uploads/adgp-photo.png"
-                      alt="Ms. Charu Sinha, IPS"
-                      className="w-full h-full object-cover"
-                    />
+          {/* MULTIPLE ASYMMETRIC LAYOUT DEMOS */}
+          <div className="space-y-16">
+            
+            {/* DEMO 1: L-SHAPE LAYOUT */}
+            <div>
+              <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center">DEMO 1: L-SHAPE ASYMMETRIC</h2>
+              <div className="grid grid-cols-4 grid-rows-2 gap-4 h-80">
+                <!-- Large card spans 2x2 -->
+                <div className="col-span-2 row-span-2 bg-blue-600 border-4 border-yellow-400 rounded-xl p-4 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-xl font-bold mb-2">LARGE CARD</h3>
+                    <p>Director Message (2x2 space)</p>
                   </div>
                 </div>
-
-                {/* Director Info and Message */}
-                <div className="flex-1 overflow-hidden">
-                  <div className="mb-3">
-                    <h3 className="text-xl font-bold text-white mb-1">
-                      🔵 CARD 1: Ms. Charu Sinha, IPS
-                    </h3>
-                    <p
-                      className={`text-base font-semibold ${themeClasses.textAccent} mb-2`}
-                    >
-                      Addl. Director General of Police, CID, Telangana State.
-                    </p>
+                <!-- Top right card -->
+                <div className="col-span-2 row-span-1 bg-green-600 border-4 border-orange-400 rounded-xl p-4 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-lg font-bold">CARD 2</h3>
+                    <p>Video News</p>
                   </div>
-
-                  <div
-                    className="text-primary-foreground/90 leading-relaxed text-sm space-y-2"
-                  >
-                    <p>
-                      Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial, efficient and systematic investigation using high end, state of the art equipment with quality forensic support in coordination with national and international agencies.
-                    </p>
-
-                    <p>
-                      We follow the principle that 'men may lie but material will not'. Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and mission. Our specialized wings include Economic Offences, General Offences, Child and Women Protection, Protection of Civil Rights and Cyber Crimes. We welcome any feedback from the citizens related to any crime.
-                    </p>
-
-                    <p className="text-xs italic mt-3">
-                      I wish this website paves way for the public awareness about recent crimes and alerts.
-                    </p>
+                </div>
+                <!-- Bottom right card -->
+                <div className="col-span-2 row-span-1 bg-purple-600 border-4 border-pink-400 rounded-xl p-4 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-lg font-bold">CARD 3</h3>
+                    <p>Quick Services</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* 🟢 CARD 2: Video Card (GREEN) */}
-            <div className="order-2">
-              <div
-                className="bg-gradient-to-br from-green-500 to-green-700 backdrop-blur-sm rounded-xl p-6 h-96 flex flex-col border-8 border-orange-400 shadow-2xl"
-              >
-                <h3 className="text-xl font-bold mb-3 text-white">🟢 CARD 2: Latest Video News</h3>
-                <div className="flex-1 flex flex-col">
-                  {latestVideos.length > 0 ? (
-                    <div className="w-full aspect-video max-h-32 rounded-lg bg-black mb-3 overflow-hidden">
-                      <VideoPlayer
-                        video={{
-                          ...latestVideos[0],
-                          description: latestVideos[0].description || "",
-                          thumbnailPath: latestVideos[0].thumbnailPath || "",
-                          duration: latestVideos[0].duration || 0,
-                          category: latestVideos[0].category || "news",
-                          createdAt: formatDate(latestVideos[0].createdAt),
-                        }}
-                        className="w-full h-full"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-full aspect-video max-h-32 bg-gray-900 rounded-lg flex items-center justify-center mb-3">
-                      <div className="text-center">
-                        <Play className="h-12 w-12 text-white mb-2 mx-auto" />
-                        <p className="text-white text-sm">No videos available</p>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex-1 space-y-1 overflow-hidden">
-                    {latestVideos.slice(1, 2).map((video) => (
-                      <div
-                        key={video.id}
-                        className="flex items-center space-x-3 p-2 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition"
-                      >
-                        <Play className="h-3 w-3 text-blue-200" />
-                        <span className="text-xs truncate text-white">{video.title}</span>
-                      </div>
-                    ))}
+            {/* DEMO 2: DIAGONAL LAYOUT */}
+            <div>
+              <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center">DEMO 2: DIAGONAL/STAGGERED</h2>
+              <div className="grid grid-cols-6 grid-rows-3 gap-4 h-80">
+                <!-- Card 1: Top left, large -->
+                <div className="col-span-3 row-span-2 bg-blue-600 border-4 border-yellow-400 rounded-xl p-4 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-xl font-bold mb-2">CARD 1</h3>
+                    <p>Director Message</p>
+                  </div>
+                </div>
+                <!-- Card 2: Middle right -->
+                <div className="col-span-2 row-span-1 col-start-4 row-start-1 bg-green-600 border-4 border-orange-400 rounded-xl p-4 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-lg font-bold">CARD 2</h3>
+                    <p>Videos</p>
+                  </div>
+                </div>
+                <!-- Card 3: Bottom right, offset -->
+                <div className="col-span-2 row-span-1 col-start-5 row-start-3 bg-purple-600 border-4 border-pink-400 rounded-xl p-4 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-lg font-bold">CARD 3</h3>
+                    <p>Services</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* 🟡 CARD 3: Services Card (PURPLE) */}
-            <div className="order-3">
-              <div className="bg-gradient-to-br from-purple-500 to-purple-700 backdrop-blur-sm rounded-xl p-6 h-96 flex flex-col border-8 border-pink-400 shadow-2xl">
-                <h3 className="text-xl font-bold mb-4 text-white flex items-center gap-2">
-                  <Target className="h-6 w-6" />
-                  🟡 CARD 3: Quick Services
-                </h3>
-                <div className="grid grid-cols-2 gap-3 flex-1">
-                  <Link href="/complaint" className="group">
-                    <div className="bg-white/20 hover:bg-white/30 rounded-lg p-3 h-full flex flex-col items-center justify-center text-center transition-all group-hover:scale-105">
-                      <FileText className="h-6 w-6 text-white mb-1" />
-                      <span className="text-white font-semibold text-xs">File Complaint</span>
-                    </div>
-                  </Link>
-                  <Link href="/alerts" className="group">
-                    <div className="bg-white/20 hover:bg-white/30 rounded-lg p-3 h-full flex flex-col items-center justify-center text-center transition-all group-hover:scale-105">
-                      <TriangleAlert className="h-6 w-6 text-white mb-1" />
-                      <span className="text-white font-semibold text-xs">Safety Alerts</span>
-                    </div>
-                  </Link>
-                  <Link href="/contact" className="group">
-                    <div className="bg-white/20 hover:bg-white/30 rounded-lg p-3 h-full flex flex-col items-center justify-center text-center transition-all group-hover:scale-105">
-                      <Phone className="h-6 w-6 text-white mb-1" />
-                      <span className="text-white font-semibold text-xs">Emergency Contact</span>
-                    </div>
-                  </Link>
-                  <Link href="/cybercrime" className="group">
-                    <div className="bg-white/20 hover:bg-white/30 rounded-lg p-3 h-full flex flex-col items-center justify-center text-center transition-all group-hover:scale-105">
-                      <Shield className="h-6 w-6 text-white mb-1" />
-                      <span className="text-white font-semibold text-xs">Cyber Crime</span>
-                    </div>
-                  </Link>
+            {/* DEMO 3: PYRAMID LAYOUT */}
+            <div>
+              <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center">DEMO 3: PYRAMID/TRIANGLE</h2>
+              <div className="grid grid-cols-4 grid-rows-3 gap-4 h-80">
+                <!-- Card 1: Top center, wide -->
+                <div className="col-span-2 row-span-1 col-start-2 bg-blue-600 border-4 border-yellow-400 rounded-xl p-4 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-lg font-bold">CARD 1</h3>
+                    <p>Director</p>
+                  </div>
+                </div>
+                <!-- Card 2: Bottom left -->
+                <div className="col-span-2 row-span-2 row-start-2 bg-green-600 border-4 border-orange-400 rounded-xl p-4 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-lg font-bold">CARD 2</h3>
+                    <p>Video News</p>
+                  </div>
+                </div>
+                <!-- Card 3: Bottom right -->
+                <div className="col-span-2 row-span-2 col-start-3 row-start-2 bg-purple-600 border-4 border-pink-400 rounded-xl p-4 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-lg font-bold">CARD 3</h3>
+                    <p>Quick Services</p>
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* DEMO 4: OVERLAPPING LAYOUT */}
+            <div>
+              <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center">DEMO 4: OVERLAPPING CARDS</h2>
+              <div className="relative h-80">
+                <!-- Card 1: Base layer -->
+                <div className="absolute top-0 left-0 w-80 h-60 bg-blue-600 border-4 border-yellow-400 rounded-xl p-4 flex items-center justify-center z-10">
+                  <div className="text-white text-center">
+                    <h3 className="text-xl font-bold mb-2">CARD 1</h3>
+                    <p>Director Message</p>
+                  </div>
+                </div>
+                <!-- Card 2: Overlapping top right -->
+                <div className="absolute top-8 left-64 w-64 h-48 bg-green-600 border-4 border-orange-400 rounded-xl p-4 flex items-center justify-center z-20">
+                  <div className="text-white text-center">
+                    <h3 className="text-lg font-bold">CARD 2</h3>
+                    <p>Video News</p>
+                  </div>
+                </div>
+                <!-- Card 3: Overlapping bottom -->
+                <div className="absolute top-32 left-32 w-64 h-48 bg-purple-600 border-4 border-pink-400 rounded-xl p-4 flex items-center justify-center z-30">
+                  <div className="text-white text-center">
+                    <h3 className="text-lg font-bold">CARD 3</h3>
+                    <p>Quick Services</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
           
           {/* FORCE VISIBLE THIRD CARD - STANDALONE TEST */}
