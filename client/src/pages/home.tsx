@@ -170,12 +170,17 @@ export default function Home() {
           }}
         />
         <div className="relative container mx-auto px-4 py-20">
-          {/* Asymmetric Three-Card Layout Demo */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-            {/* Large Director Card - Takes 2 columns and 2 rows */}
-            <div className="lg:col-span-2 lg:row-span-2">
+          {/* ASYMMETRIC THREE-CARD LAYOUT - DEMO VERSION */}
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-white mb-2">🎯 ASYMMETRIC LAYOUT DEMO</h2>
+            <p className="text-white/80">Three cards in L-shaped pattern: 1 Large + 2 Medium</p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-2 gap-6 h-auto lg:h-[520px]">
+            {/* 🔵 CARD 1: Large Director Card (2x2 grid space) */}
+            <div className="lg:col-span-2 lg:row-span-2 order-1">
               <div
-                className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 lg:h-[500px] flex flex-col border-2 border-amber-300`}
+                className="bg-gradient-to-br from-blue-600 to-blue-800 backdrop-blur-sm rounded-xl p-6 h-80 lg:h-full flex flex-col border-4 border-yellow-400 shadow-2xl transform hover:scale-[1.02] transition-all"
               >
               <div className="flex gap-6 flex-1">
                 {/* Director Photo */}
@@ -221,10 +226,10 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Video Card - Takes 2 columns, top right */}
-            <div className="lg:col-span-2">
+            {/* 🟢 CARD 2: Video Card (2x1 grid space, top-right) */}
+            <div className="lg:col-span-2 lg:row-span-1 order-2">
               <div
-                className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-60 flex flex-col border-2 border-blue-300`}
+                className="bg-gradient-to-br from-green-500 to-green-700 backdrop-blur-sm rounded-xl p-6 h-60 lg:h-full flex flex-col border-4 border-orange-400 shadow-2xl transform hover:scale-[1.02] transition-all"
               >
                 <h3 className="text-xl font-bold mb-3 text-white">Latest Video News</h3>
                 <div className="flex-1 flex flex-col">
@@ -266,9 +271,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Quick Services Card - Takes 2 columns, bottom right */}
-            <div className="lg:col-span-2">
-              <div className="bg-gradient-to-br from-green-500 to-emerald-600 backdrop-blur-sm rounded-xl p-6 h-60 flex flex-col border-2 border-green-300 shadow-lg">
+            {/* 🟡 CARD 3: Quick Services Card (2x1 grid space, bottom-right) */}
+            <div className="lg:col-span-2 lg:row-span-1 order-3">
+              <div className="bg-gradient-to-br from-purple-500 to-purple-700 backdrop-blur-sm rounded-xl p-6 h-60 lg:h-full flex flex-col border-4 border-pink-400 shadow-2xl transform hover:scale-[1.02] transition-all">
                 <h3 className="text-xl font-bold mb-4 text-white flex items-center gap-2">
                   <Target className="h-6 w-6" />
                   Quick Services
