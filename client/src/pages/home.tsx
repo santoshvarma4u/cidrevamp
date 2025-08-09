@@ -27,6 +27,7 @@ import {
   FileText,
   Phone,
 } from "lucide-react";
+import adgpImagePath from "@assets/adgpImage_1753520299812.png";
 // Removed unused import
 import { useQuery } from "@tanstack/react-query";
 
@@ -117,14 +118,14 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative bg-gray-900 text-white min-h-screen">
-        <div className="container mx-auto px-4 py-20">
+      <section className={`relative ${themeClasses.sectionBg} min-h-screen pt-24`}>
+        <div className="container mx-auto px-4 py-12">
           {/* Hero Content */}
           <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold text-white mb-6">
+            <h1 className="text-5xl font-bold text-gray-800 mb-6">
               Crime Investigation Department
             </h1>
-            <p className="text-xl text-gray-200 max-w-4xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
               Telangana State's premier law enforcement agency ensuring public safety through
               specialized investigations, advanced technology, and community engagement
             </p>
@@ -132,40 +133,52 @@ export default function Home() {
           
           {/* Three Card Asymmetric Layout */}
           <div className="flex gap-6 min-h-[500px]">
-            {/* Large Director Message Card */}
-            <Card className="flex-[2] bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-xl">
-              <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
+            {/* Large Director Message Card with Photo */}
+            <Card className={`flex-[2] ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl`}>
+              <CardHeader className="bg-primary text-primary-foreground rounded-t-lg">
                 <CardTitle className="text-2xl flex items-center gap-3">
                   <Users className="h-8 w-8" />
                   Director General's Message
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-8 flex-1 flex flex-col">
-                <div className="flex-1">
-                  <blockquote className="text-lg text-gray-700 mb-6 leading-relaxed">
-                    "The Telangana State Police is committed to maintaining law and order, preventing and detecting crime, and ensuring the safety and security of all citizens. Our Crime Investigation Department employs scientific methods, advanced technology, and dedicated personnel to deliver justice efficiently and effectively."
-                  </blockquote>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-blue-700">
-                      <CheckCircle className="h-5 w-5" />
-                      <span className="font-medium">Scientific Crime Investigation</span>
+              <CardContent className="p-8 flex-1 flex">
+                <div className="flex gap-6">
+                  {/* DGP Photo */}
+                  <div className="flex-shrink-0">
+                    <img 
+                      src={adgpImagePath} 
+                      alt="Director General of Police" 
+                      className="w-32 h-40 object-cover rounded-lg border-2 border-gray-300"
+                    />
+                  </div>
+                  
+                  {/* Message Content */}
+                  <div className="flex-1">
+                    <blockquote className="text-lg text-gray-700 mb-6 leading-relaxed">
+                      "The Telangana State Police is committed to maintaining law and order, preventing and detecting crime, and ensuring the safety and security of all citizens. Our Crime Investigation Department employs scientific methods, advanced technology, and dedicated personnel to deliver justice efficiently and effectively."
+                    </blockquote>
+                    <div className="space-y-3">
+                      <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
+                        <CheckCircle className="h-5 w-5" />
+                        <span className="font-medium">Scientific Crime Investigation</span>
+                      </div>
+                      <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
+                        <CheckCircle className="h-5 w-5" />
+                        <span className="font-medium">Modern Forensic Technology</span>
+                      </div>
+                      <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
+                        <CheckCircle className="h-5 w-5" />
+                        <span className="font-medium">Citizen-Centric Policing</span>
+                      </div>
+                      <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
+                        <CheckCircle className="h-5 w-5" />
+                        <span className="font-medium">Specialized Investigation Wings</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3 text-blue-700">
-                      <CheckCircle className="h-5 w-5" />
-                      <span className="font-medium">Modern Forensic Technology</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-blue-700">
-                      <CheckCircle className="h-5 w-5" />
-                      <span className="font-medium">Citizen-Centric Policing</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-blue-700">
-                      <CheckCircle className="h-5 w-5" />
-                      <span className="font-medium">Specialized Investigation Wings</span>
+                    <div className="mt-6 pt-6 border-t border-gray-200">
+                      <p className="text-sm text-gray-600 font-medium">- Director General of Police, Telangana State</p>
                     </div>
                   </div>
-                </div>
-                <div className="mt-6 pt-6 border-t border-blue-200">
-                  <p className="text-sm text-gray-600 font-medium">- Director General of Police, Telangana State</p>
                 </div>
               </CardContent>
             </Card>
@@ -173,8 +186,8 @@ export default function Home() {
             {/* Right Column - Two Stacked Cards */}
             <div className="flex-1 flex flex-col gap-6">
               {/* Latest Videos Card - Smaller */}
-              <Card className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-xl">
-                <CardHeader className="bg-gradient-to-r from-green-600 to-green-700 text-white">
+              <Card className={`${themeClasses.cardBg} border-2 border-gray-200 shadow-xl`}>
+                <CardHeader className="bg-primary text-primary-foreground">
                   <CardTitle className="text-lg flex items-center gap-3">
                     <Play className="h-5 w-5" />
                     Latest Videos
@@ -182,9 +195,9 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-4">
                   <div className="space-y-3">
-                    <div className="bg-white rounded-lg p-3 border border-green-200 hover:shadow-md transition-shadow">
-                      <h4 className="font-semibold text-green-800 mb-2 text-sm">Cyber Crime Awareness</h4>
-                      <Button size="sm" className="bg-green-600 hover:bg-green-700 text-xs">
+                    <div className="bg-white rounded-lg p-3 border border-gray-200 hover:shadow-md transition-shadow">
+                      <h4 className={`font-semibold ${themeClasses.textAccent} mb-2 text-sm`}>Cyber Crime Awareness</h4>
+                      <Button size="sm" className="bg-primary hover:bg-primary/90 text-xs">
                         Watch Now
                       </Button>
                     </div>
@@ -193,21 +206,21 @@ export default function Home() {
               </Card>
               
               {/* NCL Card */}
-              <Card className="flex-1 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 shadow-xl">
-                <CardHeader className="bg-gradient-to-r from-purple-600 to-purple-700 text-white">
+              <Card className={`flex-1 ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl`}>
+                <CardHeader className="bg-primary text-primary-foreground">
                   <CardTitle className="text-xl flex items-center gap-3">
-                    <Shield className="h-6 w-6" />
+                    <Scale className="h-6 w-6" />
                     NCL
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 flex-1 flex items-center justify-center">
                   <div className="text-center">
-                    <h3 className="text-4xl font-bold text-purple-700 mb-4">NCL</h3>
-                    <p className="text-lg text-purple-600">
-                      National Crime Laboratory
+                    <h3 className={`text-4xl font-bold ${themeClasses.textAccent} mb-4`}>NCL</h3>
+                    <p className="text-lg text-gray-800">
+                      National Criminal Laws
                     </p>
                     <p className="text-sm text-gray-600 mt-2">
-                      Advanced forensic analysis and scientific investigation support
+                      Legal framework and criminal law provisions
                     </p>
                   </div>
                 </CardContent>
