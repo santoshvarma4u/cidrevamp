@@ -137,102 +137,78 @@ export default function Home() {
               <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
                 <CardTitle className="text-2xl flex items-center gap-3">
                   <Users className="h-8 w-8" />
-                  Director's Message
+                  Director General's Message
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-8 flex-1 flex flex-col">
                 <div className="flex-1">
-                  <blockquote className="text-lg text-gray-700 italic mb-6 leading-relaxed">
-                    "The Crime Investigation Department of Telangana stands committed to maintaining 
-                    law and order through scientific investigation, technological advancement, and 
-                    unwavering dedication to justice. Our specialized wings ensure comprehensive 
-                    coverage of all criminal activities."
+                  <blockquote className="text-lg text-gray-700 mb-6 leading-relaxed">
+                    "The Telangana State Police is committed to maintaining law and order, preventing and detecting crime, and ensuring the safety and security of all citizens. Our Crime Investigation Department employs scientific methods, advanced technology, and dedicated personnel to deliver justice efficiently and effectively."
                   </blockquote>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 text-blue-700">
                       <CheckCircle className="h-5 w-5" />
-                      <span className="font-medium">Scientific Investigation Methods</span>
+                      <span className="font-medium">Scientific Crime Investigation</span>
                     </div>
                     <div className="flex items-center gap-3 text-blue-700">
                       <CheckCircle className="h-5 w-5" />
-                      <span className="font-medium">Advanced Digital Forensics</span>
+                      <span className="font-medium">Modern Forensic Technology</span>
                     </div>
                     <div className="flex items-center gap-3 text-blue-700">
                       <CheckCircle className="h-5 w-5" />
-                      <span className="font-medium">24/7 Public Safety Services</span>
+                      <span className="font-medium">Citizen-Centric Policing</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-blue-700">
+                      <CheckCircle className="h-5 w-5" />
+                      <span className="font-medium">Specialized Investigation Wings</span>
                     </div>
                   </div>
                 </div>
                 <div className="mt-6 pt-6 border-t border-blue-200">
-                  <p className="text-sm text-gray-600 font-medium">- Director, Crime Investigation Department</p>
+                  <p className="text-sm text-gray-600 font-medium">- Director General of Police, Telangana State</p>
                 </div>
               </CardContent>
             </Card>
             
             {/* Right Column - Two Stacked Cards */}
             <div className="flex-1 flex flex-col gap-6">
-              {/* Latest Videos Card */}
-              <Card className="flex-1 bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-xl">
+              {/* Latest Videos Card - Smaller */}
+              <Card className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-xl">
                 <CardHeader className="bg-gradient-to-r from-green-600 to-green-700 text-white">
-                  <CardTitle className="text-xl flex items-center gap-3">
-                    <Play className="h-6 w-6" />
+                  <CardTitle className="text-lg flex items-center gap-3">
+                    <Play className="h-5 w-5" />
                     Latest Videos
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6 flex-1">
-                  <div className="space-y-4">
-                    <div className="bg-white rounded-lg p-4 border border-green-200 hover:shadow-md transition-shadow">
-                      <h4 className="font-semibold text-green-800 mb-2">Cyber Crime Awareness</h4>
-                      <p className="text-sm text-gray-600 mb-3">Learn about online safety and cybercrime prevention</p>
-                      <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                <CardContent className="p-4">
+                  <div className="space-y-3">
+                    <div className="bg-white rounded-lg p-3 border border-green-200 hover:shadow-md transition-shadow">
+                      <h4 className="font-semibold text-green-800 mb-2 text-sm">Cyber Crime Awareness</h4>
+                      <Button size="sm" className="bg-green-600 hover:bg-green-700 text-xs">
                         Watch Now
-                      </Button>
-                    </div>
-                    <div className="bg-white rounded-lg p-4 border border-green-200 hover:shadow-md transition-shadow">
-                      <h4 className="font-semibold text-green-800 mb-2">Training Programs</h4>
-                      <p className="text-sm text-gray-600 mb-3">Professional development initiatives</p>
-                      <Button size="sm" variant="outline" className="border-green-600 text-green-600 hover:bg-green-50">
-                        View All
                       </Button>
                     </div>
                   </div>
                 </CardContent>
               </Card>
               
-              {/* Quick Services Card */}
+              {/* NCL Card */}
               <Card className="flex-1 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 shadow-xl">
                 <CardHeader className="bg-gradient-to-r from-purple-600 to-purple-700 text-white">
                   <CardTitle className="text-xl flex items-center gap-3">
                     <Shield className="h-6 w-6" />
-                    Quick Services
+                    NCL
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6 flex-1">
-                  <div className="grid grid-cols-2 gap-3">
-                    <Link href="/citizen/complaint">
-                      <Button variant="outline" className="w-full h-16 flex flex-col gap-1 border-purple-300 text-purple-700 hover:bg-purple-50">
-                        <FileText className="h-5 w-5" />
-                        <span className="text-xs">File Complaint</span>
-                      </Button>
-                    </Link>
-                    <Link href="/citizen/status">
-                      <Button variant="outline" className="w-full h-16 flex flex-col gap-1 border-purple-300 text-purple-700 hover:bg-purple-50">
-                        <Clock className="h-5 w-5" />
-                        <span className="text-xs">Track Status</span>
-                      </Button>
-                    </Link>
-                    <Link href="/contact">
-                      <Button variant="outline" className="w-full h-16 flex flex-col gap-1 border-purple-300 text-purple-700 hover:bg-purple-50">
-                        <Phone className="h-5 w-5" />
-                        <span className="text-xs">Contact Us</span>
-                      </Button>
-                    </Link>
-                    <Link href="/alerts">
-                      <Button variant="outline" className="w-full h-16 flex flex-col gap-1 border-purple-300 text-purple-700 hover:bg-purple-50">
-                        <TriangleAlert className="h-5 w-5" />
-                        <span className="text-xs">Safety Alerts</span>
-                      </Button>
-                    </Link>
+                <CardContent className="p-6 flex-1 flex items-center justify-center">
+                  <div className="text-center">
+                    <h3 className="text-4xl font-bold text-purple-700 mb-4">NCL</h3>
+                    <p className="text-lg text-purple-600">
+                      National Crime Laboratory
+                    </p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Advanced forensic analysis and scientific investigation support
+                    </p>
                   </div>
                 </CardContent>
               </Card>
