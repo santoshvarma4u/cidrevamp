@@ -176,7 +176,7 @@ export default function Home() {
             <p className="text-white text-lg">You should see: BLUE (large) + GREEN + PURPLE cards</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
             {/* 🔵 CARD 1: Director Card (BLUE) */}
             <div className="order-1">
               <div
@@ -303,6 +303,23 @@ export default function Home() {
                       <span className="text-white font-semibold text-xs">Cyber Crime</span>
                     </div>
                   </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* FORCE VISIBLE THIRD CARD - STANDALONE TEST */}
+          <div className="mt-12 text-center">
+            <h2 className="text-2xl font-bold text-yellow-300 mb-6">STANDALONE THIRD CARD TEST</h2>
+            <div className="bg-gradient-to-br from-red-500 to-red-700 rounded-xl p-8 border-8 border-white shadow-2xl mx-auto max-w-md">
+              <h3 className="text-2xl font-bold text-white mb-4">🔴 THIRD CARD IS HERE!</h3>
+              <p className="text-white text-lg">If you can see this red card, then the issue is with the grid layout above.</p>
+              <div className="grid grid-cols-2 gap-4 mt-6">
+                <div className="bg-white/20 p-4 rounded-lg text-center">
+                  <div className="text-white font-bold">Service 1</div>
+                </div>
+                <div className="bg-white/20 p-4 rounded-lg text-center">
+                  <div className="text-white font-bold">Service 2</div>
                 </div>
               </div>
             </div>
