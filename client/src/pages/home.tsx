@@ -170,17 +170,17 @@ export default function Home() {
           }}
         />
         <div className="relative container mx-auto px-4 py-20">
-          {/* ASYMMETRIC THREE-CARD LAYOUT - DEMO VERSION */}
+          {/* ASYMMETRIC THREE-CARD LAYOUT - CLEAR DEMO VERSION */}
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-white mb-2">🎯 ASYMMETRIC LAYOUT DEMO</h2>
-            <p className="text-white/80">Three cards in L-shaped pattern: 1 Large + 2 Medium</p>
+            <h2 className="text-3xl font-bold text-yellow-300 mb-2">🔥 THREE CARD ASYMMETRIC DEMO 🔥</h2>
+            <p className="text-white text-lg">You should see: BLUE (large) + GREEN + PURPLE cards</p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-4 lg:grid-rows-2 gap-6 h-auto lg:h-[520px]">
-            {/* 🔵 CARD 1: Large Director Card (2x2 grid space) */}
-            <div className="lg:col-span-2 lg:row-span-2 order-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* 🔵 CARD 1: Director Card (BLUE) */}
+            <div className="order-1">
               <div
-                className="bg-gradient-to-br from-blue-600 to-blue-800 backdrop-blur-sm rounded-xl p-6 h-80 lg:h-full flex flex-col border-4 border-yellow-400 shadow-2xl transform hover:scale-[1.02] transition-all"
+                className="bg-gradient-to-br from-blue-600 to-blue-800 backdrop-blur-sm rounded-xl p-6 h-96 flex flex-col border-8 border-yellow-400 shadow-2xl"
               >
               <div className="flex gap-6 flex-1">
                 {/* Director Photo */}
@@ -198,7 +198,7 @@ export default function Home() {
                 <div className="flex-1 overflow-hidden">
                   <div className="mb-3">
                     <h3 className="text-xl font-bold text-white mb-1">
-                      Ms. Charu Sinha, IPS
+                      🔵 CARD 1: Ms. Charu Sinha, IPS
                     </h3>
                     <p
                       className={`text-base font-semibold ${themeClasses.textAccent} mb-2`}
@@ -226,12 +226,12 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 🟢 CARD 2: Video Card (2x1 grid space, top-right) */}
-            <div className="lg:col-span-2 lg:row-span-1 order-2">
+            {/* 🟢 CARD 2: Video Card (GREEN) */}
+            <div className="order-2">
               <div
-                className="bg-gradient-to-br from-green-500 to-green-700 backdrop-blur-sm rounded-xl p-6 h-60 lg:h-full flex flex-col border-4 border-orange-400 shadow-2xl transform hover:scale-[1.02] transition-all"
+                className="bg-gradient-to-br from-green-500 to-green-700 backdrop-blur-sm rounded-xl p-6 h-96 flex flex-col border-8 border-orange-400 shadow-2xl"
               >
-                <h3 className="text-xl font-bold mb-3 text-white">Latest Video News</h3>
+                <h3 className="text-xl font-bold mb-3 text-white">🟢 CARD 2: Latest Video News</h3>
                 <div className="flex-1 flex flex-col">
                   {latestVideos.length > 0 ? (
                     <div className="w-full aspect-video max-h-32 rounded-lg bg-black mb-3 overflow-hidden">
@@ -271,12 +271,12 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 🟡 CARD 3: Quick Services Card (2x1 grid space, bottom-right) */}
-            <div className="lg:col-span-2 lg:row-span-1 order-3">
-              <div className="bg-gradient-to-br from-purple-500 to-purple-700 backdrop-blur-sm rounded-xl p-6 h-60 lg:h-full flex flex-col border-4 border-pink-400 shadow-2xl transform hover:scale-[1.02] transition-all">
+            {/* 🟡 CARD 3: Services Card (PURPLE) */}
+            <div className="order-3">
+              <div className="bg-gradient-to-br from-purple-500 to-purple-700 backdrop-blur-sm rounded-xl p-6 h-96 flex flex-col border-8 border-pink-400 shadow-2xl">
                 <h3 className="text-xl font-bold mb-4 text-white flex items-center gap-2">
                   <Target className="h-6 w-6" />
-                  Quick Services
+                  🟡 CARD 3: Quick Services
                 </h3>
                 <div className="grid grid-cols-2 gap-3 flex-1">
                   <Link href="/complaint" className="group">
