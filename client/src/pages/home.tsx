@@ -194,7 +194,7 @@ export default function Home() {
                         className="w-full h-full object-cover"
                         controls
                       >
-                        <source src={`/api/${latestVideos[0].filePath}`} type="video/mp4" />
+                        <source src={`/${latestVideos[0].filePath}`} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
                     ) : (
@@ -250,7 +250,7 @@ export default function Home() {
                       {latestPhotos.slice(0, 4).map((photo: any) => (
                         <div key={photo.id} className="aspect-square rounded-lg overflow-hidden shadow-md">
                           <img 
-                            src={`/api/${photo.filePath}`}
+                            src={`/${photo.filePath}`}
                             alt={photo.title || 'CID Photo'}
                             className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
                           />
