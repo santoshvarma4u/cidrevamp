@@ -176,32 +176,16 @@ export default function Home() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
-                  <div className="space-y-4">
-                    {/* Video Player */}
-                    <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video">
-                      <video 
-                        className="w-full h-full object-cover"
-                        controls
-                        poster="/api/placeholder/400/225"
-                      >
-                        <source src="/api/placeholder/video" type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                    
-                    {/* Video Info */}
-                    <div className="bg-white rounded-lg p-4 border border-gray-200">
-                      <h4 className={`font-semibold ${themeClasses.textAccent} mb-2`}>CID Training Programs</h4>
-                      <p className="text-sm text-gray-600 mb-3">Professional development and investigation training for officers</p>
-                      <div className="flex gap-2">
-                        <Button size="sm" className="bg-primary hover:bg-primary/90">
-                          Watch More
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          Share
-                        </Button>
-                      </div>
-                    </div>
+                  {/* Video Player */}
+                  <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video">
+                    <video 
+                      className="w-full h-full object-cover"
+                      controls
+                      poster="/api/placeholder/400/225"
+                    >
+                      <source src="/api/placeholder/video" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
                   </div>
                 </CardContent>
               </Card>
