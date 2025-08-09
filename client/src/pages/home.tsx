@@ -133,50 +133,32 @@ export default function Home() {
           
           {/* Three Card Asymmetric Layout */}
           <div className="flex gap-6 min-h-[500px]">
-            {/* Large Director Message Card with Photo and Text Overlay */}
-            <Card className={`flex-[2] ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl rounded-2xl overflow-hidden`}>
+            {/* Large Director Message Card with Photo */}
+            <Card className={`flex-[2] ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl rounded-2xl`}>
               <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl">
                 <CardTitle className="text-2xl flex items-center gap-3">
                   <Users className="h-8 w-8" />
                   Director General's Message
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-0 flex-1 relative">
-                {/* Background Image */}
-                <div className="relative h-full min-h-[400px]">
-                  <img 
-                    src={adgpImagePath} 
-                    alt="Director General of Police" 
-                    className="absolute inset-0 w-full h-full object-cover opacity-20"
-                  />
+              <CardContent className="p-8 flex-1 flex">
+                <div className="flex gap-6">
+                  {/* DGP Photo */}
+                  <div className="flex-shrink-0">
+                    <img 
+                      src={adgpImagePath} 
+                      alt="Director General of Police" 
+                      className="w-32 h-40 object-cover rounded-lg border-2 border-gray-300"
+                    />
+                  </div>
                   
-                  {/* Text Overlay */}
-                  <div className="relative z-10 p-8 h-full flex flex-col justify-center">
-                    <div className="bg-white/95 backdrop-blur-sm rounded-lg p-6 shadow-lg">
-                      <blockquote className="text-lg text-gray-800 mb-6 leading-relaxed font-medium">
-                        "Crime Investigation Department, Telangana State stands committed to ensure effective investigation of crime through scientific and technological advancement in the field of investigation and to deliver quality service to the people."
-                      </blockquote>
-                      <div className="space-y-3">
-                        <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
-                          <CheckCircle className="h-5 w-5" />
-                          <span className="font-medium">Scientific Crime Investigation</span>
-                        </div>
-                        <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
-                          <CheckCircle className="h-5 w-5" />
-                          <span className="font-medium">Modern Forensic Technology</span>
-                        </div>
-                        <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
-                          <CheckCircle className="h-5 w-5" />
-                          <span className="font-medium">Citizen-Centric Policing</span>
-                        </div>
-                        <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
-                          <CheckCircle className="h-5 w-5" />
-                          <span className="font-medium">Specialized Investigation Wings</span>
-                        </div>
-                      </div>
-                      <div className="mt-6 pt-4 border-t border-gray-200">
-                        <p className="text-sm text-gray-600 font-medium">- Director General of Police, Telangana State</p>
-                      </div>
+                  {/* Message Content */}
+                  <div className="flex-1">
+                    <blockquote className="text-base text-gray-800 mb-6 leading-relaxed">
+                      "Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial, efficient and systematic investigation using high end, state of the art equipment with quality forensic support in coordination with national and international agencies. We follow the principle that 'men may lie but material will not'. Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and mission. Our specialized wings include Economic Offences, General Offences, Child and Women Protection, Protection of Civil Rights and Cyber Crimes. We welcome any feedback from the citizens related to any crime. I wish this website paves way for the public awareness about recent crimes and alerts."
+                    </blockquote>
+                    <div className="mt-6 pt-4 border-t border-gray-200">
+                      <p className="text-sm text-gray-600 font-medium">- Director General of Police, Telangana State</p>
                     </div>
                   </div>
                 </div>
@@ -209,8 +191,8 @@ export default function Home() {
                     
                     {/* Video Info */}
                     <div className="bg-white rounded-lg p-4 border border-gray-200">
-                      <h4 className={`font-semibold ${themeClasses.textAccent} mb-2`}>Cyber Crime Awareness</h4>
-                      <p className="text-sm text-gray-600 mb-3">Learn about online safety and cybercrime prevention measures</p>
+                      <h4 className={`font-semibold ${themeClasses.textAccent} mb-2`}>CID Training Programs</h4>
+                      <p className="text-sm text-gray-600 mb-3">Professional development and investigation training for officers</p>
                       <div className="flex gap-2">
                         <Button size="sm" className="bg-primary hover:bg-primary/90">
                           Watch More

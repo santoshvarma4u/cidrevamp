@@ -22,11 +22,12 @@ This full-stack web application serves as a public information portal and conten
 - **Admin UI Improvements**: Enhanced admin login with white placeholder text and removed demo credentials for professional appearance
 - **Theme System Overhaul**: Complete theme switcher implementation with CSS variables, replaced all hardcoded teal colors with dynamic theme-aware classes
 - **Mulberry Theme**: Replaced purple theme with user-requested Mulberry color (#4C0121) for professional government aesthetic
-- **Three-Card Asymmetric Layout**: Successfully implemented asymmetric layout with flexbox approach replacing previous 2-card layout:
-  - Large Director Message card (2x width) with professional gradient styling and feature highlights
-  - Latest Videos card (top-right) with interactive video previews and call-to-action buttons
-  - Quick Services card (bottom-right) with grid of essential citizen services (File Complaint, Track Status, Contact, Alerts)
-  - Modern gradient color schemes (blue, green, purple) with proper contrast and accessibility
+- **Three-Card Asymmetric Layout**: Successfully implemented asymmetric layout with flexbox approach:
+  - Large Director Message card (2x width) with authentic DGP message and photo, featuring the complete official statement about CID's mission and specialized wings
+  - Latest Videos card (larger, top-right) with embedded video player showing CID training programs
+  - NCL card (smaller, bottom-right) displaying "National Criminal Laws" information
+  - Consistent rounded styling (rounded-2xl) and theme-appropriate colors throughout all cards
+  - Proper spacing with pt-24 to prevent header menu overlap
 
 ## User Preferences
 
