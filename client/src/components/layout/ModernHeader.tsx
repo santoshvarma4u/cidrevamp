@@ -111,42 +111,52 @@ export default function ModernHeader() {
       </div>
 
       {/* Main Header */}
-      <div className="bg-card py-6">
+      <div className="bg-card py-4 md:py-6">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Left Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 hidden md:block">
               <img
                 src={leftLogoSrc}
                 alt="Telangana Government"
-                className="h-20 w-20 object-contain"
+                className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-contain drop-shadow-md"
                 data-testid="telangana-logo"
               />
             </div>
 
             {/* Center Title - Modern Design */}
-            <div className="flex-1 text-center px-6">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent leading-tight tracking-tight">
+            <div className="flex-1 text-center px-4 md:px-6">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent leading-tight tracking-tight">
                 CID
               </h1>
-              <h2 className="text-lg md:text-xl font-semibold text-card-foreground mt-1 tracking-wide">
+              <h2 className="text-sm md:text-lg lg:text-xl font-semibold text-card-foreground mt-1 tracking-wide">
                 Crime Investigation Department
               </h2>
-              <p className="text-base text-muted-foreground mt-1 font-medium">
+              <p className="text-xs md:text-base text-muted-foreground mt-1 font-medium">
                 Telangana State Police
               </p>
-              <p className="text-sm text-muted-foreground/80 mt-1">
+              <p className="text-xs md:text-sm text-muted-foreground/80 mt-1 hidden sm:block">
                 3rd Floor, DGP Office, Lakadikapul, Hyderabad-004
               </p>
             </div>
 
             {/* Right Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 hidden md:block">
               <img
                 src={rightLogoSrc}
                 alt="Telangana State Police"
-                className="h-20 w-20 object-contain"
+                className="h-16 w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-contain drop-shadow-md"
                 data-testid="police-logo"
+              />
+            </div>
+
+            {/* Mobile Logo - Only on Small Screens */}
+            <div className="flex-shrink-0 md:hidden">
+              <img
+                src={rightLogoSrc}
+                alt="Telangana State Police"
+                className="h-12 w-12 object-contain drop-shadow-md"
+                data-testid="mobile-police-logo"
               />
             </div>
 
