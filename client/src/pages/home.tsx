@@ -170,11 +170,13 @@ export default function Home() {
           }}
         />
         <div className="relative container mx-auto px-4 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-stretch">
-            {/* Director General Message - Updated Design */}
-            <div
-              className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col border-2 border-amber-300`}
-            >
+          {/* Asymmetric Three-Card Layout Demo */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+            {/* Large Director Card - Takes 2 columns and 2 rows */}
+            <div className="lg:col-span-2 lg:row-span-2">
+              <div
+                className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 lg:h-[500px] flex flex-col border-2 border-amber-300`}
+              >
               <div className="flex gap-6 flex-1">
                 {/* Director Photo */}
                 <div className="flex-shrink-0">
@@ -219,44 +221,83 @@ export default function Home() {
               </div>
             </div>
 
-            <div
-              className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-80 flex flex-col`}
-            >
-              <h3 className="text-xl font-bold mb-3">Latest Video News</h3>
-              <div className="flex-1 flex flex-col">
-                {latestVideos.length > 0 ? (
-                  <div className="w-full aspect-video max-h-52 rounded-lg bg-black mb-3 overflow-hidden">
-                    <VideoPlayer
-                      video={{
-                        ...latestVideos[0],
-                        description: latestVideos[0].description || "",
-                        thumbnailPath: latestVideos[0].thumbnailPath || "",
-                        duration: latestVideos[0].duration || 0,
-                        category: latestVideos[0].category || "news",
-                        createdAt: formatDate(latestVideos[0].createdAt),
-                      }}
-                      className="w-full h-full"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-full aspect-video max-h-52 bg-gray-900 rounded-lg flex items-center justify-center mb-3">
-                    <div className="text-center">
-                      <Play className="h-16 w-16 text-white mb-4 mx-auto" />
-                      <p className="text-white">No videos available</p>
+            {/* Video Card - Takes 2 columns, top right */}
+            <div className="lg:col-span-2">
+              <div
+                className={`${themeClasses.cardBg} backdrop-blur-sm rounded-xl p-6 h-60 flex flex-col border-2 border-blue-300`}
+              >
+                <h3 className="text-xl font-bold mb-3 text-white">Latest Video News</h3>
+                <div className="flex-1 flex flex-col">
+                  {latestVideos.length > 0 ? (
+                    <div className="w-full aspect-video max-h-32 rounded-lg bg-black mb-3 overflow-hidden">
+                      <VideoPlayer
+                        video={{
+                          ...latestVideos[0],
+                          description: latestVideos[0].description || "",
+                          thumbnailPath: latestVideos[0].thumbnailPath || "",
+                          duration: latestVideos[0].duration || 0,
+                          category: latestVideos[0].category || "news",
+                          createdAt: formatDate(latestVideos[0].createdAt),
+                        }}
+                        className="w-full h-full"
+                      />
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <div className="w-full aspect-video max-h-32 bg-gray-900 rounded-lg flex items-center justify-center mb-3">
+                      <div className="text-center">
+                        <Play className="h-12 w-12 text-white mb-2 mx-auto" />
+                        <p className="text-white text-sm">No videos available</p>
+                      </div>
+                    </div>
+                  )}
 
-                <div className="flex-1 space-y-1 overflow-hidden">
-                  {latestVideos.slice(1, 2).map((video) => (
-                    <div
-                      key={video.id}
-                      className="flex items-center space-x-3 p-2 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition"
-                    >
-                      <Play className="h-3 w-3 text-blue-200" />
-                      <span className="text-xs truncate">{video.title}</span>
+                  <div className="flex-1 space-y-1 overflow-hidden">
+                    {latestVideos.slice(1, 2).map((video) => (
+                      <div
+                        key={video.id}
+                        className="flex items-center space-x-3 p-2 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition"
+                      >
+                        <Play className="h-3 w-3 text-blue-200" />
+                        <span className="text-xs truncate text-white">{video.title}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Services Card - Takes 2 columns, bottom right */}
+            <div className="lg:col-span-2">
+              <div className="bg-gradient-to-br from-green-500 to-emerald-600 backdrop-blur-sm rounded-xl p-6 h-60 flex flex-col border-2 border-green-300 shadow-lg">
+                <h3 className="text-xl font-bold mb-4 text-white flex items-center gap-2">
+                  <Target className="h-6 w-6" />
+                  Quick Services
+                </h3>
+                <div className="grid grid-cols-2 gap-3 flex-1">
+                  <Link href="/complaint" className="group">
+                    <div className="bg-white/20 hover:bg-white/30 rounded-lg p-3 h-full flex flex-col items-center justify-center text-center transition-all group-hover:scale-105">
+                      <FileText className="h-6 w-6 text-white mb-1" />
+                      <span className="text-white font-semibold text-xs">File Complaint</span>
                     </div>
-                  ))}
+                  </Link>
+                  <Link href="/alerts" className="group">
+                    <div className="bg-white/20 hover:bg-white/30 rounded-lg p-3 h-full flex flex-col items-center justify-center text-center transition-all group-hover:scale-105">
+                      <TriangleAlert className="h-6 w-6 text-white mb-1" />
+                      <span className="text-white font-semibold text-xs">Safety Alerts</span>
+                    </div>
+                  </Link>
+                  <Link href="/contact" className="group">
+                    <div className="bg-white/20 hover:bg-white/30 rounded-lg p-3 h-full flex flex-col items-center justify-center text-center transition-all group-hover:scale-105">
+                      <Phone className="h-6 w-6 text-white mb-1" />
+                      <span className="text-white font-semibold text-xs">Emergency Contact</span>
+                    </div>
+                  </Link>
+                  <Link href="/cybercrime" className="group">
+                    <div className="bg-white/20 hover:bg-white/30 rounded-lg p-3 h-full flex flex-col items-center justify-center text-center transition-all group-hover:scale-105">
+                      <Shield className="h-6 w-6 text-white mb-1" />
+                      <span className="text-white font-semibold text-xs">Cyber Crime</span>
+                    </div>
+                  </Link>
                 </div>
               </div>
             </div>
