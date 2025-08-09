@@ -133,50 +133,50 @@ export default function Home() {
           
           {/* Three Card Asymmetric Layout */}
           <div className="flex gap-6 min-h-[500px]">
-            {/* Large Director Message Card with Photo */}
-            <Card className={`flex-[2] ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl`}>
-              <CardHeader className="bg-primary text-primary-foreground rounded-t-lg">
+            {/* Large Director Message Card with Photo and Text Overlay */}
+            <Card className={`flex-[2] ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl rounded-2xl overflow-hidden`}>
+              <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl">
                 <CardTitle className="text-2xl flex items-center gap-3">
                   <Users className="h-8 w-8" />
                   Director General's Message
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-8 flex-1 flex">
-                <div className="flex gap-6">
-                  {/* DGP Photo */}
-                  <div className="flex-shrink-0">
-                    <img 
-                      src={adgpImagePath} 
-                      alt="Director General of Police" 
-                      className="w-32 h-40 object-cover rounded-lg border-2 border-gray-300"
-                    />
-                  </div>
+              <CardContent className="p-0 flex-1 relative">
+                {/* Background Image */}
+                <div className="relative h-full min-h-[400px]">
+                  <img 
+                    src={adgpImagePath} 
+                    alt="Director General of Police" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-20"
+                  />
                   
-                  {/* Message Content */}
-                  <div className="flex-1">
-                    <blockquote className="text-lg text-gray-700 mb-6 leading-relaxed">
-                      "The Telangana State Police is committed to maintaining law and order, preventing and detecting crime, and ensuring the safety and security of all citizens. Our Crime Investigation Department employs scientific methods, advanced technology, and dedicated personnel to deliver justice efficiently and effectively."
-                    </blockquote>
-                    <div className="space-y-3">
-                      <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
-                        <CheckCircle className="h-5 w-5" />
-                        <span className="font-medium">Scientific Crime Investigation</span>
+                  {/* Text Overlay */}
+                  <div className="relative z-10 p-8 h-full flex flex-col justify-center">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-lg p-6 shadow-lg">
+                      <blockquote className="text-lg text-gray-800 mb-6 leading-relaxed font-medium">
+                        "Crime Investigation Department, Telangana State stands committed to ensure effective investigation of crime through scientific and technological advancement in the field of investigation and to deliver quality service to the people."
+                      </blockquote>
+                      <div className="space-y-3">
+                        <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
+                          <CheckCircle className="h-5 w-5" />
+                          <span className="font-medium">Scientific Crime Investigation</span>
+                        </div>
+                        <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
+                          <CheckCircle className="h-5 w-5" />
+                          <span className="font-medium">Modern Forensic Technology</span>
+                        </div>
+                        <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
+                          <CheckCircle className="h-5 w-5" />
+                          <span className="font-medium">Citizen-Centric Policing</span>
+                        </div>
+                        <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
+                          <CheckCircle className="h-5 w-5" />
+                          <span className="font-medium">Specialized Investigation Wings</span>
+                        </div>
                       </div>
-                      <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
-                        <CheckCircle className="h-5 w-5" />
-                        <span className="font-medium">Modern Forensic Technology</span>
+                      <div className="mt-6 pt-4 border-t border-gray-200">
+                        <p className="text-sm text-gray-600 font-medium">- Director General of Police, Telangana State</p>
                       </div>
-                      <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
-                        <CheckCircle className="h-5 w-5" />
-                        <span className="font-medium">Citizen-Centric Policing</span>
-                      </div>
-                      <div className={`flex items-center gap-3 ${themeClasses.textAccent}`}>
-                        <CheckCircle className="h-5 w-5" />
-                        <span className="font-medium">Specialized Investigation Wings</span>
-                      </div>
-                    </div>
-                    <div className="mt-6 pt-6 border-t border-gray-200">
-                      <p className="text-sm text-gray-600 font-medium">- Director General of Police, Telangana State</p>
                     </div>
                   </div>
                 </div>
@@ -185,42 +185,61 @@ export default function Home() {
             
             {/* Right Column - Two Stacked Cards */}
             <div className="flex-1 flex flex-col gap-6">
-              {/* Latest Videos Card - Smaller */}
-              <Card className={`${themeClasses.cardBg} border-2 border-gray-200 shadow-xl`}>
-                <CardHeader className="bg-primary text-primary-foreground">
-                  <CardTitle className="text-lg flex items-center gap-3">
-                    <Play className="h-5 w-5" />
+              {/* Latest Videos Card - Bigger */}
+              <Card className={`flex-[2] ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl rounded-2xl`}>
+                <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl">
+                  <CardTitle className="text-xl flex items-center gap-3">
+                    <Play className="h-6 w-6" />
                     Latest Videos
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4">
-                  <div className="space-y-3">
-                    <div className="bg-white rounded-lg p-3 border border-gray-200 hover:shadow-md transition-shadow">
-                      <h4 className={`font-semibold ${themeClasses.textAccent} mb-2 text-sm`}>Cyber Crime Awareness</h4>
-                      <Button size="sm" className="bg-primary hover:bg-primary/90 text-xs">
-                        Watch Now
-                      </Button>
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    {/* Video Player */}
+                    <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video">
+                      <video 
+                        className="w-full h-full object-cover"
+                        controls
+                        poster="/api/placeholder/400/225"
+                      >
+                        <source src="/api/placeholder/video" type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                    
+                    {/* Video Info */}
+                    <div className="bg-white rounded-lg p-4 border border-gray-200">
+                      <h4 className={`font-semibold ${themeClasses.textAccent} mb-2`}>Cyber Crime Awareness</h4>
+                      <p className="text-sm text-gray-600 mb-3">Learn about online safety and cybercrime prevention measures</p>
+                      <div className="flex gap-2">
+                        <Button size="sm" className="bg-primary hover:bg-primary/90">
+                          Watch More
+                        </Button>
+                        <Button size="sm" variant="outline">
+                          Share
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
               
-              {/* NCL Card */}
-              <Card className={`flex-1 ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl`}>
-                <CardHeader className="bg-primary text-primary-foreground">
-                  <CardTitle className="text-xl flex items-center gap-3">
-                    <Scale className="h-6 w-6" />
+              {/* NCL Card - Smaller */}
+              <Card className={`${themeClasses.cardBg} border-2 border-gray-200 shadow-xl rounded-2xl`}>
+                <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl">
+                  <CardTitle className="text-lg flex items-center gap-3">
+                    <Scale className="h-5 w-5" />
                     NCL
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6 flex-1 flex items-center justify-center">
+                <CardContent className="p-4 flex items-center justify-center">
                   <div className="text-center">
-                    <h3 className={`text-4xl font-bold ${themeClasses.textAccent} mb-4`}>NCL</h3>
-                    <p className="text-lg text-gray-800">
+                    <h3 className={`text-3xl font-bold ${themeClasses.textAccent} mb-3`}>NCL</h3>
+                    <p className="text-base text-gray-800 font-medium">
                       National Criminal Laws
                     </p>
-                    <p className="text-sm text-gray-600 mt-2">
-                      Legal framework and criminal law provisions
+                    <p className="text-xs text-gray-600 mt-2">
+                      Legal framework and provisions
                     </p>
                   </div>
                 </CardContent>
