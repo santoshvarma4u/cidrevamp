@@ -170,31 +170,41 @@ export default function Home() {
           }}
         />
         <div className="relative container mx-auto px-4 py-20">
+          {/* SIMPLE TEST FIRST */}
+          <div className="mb-16">
+            <h1 className="text-4xl font-bold text-red-500 mb-8 text-center bg-white p-4 rounded">SIMPLE TEST - CAN YOU SEE THIS?</h1>
+            <div className="flex gap-4">
+              <div className="w-64 h-32 bg-red-500 text-white p-4 text-center font-bold">RED BOX 1</div>
+              <div className="w-64 h-32 bg-green-500 text-white p-4 text-center font-bold">GREEN BOX 2</div>
+              <div className="w-64 h-32 bg-blue-500 text-white p-4 text-center font-bold">BLUE BOX 3</div>
+            </div>
+          </div>
+          
           {/* MULTIPLE ASYMMETRIC LAYOUT DEMOS */}
           <div className="space-y-16">
             
-            {/* DEMO 1: L-SHAPE LAYOUT */}
-            <div>
-              <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center">DEMO 1: L-SHAPE ASYMMETRIC</h2>
-              <div className="grid grid-cols-4 grid-rows-2 gap-4 h-80">
+            {/* DEMO 1: SIMPLIFIED L-SHAPE LAYOUT */}
+            <div className="bg-white/10 p-8 rounded-lg">
+              <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center bg-black/50 p-4 rounded">DEMO 1: L-SHAPE ASYMMETRIC</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '16px', height: '320px' }}>
                 {/* Large card spans 2x2 */}
-                <div className="col-span-2 row-span-2 bg-blue-600 border-4 border-yellow-400 rounded-xl p-4 flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <h3 className="text-xl font-bold mb-2">LARGE CARD</h3>
+                <div style={{ gridColumn: '1 / span 2', gridRow: '1 / span 2', backgroundColor: '#2563eb', border: '4px solid #fbbf24', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
+                  <div style={{ color: 'white', textAlign: 'center' }}>
+                    <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px' }}>LARGE CARD</h3>
                     <p>Director Message (2x2 space)</p>
                   </div>
                 </div>
                 {/* Top right card */}
-                <div className="col-span-2 row-span-1 bg-green-600 border-4 border-orange-400 rounded-xl p-4 flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <h3 className="text-lg font-bold">CARD 2</h3>
+                <div style={{ gridColumn: '3 / span 2', gridRow: '1', backgroundColor: '#16a34a', border: '4px solid #fb923c', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
+                  <div style={{ color: 'white', textAlign: 'center' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: 'bold' }}>CARD 2</h3>
                     <p>Video News</p>
                   </div>
                 </div>
                 {/* Bottom right card */}
-                <div className="col-span-2 row-span-1 bg-purple-600 border-4 border-pink-400 rounded-xl p-4 flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <h3 className="text-lg font-bold">CARD 3</h3>
+                <div style={{ gridColumn: '3 / span 2', gridRow: '2', backgroundColor: '#9333ea', border: '4px solid #f472b6', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3 }}>
+                  <div style={{ color: 'white', textAlign: 'center' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: 'bold' }}>CARD 3</h3>
                     <p>Quick Services</p>
                   </div>
                 </div>
