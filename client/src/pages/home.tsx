@@ -23,6 +23,9 @@ import {
   CreditCard,
   Smartphone,
   UserX,
+  Play,
+  FileText,
+  Phone,
 } from "lucide-react";
 // Removed unused import
 import { useQuery } from "@tanstack/react-query";
@@ -116,57 +119,123 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative bg-gray-900 text-white min-h-screen">
         <div className="container mx-auto px-4 py-20">
-          {/* BASIC VISIBILITY TEST */}
-          <div style={{ marginBottom: '64px', padding: '32px', backgroundColor: '#ffffff', color: '#000000', borderRadius: '8px' }}>
-            <h1 style={{ fontSize: '48px', fontWeight: 'bold', color: '#dc2626', marginBottom: '32px', textAlign: 'center', backgroundColor: '#ffffff', padding: '16px', border: '4px solid #000000' }}>
-              🚨 VISIBILITY TEST - CAN YOU SEE THIS? 🚨
+          {/* Hero Content */}
+          <div className="text-center mb-16">
+            <h1 className="text-5xl font-bold text-white mb-6">
+              Crime Investigation Department
             </h1>
-            <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
-              <div style={{ width: '200px', height: '100px', backgroundColor: '#dc2626', color: '#ffffff', padding: '16px', textAlign: 'center', fontWeight: 'bold', fontSize: '20px', border: '4px solid #000000' }}>
-                RED BOX 1
-              </div>
-              <div style={{ width: '200px', height: '100px', backgroundColor: '#16a34a', color: '#ffffff', padding: '16px', textAlign: 'center', fontWeight: 'bold', fontSize: '20px', border: '4px solid #000000' }}>
-                GREEN BOX 2
-              </div>
-              <div style={{ width: '200px', height: '100px', backgroundColor: '#2563eb', color: '#ffffff', padding: '16px', textAlign: 'center', fontWeight: 'bold', fontSize: '20px', border: '4px solid #000000' }}>
-                BLUE BOX 3
-              </div>
-            </div>
+            <p className="text-xl text-gray-200 max-w-4xl mx-auto">
+              Telangana State's premier law enforcement agency ensuring public safety through
+              specialized investigations, advanced technology, and community engagement
+            </p>
           </div>
           
-          {/* THREE CARD LAYOUT - SIMPLE FLEXBOX APPROACH */}
-          <div style={{ marginBottom: '64px', padding: '32px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
-            <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#000000', marginBottom: '32px', textAlign: 'center', backgroundColor: '#fbbf24', padding: '16px', border: '4px solid #000000' }}>
-              THREE CARD ASYMMETRIC LAYOUT
-            </h2>
-            <div style={{ display: 'flex', gap: '16px', height: '400px', border: '2px solid #000000', padding: '16px' }}>
-              {/* Large card - takes up more space */}
-              <div style={{ flex: '2', backgroundColor: '#2563eb', border: '4px solid #fbbf24', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ color: 'white', textAlign: 'center' }}>
-                  <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>🔵 CARD 1</h3>
-                  <p style={{ fontSize: '16px' }}>Director Message</p>
-                  <p style={{ fontSize: '14px', marginTop: '8px' }}>(Large - Double Width)</p>
+          {/* Three Card Asymmetric Layout */}
+          <div className="flex gap-6 min-h-[500px]">
+            {/* Large Director Message Card */}
+            <Card className="flex-[2] bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 shadow-xl">
+              <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
+                <CardTitle className="text-2xl flex items-center gap-3">
+                  <Users className="h-8 w-8" />
+                  Director's Message
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-8 flex-1 flex flex-col">
+                <div className="flex-1">
+                  <blockquote className="text-lg text-gray-700 italic mb-6 leading-relaxed">
+                    "The Crime Investigation Department of Telangana stands committed to maintaining 
+                    law and order through scientific investigation, technological advancement, and 
+                    unwavering dedication to justice. Our specialized wings ensure comprehensive 
+                    coverage of all criminal activities."
+                  </blockquote>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-blue-700">
+                      <CheckCircle className="h-5 w-5" />
+                      <span className="font-medium">Scientific Investigation Methods</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-blue-700">
+                      <CheckCircle className="h-5 w-5" />
+                      <span className="font-medium">Advanced Digital Forensics</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-blue-700">
+                      <CheckCircle className="h-5 w-5" />
+                      <span className="font-medium">24/7 Public Safety Services</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+                <div className="mt-6 pt-6 border-t border-blue-200">
+                  <p className="text-sm text-gray-600 font-medium">- Director, Crime Investigation Department</p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Right Column - Two Stacked Cards */}
+            <div className="flex-1 flex flex-col gap-6">
+              {/* Latest Videos Card */}
+              <Card className="flex-1 bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-xl">
+                <CardHeader className="bg-gradient-to-r from-green-600 to-green-700 text-white">
+                  <CardTitle className="text-xl flex items-center gap-3">
+                    <Play className="h-6 w-6" />
+                    Latest Videos
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 flex-1">
+                  <div className="space-y-4">
+                    <div className="bg-white rounded-lg p-4 border border-green-200 hover:shadow-md transition-shadow">
+                      <h4 className="font-semibold text-green-800 mb-2">Cyber Crime Awareness</h4>
+                      <p className="text-sm text-gray-600 mb-3">Learn about online safety and cybercrime prevention</p>
+                      <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                        Watch Now
+                      </Button>
+                    </div>
+                    <div className="bg-white rounded-lg p-4 border border-green-200 hover:shadow-md transition-shadow">
+                      <h4 className="font-semibold text-green-800 mb-2">Training Programs</h4>
+                      <p className="text-sm text-gray-600 mb-3">Professional development initiatives</p>
+                      <Button size="sm" variant="outline" className="border-green-600 text-green-600 hover:bg-green-50">
+                        View All
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
               
-              {/* Right column with two stacked cards */}
-              <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {/* Top right card */}
-                <div style={{ flex: '1', backgroundColor: '#16a34a', border: '4px solid #fb923c', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ color: 'white', textAlign: 'center' }}>
-                    <h3 style={{ fontSize: '20px', fontWeight: 'bold' }}>🟢 CARD 2</h3>
-                    <p>Video News</p>
+              {/* Quick Services Card */}
+              <Card className="flex-1 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-200 shadow-xl">
+                <CardHeader className="bg-gradient-to-r from-purple-600 to-purple-700 text-white">
+                  <CardTitle className="text-xl flex items-center gap-3">
+                    <Shield className="h-6 w-6" />
+                    Quick Services
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 flex-1">
+                  <div className="grid grid-cols-2 gap-3">
+                    <Link href="/citizen/complaint">
+                      <Button variant="outline" className="w-full h-16 flex flex-col gap-1 border-purple-300 text-purple-700 hover:bg-purple-50">
+                        <FileText className="h-5 w-5" />
+                        <span className="text-xs">File Complaint</span>
+                      </Button>
+                    </Link>
+                    <Link href="/citizen/status">
+                      <Button variant="outline" className="w-full h-16 flex flex-col gap-1 border-purple-300 text-purple-700 hover:bg-purple-50">
+                        <Clock className="h-5 w-5" />
+                        <span className="text-xs">Track Status</span>
+                      </Button>
+                    </Link>
+                    <Link href="/contact">
+                      <Button variant="outline" className="w-full h-16 flex flex-col gap-1 border-purple-300 text-purple-700 hover:bg-purple-50">
+                        <Phone className="h-5 w-5" />
+                        <span className="text-xs">Contact Us</span>
+                      </Button>
+                    </Link>
+                    <Link href="/alerts">
+                      <Button variant="outline" className="w-full h-16 flex flex-col gap-1 border-purple-300 text-purple-700 hover:bg-purple-50">
+                        <TriangleAlert className="h-5 w-5" />
+                        <span className="text-xs">Safety Alerts</span>
+                      </Button>
+                    </Link>
                   </div>
-                </div>
-                
-                {/* Bottom right card */}
-                <div style={{ flex: '1', backgroundColor: '#9333ea', border: '4px solid #f472b6', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ color: 'white', textAlign: 'center' }}>
-                    <h3 style={{ fontSize: '20px', fontWeight: 'bold' }}>🟣 CARD 3</h3>
-                    <p>Quick Services</p>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
