@@ -111,7 +111,7 @@ export default function ModernHeader() {
       </div>
 
       {/* Main Header */}
-      <div className="bg-card py-4">
+      <div className="bg-card py-6">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Left Logo */}
@@ -124,15 +124,18 @@ export default function ModernHeader() {
               />
             </div>
 
-            {/* Center Title */}
+            {/* Center Title - Modern Design */}
             <div className="flex-1 text-center px-6">
-              <h1 className="text-3xl md:text-4xl font-bold text-card-foreground leading-tight">
-                Crime Investigation Department
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent leading-tight tracking-tight">
+                CID
               </h1>
-              <p className="text-lg text-muted-foreground mt-1">
+              <h2 className="text-lg md:text-xl font-semibold text-card-foreground mt-1 tracking-wide">
+                Crime Investigation Department
+              </h2>
+              <p className="text-base text-muted-foreground mt-1 font-medium">
                 Telangana State Police
               </p>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground/80 mt-1">
                 3rd Floor, DGP Office, Lakadikapul, Hyderabad-004
               </p>
             </div>
@@ -151,7 +154,7 @@ export default function ModernHeader() {
             <div className="lg:hidden">
               <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="icon">
+                  <Button variant="outline" size="icon" className="hover:bg-primary/10 rounded-lg">
                     <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
@@ -215,13 +218,13 @@ export default function ModernHeader() {
         </div>
       </div>
 
-      {/* Desktop Navigation Menu */}
-      <nav className="bg-primary text-primary-foreground hidden lg:block">
+      {/* Modern Navigation Menu */}
+      <nav className="bg-gradient-to-r from-primary via-primary to-primary/90 text-primary-foreground hidden lg:block shadow-lg">
         <div className="container mx-auto px-4">
-          <div className="flex justify-start space-x-8 py-4">
+          <div className="flex justify-center space-x-1 py-3">
             <Button
               variant="ghost"
-              className="text-white hover:text-white/90 hover:bg-teal-600/50 transition px-3 py-2"
+              className="text-primary-foreground hover:text-primary-foreground/90 hover:bg-white/10 transition-all duration-300 px-6 py-3 rounded-lg font-medium text-sm uppercase tracking-wide"
               onClick={() => (window.location.href = "/")}
               data-testid="nav-home"
             >
@@ -238,19 +241,19 @@ export default function ModernHeader() {
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className="text-white hover:text-white/90 hover:bg-teal-600/50 transition px-3 py-2"
+                        className="text-primary-foreground hover:text-primary-foreground/90 hover:bg-white/10 transition-all duration-300 px-6 py-3 rounded-lg font-medium text-sm uppercase tracking-wide"
                         data-testid={`nav-${page.slug}`}
                       >
                         {page.menuTitle || page.title}
                         <ChevronDown className="h-4 w-4 ml-1" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-white">
+                    <DropdownMenuContent className="bg-white shadow-xl border-0 rounded-xl p-2 min-w-[200px]">
                       {childPages.map((child: any) => (
                         <DropdownMenuItem key={child.slug} asChild>
                           <Link 
                             href={`/${child.slug}`}
-                            className="cursor-pointer"
+                            className="cursor-pointer text-gray-700 hover:text-primary hover:bg-primary/5 rounded-lg px-3 py-2 font-medium transition-all duration-200"
                           >
                             {child.menuTitle || child.title}
                           </Link>
@@ -265,7 +268,7 @@ export default function ModernHeader() {
                   <Button
                     key={page.slug}
                     variant="ghost"
-                    className="text-white hover:text-white/90 hover:bg-teal-600/50 transition px-3 py-2"
+                    className="text-primary-foreground hover:text-primary-foreground/90 hover:bg-white/10 transition-all duration-300 px-6 py-3 rounded-lg font-medium text-sm uppercase tracking-wide"
                     onClick={() => (window.location.href = `/${page.slug}`)}
                     data-testid={`nav-${page.slug}`}
                   >
