@@ -20,6 +20,8 @@ This full-stack web application serves as a public information portal and conten
 - **Loading Animations**: Replaced all loading spinners with pulsing police logo animation for consistent government branding
 - **News Ticker Integration**: Successfully implemented and positioned news ticker between DGP message and Latest News Updates sections with authentic API data, optimized scrolling animations (120s cycle with immediate start), and red text with white outline for optimal readability
 - **Admin UI Improvements**: Enhanced admin login with white placeholder text and removed demo credentials for professional appearance
+- **Theme System Overhaul**: Complete theme switcher implementation with CSS variables, replaced all hardcoded teal colors with dynamic theme-aware classes
+- **Mulberry Theme**: Replaced purple theme with user-requested Mulberry color (#4C0121) for professional government aesthetic
 
 ## User Preferences
 

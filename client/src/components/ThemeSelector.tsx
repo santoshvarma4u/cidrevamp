@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette, ChevronDown, ChevronUp } from 'lucide-react';
 
-export type Theme = 'light-teal' | 'lavender-purple' | 'soft-peach';
+export type Theme = 'light-teal' | 'mulberry' | 'soft-peach';
 
 // Theme configurations with complete color palettes
 const themeConfigs = {
@@ -22,21 +22,21 @@ const themeConfigs = {
     '--card': 'hsl(0, 0%, 100%)',
     '--card-foreground': 'hsl(180, 18%, 20%)',
   },
-  'lavender-purple': {
-    '--background': 'hsl(275, 70%, 96%)',
-    '--foreground': 'hsl(275, 25%, 15%)',
-    '--primary': 'hsl(275, 80%, 55%)',
+  'mulberry': {
+    '--background': 'hsl(340, 95%, 96%)',
+    '--foreground': 'hsl(340, 30%, 15%)',
+    '--primary': 'hsl(340, 95%, 15%)',
     '--primary-foreground': 'hsl(0, 0%, 100%)',
-    '--secondary': 'hsl(275, 45%, 88%)',
-    '--secondary-foreground': 'hsl(275, 25%, 15%)',
-    '--muted': 'hsl(275, 35%, 90%)',
-    '--muted-foreground': 'hsl(275, 20%, 50%)',
-    '--accent': 'hsl(275, 55%, 85%)',
-    '--accent-foreground': 'hsl(275, 25%, 15%)',
-    '--border': 'hsl(275, 35%, 75%)',
-    '--ring': 'hsl(275, 80%, 55%)',
+    '--secondary': 'hsl(340, 50%, 88%)',
+    '--secondary-foreground': 'hsl(340, 30%, 15%)',
+    '--muted': 'hsl(340, 40%, 90%)',
+    '--muted-foreground': 'hsl(340, 25%, 50%)',
+    '--accent': 'hsl(340, 60%, 85%)',
+    '--accent-foreground': 'hsl(340, 30%, 15%)',
+    '--border': 'hsl(340, 40%, 75%)',
+    '--ring': 'hsl(340, 95%, 15%)',
     '--card': 'hsl(0, 0%, 100%)',
-    '--card-foreground': 'hsl(275, 25%, 15%)',
+    '--card-foreground': 'hsl(340, 30%, 15%)',
   },
   'soft-peach': {
     '--background': 'hsl(15, 80%, 96%)',
@@ -73,7 +73,7 @@ const applyTheme = (theme: Theme) => {
 
 const themes = [
   { id: 'light-teal', name: 'Light Teal', color: 'bg-teal-400' },
-  { id: 'lavender-purple', name: 'Lavender Purple', color: 'bg-purple-400' },
+  { id: 'mulberry', name: 'Mulberry', color: 'bg-rose-900' },
   { id: 'soft-peach', name: 'Soft Peach', color: 'bg-orange-300' },
 ] as const;
 
