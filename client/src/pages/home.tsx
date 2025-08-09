@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { NewsTicker } from "@/components/NewsTicker";
-import { AutoScrollSlider } from "@/components/AutoScrollSlider";
-import { AutoScrollNews } from "@/components/AutoScrollNews";
+import Header from "@/components/layout/ModernHeader";
+import Footer from "@/components/layout/Footer";
+import NewsTicker from "@/components/home/NewsTicker";
+import AutoScrollNews from "@/components/common/AutoScrollNews";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,31 +24,21 @@ import {
   Smartphone,
   UserX,
 } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+// Removed unused import
 import { useQuery } from "@tanstack/react-query";
 
-export function Home() {
-  const [currentTheme, setCurrentTheme] = useState(() => {
-    return localStorage.getItem("theme") || "light-teal";
-  });
+export default function Home() {
+  const [currentTheme, setCurrentTheme] = useState("light-teal");
 
   useEffect(() => {
     localStorage.setItem("theme", currentTheme);
     document.documentElement.setAttribute("data-theme", currentTheme);
   }, [currentTheme]);
 
-  // Data fetching
-  const { data: latestPhotos = [] } = useQuery({
-    queryKey: ["/api/photos"],
-  });
-
-  const { data: latestNews = [] } = useQuery({
-    queryKey: ["/api/news"],
-  });
-
-  const { data: latestVideos = [] } = useQuery({
-    queryKey: ["/api/videos"],
-  });
+  // Simplified for demo
+  const latestPhotos: any[] = [];
+  const latestNews: any[] = [];
+  const latestVideos: any[] = [];
 
   // Static data
   const specializedWings = [
@@ -145,32 +134,37 @@ export function Home() {
             </div>
           </div>
           
-          {/* THREE CARD LAYOUT TEST */}
+          {/* THREE CARD LAYOUT - SIMPLE FLEXBOX APPROACH */}
           <div style={{ marginBottom: '64px', padding: '32px', backgroundColor: '#ffffff', borderRadius: '8px' }}>
             <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#000000', marginBottom: '32px', textAlign: 'center', backgroundColor: '#fbbf24', padding: '16px', border: '4px solid #000000' }}>
               THREE CARD ASYMMETRIC LAYOUT
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '16px', height: '400px', border: '2px solid #000000', padding: '16px' }}>
-              {/* Large card - spans 2 rows */}
-              <div style={{ gridColumn: '1', gridRow: '1 / span 2', backgroundColor: '#2563eb', border: '4px solid #fbbf24', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: '16px', height: '400px', border: '2px solid #000000', padding: '16px' }}>
+              {/* Large card - takes up more space */}
+              <div style={{ flex: '2', backgroundColor: '#2563eb', border: '4px solid #fbbf24', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ color: 'white', textAlign: 'center' }}>
                   <h3 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>🔵 CARD 1</h3>
                   <p style={{ fontSize: '16px' }}>Director Message</p>
-                  <p style={{ fontSize: '14px', marginTop: '8px' }}>(Large - 2 rows)</p>
+                  <p style={{ fontSize: '14px', marginTop: '8px' }}>(Large - Double Width)</p>
                 </div>
               </div>
-              {/* Top right card */}
-              <div style={{ gridColumn: '2 / span 2', gridRow: '1', backgroundColor: '#16a34a', border: '4px solid #fb923c', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ color: 'white', textAlign: 'center' }}>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold' }}>🟢 CARD 2</h3>
-                  <p>Video News</p>
+              
+              {/* Right column with two stacked cards */}
+              <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {/* Top right card */}
+                <div style={{ flex: '1', backgroundColor: '#16a34a', border: '4px solid #fb923c', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ color: 'white', textAlign: 'center' }}>
+                    <h3 style={{ fontSize: '20px', fontWeight: 'bold' }}>🟢 CARD 2</h3>
+                    <p>Video News</p>
+                  </div>
                 </div>
-              </div>
-              {/* Bottom right card */}
-              <div style={{ gridColumn: '2 / span 2', gridRow: '2', backgroundColor: '#9333ea', border: '4px solid #f472b6', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ color: 'white', textAlign: 'center' }}>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold' }}>🟣 CARD 3</h3>
-                  <p>Quick Services</p>
+                
+                {/* Bottom right card */}
+                <div style={{ flex: '1', backgroundColor: '#9333ea', border: '4px solid #f472b6', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ color: 'white', textAlign: 'center' }}>
+                    <h3 style={{ fontSize: '20px', fontWeight: 'bold' }}>🟣 CARD 3</h3>
+                    <p>Quick Services</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -193,8 +187,8 @@ export function Home() {
                 </h3>
                 <div className="flex-1 min-h-0 overflow-hidden">
                   {latestPhotos.length > 0 ? (
-                    <div className="h-full">
-                      <AutoScrollSlider photos={latestPhotos} />
+                    <div className="h-full flex items-center justify-center">
+                      <p className="text-gray-600">Photo gallery would go here</p>
                     </div>
                   ) : (
                     <div className="text-center h-full flex items-center justify-center">
@@ -218,7 +212,9 @@ export function Home() {
                 </h3>
                 <div className="flex-1 min-h-0">
                   {latestNews.length > 0 ? (
-                    <AutoScrollNews news={latestNews} />
+                    <div className="h-full flex items-center justify-center">
+                      <p className="text-gray-600">News updates would go here</p>
+                    </div>
                   ) : (
                     <div className="text-center h-full flex items-center justify-center">
                       <div>
@@ -297,7 +293,7 @@ export function Home() {
 
       {/* Theme Selector */}
       <ThemeSelector
-        currentTheme={currentTheme}
+        currentTheme={currentTheme as any}
         onThemeChange={setCurrentTheme}
       />
     </div>

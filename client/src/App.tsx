@@ -6,7 +6,7 @@ import Watermark from "@/components/layout/Watermark";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
 // Public pages
-import { TestSimple } from "@/pages/test-simple";
+import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
 import AdminAuth from "@/pages/admin/auth";
 import GeneralOffences from "@/pages/wings/general-offences";
@@ -55,7 +55,7 @@ function Router() {
   return (
     <Switch>
       {/* Public routes */}
-      <Route path="/" component={TestSimple} />
+      <Route path="/" component={Home} />
       <Route path="/wings/general-offences" component={GeneralOffences} />
       <Route path="/wings/women-protection" component={WomenProtection} />
       <Route path="/wings/economic-offences" component={EconomicOffences} />
