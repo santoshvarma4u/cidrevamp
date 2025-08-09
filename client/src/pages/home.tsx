@@ -39,10 +39,21 @@ export default function Home() {
     document.documentElement.setAttribute("data-theme", currentTheme);
   }, [currentTheme]);
 
-  // Simplified for demo
-  const latestPhotos: any[] = [];
-  const latestNews: any[] = [];
-  const latestVideos: any[] = [];
+  // Fetch real data
+  const { data: latestVideos = [] } = useQuery({
+    queryKey: ['/api/videos'],
+    queryFn: () => fetch('/api/videos').then(res => res.json())
+  });
+
+  const { data: latestPhotos = [] } = useQuery({
+    queryKey: ['/api/photos'],
+    queryFn: () => fetch('/api/photos').then(res => res.json())
+  });
+
+  const { data: latestNews = [] } = useQuery({
+    queryKey: ['/api/news'],
+    queryFn: () => fetch('/api/news').then(res => res.json())
+  });
 
   // Static data
   const specializedWings = [
@@ -178,14 +189,19 @@ export default function Home() {
                 <CardContent className="p-6">
                   {/* Video Player */}
                   <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video">
-                    <video 
-                      className="w-full h-full object-cover"
-                      controls
-                      poster="/api/placeholder/400/225"
-                    >
-                      <source src="/api/placeholder/video" type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
+                    {latestVideos.length > 0 ? (
+                      <video 
+                        className="w-full h-full object-cover"
+                        controls
+                      >
+                        <source src={`/api/${latestVideos[0].file_path}`} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white">
+                        <Play className="h-16 w-16 opacity-50" />
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
