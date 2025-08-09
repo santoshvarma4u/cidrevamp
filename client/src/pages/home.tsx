@@ -177,21 +177,21 @@ export default function Home() {
             <div>
               <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center">DEMO 1: L-SHAPE ASYMMETRIC</h2>
               <div className="grid grid-cols-4 grid-rows-2 gap-4 h-80">
-                <!-- Large card spans 2x2 -->
+                {/* Large card spans 2x2 */}
                 <div className="col-span-2 row-span-2 bg-blue-600 border-4 border-yellow-400 rounded-xl p-4 flex items-center justify-center">
                   <div className="text-white text-center">
                     <h3 className="text-xl font-bold mb-2">LARGE CARD</h3>
                     <p>Director Message (2x2 space)</p>
                   </div>
                 </div>
-                <!-- Top right card -->
+                {/* Top right card */}
                 <div className="col-span-2 row-span-1 bg-green-600 border-4 border-orange-400 rounded-xl p-4 flex items-center justify-center">
                   <div className="text-white text-center">
                     <h3 className="text-lg font-bold">CARD 2</h3>
                     <p>Video News</p>
                   </div>
                 </div>
-                <!-- Bottom right card -->
+                {/* Bottom right card */}
                 <div className="col-span-2 row-span-1 bg-purple-600 border-4 border-pink-400 rounded-xl p-4 flex items-center justify-center">
                   <div className="text-white text-center">
                     <h3 className="text-lg font-bold">CARD 3</h3>
@@ -205,21 +205,21 @@ export default function Home() {
             <div>
               <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center">DEMO 2: DIAGONAL/STAGGERED</h2>
               <div className="grid grid-cols-6 grid-rows-3 gap-4 h-80">
-                <!-- Card 1: Top left, large -->
+                {/* Card 1: Top left, large */}
                 <div className="col-span-3 row-span-2 bg-blue-600 border-4 border-yellow-400 rounded-xl p-4 flex items-center justify-center">
                   <div className="text-white text-center">
                     <h3 className="text-xl font-bold mb-2">CARD 1</h3>
                     <p>Director Message</p>
                   </div>
                 </div>
-                <!-- Card 2: Middle right -->
+                {/* Card 2: Middle right */}
                 <div className="col-span-2 row-span-1 col-start-4 row-start-1 bg-green-600 border-4 border-orange-400 rounded-xl p-4 flex items-center justify-center">
                   <div className="text-white text-center">
                     <h3 className="text-lg font-bold">CARD 2</h3>
                     <p>Videos</p>
                   </div>
                 </div>
-                <!-- Card 3: Bottom right, offset -->
+                {/* Card 3: Bottom right, offset */}
                 <div className="col-span-2 row-span-1 col-start-5 row-start-3 bg-purple-600 border-4 border-pink-400 rounded-xl p-4 flex items-center justify-center">
                   <div className="text-white text-center">
                     <h3 className="text-lg font-bold">CARD 3</h3>
@@ -233,21 +233,21 @@ export default function Home() {
             <div>
               <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center">DEMO 3: PYRAMID/TRIANGLE</h2>
               <div className="grid grid-cols-4 grid-rows-3 gap-4 h-80">
-                <!-- Card 1: Top center, wide -->
+                {/* Card 1: Top center, wide */}
                 <div className="col-span-2 row-span-1 col-start-2 bg-blue-600 border-4 border-yellow-400 rounded-xl p-4 flex items-center justify-center">
                   <div className="text-white text-center">
                     <h3 className="text-lg font-bold">CARD 1</h3>
                     <p>Director</p>
                   </div>
                 </div>
-                <!-- Card 2: Bottom left -->
+                {/* Card 2: Bottom left */}
                 <div className="col-span-2 row-span-2 row-start-2 bg-green-600 border-4 border-orange-400 rounded-xl p-4 flex items-center justify-center">
                   <div className="text-white text-center">
                     <h3 className="text-lg font-bold">CARD 2</h3>
                     <p>Video News</p>
                   </div>
                 </div>
-                <!-- Card 3: Bottom right -->
+                {/* Card 3: Bottom right */}
                 <div className="col-span-2 row-span-2 col-start-3 row-start-2 bg-purple-600 border-4 border-pink-400 rounded-xl p-4 flex items-center justify-center">
                   <div className="text-white text-center">
                     <h3 className="text-lg font-bold">CARD 3</h3>
@@ -261,21 +261,21 @@ export default function Home() {
             <div>
               <h2 className="text-3xl font-bold text-yellow-300 mb-4 text-center">DEMO 4: OVERLAPPING CARDS</h2>
               <div className="relative h-80">
-                <!-- Card 1: Base layer -->
+                {/* Card 1: Base layer */}
                 <div className="absolute top-0 left-0 w-80 h-60 bg-blue-600 border-4 border-yellow-400 rounded-xl p-4 flex items-center justify-center z-10">
                   <div className="text-white text-center">
                     <h3 className="text-xl font-bold mb-2">CARD 1</h3>
                     <p>Director Message</p>
                   </div>
                 </div>
-                <!-- Card 2: Overlapping top right -->
+                {/* Card 2: Overlapping top right */}
                 <div className="absolute top-8 left-64 w-64 h-48 bg-green-600 border-4 border-orange-400 rounded-xl p-4 flex items-center justify-center z-20">
                   <div className="text-white text-center">
                     <h3 className="text-lg font-bold">CARD 2</h3>
                     <p>Video News</p>
                   </div>
                 </div>
-                <!-- Card 3: Overlapping bottom -->
+                {/* Card 3: Overlapping bottom */}
                 <div className="absolute top-32 left-32 w-64 h-48 bg-purple-600 border-4 border-pink-400 rounded-xl p-4 flex items-center justify-center z-30">
                   <div className="text-white text-center">
                     <h3 className="text-lg font-bold">CARD 3</h3>
