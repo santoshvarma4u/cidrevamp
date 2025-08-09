@@ -194,7 +194,7 @@ export default function Home() {
                         className="w-full h-full object-cover"
                         controls
                       >
-                        <source src={`/api/${latestVideos[0].file_path}`} type="video/mp4" />
+                        <source src={`/api/${latestVideos[0].filePath}`} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
                     ) : (
@@ -246,8 +246,16 @@ export default function Home() {
                 </h3>
                 <div className="flex-1 min-h-0 overflow-hidden">
                   {latestPhotos.length > 0 ? (
-                    <div className="h-full flex items-center justify-center">
-                      <p className="text-gray-600">Photo gallery would go here</p>
+                    <div className="grid grid-cols-2 gap-3 h-full overflow-y-auto">
+                      {latestPhotos.slice(0, 4).map((photo: any) => (
+                        <div key={photo.id} className="aspect-square rounded-lg overflow-hidden shadow-md">
+                          <img 
+                            src={`/api/${photo.filePath}`}
+                            alt={photo.title || 'CID Photo'}
+                            className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
+                          />
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <div className="text-center h-full flex items-center justify-center">
@@ -269,10 +277,23 @@ export default function Home() {
                 <h3 className="text-xl font-bold text-blue-800 mb-3 text-center">
                   Latest News Updates
                 </h3>
-                <div className="flex-1 min-h-0">
+                <div className="flex-1 min-h-0 overflow-y-auto">
                   {latestNews.length > 0 ? (
-                    <div className="h-full flex items-center justify-center">
-                      <p className="text-gray-600">News updates would go here</p>
+                    <div className="space-y-4">
+                      {latestNews.slice(0, 3).map((news: any) => (
+                        <div key={news.id} className="border-l-4 border-blue-500 pl-4 pb-3 border-b border-gray-200 last:border-b-0">
+                          <h4 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2">
+                            {news.title}
+                          </h4>
+                          <p className="text-xs text-gray-600 mb-2 line-clamp-3">
+                            {news.content?.substring(0, 100)}...
+                          </p>
+                          <div className="flex items-center text-xs text-gray-500">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {new Date(news.publishedAt).toLocaleDateString()}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <div className="text-center h-full flex items-center justify-center">
