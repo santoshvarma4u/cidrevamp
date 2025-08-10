@@ -55,20 +55,20 @@ const themeConfigs = {
     '--card-foreground': 'hsl(15, 30%, 15%)',
   },
   'purple-cyan': {
-    '--background': 'hsl(282, 50%, 95%)', // Very light purple-tinted background
-    '--foreground': 'hsl(0, 0%, 100%)', // White text for gradient background
-    '--primary': 'hsl(282, 58%, 46%)', // Main purple #672676
+    '--background': '#672676', // Exact start color #672676
+    '--foreground': 'hsl(0, 0%, 100%)', // White text for dark background
+    '--primary': '#672676', // Exact main purple #672676
     '--primary-foreground': 'hsl(0, 0%, 100%)',
-    '--secondary': 'hsl(282, 40%, 75%)', // Light purple
-    '--secondary-foreground': 'hsl(282, 58%, 20%)',
-    '--muted': 'hsl(282, 20%, 85%)', // Muted purple
-    '--muted-foreground': 'hsl(282, 30%, 40%)',
+    '--secondary': '#672676', // Use main purple for secondary
+    '--secondary-foreground': 'hsl(0, 0%, 100%)',
+    '--muted': 'rgba(103, 38, 118, 0.7)', // Muted version of main purple
+    '--muted-foreground': 'hsl(0, 0%, 80%)',
     '--accent': 'hsl(188, 100%, 50%)', // Bright cyan for accents
-    '--accent-foreground': 'hsl(282, 58%, 20%)',
-    '--border': 'hsl(282, 30%, 70%)', // Purple border
+    '--accent-foreground': '#020104',
+    '--border': 'rgba(103, 38, 118, 0.3)', // Transparent purple border
     '--ring': 'hsl(188, 100%, 50%)', // Cyan ring
     '--card': 'hsl(0, 0%, 100%)', // White cards for contrast
-    '--card-foreground': 'hsl(282, 58%, 25%)', // Dark purple text on cards
+    '--card-foreground': '#020104', // Dark end color for card text
   },
 } as const;
 

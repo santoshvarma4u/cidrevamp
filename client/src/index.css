@@ -23,10 +23,11 @@
   animation-delay: 0s;
 }
 
-/* Purple-Cyan theme gradient backgrounds - exact colors #672676 to #020104 */
+/* Purple-Cyan theme - exact gradient #672676 to #020104 only */
 [data-theme="purple-cyan"] body {
   background: linear-gradient(135deg, #672676 0%, #020104 100%);
   min-height: 100vh;
+  color: white;
 }
 
 [data-theme="purple-cyan"] .hero-section {
@@ -35,13 +36,31 @@
 }
 
 [data-theme="purple-cyan"] .section-gradient {
-  background: linear-gradient(135deg, rgba(103, 38, 118, 0.05) 0%, rgba(2, 1, 4, 0.1) 100%);
+  background: linear-gradient(135deg, #672676 0%, #020104 100%);
+  color: white;
 }
 
-/* Purple-cyan theme specific card styling */
+/* Purple-cyan theme specific styling */
 [data-theme="purple-cyan"] .gradient-card {
-  background: linear-gradient(135deg, rgba(103, 38, 118, 0.1) 0%, rgba(0, 191, 255, 0.1) 100%);
-  border: 1px solid rgba(103, 38, 118, 0.2);
+  background: linear-gradient(135deg, #672676 0%, #020104 100%);
+  border: 1px solid rgba(103, 38, 118, 0.3);
+  color: white;
+}
+
+/* Ensure all text is white on the gradient background */
+[data-theme="purple-cyan"] * {
+  color: white;
+}
+
+/* Exception: card content should have dark text on white background */
+[data-theme="purple-cyan"] .bg-card,
+[data-theme="purple-cyan"] .bg-white {
+  color: #020104 !important;
+}
+
+[data-theme="purple-cyan"] .bg-card *,
+[data-theme="purple-cyan"] .bg-white * {
+  color: #020104 !important;
 }
 
 /* Remove text-shadow since we now have white background */
