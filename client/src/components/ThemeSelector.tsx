@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette, ChevronDown, ChevronUp } from 'lucide-react';
 
-export type Theme = 'light-teal' | 'mulberry' | 'soft-peach';
+export type Theme = 'light-teal' | 'mulberry' | 'soft-peach' | 'purple-cyan';
 
 // Theme configurations with complete color palettes
 const themeConfigs = {
@@ -54,6 +54,22 @@ const themeConfigs = {
     '--card': 'hsl(0, 0%, 100%)',
     '--card-foreground': 'hsl(15, 30%, 15%)',
   },
+  'purple-cyan': {
+    '--background': 'hsl(45, 70%, 96%)', // Cream background
+    '--foreground': 'hsl(270, 40%, 20%)', // Dark purple text
+    '--primary': 'hsl(270, 85%, 45%)', // Rich purple from image
+    '--primary-foreground': 'hsl(0, 0%, 100%)',
+    '--secondary': 'hsl(45, 60%, 88%)', // Light cream
+    '--secondary-foreground': 'hsl(270, 40%, 20%)',
+    '--muted': 'hsl(45, 50%, 92%)', // Very light cream
+    '--muted-foreground': 'hsl(270, 25%, 50%)',
+    '--accent': 'hsl(180, 95%, 60%)', // Bright cyan accent from image
+    '--accent-foreground': 'hsl(270, 40%, 20%)',
+    '--border': 'hsl(270, 35%, 75%)', // Purple border
+    '--ring': 'hsl(180, 95%, 60%)', // Cyan ring
+    '--card': 'hsl(0, 0%, 100%)', // White cards
+    '--card-foreground': 'hsl(270, 40%, 20%)',
+  },
 } as const;
 
 interface ThemeSelectorProps {
@@ -75,6 +91,7 @@ const themes = [
   { id: 'light-teal', name: 'Light Teal', color: 'bg-teal-400' },
   { id: 'mulberry', name: 'Mulberry', color: 'bg-rose-900' },
   { id: 'soft-peach', name: 'Soft Peach', color: 'bg-orange-300' },
+  { id: 'purple-cyan', name: 'Purple & Cyan', color: 'bg-gradient-to-r from-purple-600 to-cyan-400' },
 ] as const;
 
 export function ThemeSelector({ currentTheme, onThemeChange }: ThemeSelectorProps) {

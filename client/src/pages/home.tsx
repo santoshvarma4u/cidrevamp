@@ -35,7 +35,7 @@ import adgpImagePath from "@assets/adgpImage_1753520299812.png";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
-  const [currentTheme, setCurrentTheme] = useState("light-teal");
+  const [currentTheme, setCurrentTheme] = useState("purple-cyan");
   const [currentPhotoSlide, setCurrentPhotoSlide] = useState(0);
 
   useEffect(() => {
