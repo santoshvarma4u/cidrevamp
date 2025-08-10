@@ -23,25 +23,25 @@
   animation-delay: 0s;
 }
 
-/* Purple-Cyan theme gradient backgrounds - matching Oscore design */
+/* Purple-Cyan theme gradient backgrounds - exact colors #672676 to #020104 */
 [data-theme="purple-cyan"] body {
-  background: linear-gradient(135deg, hsl(249, 57%, 50%) 0%, hsl(260, 60%, 45%) 50%, hsl(270, 65%, 40%) 100%);
+  background: linear-gradient(135deg, #672676 0%, #020104 100%);
   min-height: 100vh;
 }
 
 [data-theme="purple-cyan"] .hero-section {
-  background: linear-gradient(135deg, hsl(249, 57%, 50%) 0%, hsl(260, 60%, 45%) 50%, hsl(270, 65%, 40%) 100%);
+  background: linear-gradient(135deg, #672676 0%, #020104 100%);
   color: white;
 }
 
 [data-theme="purple-cyan"] .section-gradient {
-  background: linear-gradient(135deg, hsl(249, 100%, 98%) 0%, hsl(249, 80%, 95%) 100%);
+  background: linear-gradient(135deg, rgba(103, 38, 118, 0.05) 0%, rgba(2, 1, 4, 0.1) 100%);
 }
 
 /* Purple-cyan theme specific card styling */
 [data-theme="purple-cyan"] .gradient-card {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(0, 191, 255, 0.1) 100%);
-  border: 1px solid rgba(124, 58, 237, 0.2);
+  background: linear-gradient(135deg, rgba(103, 38, 118, 0.1) 0%, rgba(0, 191, 255, 0.1) 100%);
+  border: 1px solid rgba(103, 38, 118, 0.2);
 }
 
 /* Remove text-shadow since we now have white background */
