@@ -23,15 +23,15 @@
   animation-delay: 0s;
 }
 
-/* Purple-Cyan theme gradient backgrounds - exact colors #672676 to #020104 */
+/* Purple-Cyan theme - keep original light background */
 [data-theme="purple-cyan"] body {
-  background: linear-gradient(135deg, #672676 0%, #020104 100%);
+  background: hsl(249, 100%, 95%);
   min-height: 100vh;
 }
 
 [data-theme="purple-cyan"] .hero-section {
-  background: linear-gradient(135deg, #672676 0%, #020104 100%);
-  color: white;
+  background: hsl(249, 100%, 95%);
+  color: inherit;
 }
 
 [data-theme="purple-cyan"] .section-gradient {
@@ -86,11 +86,7 @@
   transition: background 0.3s ease;
 }
 
-/* Menu bar gradient styling */
-[data-theme="purple-cyan"] .header-bg,
-[data-theme="purple-cyan"] .bg-background {
-  background: linear-gradient(90deg, #672676 0%, rgba(103, 38, 118, 0.95) 50%, #020104 100%) !important;
-}
+/* Menu bar gradient styling - only for header */
 
 [data-theme="purple-cyan"] .navbar-gradient {
   background: linear-gradient(90deg, #672676 0%, rgba(103, 38, 118, 0.95) 50%, #020104 100%);
