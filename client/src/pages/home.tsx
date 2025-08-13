@@ -133,7 +133,7 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className={`relative ${themeClasses.sectionBg} min-h-screen pt-24`}>
+      <section className={`relative ${themeClasses.sectionBg} min-h-screen pt-32`}>
         <div className="container mx-auto px-4 py-12">
 
           
