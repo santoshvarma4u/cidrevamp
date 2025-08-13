@@ -46,9 +46,9 @@ export default function ModernHeader() {
   };
 
   return (
-    <header className="shadow-sm border-b border-border fixed top-0 left-0 right-0 z-50" style={{background: 'linear-gradient(90deg, #672676 0%, rgba(103, 38, 118, 0.95) 50%, #020104 100%)'}}>
+    <header className="bg-card shadow-sm border-b border-border fixed top-0 left-0 right-0 z-50">
       {/* Top Bar */}
-      <div className="text-primary-foreground py-2">
+      <div className="text-primary-foreground py-2" style={{background: 'linear-gradient(90deg, #672676 0%, rgba(103, 38, 118, 0.95) 50%, #020104 100%)'}}>
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center space-x-6">
@@ -111,7 +111,7 @@ export default function ModernHeader() {
       </div>
 
       {/* Main Header */}
-      <div className="py-4 md:py-6">
+      <div className="bg-card py-4 md:py-6">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Left Logo */}
@@ -229,7 +229,7 @@ export default function ModernHeader() {
       </div>
 
       {/* Modern Navigation Menu */}
-      <nav className="text-primary-foreground hidden lg:block shadow-lg">
+      <nav className="text-primary-foreground hidden lg:block shadow-lg" style={{background: 'linear-gradient(90deg, #672676 0%, rgba(103, 38, 118, 0.95) 50%, #020104 100%)'}}>
         <div className="container mx-auto px-4">
           <div className="flex justify-center space-x-1 py-3">
             <Button

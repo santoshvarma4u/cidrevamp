@@ -93,24 +93,7 @@
   border-bottom: 2px solid rgba(0, 191, 255, 0.3);
 }
 
-/* Header text colors for purple-cyan theme */
-[data-theme="purple-cyan"] .navbar-gradient .text-card-foreground,
-[data-theme="purple-cyan"] .navbar-gradient .text-muted-foreground {
-  color: white !important;
-}
-
-[data-theme="purple-cyan"] .navbar-gradient h1,
-[data-theme="purple-cyan"] .navbar-gradient h2,
-[data-theme="purple-cyan"] .navbar-gradient p {
-  color: white !important;
-}
-
-/* Override the gradient text for the main CID title */
-[data-theme="purple-cyan"] .navbar-gradient .bg-gradient-to-r {
-  background: linear-gradient(to right, white, rgba(255, 255, 255, 0.9), white) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-}
+/* Keep original title area text colors - remove gradient overrides */
 
 /* Remove text-shadow since we now have white background */
 
