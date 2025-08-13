@@ -129,7 +129,7 @@ export default function ModernHeader() {
               <h1 className="cid-logo-font bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent leading-tight tracking-tight">
                 CID
               </h1>
-              <h2 className="text-sm md:text-lg lg:text-xl font-semibold text-card-foreground mt-1 tracking-wide">
+              <h2 className="cid-subtitle-font text-card-foreground mt-1">
                 Crime Investigation Department
               </h2>
               <p className="text-xs md:text-base text-muted-foreground mt-1 font-medium">
