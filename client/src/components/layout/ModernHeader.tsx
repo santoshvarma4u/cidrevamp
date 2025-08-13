@@ -126,7 +126,7 @@ export default function ModernHeader() {
 
             {/* Center Title - Modern Design */}
             <div className="flex-1 text-center px-4 md:px-6">
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent leading-tight tracking-tight">
+              <h1 className="cid-logo-font bg-gradient-to-r from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent leading-tight tracking-tight">
                 CID
               </h1>
               <h2 className="text-sm md:text-lg lg:text-xl font-semibold text-card-foreground mt-1 tracking-wide">

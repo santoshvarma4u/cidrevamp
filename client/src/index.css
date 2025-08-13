@@ -95,6 +95,18 @@
 
 /* Keep original title area text colors - remove gradient overrides */
 
+/* Modern CID Logo Font - inspired by contemporary tech branding */
+.cid-logo-font {
+  font-family: 'Inter', 'Poppins', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* Remove text-shadow since we now have white background */
 
 /* Watermark styles */
