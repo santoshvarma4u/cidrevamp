@@ -44,6 +44,32 @@
   border: 1px solid rgba(103, 38, 118, 0.2);
 }
 
+/* Apply gradients to all cards in purple-cyan theme */
+[data-theme="purple-cyan"] .card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(103, 38, 118, 0.05) 50%, rgba(0, 191, 255, 0.08) 100%);
+  border: 2px solid rgba(103, 38, 118, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+[data-theme="purple-cyan"] .bg-white {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(103, 38, 118, 0.05) 50%, rgba(0, 191, 255, 0.08) 100%) !important;
+  border: 2px solid rgba(103, 38, 118, 0.15) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Special gradient for main content cards */
+[data-theme="purple-cyan"] .main-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(103, 38, 118, 0.08) 40%, rgba(0, 191, 255, 0.12) 100%);
+  border: 2px solid rgba(103, 38, 118, 0.25);
+  box-shadow: 0 8px 32px rgba(103, 38, 118, 0.1);
+}
+
+/* Subtle gradient for photo gallery and news cards */
+[data-theme="purple-cyan"] .gallery-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.97) 0%, rgba(103, 38, 118, 0.06) 60%, rgba(0, 191, 255, 0.1) 100%);
+  border: 2px solid rgba(103, 38, 118, 0.18);
+}
+
 /* Remove text-shadow since we now have white background */
 
 /* Watermark styles */

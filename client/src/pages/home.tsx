@@ -149,7 +149,7 @@ export default function Home() {
           {/* Three Card Asymmetric Layout */}
           <div className="flex gap-6 min-h-[500px]">
             {/* Large Director Message Card with Photo */}
-            <Card className={`flex-[2] ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl rounded-2xl`}>
+            <Card className={`flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}>
               <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl">
                 <CardTitle className="text-2xl flex items-center gap-3">
                   <Users className="h-8 w-8" />
@@ -183,7 +183,7 @@ export default function Home() {
             {/* Right Column - Two Stacked Cards */}
             <div className="flex-1 flex flex-col gap-6">
               {/* Latest Videos Card - Bigger */}
-              <Card className={`flex-[2] ${themeClasses.cardBg} border-2 border-gray-200 shadow-xl rounded-2xl`}>
+              <Card className={`flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}>
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl">
                   <CardTitle className="text-xl flex items-center gap-3">
                     <Play className="h-6 w-6" />
@@ -211,7 +211,7 @@ export default function Home() {
               </Card>
               
               {/* NCL Card - Smaller */}
-              <Card className={`${themeClasses.cardBg} border-2 border-gray-200 shadow-xl rounded-2xl`}>
+              <Card className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}>
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl">
                   <CardTitle className="text-lg flex items-center gap-3">
                     <Scale className="h-5 w-5" />
@@ -244,7 +244,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Photo Gallery */}
             <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-96 flex flex-col">
+              <div className="bg-white gallery-card rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-96 flex flex-col">
                 <h3 className="text-xl font-bold text-blue-800 mb-3 text-center">
                   Latest Photo Gallery
                 </h3>
@@ -334,7 +334,7 @@ export default function Home() {
 
             {/* News Section */}
             <div>
-              <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-96 flex flex-col">
+              <div className="bg-white gallery-card rounded-2xl p-6 shadow-lg border-2 border-orange-200 h-96 flex flex-col">
                 <h3 className="text-xl font-bold text-blue-800 mb-3 text-center">
                   Latest News Updates
                 </h3>
@@ -390,7 +390,7 @@ export default function Home() {
             {specializedWings.map((wing, index) => (
               <Card
                 key={index}
-                className="border-l-4 border-l-blue-600 hover:shadow-xl transition-shadow"
+                className="border-l-4 border-l-blue-600 hover:shadow-xl transition-shadow gallery-card"
               >
                 <CardContent className="p-8">
                   <div className="flex items-start space-x-4">
