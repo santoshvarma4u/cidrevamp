@@ -86,6 +86,36 @@
   transition: background 0.3s ease;
 }
 
+/* Menu bar gradient styling */
+[data-theme="purple-cyan"] .header-bg,
+[data-theme="purple-cyan"] .bg-background {
+  background: linear-gradient(90deg, #672676 0%, rgba(103, 38, 118, 0.95) 50%, #020104 100%) !important;
+}
+
+[data-theme="purple-cyan"] .navbar-gradient {
+  background: linear-gradient(90deg, #672676 0%, rgba(103, 38, 118, 0.95) 50%, #020104 100%);
+  border-bottom: 2px solid rgba(0, 191, 255, 0.3);
+}
+
+/* Header text colors for purple-cyan theme */
+[data-theme="purple-cyan"] .navbar-gradient .text-card-foreground,
+[data-theme="purple-cyan"] .navbar-gradient .text-muted-foreground {
+  color: white !important;
+}
+
+[data-theme="purple-cyan"] .navbar-gradient h1,
+[data-theme="purple-cyan"] .navbar-gradient h2,
+[data-theme="purple-cyan"] .navbar-gradient p {
+  color: white !important;
+}
+
+/* Override the gradient text for the main CID title */
+[data-theme="purple-cyan"] .navbar-gradient .bg-gradient-to-r {
+  background: linear-gradient(to right, white, rgba(255, 255, 255, 0.9), white) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
 /* Remove text-shadow since we now have white background */
 
 /* Watermark styles */
