@@ -70,6 +70,22 @@
   border: 2px solid rgba(103, 38, 118, 0.18);
 }
 
+/* Gradient card headers */
+[data-theme="purple-cyan"] .bg-primary {
+  background: linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%) !important;
+}
+
+[data-theme="purple-cyan"] .card-header-gradient {
+  background: linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%);
+  color: white;
+}
+
+/* Enhanced gradient for card headers with hover effects */
+[data-theme="purple-cyan"] .header-gradient:hover {
+  background: linear-gradient(135deg, #672676 0%, rgba(0, 191, 255, 0.3) 50%, #020104 100%);
+  transition: background 0.3s ease;
+}
+
 /* Remove text-shadow since we now have white background */
 
 /* Watermark styles */
