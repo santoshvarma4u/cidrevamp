@@ -45,47 +45,67 @@ export default function Home() {
 
   // Fetch real data
   const { data: latestVideos = [] } = useQuery({
-    queryKey: ['/api/videos'],
-    queryFn: () => fetch('/api/videos').then(res => res.json())
+    queryKey: ["/api/videos"],
+    queryFn: () => fetch("/api/videos").then((res) => res.json()),
   });
 
   const { data: latestPhotos = [] } = useQuery({
-    queryKey: ['/api/photos'],
-    queryFn: () => fetch('/api/photos').then(res => res.json())
+    queryKey: ["/api/photos"],
+    queryFn: () => fetch("/api/photos").then((res) => res.json()),
   });
 
   const { data: latestNews = [] } = useQuery({
-    queryKey: ['/api/news'],
-    queryFn: () => fetch('/api/news').then(res => res.json())
+    queryKey: ["/api/news"],
+    queryFn: () => fetch("/api/news").then((res) => res.json()),
   });
 
   // Static data
   const specializedWings = [
     {
       title: "Economic Offences Wing",
-      description: "Specialized investigation of financial crimes, fraud cases, and economic offenses",
-      features: ["Banking fraud investigations", "Corporate crime analysis", "Money laundering detection"],
+      description:
+        "Specialized investigation of financial crimes, fraud cases, and economic offenses",
+      features: [
+        "Banking fraud investigations",
+        "Corporate crime analysis",
+        "Money laundering detection",
+      ],
       icon: CreditCard,
       href: "/economic-offences",
     },
     {
       title: "Cyber Crimes Unit",
-      description: "Digital forensics and cybercrime investigation with cutting-edge technology",
-      features: ["Digital evidence recovery", "Online fraud investigation", "Cyber security consulting"],
+      description:
+        "Digital forensics and cybercrime investigation with cutting-edge technology",
+      features: [
+        "Digital evidence recovery",
+        "Online fraud investigation",
+        "Cyber security consulting",
+      ],
       icon: Computer,
       href: "/cyber-crimes",
     },
     {
       title: "Women & Child Protection",
-      description: "Dedicated protection services for women and children against violence and exploitation",
-      features: ["24/7 helpline services", "Specialized investigation teams", "Victim support programs"],
+      description:
+        "Dedicated protection services for women and children against violence and exploitation",
+      features: [
+        "24/7 helpline services",
+        "Specialized investigation teams",
+        "Victim support programs",
+      ],
       icon: Heart,
       href: "/women-child-protection",
     },
     {
       title: "General Offences Wing",
-      description: "Investigation of serious crimes with state-level ramifications and complex cases",
-      features: ["Inter-district coordination", "Organized crime investigation", "Special operations"],
+      description:
+        "Investigation of serious crimes with state-level ramifications and complex cases",
+      features: [
+        "Inter-district coordination",
+        "Organized crime investigation",
+        "Special operations",
+      ],
       icon: Scale,
       href: "/general-offences",
     },
@@ -94,21 +114,24 @@ export default function Home() {
   const safetyAlerts = [
     {
       title: "Cybercrime Prevention",
-      description: "Be cautious about online transactions and avoid sharing OTPs or banking details.",
+      description:
+        "Be cautious about online transactions and avoid sharing OTPs or banking details.",
       priority: "HIGH PRIORITY",
       icon: Shield,
       color: "red",
     },
     {
       title: "ATM Safety Guidelines",
-      description: "Always cover your PIN while entering and check for suspicious devices attached to ATMs.",
-      priority: "MEDIUM PRIORITY", 
+      description:
+        "Always cover your PIN while entering and check for suspicious devices attached to ATMs.",
+      priority: "MEDIUM PRIORITY",
       icon: CreditCard,
       color: "yellow",
     },
     {
       title: "Social Media Awareness",
-      description: "Be cautious about sharing personal information on social media platforms.",
+      description:
+        "Be cautious about sharing personal information on social media platforms.",
       priority: "GENERAL ADVISORY",
       icon: Smartphone,
       color: "green",
@@ -133,14 +156,16 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className={`relative ${themeClasses.sectionBg} min-h-screen pt-32`}>
+      <section
+        className={`relative ${themeClasses.sectionBg} min-h-screen pt-72`}
+      >
         <div className="container mx-auto px-4 py-12">
-
-          
           {/* Three Card Asymmetric Layout */}
           <div className="flex gap-6 min-h-[500px]">
             {/* Large Director Message Card with Photo */}
-            <Card className={`flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}>
+            <Card
+              className={`flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}
+            >
               <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                 <CardTitle className="text-2xl flex items-center gap-3">
                   <Users className="h-8 w-8" />
@@ -151,30 +176,48 @@ export default function Home() {
                 <div className="flex gap-6">
                   {/* DGP Photo */}
                   <div className="flex-shrink-0">
-                    <img 
-                      src={adgpImagePath} 
-                      alt="Director General of Police" 
+                    <img
+                      src={adgpImagePath}
+                      alt="Director General of Police"
                       className="w-32 h-40 object-cover rounded-lg border-2 border-gray-300"
                     />
                   </div>
-                  
+
                   {/* Message Content */}
                   <div className="flex-1">
                     <blockquote className="text-base text-gray-800 mb-6 leading-relaxed">
-                      "Crime Investigation Department is the premier investigation agency of Telangana State. Our endeavour is to provide transparent, impartial, efficient and systematic investigation using high end, state of the art equipment with quality forensic support in coordination with national and international agencies. We follow the principle that 'men may lie but material will not'. Our staff is highly trained, motivated, sincere and hardworking to achieve our vision and mission. Our specialized wings include Economic Offences, General Offences, Child and Women Protection, Protection of Civil Rights and Cyber Crimes. We welcome any feedback from the citizens related to any crime. I wish this website paves way for the public awareness about recent crimes and alerts."
+                      "Crime Investigation Department is the premier
+                      investigation agency of Telangana State. Our endeavour is
+                      to provide transparent, impartial, efficient and
+                      systematic investigation using high end, state of the art
+                      equipment with quality forensic support in coordination
+                      with national and international agencies. We follow the
+                      principle that 'men may lie but material will not'. Our
+                      staff is highly trained, motivated, sincere and
+                      hardworking to achieve our vision and mission. Our
+                      specialized wings include Economic Offences, General
+                      Offences, Child and Women Protection, Protection of Civil
+                      Rights and Cyber Crimes. We welcome any feedback from the
+                      citizens related to any crime. I wish this website paves
+                      way for the public awareness about recent crimes and
+                      alerts."
                     </blockquote>
                     <div className="mt-6 pt-4 border-t border-gray-200">
-                      <p className="text-sm text-gray-600 font-medium">- Director General of Police, Telangana State</p>
+                      <p className="text-sm text-gray-600 font-medium">
+                        - Director General of Police, Telangana State
+                      </p>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
-            
+
             {/* Right Column - Two Stacked Cards */}
             <div className="flex-1 flex flex-col gap-6">
               {/* Latest Videos Card - Bigger */}
-              <Card className={`flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}>
+              <Card
+                className={`flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}
+              >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
                     <Play className="h-6 w-6" />
@@ -185,11 +228,11 @@ export default function Home() {
                   {/* Video Player */}
                   <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video">
                     {latestVideos.length > 0 ? (
-                      <video 
-                        className="w-full h-full object-cover"
-                        controls
-                      >
-                        <source src={`/${latestVideos[0].filePath}`} type="video/mp4" />
+                      <video className="w-full h-full object-cover" controls>
+                        <source
+                          src={`/${latestVideos[0].filePath}`}
+                          type="video/mp4"
+                        />
                         Your browser does not support the video tag.
                       </video>
                     ) : (
@@ -200,9 +243,11 @@ export default function Home() {
                   </div>
                 </CardContent>
               </Card>
-              
+
               {/* NCL Card - Smaller */}
-              <Card className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}>
+              <Card
+                className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}
+              >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-lg flex items-center gap-3">
                     <Scale className="h-5 w-5" />
@@ -211,7 +256,11 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-4 flex items-center justify-center">
                   <div className="text-center">
-                    <h3 className={`text-3xl font-bold ${themeClasses.textAccent} mb-3`}>NCL</h3>
+                    <h3
+                      className={`text-3xl font-bold ${themeClasses.textAccent} mb-3`}
+                    >
+                      NCL
+                    </h3>
                     <p className="text-base text-gray-800 font-medium">
                       National Criminal Laws
                     </p>
@@ -244,65 +293,90 @@ export default function Home() {
                     <div className="h-full relative">
                       {/* Photo Grid */}
                       <div className="grid grid-cols-2 gap-3 h-full p-2">
-                        {latestPhotos.slice(currentPhotoSlide * 4, (currentPhotoSlide * 4) + 4).map((photo: any, index: number) => (
-                          <Dialog key={photo.id}>
-                            <DialogTrigger asChild>
-                              <div className="aspect-square rounded-lg overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-all">
-                                <img 
-                                  src={`/${photo.filePath}`}
-                                  alt={photo.title || 'CID Photo'}
-                                  className="w-full h-full object-cover hover:scale-105 transition-transform"
-                                />
-                              </div>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-4xl max-h-[90vh] p-4">
-                              <div className="relative">
-                                <img 
-                                  src={`/${photo.filePath}`}
-                                  alt={photo.title || 'CID Photo'}
-                                  className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
-                                />
-                                {photo.title && (
-                                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4 rounded-b-lg">
-                                    <h3 className="text-lg font-semibold">{photo.title}</h3>
-                                    {photo.description && (
-                                      <p className="text-sm text-gray-200">{photo.description}</p>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                            </DialogContent>
-                          </Dialog>
-                        ))}
+                        {latestPhotos
+                          .slice(
+                            currentPhotoSlide * 4,
+                            currentPhotoSlide * 4 + 4,
+                          )
+                          .map((photo: any, index: number) => (
+                            <Dialog key={photo.id}>
+                              <DialogTrigger asChild>
+                                <div className="aspect-square rounded-lg overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-all">
+                                  <img
+                                    src={`/${photo.filePath}`}
+                                    alt={photo.title || "CID Photo"}
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform"
+                                  />
+                                </div>
+                              </DialogTrigger>
+                              <DialogContent className="max-w-4xl max-h-[90vh] p-4">
+                                <div className="relative">
+                                  <img
+                                    src={`/${photo.filePath}`}
+                                    alt={photo.title || "CID Photo"}
+                                    className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                                  />
+                                  {photo.title && (
+                                    <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4 rounded-b-lg">
+                                      <h3 className="text-lg font-semibold">
+                                        {photo.title}
+                                      </h3>
+                                      {photo.description && (
+                                        <p className="text-sm text-gray-200">
+                                          {photo.description}
+                                        </p>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          ))}
                       </div>
-                      
+
                       {/* Navigation Arrows */}
                       {latestPhotos.length > 4 && (
                         <>
                           <button
-                            onClick={() => setCurrentPhotoSlide(prev => prev > 0 ? prev - 1 : Math.ceil(latestPhotos.length / 4) - 1)}
+                            onClick={() =>
+                              setCurrentPhotoSlide((prev) =>
+                                prev > 0
+                                  ? prev - 1
+                                  : Math.ceil(latestPhotos.length / 4) - 1,
+                              )
+                            }
                             className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
                           >
                             <ChevronLeft className="h-4 w-4" />
                           </button>
                           <button
-                            onClick={() => setCurrentPhotoSlide(prev => prev < Math.ceil(latestPhotos.length / 4) - 1 ? prev + 1 : 0)}
+                            onClick={() =>
+                              setCurrentPhotoSlide((prev) =>
+                                prev < Math.ceil(latestPhotos.length / 4) - 1
+                                  ? prev + 1
+                                  : 0,
+                              )
+                            }
                             className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
                           >
                             <ChevronRight className="h-4 w-4" />
                           </button>
                         </>
                       )}
-                      
+
                       {/* Slide Indicators */}
                       {latestPhotos.length > 4 && (
                         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2">
-                          {Array.from({ length: Math.ceil(latestPhotos.length / 4) }).map((_, index) => (
+                          {Array.from({
+                            length: Math.ceil(latestPhotos.length / 4),
+                          }).map((_, index) => (
                             <button
                               key={index}
                               onClick={() => setCurrentPhotoSlide(index)}
                               className={`w-2 h-2 rounded-full transition-colors ${
-                                currentPhotoSlide === index ? 'bg-blue-600' : 'bg-gray-300'
+                                currentPhotoSlide === index
+                                  ? "bg-blue-600"
+                                  : "bg-gray-300"
                               }`}
                             />
                           ))}
@@ -333,7 +407,10 @@ export default function Home() {
                   {latestNews.length > 0 ? (
                     <div className="space-y-4">
                       {latestNews.slice(0, 3).map((news: any) => (
-                        <div key={news.id} className="border-l-4 border-blue-500 pl-4 pb-3 border-b border-gray-200 last:border-b-0">
+                        <div
+                          key={news.id}
+                          className="border-l-4 border-blue-500 pl-4 pb-3 border-b border-gray-200 last:border-b-0"
+                        >
                           <h4 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2">
                             {news.title}
                           </h4>
