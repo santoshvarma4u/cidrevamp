@@ -135,16 +135,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className={`relative ${themeClasses.sectionBg} min-h-screen pt-24`}>
         <div className="container mx-auto px-4 py-12">
-          {/* Hero Content */}
-          <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold text-gray-800 mb-6">
-              Crime Investigation Department
-            </h1>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-              Telangana State's premier law enforcement agency ensuring public safety through
-              specialized investigations, advanced technology, and community engagement
-            </p>
-          </div>
+
           
           {/* Three Card Asymmetric Layout */}
           <div className="flex gap-6 min-h-[500px]">
