@@ -111,7 +111,7 @@ export default function ModernHeader() {
       </div>
 
       {/* Main Header */}
-      <div className="py-4 md:py-6" style={{background: 'linear-gradient(135deg, #672676 0%, rgba(0, 191, 255, 0.3) 50%, #020104 100%)'}}>
+      <div className="py-4 md:py-6 card-header-gradient">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Left Logo */}
