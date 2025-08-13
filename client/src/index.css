@@ -23,15 +23,15 @@
   animation-delay: 0s;
 }
 
-/* Purple-Cyan theme - keep original light background */
+/* Purple-Cyan theme - apply card gradient to entire background */
 [data-theme="purple-cyan"] body {
-  background: hsl(249, 100%, 95%);
+  background: linear-gradient(135deg, #672676 0%, rgba(0, 191, 255, 0.3) 50%, #020104 100%);
   min-height: 100vh;
 }
 
 [data-theme="purple-cyan"] .hero-section {
-  background: hsl(249, 100%, 95%);
-  color: inherit;
+  background: linear-gradient(135deg, #672676 0%, rgba(0, 191, 255, 0.3) 50%, #020104 100%);
+  color: white;
 }
 
 [data-theme="purple-cyan"] .section-gradient {
