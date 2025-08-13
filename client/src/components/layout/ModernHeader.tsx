@@ -111,7 +111,7 @@ export default function ModernHeader() {
       </div>
 
       {/* Main Header */}
-      <div className="py-4 md:py-6 card-header-gradient">
+      <div className="py-4 md:py-6 main-card">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Left Logo */}
@@ -126,13 +126,13 @@ export default function ModernHeader() {
 
             {/* Center Title - Modern Design */}
             <div className="flex-1 text-center px-4 md:px-6">
-              <h1 className="cid-subtitle-font text-white">
+              <h1 className="cid-subtitle-font text-card-foreground">
                 Crime Investigation Department
               </h1>
-              <p className="text-xs md:text-base text-white/90 mt-1 font-medium">
+              <p className="text-xs md:text-base text-muted-foreground mt-1 font-medium">
                 Telangana State Police
               </p>
-              <p className="text-xs md:text-sm text-white/80 mt-1 hidden sm:block">
+              <p className="text-xs md:text-sm text-muted-foreground/80 mt-1 hidden sm:block">
                 3rd Floor, DGP Office, Lakadikapul, Hyderabad-004
               </p>
             </div>
