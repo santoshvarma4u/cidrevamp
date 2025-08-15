@@ -156,10 +156,68 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section
-        className={`relative ${themeClasses.sectionBg} min-h-screen pt-72`}
-      >
-        <div className="container mx-auto px-4 py-12">
+      <section className="relative overflow-hidden pt-32">
+        {/* Hero Background with Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900"></div>
+        
+        {/* Geometric Background Elements */}
+        <div className="absolute inset-0">
+          {/* Large Circular Elements */}
+          <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-purple-600/30 to-transparent rounded-full"></div>
+          <div className="absolute top-40 right-32 w-64 h-64 bg-gradient-to-br from-cyan-400/40 to-transparent rounded-full"></div>
+          <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-tr from-purple-500/20 to-transparent rounded-full"></div>
+          
+          {/* Wireframe Grid Bottom */}
+          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-purple-900/50 to-transparent">
+            <svg className="w-full h-full" viewBox="0 0 800 200" preserveAspectRatio="none">
+              <defs>
+                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(147, 51, 234, 0.3)" strokeWidth="1"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+              {/* Wavy distortion */}
+              <path d="M0,100 Q200,80 400,100 T800,100 L800,200 L0,200 Z" fill="url(#grid)" opacity="0.6"/>
+            </svg>
+          </div>
+        </div>
+        
+        <div className="relative z-10 container mx-auto px-4 py-20 min-h-[70vh] flex items-center">
+          <div className="max-w-3xl">
+            {/* Hero Content */}
+            <div className="mb-12">
+              <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight">
+                Excellence in
+                <span className="block text-transparent bg-gradient-to-r from-cyan-400 to-purple-300 bg-clip-text">
+                  Crime Investigation
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-purple-100 mb-10 leading-relaxed max-w-2xl">
+                Telangana State's premier law enforcement agency ensuring public safety through
+                specialized investigations, advanced technology, and community engagement
+              </p>
+              
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/complaint">
+                  <button className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-cyan-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105" data-testid="button-report-crime">
+                    Report a Crime
+                  </button>
+                </Link>
+                <Link href="/about">
+                  <button className="px-8 py-4 border-2 border-purple-300 text-purple-100 font-semibold rounded-full hover:bg-purple-300 hover:text-purple-900 transition-all duration-300" data-testid="button-learn-more">
+                    Learn More
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content Section */}
+      <section className={`relative ${themeClasses.sectionBg} py-16`}>
+        <div className="container mx-auto px-4">
           {/* Three Card Asymmetric Layout */}
           <div className="flex gap-6 min-h-[500px]">
             {/* Large Director Message Card with Photo */}
