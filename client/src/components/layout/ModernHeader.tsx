@@ -60,7 +60,7 @@ export default function ModernHeader() {
             </Link>
 
             {/* Navigation Menu - Desktop */}
-            <nav className="hidden md:flex items-center space-x-6">
+            <nav className="hidden md:flex items-center space-x-4">
               {/* Home */}
               <Button
                 variant="ghost"
@@ -70,8 +70,8 @@ export default function ModernHeader() {
                 HOME
               </Button>
 
-              {/* Dynamic Menu Pages with Submenus */}
-              {parentPages.map((page: any) => {
+              {/* First 4 Main Menu Items */}
+              {parentPages.slice(0, 4).map((page: any) => {
                 const childPages = getChildPages(page.slug);
 
                 if (childPages.length > 0) {
@@ -125,6 +125,52 @@ export default function ModernHeader() {
                   );
                 }
               })}
+
+              {/* More Dropdown for Remaining Menu Items */}
+              {parentPages.length > 4 && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2"
+                    >
+                      <span>More</span>
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-56">
+                    {parentPages.slice(4).map((page: any) => {
+                      const childPages = getChildPages(page.slug);
+                      
+                      return (
+                        <div key={page.slug}>
+                          <DropdownMenuItem
+                            onClick={() => (window.location.href = `/${page.slug}`)}
+                            className="font-medium"
+                          >
+                            {page.menuTitle || page.title}
+                          </DropdownMenuItem>
+                          {childPages.length > 0 && (
+                            <div className="ml-4 border-l border-gray-200 pl-2">
+                              {childPages.map((childPage: any) => (
+                                <DropdownMenuItem
+                                  key={childPage.slug}
+                                  onClick={() =>
+                                    (window.location.href = `/${childPage.slug}`)
+                                  }
+                                  className="text-sm text-gray-600"
+                                >
+                                  {childPage.menuTitle || childPage.title}
+                                </DropdownMenuItem>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
               
               {/* Admin Menu */}
               {isAuthenticated && user ? (
