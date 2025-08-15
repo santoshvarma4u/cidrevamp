@@ -101,7 +101,7 @@ export default function Mission() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16">
+      <section className="page-hero-gradient text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
             <div className="flex items-center space-x-4 mb-6">
@@ -109,11 +109,11 @@ export default function Mission() {
                 <Target className="h-8 w-8" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold mb-2">Mission & Vision</h1>
-                <p className="text-xl text-blue-100">Guiding Principles of CID Telangana</p>
+                <h1 className="text-4xl font-bold mb-2 cid-nav-text">Mission & Vision</h1>
+                <p className="text-xl text-purple-100">Guiding Principles of CID Telangana</p>
               </div>
             </div>
-            <p className="text-lg text-blue-100 leading-relaxed">
+            <p className="text-lg text-purple-100 leading-relaxed">
               Our mission is to provide transparent, impartial, efficient and systematic investigation 
               services to the people of Telangana, ensuring justice delivery through scientific methods 
               and upholding the highest standards of professional excellence.
@@ -125,11 +125,11 @@ export default function Mission() {
       <div className="container mx-auto px-4 py-12">
         {/* Mission Statement */}
         <section className="mb-12">
-          <Card className="border-l-4 border-l-blue-600">
-            <CardHeader>
+          <Card className="border-l-4 border-l-purple-600">
+            <CardHeader className="cid-card-header">
               <CardTitle className="flex items-center space-x-2">
-                <Target className="h-6 w-6 text-blue-600" />
-                <span>Our Mission</span>
+                <Target className="h-6 w-6 text-white" />
+                <span className="cid-nav-text">Our Mission</span>
               </CardTitle>
             </CardHeader>
             <CardContent>

@@ -65,12 +65,12 @@ export default function PhotoGallery() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Photo Gallery</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <div className="text-center mb-12 cid-page-header rounded-2xl p-8">
+          <h1 className="text-4xl font-bold text-white mb-4 cid-nav-text">Photo Gallery</h1>
+          <p className="text-lg text-purple-100 max-w-2xl mx-auto">
             Explore our collection of images from CID operations, events, and activities
           </p>
-          <div className="mt-6 flex items-center justify-center text-sm text-gray-500">
+          <div className="mt-6 flex items-center justify-center text-sm text-purple-200">
             <Eye className="h-4 w-4 mr-2" />
             {photos?.length || 0} photos available
           </div>

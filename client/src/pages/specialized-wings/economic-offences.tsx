@@ -59,16 +59,16 @@ export default function EconomicOffences() {
       <Header />
       
       {/* Page Header */}
-      <section className="bg-white border-b py-8">
+      <section className="page-hero-gradient py-16">
         <div className="container mx-auto px-4">
           <Breadcrumb items={breadcrumbItems} className="mb-4" />
           <div className="flex items-center space-x-4">
-            <div className="bg-blue-100 p-4 rounded-lg">
-              <ChartLine className="h-12 w-12 text-gov-blue" />
+            <div className="bg-white bg-opacity-20 p-4 rounded-lg">
+              <ChartLine className="h-12 w-12 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-gov-dark">Economic Offences Wing</h1>
-              <p className="text-xl text-gov-gray mt-2">
+              <h1 className="text-4xl font-bold text-white cid-nav-text">Economic Offences Wing</h1>
+              <p className="text-xl text-purple-100 mt-2">
                 Specialized unit for financial crimes and economic fraud investigations
               </p>
             </div>

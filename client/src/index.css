@@ -94,6 +94,31 @@
   transition: background 0.3s ease;
 }
 
+/* Global page hero section styling */
+.page-hero-gradient {
+  background: linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%);
+}
+
+/* Global header styling for consistency */
+.cid-page-header {
+  background: linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%);
+  color: white;
+  font-weight: 600;
+}
+
+/* Global card header styling */
+.cid-card-header {
+  background: linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%) !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+/* Consistent navigation typography */
+.cid-nav-text {
+  font-weight: 600;
+  font-family: 'Inter', 'Poppins', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 /* Menu bar gradient styling - only for header */
 
 [data-theme="purple-cyan"] .navbar-gradient {

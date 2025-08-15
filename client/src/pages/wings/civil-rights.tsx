@@ -93,7 +93,7 @@ export default function CivilRights() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <section className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-16">
+      <section className="page-hero-gradient text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
             <div className="flex items-center space-x-4 mb-6">
@@ -101,11 +101,11 @@ export default function CivilRights() {
                 <Scale className="h-8 w-8" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold mb-2">Protection of Civil Rights Wing</h1>
-                <p className="text-xl text-indigo-100">Constitutional Rights & Social Justice</p>
+                <h1 className="text-4xl font-bold mb-2 cid-nav-text">Protection of Civil Rights Wing</h1>
+                <p className="text-xl text-purple-100">Constitutional Rights & Social Justice</p>
               </div>
             </div>
-            <p className="text-lg text-indigo-100 leading-relaxed">
+            <p className="text-lg text-purple-100 leading-relaxed">
               The Protection of Civil Rights Wing is dedicated to upholding constitutional rights and 
               ensuring social justice for all citizens. We investigate violations of civil rights, 
               discrimination cases, and work towards creating an equitable society where every 
@@ -119,10 +119,10 @@ export default function CivilRights() {
         {/* Key Areas */}
         <section className="mb-12">
           <Card>
-            <CardHeader>
+            <CardHeader className="cid-card-header">
               <CardTitle className="flex items-center space-x-2">
-                <Book className="h-6 w-6 text-indigo-600" />
-                <span>Areas of Focus</span>
+                <Book className="h-6 w-6 text-white" />
+                <span className="cid-nav-text">Areas of Focus</span>
               </CardTitle>
             </CardHeader>
             <CardContent>

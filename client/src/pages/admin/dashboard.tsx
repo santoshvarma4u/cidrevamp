@@ -124,9 +124,9 @@ export default function AdminDashboard() {
         
         <div className="flex-1 lg:ml-64">
           <div className="p-8">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-gray-600 mt-2">
+            <div className="mb-8 cid-page-header rounded-2xl p-6">
+              <h1 className="text-3xl font-bold text-white cid-nav-text">Admin Dashboard</h1>
+              <p className="text-purple-100 mt-2">
                 Welcome back, {user.firstName || user.email}. Here's what's happening with your CID website.
               </p>
             </div>

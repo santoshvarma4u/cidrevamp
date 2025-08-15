@@ -65,12 +65,12 @@ export default function DynamicPage() {
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-7xl">
           {/* Page Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 font-['Poppins']">
+          <div className="text-center mb-12 cid-page-header rounded-2xl p-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 cid-nav-text">
               {page.title}
             </h1>
             {page.metaDescription && (
-              <p className="text-lg text-gray-700 max-w-3xl mx-auto font-['Inter']">
+              <p className="text-lg text-purple-100 max-w-3xl mx-auto">
                 {page.metaDescription}
               </p>
             )}
