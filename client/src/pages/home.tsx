@@ -157,19 +157,21 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-32">
-        {/* Hero Background with Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900"></div>
+        {/* Hero Background with Gradient - Matching Card Headers */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%)'
+        }}></div>
         
         {/* Geometric Background Elements */}
         <div className="absolute inset-0">
           {/* Large Circular Elements */}
-          <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-purple-600/30 to-transparent rounded-full"></div>
-          <div className="absolute top-40 right-32 w-64 h-64 bg-gradient-to-br from-cyan-400/40 to-transparent rounded-full"></div>
-          <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-tr from-purple-500/20 to-transparent rounded-full"></div>
+          <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-transparent rounded-full"></div>
+          <div className="absolute top-40 right-32 w-64 h-64 bg-gradient-to-br from-cyan-400/30 to-transparent rounded-full"></div>
+          <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-tr from-purple-300/15 to-transparent rounded-full"></div>
           
           {/* Simple Grid Pattern */}
-          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-purple-900/50 to-transparent">
-            <div className="w-full h-full bg-gradient-to-r from-purple-800/20 to-cyan-600/20"></div>
+          <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black/30 to-transparent">
+            <div className="w-full h-full bg-gradient-to-r from-purple-600/15 to-cyan-600/15"></div>
           </div>
         </div>
         

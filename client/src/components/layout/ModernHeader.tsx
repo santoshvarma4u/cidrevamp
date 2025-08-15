@@ -64,10 +64,10 @@ export default function ModernHeader() {
               {/* Home */}
               <Button
                 variant="ghost"
-                className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold tracking-wide"
+                className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-medium"
                 onClick={() => (window.location.href = "/")}
               >
-                HOME
+                Home
               </Button>
 
               {/* First 4 Main Menu Items */}
@@ -81,10 +81,10 @@ export default function ModernHeader() {
                       <div className="flex items-center">
                         <Button
                           variant="ghost"
-                          className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold tracking-wide"
+                          className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-medium"
                           onClick={() => (window.location.href = `/${page.slug}`)}
                         >
-                          {(page.menuTitle || page.title).toUpperCase()}
+                          {page.menuTitle || page.title}
                         </Button>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -117,10 +117,10 @@ export default function ModernHeader() {
                     <Button
                       key={page.slug}
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold tracking-wide"
+                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-medium"
                       onClick={() => (window.location.href = `/${page.slug}`)}
                     >
-                      {(page.menuTitle || page.title).toUpperCase()}
+                      {page.menuTitle || page.title}
                     </Button>
                   );
                 }
@@ -132,9 +132,9 @@ export default function ModernHeader() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2 font-semibold tracking-wide"
+                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2 font-medium"
                     >
-                      <span>MORE</span>
+                      <span>More</span>
                       <ChevronDown className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
