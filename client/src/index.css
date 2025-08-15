@@ -44,40 +44,48 @@
   border: 1px solid rgba(103, 38, 118, 0.2);
 }
 
-/* Apply gradients to all cards in purple-cyan theme */
+/* Clean white backgrounds for all cards - NO gradients on card bodies */
 [data-theme="purple-cyan"] .card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(103, 38, 118, 0.05) 50%, rgba(0, 191, 255, 0.08) 100%);
+  background: white;
   border: 2px solid rgba(103, 38, 118, 0.2);
-  backdrop-filter: blur(10px);
 }
 
 [data-theme="purple-cyan"] .bg-white {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(103, 38, 118, 0.05) 50%, rgba(0, 191, 255, 0.08) 100%) !important;
+  background: white !important;
   border: 2px solid rgba(103, 38, 118, 0.15) !important;
-  backdrop-filter: blur(10px);
 }
 
-/* Special gradient for main content cards */
+/* Clean white backgrounds for main content cards */
 [data-theme="purple-cyan"] .main-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(103, 38, 118, 0.08) 40%, rgba(0, 191, 255, 0.12) 100%);
+  background: white;
   border: 2px solid rgba(103, 38, 118, 0.25);
   box-shadow: 0 8px 32px rgba(103, 38, 118, 0.1);
 }
 
-/* Subtle gradient for photo gallery and news cards */
+/* Clean white background for photo gallery and news cards */
 [data-theme="purple-cyan"] .gallery-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.97) 0%, rgba(103, 38, 118, 0.06) 60%, rgba(0, 191, 255, 0.1) 100%);
+  background: white;
   border: 2px solid rgba(103, 38, 118, 0.18);
 }
 
-/* Gradient card headers */
+/* Gradient ONLY for card headers */
 [data-theme="purple-cyan"] .bg-primary {
   background: linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%) !important;
+  color: white !important;
 }
 
 [data-theme="purple-cyan"] .card-header-gradient {
-  background: linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%);
-  color: white;
+  background: linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%) !important;
+  color: white !important;
+}
+
+/* Ensure card content areas remain white */
+[data-theme="purple-cyan"] .card [data-slot="content"] {
+  background: white !important;
+}
+
+[data-theme="purple-cyan"] .card-content {
+  background: white !important;
 }
 
 /* Enhanced gradient for card headers with hover effects */

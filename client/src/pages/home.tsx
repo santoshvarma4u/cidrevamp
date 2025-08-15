@@ -221,7 +221,7 @@ export default function Home() {
                   Director General's Message
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-8 flex-1 flex">
+              <CardContent className="p-8 flex-1 flex bg-white rounded-b-2xl">
                 <div className="flex gap-6">
                   {/* DGP Photo */}
                   <div className="flex-shrink-0">
@@ -273,7 +273,7 @@ export default function Home() {
                     Latest Videos
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6">
+                <CardContent className="p-6 bg-white rounded-b-2xl">
                   {/* Video Player */}
                   <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video">
                     {latestVideos.length > 0 ? (
@@ -303,7 +303,7 @@ export default function Home() {
                     NCL
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 flex items-center justify-center">
+                <CardContent className="p-4 flex items-center justify-center bg-white rounded-b-2xl">
                   <div className="text-center">
                     <h3
                       className={`text-3xl font-bold ${themeClasses.textAccent} mb-3`}
@@ -340,7 +340,7 @@ export default function Home() {
                     Latest Photo Gallery
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6 flex-1 min-h-0 overflow-hidden relative">
+                <CardContent className="p-6 flex-1 min-h-0 overflow-hidden relative bg-white rounded-b-2xl">
                   {latestPhotos.length > 0 ? (
                     <div className="h-full relative">
                       {/* Photo Grid */}
@@ -458,7 +458,7 @@ export default function Home() {
                     Latest News Updates
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6 flex-1 min-h-0 overflow-y-auto">
+                <CardContent className="p-6 flex-1 min-h-0 overflow-y-auto bg-white">
                   {latestNews.length > 0 ? (
                     <div className="space-y-4">
                       {latestNews.slice(0, 3).map((news: any) => (
@@ -521,7 +521,7 @@ export default function Home() {
                     {wing.title}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-8">
+                <CardContent className="p-8 bg-white rounded-b-2xl">
                   <div className="space-y-4">
                     <p className="text-gray-600 mb-4">{wing.description}</p>
                     <div className="space-y-2 mb-4">
