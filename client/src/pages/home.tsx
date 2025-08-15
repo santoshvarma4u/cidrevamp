@@ -167,18 +167,9 @@ export default function Home() {
           <div className="absolute top-40 right-32 w-64 h-64 bg-gradient-to-br from-cyan-400/40 to-transparent rounded-full"></div>
           <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-tr from-purple-500/20 to-transparent rounded-full"></div>
           
-          {/* Wireframe Grid Bottom */}
+          {/* Simple Grid Pattern */}
           <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-purple-900/50 to-transparent">
-            <svg className="w-full h-full" viewBox="0 0 800 200" preserveAspectRatio="none">
-              <defs>
-                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(147, 51, 234, 0.3)" strokeWidth="1"/>
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#grid)" />
-              {/* Wavy distortion */}
-              <path d="M0,100 Q200,80 400,100 T800,100 L800,200 L0,200 Z" fill="url(#grid)" opacity="0.6"/>
-            </svg>
+            <div className="w-full h-full bg-gradient-to-r from-purple-800/20 to-cyan-600/20"></div>
           </div>
         </div>
         
@@ -199,12 +190,12 @@ export default function Home() {
               
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/complaint">
+                <Link href="/citizen/complaint">
                   <button className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-cyan-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105" data-testid="button-report-crime">
                     Report a Crime
                   </button>
                 </Link>
-                <Link href="/about">
+                <Link href="/about/structure">
                   <button className="px-8 py-4 border-2 border-purple-300 text-purple-100 font-semibold rounded-full hover:bg-purple-300 hover:text-purple-900 transition-all duration-300" data-testid="button-learn-more">
                     Learn More
                   </button>
