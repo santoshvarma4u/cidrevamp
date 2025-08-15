@@ -44,7 +44,9 @@ export default function ModernHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Simple Top Navigation Bar like OSCORE */}
-      <div className="bg-purple-900/95 backdrop-blur-sm text-white py-4 px-6">
+      <div className="text-white py-4 px-6 backdrop-blur-sm" style={{
+        background: 'linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%)'
+      }}>
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             {/* Logo Section */}
@@ -64,7 +66,7 @@ export default function ModernHeader() {
               {/* Home */}
               <Button
                 variant="ghost"
-                className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-medium"
+                className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold"
                 onClick={() => (window.location.href = "/")}
               >
                 Home
@@ -81,7 +83,7 @@ export default function ModernHeader() {
                       <div className="flex items-center">
                         <Button
                           variant="ghost"
-                          className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-medium"
+                          className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold"
                           onClick={() => (window.location.href = `/${page.slug}`)}
                         >
                           {page.menuTitle || page.title}
@@ -117,7 +119,7 @@ export default function ModernHeader() {
                     <Button
                       key={page.slug}
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-medium"
+                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold"
                       onClick={() => (window.location.href = `/${page.slug}`)}
                     >
                       {page.menuTitle || page.title}
@@ -132,7 +134,7 @@ export default function ModernHeader() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2 font-medium"
+                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2 font-semibold"
                     >
                       <span>More</span>
                       <ChevronDown className="h-4 w-4" />
@@ -178,7 +180,7 @@ export default function ModernHeader() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-2 px-3 py-2"
+                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-2 px-3 py-2 font-semibold"
                     >
                       <User className="h-4 w-4" />
                       <span>{user.firstName || user.email}</span>
@@ -205,7 +207,7 @@ export default function ModernHeader() {
               ) : (
                 <Button
                   variant="ghost"
-                  className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2"
+                  className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold"
                   onClick={() => (window.location.href = "/admin/login")}
                 >
                   <User className="mr-2 h-4 w-4" />
