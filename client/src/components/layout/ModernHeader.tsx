@@ -66,7 +66,7 @@ export default function ModernHeader() {
               {/* Home */}
               <Button
                 variant="ghost"
-                className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold"
+                className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold lowercase"
                 onClick={() => (window.location.href = "/")}
               >
                 Home
@@ -83,7 +83,7 @@ export default function ModernHeader() {
                       <div className="flex items-center">
                         <Button
                           variant="ghost"
-                          className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold"
+                          className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold lowercase"
                           onClick={() => (window.location.href = `/${page.slug}`)}
                         >
                           {page.menuTitle || page.title}
@@ -104,6 +104,7 @@ export default function ModernHeader() {
                                 onClick={() =>
                                   (window.location.href = `/${childPage.slug}`)
                                 }
+                                className="lowercase"
                               >
                                 {childPage.menuTitle || childPage.title}
                               </DropdownMenuItem>
@@ -119,7 +120,7 @@ export default function ModernHeader() {
                     <Button
                       key={page.slug}
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold"
+                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold lowercase"
                       onClick={() => (window.location.href = `/${page.slug}`)}
                     >
                       {page.menuTitle || page.title}
@@ -134,7 +135,7 @@ export default function ModernHeader() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2 font-semibold"
+                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2 font-semibold lowercase"
                     >
                       <span>More</span>
                       <ChevronDown className="h-4 w-4" />
@@ -148,7 +149,7 @@ export default function ModernHeader() {
                         <div key={page.slug}>
                           <DropdownMenuItem
                             onClick={() => (window.location.href = `/${page.slug}`)}
-                            className="font-medium"
+                            className="font-medium lowercase"
                           >
                             {page.menuTitle || page.title}
                           </DropdownMenuItem>
@@ -160,7 +161,7 @@ export default function ModernHeader() {
                                   onClick={() =>
                                     (window.location.href = `/${childPage.slug}`)
                                   }
-                                  className="text-sm text-gray-600"
+                                  className="text-sm text-gray-600 lowercase"
                                 >
                                   {childPage.menuTitle || childPage.title}
                                 </DropdownMenuItem>
@@ -228,7 +229,7 @@ export default function ModernHeader() {
                   <div className="space-y-2">
                     <Button
                       variant="ghost"
-                      className="w-full justify-start"
+                      className="w-full justify-start lowercase"
                       onClick={() => {
                         window.location.href = "/";
                         setIsMobileMenuOpen(false);
@@ -245,7 +246,7 @@ export default function ModernHeader() {
                         <div key={page.slug} className="space-y-1">
                           <Button
                             variant="ghost"
-                            className="w-full justify-start font-medium"
+                            className="w-full justify-start font-medium lowercase"
                             onClick={() => {
                               window.location.href = `/${page.slug}`;
                               setIsMobileMenuOpen(false);
@@ -259,7 +260,7 @@ export default function ModernHeader() {
                             <Button
                               key={childPage.slug}
                               variant="ghost"
-                              className="w-full justify-start pl-6 text-sm text-gray-600"
+                              className="w-full justify-start pl-6 text-sm text-gray-600 lowercase"
                               onClick={() => {
                                 window.location.href = `/${childPage.slug}`;
                                 setIsMobileMenuOpen(false);
