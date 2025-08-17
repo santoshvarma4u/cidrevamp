@@ -179,13 +179,13 @@ export default function Home() {
           <div className="max-w-3xl">
             {/* Hero Content */}
             <div className="mb-12">
-              <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
                 Excellence in
                 <span className="block text-transparent bg-gradient-to-r from-cyan-400 to-purple-300 bg-clip-text">
                   Crime Investigation
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-purple-100 mb-10 leading-relaxed max-w-2xl">
+              <p className="text-lg md:text-xl lg:text-2xl text-purple-100 mb-10 leading-relaxed max-w-2xl">
                 Telangana State's premier law enforcement agency ensuring public safety through
                 specialized investigations, advanced technology, and community engagement
               </p>
@@ -212,10 +212,10 @@ export default function Home() {
       <section className={`relative ${themeClasses.sectionBg} py-16`}>
         <div className="container mx-auto px-4">
           {/* Three Card Asymmetric Layout */}
-          <div className="flex gap-6 min-h-[500px]">
+          <div className="flex flex-col lg:flex-row gap-6 min-h-[500px]">
             {/* Large Director Message Card with Photo */}
             <Card
-              className={`flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}
+              className={`lg:flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}
             >
               <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                 <CardTitle className="text-2xl flex items-center gap-3">
@@ -224,7 +224,7 @@ export default function Home() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-8 flex-1 flex bg-white rounded-b-2xl">
-                <div className="flex gap-6">
+                <div className="flex flex-col md:flex-row gap-6">
                   {/* DGP Photo */}
                   <div className="flex-shrink-0">
                     <img
@@ -264,7 +264,7 @@ export default function Home() {
             </Card>
 
             {/* Right Column - Two Stacked Cards */}
-            <div className="flex-1 flex flex-col gap-6">
+            <div className="lg:flex-1 flex flex-col gap-6">
               {/* Latest Videos Card - Bigger */}
               <Card
                 className={`flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}

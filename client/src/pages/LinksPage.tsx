@@ -383,7 +383,7 @@ export default function LinksPage() {
                             </div>
                           )}
                           <CardTitle className="text-base text-gray-900 flex items-start gap-2 leading-tight">
-                            <ExternalLink className="h-4 w-4 text-teal-600 mt-1 flex-shrink-0" />
+                            <ExternalLink className="h-4 w-4 text-purple-600 mt-1 flex-shrink-0" />
                             <span className="line-clamp-2">{link.title}</span>
                           </CardTitle>
                         </CardHeader>
@@ -397,7 +397,7 @@ export default function LinksPage() {
                             href={link.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-3 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200 text-sm font-medium w-full justify-center"
+                            className="inline-flex items-center gap-2 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200 text-sm font-medium w-full justify-center"
                           >
                             <ExternalLink className="h-3 w-3" />
                             Visit Website
@@ -415,7 +415,7 @@ export default function LinksPage() {
             <Card className="bg-white shadow-lg border-0 rounded-xl">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl text-gray-900 flex items-center justify-center gap-2">
-                  <Shield className="h-6 w-6 text-teal-600" />
+                  <Shield className="h-6 w-6 text-purple-600" />
                   Contact CID Telangana
                 </CardTitle>
               </CardHeader>
@@ -447,7 +447,7 @@ export default function LinksPage() {
                       href="https://cybercrime.gov.in"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-200 font-medium text-sm"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium text-sm"
                     >
                       <Globe className="h-4 w-4" />
                       Cybercrime Portal

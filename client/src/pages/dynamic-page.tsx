@@ -92,7 +92,7 @@ export default function DynamicPage() {
                 [&_td]:text-gray-700 [&_td]:font-['Inter'] [&_td]:p-4 [&_td]:border [&_td]:border-gray-300
                 [&_tr:hover]:bg-gray-50
                 [&_.bg-white]:shadow-lg [&_.bg-white]:border [&_.bg-white]:border-border
-                [&_.bg-teal-50]:bg-muted [&_.bg-teal-50]:border [&_.bg-teal-50]:border-border"
+                [&_.bg-purple-50]:bg-muted [&_.bg-purple-50]:border [&_.bg-purple-50]:border-border"
               dangerouslySetInnerHTML={{ __html: page.content }}
             />
           </div>

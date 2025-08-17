@@ -136,7 +136,7 @@ export default function CaptchaInput({ onCaptchaChange, onValidationChange, erro
         >
           {isGenerating || refreshMutation.isPending ? (
             <div className="text-center">
-              <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2 text-teal-600" />
+              <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2 text-purple-600" />
               <p className="text-sm text-gray-500">Generating CAPTCHA...</p>
             </div>
           ) : !captchaData ? (
@@ -177,7 +177,7 @@ export default function CaptchaInput({ onCaptchaChange, onValidationChange, erro
         {/* Validation Indicator */}
         {isValidating && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-            <RefreshCw className="h-4 w-4 animate-spin text-teal-600" />
+            <RefreshCw className="h-4 w-4 animate-spin text-purple-600" />
           </div>
         )}
         

@@ -185,7 +185,7 @@ export function ContactPage() {
                         <Mail className="h-4 w-4 text-gray-500" />
                         <a 
                           href={`mailto:${office.email}`}
-                          className="text-teal-600 hover:text-teal-700 text-sm"
+                          className="text-purple-600 hover:text-purple-700 text-sm"
                         >
                           {office.email}
                         </a>
@@ -198,7 +198,7 @@ export function ContactPage() {
                       href={office.mapUrl} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="inline-flex items-center text-teal-600 hover:text-teal-700 font-medium text-sm"
+                      className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm"
                     >
                       View on Map
                       <ExternalLink className="h-3 w-3 ml-1" />
@@ -213,14 +213,14 @@ export function ContactPage() {
           <div className="mb-16">
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="flex items-center mb-6">
-                <Users className="h-6 w-6 text-teal-600 mr-3" />
+                <Users className="h-6 w-6 text-purple-600 mr-3" />
                 <h2 className="text-3xl font-bold text-gray-900">Department Directory</h2>
               </div>
               
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse border border-gray-300">
                   <thead>
-                    <tr className="bg-teal-600 text-white">
+                    <tr className="bg-purple-600 text-white">
                       <th className="border border-gray-300 px-4 py-3 text-left">SL No</th>
                       <th className="border border-gray-300 px-4 py-3 text-left">Rank</th>
                       <th className="border border-gray-300 px-4 py-3 text-left">Land Line's</th>
@@ -241,7 +241,7 @@ export function ContactPage() {
                         <td className="border border-gray-300 px-4 py-3">
                           {contact.landline && (
                             <div className="flex items-center">
-                              <Phone className="h-4 w-4 text-teal-600 mr-2" />
+                              <Phone className="h-4 w-4 text-purple-600 mr-2" />
                               <span className="font-mono text-sm">{contact.landline}</span>
                             </div>
                           )}

@@ -142,8 +142,8 @@ export function AlertsPage() {
                     
                     <div className="space-y-4">
                       {/* Public Notification */}
-                      <div className="border-l-4 border-teal-400 pl-4">
-                        <a href="/cid/citizenimages" className="text-teal-600 hover:text-teal-700 font-medium">
+                      <div className="border-l-4 border-purple-400 pl-4">
+                        <a href="/cid/citizenimages" className="text-purple-600 hover:text-purple-700 font-medium">
                           Public Notification
                           <span className="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">NEW</span>
                         </a>
@@ -162,7 +162,7 @@ export function AlertsPage() {
                         <div className="space-y-2 ml-4">
                           {cyberSafetyTopics.map((topic, index) => (
                             <div key={index} className="border-l-2 border-gray-200 pl-3">
-                              <a href={`/cid/${topic.slug}`} className="text-sm text-gray-600 hover:text-teal-600">
+                              <a href={`/cid/${topic.slug}`} className="text-sm text-gray-600 hover:text-purple-600">
                                 {topic.title}
                               </a>
                             </div>
@@ -176,7 +176,7 @@ export function AlertsPage() {
                         <div className="space-y-2 ml-4">
                           {womenChildrenSafety.map((topic, index) => (
                             <div key={index} className="border-l-2 border-gray-200 pl-3">
-                              <a href={`/cid/${topic.slug}`} className="text-sm text-gray-600 hover:text-teal-600">
+                              <a href={`/cid/${topic.slug}`} className="text-sm text-gray-600 hover:text-purple-600">
                                 {topic.title}
                               </a>
                             </div>
@@ -188,7 +188,7 @@ export function AlertsPage() {
                       <div className="space-y-2">
                         {safetyTopics.map((topic, index) => (
                           <div key={index} className="border-l-4 border-gray-200 pl-4">
-                            <a href={`/cid/${topic.slug}`} className="text-gray-600 hover:text-teal-600 font-medium text-sm flex items-center">
+                            <a href={`/cid/${topic.slug}`} className="text-gray-600 hover:text-purple-600 font-medium text-sm flex items-center">
                               <topic.icon className="h-4 w-4 mr-2" />
                               {topic.title.toUpperCase()}
                             </a>
@@ -212,9 +212,9 @@ export function AlertsPage() {
             </div>
             
             <div className="bg-white rounded-lg shadow-lg p-6 text-center">
-              <Shield className="h-12 w-12 text-teal-500 mx-auto mb-4" />
+              <Shield className="h-12 w-12 text-purple-500 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-gray-900 mb-2">Women Helpline</h3>
-              <p className="text-3xl font-bold text-teal-600">1091</p>
+              <p className="text-3xl font-bold text-purple-600">1091</p>
               <p className="text-gray-600 mt-2">24/7 Support</p>
             </div>
             
