@@ -57,7 +57,7 @@ export default function ModernHeader() {
                   alt="CID Logo" 
                   className="h-8 w-8"
                 />
-                <span className="text-xl font-bold">CID TELANGANA</span>
+                <span className="text-xl font-bold">CID Telangana</span>
               </div>
             </Link>
 
@@ -235,7 +235,7 @@ export default function ModernHeader() {
                         setIsMobileMenuOpen(false);
                       }}
                     >
-                      HOME
+                      Home
                     </Button>
 
                     {/* Parent menu pages with potential submenus */}
