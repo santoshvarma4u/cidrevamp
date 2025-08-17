@@ -1,4 +1,4 @@
-import Header from "@/components/layout/ModernHeader";
+import ModernHeader from "@/components/layout/ModernHeader";
 import { MapPin, Phone, Mail, Building, Users, ExternalLink } from "lucide-react";
 
 export function ContactPage() {
@@ -248,10 +248,10 @@ export function ContactPage() {
                         </td>
                         <td className="border border-gray-300 px-4 py-3">
                           <div className="flex items-center">
-                            <Mail className="h-4 w-4 text-teal-600 mr-2" />
+                            <Mail className="h-4 w-4 text-purple-600 mr-2" />
                             <a 
                               href={`mailto:${contact.email}`}
-                              className="text-teal-600 hover:text-teal-700 text-sm break-all"
+                              className="text-purple-600 hover:text-purple-700 text-sm break-all"
                             >
                               {contact.email}
                             </a>
@@ -289,10 +289,10 @@ export function ContactPage() {
               </div>
             </div>
             
-            <div className="mt-8 p-4 bg-teal-50 rounded-lg">
+            <div className="mt-8 p-4 bg-purple-50 rounded-lg">
               <h4 className="text-lg font-semibold text-gray-900 mb-2">Important Note</h4>
               <p className="text-gray-700">
-                For urgent matters and complaints, please visit our <a href="/citizen/complaint" className="text-teal-600 hover:text-teal-700 font-medium">Complaint Portal</a> or contact the nearest CID office directly.
+                For urgent matters and complaints, please visit our <a href="/citizen/complaint" className="text-purple-600 hover:text-purple-700 font-medium">Complaint Portal</a> or contact the nearest CID office directly.
               </p>
             </div>
           </div>

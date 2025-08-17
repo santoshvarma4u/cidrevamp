@@ -88,7 +88,7 @@ const applyTheme = (theme: Theme) => {
 };
 
 const themes = [
-  { id: 'light-teal', name: 'Light Teal', color: 'bg-teal-400' },
+  { id: 'light-teal', name: 'Light Teal', color: 'bg-purple-400' },
   { id: 'mulberry', name: 'Mulberry', color: 'bg-rose-900' },
   { id: 'soft-peach', name: 'Soft Peach', color: 'bg-orange-300' },
   { id: 'purple-cyan', name: 'Purple & Cyan', color: 'bg-gradient-to-r from-purple-600 to-cyan-400' },

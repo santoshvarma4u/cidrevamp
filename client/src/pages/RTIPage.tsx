@@ -1,4 +1,4 @@
-import Header from "@/components/layout/ModernHeader";
+import ModernHeader from "@/components/layout/ModernHeader";
 import { Shield, Phone, Users, Building, ExternalLink } from "lucide-react";
 
 export function RTIPage() {
@@ -176,12 +176,12 @@ export function RTIPage() {
           <div className="mb-16">
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="flex items-center mb-6">
-                <Building className="h-6 w-6 text-teal-600 mr-3" />
+                <Building className="h-6 w-6 text-purple-600 mr-3" />
                 <h2 className="text-2xl font-bold text-gray-900">Online RTI Application</h2>
               </div>
               
-              <div className="flex items-center space-x-4 p-6 bg-teal-50 rounded-lg">
-                <ExternalLink className="h-8 w-8 text-teal-600" />
+              <div className="flex items-center space-x-4 p-6 bg-purple-50 rounded-lg">
+                <ExternalLink className="h-8 w-8 text-purple-600" />
                 <div>
                   <p className="text-gray-700 mb-2">
                     You can file a complaint online through the official RTI portal:
@@ -190,7 +190,7 @@ export function RTIPage() {
                     href="https://rtionline.gov.in/" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="inline-flex items-center text-teal-600 hover:text-teal-700 font-semibold"
+                    className="inline-flex items-center text-purple-600 hover:text-purple-700 font-semibold"
                   >
                     https://rtionline.gov.in/
                     <ExternalLink className="h-4 w-4 ml-1" />
@@ -210,7 +210,7 @@ export function RTIPage() {
               <p className="text-gray-700 mb-4">
                 Under this Act, any citizen can request information from a "public authority" which is required to reply expeditiously or within thirty days. The Act also requires every public authority to computerize their records for wide dissemination and to proactively publish certain categories of information so that the citizens need minimum recourse to request for information formally.
               </p>
-              <div className="bg-teal-50 p-4 rounded-lg">
+              <div className="bg-purple-50 p-4 rounded-lg">
                 <h4 className="font-semibold text-gray-900 mb-2">Important Points:</h4>
                 <ul className="list-disc list-inside space-y-1 text-gray-700">
                   <li>Application fee: ₹10 (for BPL citizens: No fee)</li>
