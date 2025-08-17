@@ -5,7 +5,7 @@ import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -101,7 +101,7 @@ export default function LodgeComplaint() {
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
+        <ModernHeader />
         
         <section className="py-12">
           <div className="container mx-auto px-4">
@@ -154,7 +154,7 @@ export default function LodgeComplaint() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <ModernHeader />
       
       {/* Page Header */}
       <section className="bg-white border-b py-8">

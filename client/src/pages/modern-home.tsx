@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Header from "@/components/layout/ModernHeader";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import type { Video, Photo, News } from "@shared/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -106,7 +106,7 @@ export default function ModernHome() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <ModernHeader />
 
       {/* Director General and Latest Video Section */}
       <section className="pt-72 pb-18">

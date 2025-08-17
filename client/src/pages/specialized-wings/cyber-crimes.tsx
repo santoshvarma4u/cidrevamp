@@ -1,4 +1,4 @@
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -88,7 +88,7 @@ export default function CyberCrimes() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <ModernHeader />
       
       {/* Page Header */}
       <section className="bg-white border-b py-8">

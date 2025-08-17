@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { X, Download, Calendar, Eye } from "lucide-react";
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 
 interface Photo {
@@ -61,7 +61,7 @@ export default function PhotoGallery() {
 
   return (
     <>
-      <Header />
+      <ModernHeader />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}

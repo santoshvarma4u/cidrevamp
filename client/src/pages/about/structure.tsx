@@ -1,4 +1,4 @@
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -113,7 +113,7 @@ export default function OrganizationStructure() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <ModernHeader />
 
       {/* Header Section */}
       <section className="bg-gradient-to-r from-gray-700 to-gray-800 text-white py-16">

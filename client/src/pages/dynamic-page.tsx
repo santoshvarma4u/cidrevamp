@@ -1,6 +1,6 @@
 import { useParams } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 
@@ -23,7 +23,7 @@ export default function DynamicPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen">
-        <Header />
+        <ModernHeader />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <LoadingSpinner size="md" className="mx-auto mb-4" />
@@ -38,7 +38,7 @@ export default function DynamicPage() {
   if (error || !page) {
     return (
       <div className="min-h-screen">
-        <Header />
+        <ModernHeader />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Page Not Found</h1>
@@ -60,7 +60,7 @@ export default function DynamicPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <ModernHeader />
       
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4 max-w-7xl">

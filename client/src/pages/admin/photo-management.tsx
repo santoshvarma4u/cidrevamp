@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { Link } from "wouter";
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import Breadcrumb from "@/components/ui/breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -200,7 +200,7 @@ export default function PhotoManagement() {
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
+        <ModernHeader />
         <div className="container mx-auto px-4 py-12">
           <Card className="max-w-md mx-auto">
             <CardContent className="pt-6 text-center">
@@ -254,7 +254,7 @@ export default function PhotoManagement() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <ModernHeader />
       
       {/* Page Header */}
       <section className="bg-white border-b py-6">

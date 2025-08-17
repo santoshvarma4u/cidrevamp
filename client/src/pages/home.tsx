@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Header from "@/components/layout/ModernHeader";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import NewsTicker from "@/components/home/NewsTicker";
 import AutoScrollNews from "@/components/common/AutoScrollNews";
@@ -153,7 +153,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <ModernHeader />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-32">

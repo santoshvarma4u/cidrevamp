@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Play, Calendar, Clock, Eye, X, Download } from "lucide-react";
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 
 interface Video {
@@ -66,7 +66,7 @@ export default function VideoGallery() {
 
   return (
     <>
-      <Header />
+      <ModernHeader />
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}

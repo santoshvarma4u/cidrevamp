@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import VideoPlayer from "@/components/common/VideoPlayer";
 import PhotoGallery from "@/components/common/PhotoGallery";
@@ -28,7 +28,7 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <ModernHeader />
       
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-gov-blue to-gov-light-blue text-white">

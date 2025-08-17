@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -102,7 +102,7 @@ export default function ComplaintForm() {
   if (submittedComplaint) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header />
+        <ModernHeader />
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-2xl mx-auto">
             <Card className="border-green-200 bg-green-50">
@@ -166,7 +166,7 @@ export default function ComplaintForm() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <ModernHeader />
       
       {/* Header Section */}
       <section className="bg-blue-600 text-white py-12">

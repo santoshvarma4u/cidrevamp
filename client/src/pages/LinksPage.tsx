@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "@/components/layout/Header";
+import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import { ExternalLink, Shield, Globe, Building, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -344,7 +344,7 @@ export default function LinksPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <ModernHeader />
       
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
