@@ -190,19 +190,7 @@ export default function Home() {
                 specialized investigations, advanced technology, and community engagement
               </p>
               
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/citizen/complaint">
-                  <button className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white font-semibold rounded-full hover:from-cyan-600 hover:to-cyan-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105" data-testid="button-report-crime">
-                    Report a Crime
-                  </button>
-                </Link>
-                <Link href="/about/structure">
-                  <button className="px-8 py-4 border-2 border-purple-300 text-purple-100 font-semibold rounded-full hover:bg-purple-300 hover:text-purple-900 transition-all duration-300" data-testid="button-learn-more">
-                    Learn More
-                  </button>
-                </Link>
-              </div>
+
             </div>
           </div>
         </div>
