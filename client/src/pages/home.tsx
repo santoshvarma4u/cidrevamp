@@ -447,7 +447,7 @@ export default function Home() {
                       {latestNews.slice(0, 3).map((news: any) => (
                         <div
                           key={news.id}
-                          className="border-l-4 border-blue-500 pl-4 pb-3 border-b border-gray-200 last:border-b-0"
+                          className="border-l-4 border-blue-500 pl-4 pb-3 border-b border-gray-200"
                         >
                           <h4 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2">
                             {news.title}
