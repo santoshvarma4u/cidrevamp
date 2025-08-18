@@ -162,7 +162,7 @@ export default function Home() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)",
+              "linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)",
           }}
         ></div>
 
@@ -184,14 +184,14 @@ export default function Home() {
             {/* Hero Content */}
             <div className="mb-12">
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
-                <span className="bg-gradient-to-r from-[#161D6F] to-[#0F1454] bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#2C3680] to-[#1E2A5E] bg-clip-text text-transparent">
                   Excellence in
                 </span>
-                <span className="block bg-gradient-to-r from-[#0F1454] to-[#161D6F] bg-clip-text text-transparent font-bold">
+                <span className="block bg-gradient-to-r from-[#1E2A5E] to-[#2C3680] bg-clip-text text-transparent font-bold">
                   Crime Investigation
                 </span>
               </h1>
-              <p className="text-lg md:text-xl lg:text-2xl mb-10 leading-relaxed max-w-2xl" style={{ color: '#161D6F' }}>
+              <p className="text-lg md:text-xl lg:text-2xl mb-10 leading-relaxed max-w-2xl" style={{ color: '#2C3680' }}>
                 Telangana State's premier law enforcement agency ensuring public
                 safety through specialized investigations, advanced technology,
                 and community engagement

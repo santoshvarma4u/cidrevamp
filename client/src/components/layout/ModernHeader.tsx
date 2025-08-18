@@ -47,8 +47,8 @@ export default function ModernHeader() {
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Unified Header with Seamless Gradient */}
       <div className="backdrop-blur-sm" style={{
-        background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
-        color: '#161D6F'
+        background: 'linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
+        color: '#2C3680'
       }}>
         {/* First Row - Department Name */}
         <div className="container mx-auto">
@@ -64,7 +64,7 @@ export default function ModernHeader() {
             
             {/* Right-aligned Text */}
             <div className="text-right">
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider bg-gradient-to-r from-[#161D6F] to-[#0F1454] bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C3680] to-[#1E2A5E] bg-clip-text text-transparent">
                 Crime Investigation Department
               </h1>
             </div>
@@ -82,7 +82,7 @@ export default function ModernHeader() {
               <Button
                 variant="ghost"
                 className="hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
-                style={{ color: '#161D6F' }}
+                style={{ color: '#2C3680' }}
                 onClick={() => (window.location.href = "/")}
               >
                 Home
@@ -100,7 +100,7 @@ export default function ModernHeader() {
                         <Button
                           variant="ghost"
                           className="hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
-                          style={{ color: '#161D6F' }}
+                          style={{ color: '#2C3680' }}
                           onClick={() => (window.location.href = `/${page.slug}`)}
                         >
                           {page.menuTitle || page.title}
@@ -110,7 +110,7 @@ export default function ModernHeader() {
                             <Button
                               variant="ghost"
                               className="hover:bg-transparent transition-colors px-1 py-2"
-                              style={{ color: '#161D6F' }}
+                              style={{ color: '#2C3680' }}
                             >
                               <ChevronDown className="h-4 w-4" />
                             </Button>
@@ -139,7 +139,7 @@ export default function ModernHeader() {
                       key={page.slug}
                       variant="ghost"
                       className="hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
-                      style={{ color: '#161D6F' }}
+                      style={{ color: '#2C3680' }}
                       onClick={() => (window.location.href = `/${page.slug}`)}
                     >
                       {page.menuTitle || page.title}
