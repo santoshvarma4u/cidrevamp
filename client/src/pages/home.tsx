@@ -158,23 +158,27 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-32">
         {/* Hero Background with Gradient - Matching Card Headers */}
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%)'
-        }}></div>
-        
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%)",
+          }}
+        ></div>
+
         {/* Geometric Background Elements */}
         <div className="absolute inset-0">
           {/* Large Circular Elements */}
           <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-purple-400/20 to-transparent rounded-full"></div>
           <div className="absolute top-40 right-32 w-64 h-64 bg-gradient-to-br from-cyan-400/30 to-transparent rounded-full"></div>
           <div className="absolute bottom-20 left-10 w-80 h-80 bg-gradient-to-tr from-purple-300/15 to-transparent rounded-full"></div>
-          
+
           {/* Simple Grid Pattern */}
           <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black/30 to-transparent">
             <div className="w-full h-full bg-gradient-to-r from-purple-600/15 to-cyan-600/15"></div>
           </div>
         </div>
-        
+
         <div className="relative z-10 container mx-auto px-4 py-20 min-h-[70vh] flex items-center">
           <div className="max-w-3xl">
             {/* Hero Content */}
@@ -186,11 +190,10 @@ export default function Home() {
                 </span>
               </h1>
               <p className="text-lg md:text-xl lg:text-2xl text-purple-100 mb-10 leading-relaxed max-w-2xl">
-                Telangana State's premier law enforcement agency ensuring public safety through
-                specialized investigations, advanced technology, and community engagement
+                Telangana State's premier law enforcement agency ensuring public
+                safety through specialized investigations, advanced technology,
+                and community engagement
               </p>
-              
-
             </div>
           </div>
         </div>
@@ -218,7 +221,7 @@ export default function Home() {
                     <img
                       src={adgpImagePath}
                       alt="Director General of Police"
-                      className="w-32 h-40 object-cover rounded-lg border-2 border-gray-300"
+                      className="w-32 h-40 object-cover rounded-lg "
                     />
                   </div>
 
@@ -231,17 +234,9 @@ export default function Home() {
                       systematic investigation using high end, state of the art
                       equipment with quality forensic support in coordination
                       with national and international agencies. We follow the
-                      principle that 'men may lie but material will not'. Our
-                      staff is highly trained, motivated, sincere and
-                      hardworking to achieve our vision and mission. Our
-                      specialized wings include Economic Offences, General
-                      Offences, Child and Women Protection, Protection of Civil
-                      Rights and Cyber Crimes. We welcome any feedback from the
-                      citizens related to any crime. I wish this website paves
-                      way for the public awareness about recent crimes and
-                      alerts."
+                      principle that 'men may lie but material will not'."
                     </blockquote>
-                    <div className="mt-6 pt-4 border-t border-gray-200">
+                    <div className="mt-6 pt-4">
                       <p className="text-sm text-gray-600 font-medium">
                         - Director General of Police, Telangana State
                       </p>
@@ -295,16 +290,10 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-4 flex items-center justify-center bg-white rounded-b-2xl">
                   <div className="text-center">
-                    <h3
-                      className={`text-3xl font-bold ${themeClasses.textAccent} mb-3`}
-                    >
-                      NCL
-                    </h3>
                     <p className="text-base text-gray-800 font-medium">
-                      National Criminal Laws
-                    </p>
-                    <p className="text-xs text-gray-600 mt-2">
-                      Legal framework and provisions
+                      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vS_dO5aAJbeoGT2EnBK3dDrOae9iMCE7-hKuinw7bL-9rbWL7tETIzh9TKzds0cfHKxNUb2Rn9wD1Ep/pubhtml">
+                        National Criminal Laws
+                      </a>
                     </p>
                   </div>
                 </CardContent>
@@ -323,7 +312,9 @@ export default function Home() {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Photo Gallery */}
             <div className="lg:col-span-2">
-              <Card className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl h-96 flex flex-col`}>
+              <Card
+                className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl h-96 flex flex-col`}
+              >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
                     <Images className="h-6 w-6" />
@@ -441,7 +432,9 @@ export default function Home() {
 
             {/* News Section */}
             <div>
-              <Card className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl h-96 flex flex-col`}>
+              <Card
+                className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl h-96 flex flex-col`}
+              >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
                     <FileText className="h-6 w-6" />
@@ -516,10 +509,7 @@ export default function Home() {
                     <p className="text-gray-600 mb-4">{wing.description}</p>
                     <div className="space-y-2 mb-4">
                       {wing.features.map((feature, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center space-x-2"
-                        >
+                        <div key={idx} className="flex items-center space-x-2">
                           <CheckCircle className="h-4 w-4 text-primary" />
                           <span className="text-sm">{feature}</span>
                         </div>
