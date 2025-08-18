@@ -41,31 +41,26 @@
 /* Purple-cyan theme specific card styling */
 [data-theme="purple-cyan"] .gradient-card {
   background: linear-gradient(135deg, rgba(103, 38, 118, 0.1) 0%, rgba(0, 191, 255, 0.1) 100%);
-  border: 1px solid rgba(103, 38, 118, 0.2);
 }
 
 /* Clean white backgrounds for all cards - NO gradients on card bodies */
 [data-theme="purple-cyan"] .card {
   background: white;
-  border: 2px solid rgba(103, 38, 118, 0.2);
 }
 
 [data-theme="purple-cyan"] .bg-white {
   background: white !important;
-  border: 2px solid rgba(103, 38, 118, 0.15) !important;
 }
 
 /* Clean white backgrounds for main content cards */
 [data-theme="purple-cyan"] .main-card {
   background: white;
-  border: 2px solid rgba(103, 38, 118, 0.25);
   box-shadow: 0 8px 32px rgba(103, 38, 118, 0.1);
 }
 
 /* Clean white background for photo gallery and news cards */
 [data-theme="purple-cyan"] .gallery-card {
   background: white;
-  border: 2px solid rgba(103, 38, 118, 0.18);
 }
 
 /* Gradient ONLY for card headers */
