@@ -179,7 +179,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 py-20 min-h-[85vh] flex items-start pt-24">
+        <div className="relative z-10 container mx-auto px-4 py-20 min-h-[85vh] flex items-center">
           <div className="max-w-3xl">
             {/* Hero Content */}
             <div className="mb-12">
