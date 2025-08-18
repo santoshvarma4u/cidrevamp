@@ -62,7 +62,7 @@ export default function ModernHeader() {
 
             {/* Center Text */}
             <div className="flex-1 text-center">
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider" style={{ color: '#161D6F' }}>
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider bg-gradient-to-r from-[#161D6F] to-[#0F1454] bg-clip-text text-transparent">
                 Crime Investigation Department
               </h1>
             </div>
