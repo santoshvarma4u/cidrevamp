@@ -191,7 +191,7 @@ export default function Home() {
                   Crime Investigation
                 </span>
               </h1>
-              <p className="text-lg md:text-xl lg:text-2xl mb-10 leading-relaxed max-w-2xl" style={{ color: '#2C3680' }}>
+              <p className="text-lg md:text-xl lg:text-2xl mb-16 leading-relaxed max-w-2xl" style={{ color: '#2C3680' }}>
                 Telangana State's premier law enforcement agency ensuring public
                 safety through specialized investigations, advanced technology,
                 and community engagement
