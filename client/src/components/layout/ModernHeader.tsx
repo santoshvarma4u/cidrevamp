@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import leftLogoSrc from "@assets/leftlogo_1753517979998.png";
 import tsLogoSrc from "@assets/TSLogo_1754309846963.png";
+import policeLogoSrc from "@assets/WhatsApp Image 2025-08-18 at 11.52.23_f2cec4c6_1755518006735.jpg";
 
 export default function ModernHeader() {
   const [location] = useLocation();
@@ -52,7 +53,16 @@ export default function ModernHeader() {
         paddingRight: '20px'
       }}>
         <div className="container mx-auto">
-          <div className="flex justify-end items-center">
+          <div className="flex justify-between items-center">
+            {/* Left Logo */}
+            <div className="flex items-center">
+              <img 
+                src={policeLogoSrc} 
+                alt="Telangana Police Logo" 
+                className="h-16 w-16 md:h-20 md:w-20 object-contain"
+              />
+            </div>
+            
             {/* Right-aligned Text */}
             <div className="text-right">
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider bg-gradient-to-r from-[#161D6F] to-[#0F1454] bg-clip-text text-transparent">
