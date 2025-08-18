@@ -179,15 +179,15 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 py-20 min-h-[80vh] flex items-start pt-32">
+        <div className="relative z-10 container mx-auto px-4 py-20 min-h-[85vh] flex items-start pt-24">
           <div className="max-w-3xl">
             {/* Hero Content */}
             <div className="mb-12">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-relaxed">
                 <span className="bg-gradient-to-r from-[#2C3680] to-[#1E2A5E] bg-clip-text text-transparent">
                   Excellence in
                 </span>
-                <span className="block bg-gradient-to-r from-[#1E2A5E] to-[#2C3680] bg-clip-text text-transparent font-bold">
+                <span className="block bg-gradient-to-r from-[#1E2A5E] to-[#2C3680] bg-clip-text text-transparent font-bold pb-2">
                   Crime Investigation
                 </span>
               </h1>
