@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# CID Telangana Docker Run Script
-# This script helps you run the application with Docker Compose
-
+# CID Telangana Docker Management Script
 set -e
 
 # Colors for output
@@ -12,13 +10,9 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Print colored output
+# Function to print colored output
 print_status() {
-    echo -e "${BLUE}[INFO]${NC} $1"
-}
-
-print_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    echo -e "${GREEN}[INFO]${NC} $1"
 }
 
 print_warning() {
@@ -29,172 +23,279 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Function to check if Docker is running
-check_docker() {
-    if ! docker info > /dev/null 2>&1; then
-        print_error "Docker is not running. Please start Docker and try again."
-        exit 1
-    fi
-    print_success "Docker is running"
+print_header() {
+    echo -e "${BLUE}============================================${NC}"
+    echo -e "${BLUE}$1${NC}"
+    echo -e "${BLUE}============================================${NC}"
 }
 
-# Function to check if docker-compose is available
-check_docker_compose() {
-    if command -v docker-compose > /dev/null 2>&1; then
-        COMPOSE_CMD="docker-compose"
-    elif docker compose version > /dev/null 2>&1; then
-        COMPOSE_CMD="docker compose"
-    else
-        print_error "Docker Compose is not available. Please install Docker Compose."
-        exit 1
-    fi
-    print_success "Docker Compose is available: $COMPOSE_CMD"
+# Help function
+show_help() {
+    echo "CID Telangana Docker Management Script"
+    echo ""
+    echo "Usage: $0 [COMMAND]"
+    echo ""
+    echo "Commands:"
+    echo "  dev           Start development environment with hot reload"
+    echo "  prod          Start production environment"
+    echo "  build         Build production Docker images"
+    echo "  backup        Create database backup"
+    echo "  restore       Restore database from backup"
+    echo "  logs          Show application logs"
+    echo "  stop          Stop all containers"
+    echo "  clean         Remove all containers and volumes (WARNING: Data loss)"
+    echo "  setup         Initial setup and database initialization"
+    echo "  health        Check container health status"
+    echo "  help          Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  $0 dev                    # Start development environment"
+    echo "  $0 backup                 # Create database backup"
+    echo "  $0 restore backup.sql     # Restore from specific backup"
+    echo "  $0 logs app               # Show app container logs"
 }
 
-# Function to create necessary directories
-create_directories() {
-    print_status "Creating necessary directories..."
-    mkdir -p uploads
-    mkdir -p uploads/officers
-    mkdir -p uploads/videos
-    mkdir -p uploads/photos
-    mkdir -p uploads/documents
-    print_success "Directories created"
-}
-
-# Function to copy environment file
+# Setup function
 setup_environment() {
-    if [ ! -f .env ]; then
-        print_status "Creating .env file from template..."
-        cp .env.example .env
-        print_warning "Please edit .env file with your production settings before running in production"
-    else
-        print_success ".env file already exists"
+    print_header "Setting Up CID Telangana Environment"
+    
+    # Create necessary directories
+    mkdir -p backups
+    mkdir -p uploads
+    mkdir -p logs
+    
+    # Check if database_export.sql exists
+    if [ ! -f "database_export.sql" ]; then
+        print_warning "database_export.sql not found. Creating empty database."
     fi
+    
+    print_status "Environment setup completed!"
 }
 
-# Function to build and run the application
-run_application() {
-    local profile=${1:-""}
+# Development environment
+start_dev() {
+    print_header "Starting Development Environment"
     
-    print_status "Building and starting CID Telangana application..."
+    setup_environment
     
-    if [ "$profile" = "dev" ]; then
-        print_status "Starting in development mode..."
-        $COMPOSE_CMD -f docker-compose.dev.yml up --build -d
-    elif [ "$profile" = "production" ]; then
-        print_status "Starting in production mode with Nginx..."
-        $COMPOSE_CMD --profile production up --build -d
+    print_status "Building and starting development containers..."
+    docker-compose -f docker-compose.dev.yml up --build -d
+    
+    print_status "Development environment started!"
+    echo ""
+    echo "Services available at:"
+    echo "  - Application: http://localhost:5001"
+    echo "  - PostgreSQL: localhost:5433"
+    echo ""
+    echo "To view logs: $0 logs"
+    echo "To stop: $0 stop"
+}
+
+# Production environment
+start_prod() {
+    print_header "Starting Production Environment"
+    
+    setup_environment
+    
+    print_status "Building and starting production containers..."
+    docker-compose up --build -d
+    
+    print_status "Production environment started!"
+    echo ""
+    echo "Services available at:"
+    echo "  - Application: http://localhost:5000"
+    echo "  - Nginx (if enabled): http://localhost:80"
+    echo "  - PostgreSQL: localhost:5432"
+    echo ""
+    echo "To view logs: $0 logs"
+    echo "To stop: $0 stop"
+}
+
+# Build images
+build_images() {
+    print_header "Building Docker Images"
+    
+    print_status "Building production image..."
+    docker-compose build app
+    
+    print_status "Building development image..."
+    docker-compose -f docker-compose.dev.yml build app-dev
+    
+    print_status "Images built successfully!"
+}
+
+# Create backup
+create_backup() {
+    print_header "Creating Database Backup"
+    
+    # Check if development or production
+    if docker-compose -f docker-compose.dev.yml ps postgres-dev | grep -q "Up"; then
+        print_status "Creating backup from development database..."
+        docker-compose -f docker-compose.dev.yml --profile backup run --rm db-backup
+    elif docker-compose ps postgres | grep -q "Up"; then
+        print_status "Creating backup from production database..."
+        # Update backup script for production
+        POSTGRES_HOST=postgres POSTGRES_DB=ciddb docker-compose run --rm \
+            -e POSTGRES_HOST=postgres -e POSTGRES_DB=ciddb \
+            postgres /scripts/backup.sh
     else
-        print_status "Starting in standard mode..."
-        $COMPOSE_CMD up --build -d
-    fi
-    
-    # Wait for services to be healthy
-    print_status "Waiting for services to be healthy..."
-    sleep 10
-    
-    # Check if services are running
-    if $COMPOSE_CMD ps | grep -q "Up"; then
-        print_success "Application is running!"
-        print_status "Access the application at: http://localhost:5000"
-        
-        if [ "$profile" = "production" ]; then
-            print_status "Nginx proxy available at: http://localhost:80"
-        fi
-        
-        if [ "$profile" = "dev" ]; then
-            print_status "Development database available at: localhost:5433"
-            print_status "PgAdmin available at: http://localhost:8080 (if enabled)"
-        fi
-    else
-        print_error "Some services failed to start. Check logs with: $COMPOSE_CMD logs"
+        print_error "No database container is running!"
         exit 1
     fi
+    
+    print_status "Backup created successfully! Check ./backups/ directory"
 }
 
-# Function to show logs
+# Restore backup
+restore_backup() {
+    if [ -z "$2" ]; then
+        print_error "Please specify backup file to restore"
+        echo "Usage: $0 restore <backup_file>"
+        echo "Available backups:"
+        ls -la backups/ 2>/dev/null || echo "No backups found"
+        exit 1
+    fi
+    
+    print_header "Restoring Database Backup"
+    
+    BACKUP_FILE="$2"
+    if [ ! -f "backups/$BACKUP_FILE" ]; then
+        print_error "Backup file 'backups/$BACKUP_FILE' not found!"
+        exit 1
+    fi
+    
+    print_warning "This will overwrite the current database. Are you sure? (y/N)"
+    read -r confirm
+    if [[ $confirm != [yY] ]]; then
+        print_status "Restore cancelled."
+        exit 0
+    fi
+    
+    # Restore to appropriate database
+    if docker-compose -f docker-compose.dev.yml ps postgres-dev | grep -q "Up"; then
+        print_status "Restoring to development database..."
+        docker-compose -f docker-compose.dev.yml run --rm \
+            -v "$(pwd)/backups/$BACKUP_FILE:/backup_file" \
+            postgres-dev /scripts/restore.sh /backup_file
+    else
+        print_status "Restoring to production database..."
+        docker-compose run --rm \
+            -v "$(pwd)/backups/$BACKUP_FILE:/backup_file" \
+            postgres /scripts/restore.sh /backup_file
+    fi
+    
+    print_status "Database restored successfully!"
+}
+
+# Show logs
 show_logs() {
-    $COMPOSE_CMD logs -f
+    SERVICE=${2:-""}
+    
+    if [ -n "$SERVICE" ]; then
+        print_header "Showing logs for $SERVICE"
+        if docker-compose -f docker-compose.dev.yml ps | grep -q "$SERVICE"; then
+            docker-compose -f docker-compose.dev.yml logs -f "$SERVICE"
+        else
+            docker-compose logs -f "$SERVICE"
+        fi
+    else
+        print_header "Showing all container logs"
+        if docker-compose -f docker-compose.dev.yml ps | grep -q "Up"; then
+            docker-compose -f docker-compose.dev.yml logs -f
+        else
+            docker-compose logs -f
+        fi
+    fi
 }
 
-# Function to stop the application
-stop_application() {
-    print_status "Stopping CID Telangana application..."
-    $COMPOSE_CMD down
-    print_success "Application stopped"
+# Stop containers
+stop_containers() {
+    print_header "Stopping All Containers"
+    
+    # Stop both development and production
+    docker-compose -f docker-compose.dev.yml down 2>/dev/null || true
+    docker-compose down 2>/dev/null || true
+    
+    print_status "All containers stopped!"
 }
 
-# Function to clean up
-cleanup() {
-    print_status "Cleaning up Docker resources..."
-    $COMPOSE_CMD down -v --remove-orphans
-    docker system prune -f
-    print_success "Cleanup complete"
+# Clean up
+clean_environment() {
+    print_header "Cleaning Up Environment"
+    
+    print_warning "This will remove ALL containers, volumes, and data. Are you sure? (y/N)"
+    read -r confirm
+    if [[ $confirm != [yY] ]]; then
+        print_status "Cleanup cancelled."
+        exit 0
+    fi
+    
+    print_status "Stopping and removing all containers..."
+    docker-compose -f docker-compose.dev.yml down -v --remove-orphans 2>/dev/null || true
+    docker-compose down -v --remove-orphans 2>/dev/null || true
+    
+    print_status "Removing Docker images..."
+    docker rmi $(docker images "cid-*" -q) 2>/dev/null || true
+    
+    print_status "Cleanup completed!"
+}
+
+# Check health
+check_health() {
+    print_header "Container Health Status"
+    
+    echo "Development Environment:"
+    docker-compose -f docker-compose.dev.yml ps
+    
+    echo ""
+    echo "Production Environment:"
+    docker-compose ps
+    
+    echo ""
+    print_status "Health check completed!"
 }
 
 # Main script logic
-case "${1:-start}" in
-    "start")
-        check_docker
-        check_docker_compose
-        create_directories
-        setup_environment
-        run_application
-        ;;
+case "$1" in
     "dev")
-        check_docker
-        check_docker_compose
-        create_directories
-        setup_environment
-        run_application "dev"
+        start_dev
         ;;
     "prod")
-        check_docker
-        check_docker_compose
-        create_directories
-        setup_environment
-        run_application "production"
+        start_prod
+        ;;
+    "build")
+        build_images
+        ;;
+    "backup")
+        create_backup
+        ;;
+    "restore")
+        restore_backup "$@"
         ;;
     "logs")
-        show_logs
+        show_logs "$@"
         ;;
     "stop")
-        stop_application
-        ;;
-    "restart")
-        stop_application
-        sleep 2
-        run_application
+        stop_containers
         ;;
     "clean")
-        cleanup
+        clean_environment
         ;;
-    "help"|"-h"|"--help")
-        echo "CID Telangana Docker Management Script"
-        echo ""
-        echo "Usage: $0 [COMMAND]"
-        echo ""
-        echo "Commands:"
-        echo "  start     Start the application (default)"
-        echo "  dev       Start in development mode with dev database"
-        echo "  prod      Start in production mode with Nginx"
-        echo "  logs      Show application logs"
-        echo "  stop      Stop the application"
-        echo "  restart   Restart the application"
-        echo "  clean     Stop and clean up all Docker resources"
-        echo "  help      Show this help message"
-        echo ""
-        echo "Examples:"
-        echo "  $0 start    # Start the application"
-        echo "  $0 dev      # Start with development database"
-        echo "  $0 prod     # Start with Nginx proxy"
-        echo "  $0 logs     # View logs"
-        echo "  $0 stop     # Stop everything"
+    "setup")
+        setup_environment
+        ;;
+    "health")
+        check_health
+        ;;
+    "help"|"--help"|"-h")
+        show_help
+        ;;
+    "")
+        show_help
         ;;
     *)
         print_error "Unknown command: $1"
-        print_status "Use '$0 help' for usage information"
+        show_help
         exit 1
         ;;
 esac

@@ -1,292 +1,322 @@
 # CID Telangana - Docker Deployment Guide
 
-This guide explains how to run the CID Telangana application using Docker and Docker Compose.
+This guide provides comprehensive instructions for deploying the CID Telangana website using Docker.
 
-## Prerequisites
+## 🚀 Quick Start
 
-- Docker Engine 20.10 or later
-- Docker Compose v2.0 or later
-- At least 2GB of available RAM
-- 5GB of free disk space
+### Prerequisites
+- Docker (version 20.10 or higher)
+- Docker Compose (version 2.0 or higher)
+- At least 2GB RAM available for containers
 
-## Quick Start
-
-### 1. Clone and Setup
-
+### Development Environment
 ```bash
-# Make the run script executable
-chmod +x docker-run.sh
-
-# Start the application (creates .env file from template)
-./docker-run.sh start
-```
-
-### 2. Access the Application
-
-- **Web Application**: http://localhost:5000
-- **Admin Panel**: http://localhost:5000/admin/login
-
-## Deployment Options
-
-### Standard Deployment
-```bash
-# Start with PostgreSQL and web application
-./docker-run.sh start
-```
-
-### Development Mode
-```bash
-# Start with development database and optional PgAdmin
+# Start development environment with hot reload
 ./docker-run.sh dev
 
-# Access PgAdmin (if enabled): http://localhost:8080
-# Default credentials: admin@cidtelangana.gov.in / admin123
+# Application will be available at:
+# - Web App: http://localhost:5001
+# - PostgreSQL: localhost:5433
 ```
 
-### Production Mode
+### Production Environment
 ```bash
-# Start with Nginx reverse proxy
+# Start production environment
 ./docker-run.sh prod
 
-# Access via: http://localhost:80
+# Application will be available at:
+# - Web App: http://localhost:5000
+# - Nginx (if enabled): http://localhost:80
+# - PostgreSQL: localhost:5432
 ```
 
-## Docker Compose Files
+## 📁 Project Structure
 
-### docker-compose.yml (Production)
-- PostgreSQL database with persistent storage
-- CID web application with health checks
-- Optional Nginx reverse proxy
-- Automatic service recovery
-
-### docker-compose.dev.yml (Development)
-- Separate development database (port 5433)
-- PgAdmin for database management
-- Development-specific configurations
-
-## Environment Configuration
-
-### .env File
-Copy `.env.example` to `.env` and configure:
-
-```bash
-# Database
-DATABASE_URL=postgresql://ciduser:cidpassword@postgres:5432/ciddb
-
-# Application
-NODE_ENV=production
-PORT=5000
-SESSION_SECRET=your-super-secret-session-key
-
-# Security
-BCRYPT_ROUNDS=12
-MAX_FILE_SIZE=10485760
+```
+cid-telangana/
+├── docker-compose.yml          # Production configuration
+├── docker-compose.dev.yml      # Development configuration
+├── Dockerfile                  # Production image
+├── Dockerfile.dev              # Development image
+├── docker-run.sh              # Management script
+├── nginx.conf                 # Nginx configuration
+├── database_export.sql        # Database initialization
+├── scripts/
+│   └── backup/
+│       ├── backup.sh          # Database backup script
+│       ├── restore.sh         # Database restore script
+│       └── cron-backup.sh     # Automated backup script
+├── backups/                   # Database backups storage
+└── uploads/                   # File uploads storage
 ```
 
-### Important Security Notes
+## 🛠️ Management Commands
 
-⚠️ **Before Production Deployment:**
-
-1. **Change Default Passwords**: Update database credentials in `.env`
-2. **Generate Secure Session Secret**: Use a cryptographically secure random string
-3. **Configure SSL**: Set up SSL certificates for HTTPS
-4. **Update Admin Credentials**: Change default admin passwords
-5. **Configure Firewall**: Restrict access to necessary ports only
-
-## Container Details
-
-### PostgreSQL Container
-- **Image**: postgres:15-alpine
-- **Port**: 5432 (internal), 5432 (external)
-- **Data**: Persistent volume `postgres_data`
-- **Init**: Loads `database_export.sql` on first run
-
-### Application Container
-- **Build**: Multi-stage optimized build
-- **Port**: 5000
-- **Uploads**: Persistent volume `app_uploads`
-- **Health Check**: `/api/health` endpoint
-- **User**: Non-root user for security
-
-### Nginx Container (Production Only)
-- **Image**: nginx:alpine
-- **Ports**: 80 (HTTP), 443 (HTTPS)
-- **Features**: Rate limiting, compression, security headers
-- **SSL**: Ready for certificate configuration
-
-## Management Commands
+The `docker-run.sh` script provides easy management of the Docker environment:
 
 ```bash
-# View logs
+# Development
+./docker-run.sh dev              # Start development environment
+./docker-run.sh logs app-dev     # View development app logs
+
+# Production  
+./docker-run.sh prod             # Start production environment
+./docker-run.sh logs app         # View production app logs
+
+# Database Operations
+./docker-run.sh backup           # Create database backup
+./docker-run.sh restore backup.sql  # Restore from backup
+
+# Maintenance
+./docker-run.sh build            # Build Docker images
+./docker-run.sh health           # Check container health
+./docker-run.sh stop             # Stop all containers
+./docker-run.sh clean            # Remove containers and data (⚠️ DATA LOSS)
+
+# Help
+./docker-run.sh help             # Show all available commands
+```
+
+## 🗄️ Database Management
+
+### Automatic Initialization
+The database is automatically initialized with data from `database_export.sql` on first startup.
+
+### Manual Backup
+```bash
+# Create backup
+./docker-run.sh backup
+
+# Backups are stored in ./backups/ directory with timestamps
+# Format: cid_backup_YYYYMMDD_HHMMSS.sql.gz
+```
+
+### Restore from Backup
+```bash
+# List available backups
+ls -la backups/
+
+# Restore specific backup
+./docker-run.sh restore cid_backup_20250818_120000.sql.gz
+```
+
+### Automated Backups
+Set up automated daily backups using cron:
+
+```bash
+# Add to crontab (crontab -e)
+0 2 * * * /path/to/cid-telangana/scripts/backup/cron-backup.sh
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+#### Production (docker-compose.yml)
+```yaml
+environment:
+  NODE_ENV: production
+  PORT: 5000
+  DATABASE_URL: postgresql://ciduser:cidpassword@postgres:5432/ciddb
+  SESSION_SECRET: your-super-secret-session-key-change-this-in-production
+```
+
+#### Development (docker-compose.dev.yml)
+```yaml
+environment:
+  NODE_ENV: development
+  PORT: 5000
+  DATABASE_URL: postgresql://ciduser:cidpassword@postgres-dev:5432/ciddb_dev
+  SESSION_SECRET: dev-session-secret-key
+```
+
+### Custom Configuration
+1. Copy environment template:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` with your specific values:
+   ```bash
+   SESSION_SECRET=your-production-secret-key
+   POSTGRES_PASSWORD=your-secure-password
+   ```
+
+3. Update docker-compose.yml to use environment file:
+   ```yaml
+   env_file:
+     - .env
+   ```
+
+## 🌐 Nginx Reverse Proxy
+
+For production deployments, Nginx is included as a reverse proxy with the following features:
+
+- **Rate Limiting**: API endpoints and login protection
+- **Static File Caching**: Optimized asset delivery  
+- **Security Headers**: XSS protection, content security policy
+- **Gzip Compression**: Reduced bandwidth usage
+- **SSL/TLS Ready**: Uncomment HTTPS configuration
+
+### Enable Nginx
+```bash
+# Start with Nginx (production profile)
+docker-compose --profile production up -d
+
+# Or use the management script
+COMPOSE_PROFILES=production ./docker-run.sh prod
+```
+
+### SSL/HTTPS Setup
+1. Obtain SSL certificates (Let's Encrypt recommended)
+2. Place certificates in `./ssl/` directory
+3. Uncomment HTTPS server block in `nginx.conf`
+4. Update your domain configuration
+
+## 📊 Monitoring and Health Checks
+
+### Container Health Status
+```bash
+./docker-run.sh health
+```
+
+### Application Logs
+```bash
+# All containers
 ./docker-run.sh logs
 
-# Stop application
-./docker-run.sh stop
-
-# Restart application
-./docker-run.sh restart
-
-# Clean up (removes volumes!)
-./docker-run.sh clean
-
-# Show help
-./docker-run.sh help
+# Specific container
+./docker-run.sh logs app          # Production app
+./docker-run.sh logs app-dev      # Development app
+./docker-run.sh logs postgres     # Production database
+./docker-run.sh logs nginx        # Nginx proxy
 ```
-
-## Data Persistence
-
-### Volumes
-- `postgres_data`: Database storage
-- `app_uploads`: User uploaded files
-
-### Backup Database
-```bash
-# Export database
-docker exec cid-postgres pg_dump -U ciduser ciddb > backup.sql
-
-# Import database
-docker exec -i cid-postgres psql -U ciduser ciddb < backup.sql
-```
-
-### Backup Uploads
-```bash
-# Backup uploads
-docker cp cid-app:/app/uploads ./uploads-backup
-
-# Restore uploads
-docker cp ./uploads-backup/. cid-app:/app/uploads/
-```
-
-## Monitoring and Health Checks
 
 ### Health Check Endpoints
-- **Application**: http://localhost:5000/api/health
-- **Database**: Automated PostgreSQL health checks
+- Application: `http://localhost:5000/api/health`
+- Database: Automatic health checks in Docker Compose
 
-### Container Status
+## 🔒 Security Considerations
+
+### Production Security Checklist
+- [ ] Change default database passwords
+- [ ] Use strong SESSION_SECRET
+- [ ] Enable SSL/HTTPS with valid certificates
+- [ ] Configure firewall rules
+- [ ] Regular security updates
+- [ ] Database backup encryption
+- [ ] Monitor logs for suspicious activity
+
+### File Permissions
 ```bash
-# Check container status
-docker-compose ps
+# Ensure proper permissions for scripts
+chmod +x docker-run.sh
+chmod +x scripts/backup/*.sh
 
-# View resource usage
-docker stats
-
-# Check health status
-docker inspect cid-app | grep Health -A 10
+# Secure backup directory
+chmod 700 backups/
 ```
 
-## Troubleshooting
+## 🚨 Troubleshooting
 
 ### Common Issues
 
-1. **Port Already in Use**
-   ```bash
-   # Check what's using port 5000
-   sudo lsof -i :5000
-   
-   # Change port in docker-compose.yml
-   ports:
-     - "3000:5000"  # External:Internal
-   ```
-
-2. **Database Connection Failed**
-   ```bash
-   # Check database logs
-   docker-compose logs postgres
-   
-   # Verify database is healthy
-   docker-compose exec postgres pg_isready -U ciduser
-   ```
-
-3. **File Upload Issues**
-   ```bash
-   # Check upload directory permissions
-   docker-compose exec app ls -la uploads
-   
-   # Fix permissions if needed
-   docker-compose exec app chown -R nextjs:nodejs uploads
-   ```
-
-4. **Out of Disk Space**
-   ```bash
-   # Clean up Docker resources
-   ./docker-run.sh clean
-   
-   # Remove unused images
-   docker image prune -a
-   ```
-
-### Logs and Debugging
-
+#### Port Already in Use
 ```bash
-# Application logs
-docker-compose logs app
+# Check what's using the port
+lsof -i :5000
 
-# Database logs
-docker-compose logs postgres
-
-# All logs
-docker-compose logs
-
-# Follow logs in real-time
-docker-compose logs -f
-
-# Container shell access
-docker-compose exec app sh
+# Stop conflicting services or change port in docker-compose.yml
 ```
 
-## Production Deployment Checklist
+#### Database Connection Failed
+```bash
+# Check database logs
+./docker-run.sh logs postgres
 
-- [ ] Update all default passwords
-- [ ] Configure SSL certificates
-- [ ] Set up proper backup strategy
-- [ ] Configure monitoring and alerting
-- [ ] Set up log rotation
-- [ ] Configure firewall rules
-- [ ] Test disaster recovery procedures
-- [ ] Set up database replication (if needed)
-- [ ] Configure automated security updates
-- [ ] Document incident response procedures
+# Verify database is healthy
+docker-compose ps
+```
 
-## Security Considerations
+#### Permission Denied Errors
+```bash
+# Fix script permissions
+chmod +x docker-run.sh scripts/backup/*.sh
 
-### Container Security
-- Non-root user execution
-- Multi-stage builds to minimize attack surface
-- Regular base image updates
-- Resource limits and health checks
+# Fix volume permissions
+sudo chown -R $USER:$USER uploads/ backups/
+```
 
-### Network Security
-- Internal container network
-- Rate limiting via Nginx
-- Security headers configuration
-- CORS protection
+#### Out of Disk Space
+```bash
+# Clean up Docker resources
+docker system prune -a
 
-### Data Security
-- Encrypted database connections
-- Secure session management
-- File upload validation
-- SQL injection protection via ORM
+# Remove old backups
+find backups/ -name "*.sql.gz" -mtime +7 -delete
+```
 
-## Performance Optimization
+### Reset Everything
+If you need to completely reset the environment:
 
-### Production Tuning
-- Enable Nginx compression and caching
-- Configure PostgreSQL connection pooling
-- Set appropriate resource limits
-- Use CDN for static assets
-- Implement database indexing
+```bash
+# WARNING: This will delete all data
+./docker-run.sh clean
 
-### Scaling Options
-- Horizontal scaling with load balancer
-- Database read replicas
-- Redis for session storage
-- Container orchestration (Kubernetes)
+# Remove all Docker resources
+docker system prune -a --volumes
 
-## Support
+# Start fresh
+./docker-run.sh setup
+./docker-run.sh dev
+```
 
-For issues or questions:
-1. Check the troubleshooting section
-2. Review container logs
-3. Consult the main application documentation
-4. Contact system administrators
+## 📈 Performance Optimization
+
+### Production Optimizations
+1. **Enable Nginx caching** for static assets
+2. **Configure PostgreSQL** memory settings
+3. **Use Docker BuildKit** for faster builds
+4. **Implement log rotation** to prevent disk filling
+
+### Development Optimizations
+1. **Use bind mounts** for hot reload (already configured)
+2. **Disable health checks** in development if needed
+3. **Reduce image size** with multi-stage builds
+
+## 🤝 Support and Maintenance
+
+### Regular Maintenance Tasks
+- Weekly: Check logs and backup integrity
+- Monthly: Update Docker images and dependencies
+- Quarterly: Security audit and password rotation
+
+### Backup Best Practices
+- Test restore procedures regularly
+- Store backups in multiple locations
+- Encrypt sensitive backups
+- Document recovery procedures
+
+### Updates and Upgrades
+```bash
+# Pull latest images
+docker-compose pull
+
+# Restart with new images
+./docker-run.sh stop
+./docker-run.sh prod
+
+# Clean up old images
+docker image prune
+```
+
+## 📝 Additional Resources
+
+- [Docker Documentation](https://docs.docker.com/)
+- [Docker Compose Documentation](https://docs.docker.com/compose/)
+- [PostgreSQL Docker Image](https://hub.docker.com/_/postgres)
+- [Nginx Docker Image](https://hub.docker.com/_/nginx)
+
+---
+
+**Note**: This documentation assumes a Linux/Unix environment. For Windows, use PowerShell or WSL2 for the best experience.

@@ -14,8 +14,17 @@ This full-stack web application serves as a public information portal and conten
   - General Offences Wing - grave crimes with state-level ramifications
 - **Navigation Structure**: Organized CID Structure as parent page with wing pages as children for proper menu hierarchy
 - **Authentic Content**: All content extracted from original CID website HTML files for accuracy
-- **Docker Deployment**: Complete containerization setup with PostgreSQL, multi-stage builds, Nginx proxy, and health checks
+- **Complete Docker Deployment** (Latest Update - August 2025):
+  - **Production Setup**: Full containerization with PostgreSQL, multi-stage builds, Nginx reverse proxy, and comprehensive health checks
+  - **Development Environment**: Separate development Docker setup with hot reload and isolated database
+  - **Database Backup System**: Automated backup scripts with scheduled cron jobs, multiple backup formats (SQL and PostgreSQL custom), and restore functionality
+  - **Management Scripts**: Comprehensive docker-run.sh script for easy container management (start, stop, backup, restore, logs, health checks)
+  - **Security Features**: Nginx rate limiting, security headers, SSL/HTTPS ready configuration, and proper file permissions
+  - **Multi-Environment Support**: Separate configurations for development (port 5001) and production (port 5000) environments
+  - **Backup Automation**: Scripts for manual and automated backups with cleanup of old backups (30-day retention)
 - **Database Export**: Updated database export (database_export.sql) with latest schema and data for Docker initialization
+- **Menu Case Consistency**: Fixed all uppercase menu items to proper case (ABOUT → About, MEDIA → Media, etc.) for professional appearance
+- **Hero Section Simplification**: Removed "Report a Crime" and "Learn More" buttons for cleaner professional look
 - **Enhanced Security**: Added comprehensive CAPTCHA support to admin login with svg-captcha, session management, and attempt limits
 - **Loading Animations**: Replaced all loading spinners with pulsing police logo animation for consistent government branding
 - **News Ticker Integration**: Successfully implemented and positioned news ticker between DGP message and Latest News Updates sections with authentic API data, optimized scrolling animations (120s cycle with immediate start), and red text with white outline for optimal readability

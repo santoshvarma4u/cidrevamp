@@ -1,4 +1,4 @@
-import Header from "@/components/layout/ModernHeader";
+import ModernHeader from "@/components/layout/ModernHeader";
 import { AlertTriangle, Shield, Check, X, Users, FileText, Globe, Building } from "lucide-react";
 
 export function AlertsPage() {

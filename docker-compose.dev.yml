@@ -13,6 +13,7 @@ services:
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data
       - ./database_export.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./scripts/backup:/scripts:ro
     ports:
       - "5433:5432"
     networks:
@@ -24,30 +25,54 @@ services:
       timeout: 5s
       retries: 5
 
-  # Development Database Admin (Optional)
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: cid-pgadmin
+  # Development App (hot reload enabled)
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    container_name: cid-app-dev
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@cidtelangana.gov.in
-      PGADMIN_DEFAULT_PASSWORD: admin123
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
+      NODE_ENV: development
+      PORT: 5000
+      DATABASE_URL: postgresql://ciduser:cidpassword@postgres-dev:5432/ciddb_dev
+      SESSION_SECRET: dev-session-secret-key
     ports:
-      - "8080:80"
+      - "5001:5000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - dev_uploads:/app/uploads
     networks:
       - cid-dev-network
     depends_on:
-      - postgres-dev
+      postgres-dev:
+        condition: service_healthy
     restart: unless-stopped
+    command: npm run dev
+
+  # Database Backup Service
+  db-backup:
+    image: postgres:15-alpine
+    container_name: cid-backup
+    environment:
+      PGPASSWORD: cidpassword
+    volumes:
+      - ./backups:/backups
+      - ./scripts/backup:/scripts:ro
+    networks:
+      - cid-dev-network
+    depends_on:
+      postgres-dev:
+        condition: service_healthy
+    entrypoint: /scripts/backup.sh
     profiles:
-      - admin
+      - backup
 
 volumes:
   postgres_dev_data:
     driver: local
-  pgadmin_data:
+  dev_uploads:
     driver: local
 
 networks:

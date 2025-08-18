@@ -13,6 +13,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database_export.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./scripts/backup:/scripts:ro
+      - ./backups:/backups
     ports:
       - "5432:5432"
     networks:
@@ -23,6 +25,27 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  # Database Backup Service (Production)
+  db-backup-prod:
+    image: postgres:15-alpine
+    container_name: cid-backup-prod
+    environment:
+      PGPASSWORD: cidpassword
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ciddb
+      POSTGRES_USER: ciduser
+    volumes:
+      - ./backups:/backups
+      - ./scripts/backup:/scripts:ro
+    networks:
+      - cid-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint: /scripts/backup.sh
+    profiles:
+      - backup
 
   # CID Web Application
   app:
