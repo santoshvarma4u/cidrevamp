@@ -44,8 +44,9 @@ export default function ModernHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Simple Top Navigation Bar like OSCORE */}
-      <div className="text-white py-4 px-6 backdrop-blur-sm" style={{
-        background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)'
+      <div className="py-4 px-6 backdrop-blur-sm" style={{
+        background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
+        color: '#161D6F'
       }}>
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
@@ -66,7 +67,8 @@ export default function ModernHeader() {
               {/* Home */}
               <Button
                 variant="ghost"
-                className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
+                className="hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
+                style={{ color: '#161D6F' }}
                 onClick={() => (window.location.href = "/")}
               >
                 Home
@@ -83,7 +85,8 @@ export default function ModernHeader() {
                       <div className="flex items-center">
                         <Button
                           variant="ghost"
-                          className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
+                          className="hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
+                          style={{ color: '#161D6F' }}
                           onClick={() => (window.location.href = `/${page.slug}`)}
                         >
                           {page.menuTitle || page.title}
@@ -92,7 +95,8 @@ export default function ModernHeader() {
                           <DropdownMenuTrigger asChild>
                             <Button
                               variant="ghost"
-                              className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-1 py-2"
+                              className="hover:bg-transparent transition-colors px-1 py-2"
+                              style={{ color: '#161D6F' }}
                             >
                               <ChevronDown className="h-4 w-4" />
                             </Button>
@@ -120,7 +124,8 @@ export default function ModernHeader() {
                     <Button
                       key={page.slug}
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
+                      className="hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
+                      style={{ color: '#161D6F' }}
                       onClick={() => (window.location.href = `/${page.slug}`)}
                     >
                       {page.menuTitle || page.title}
@@ -135,7 +140,8 @@ export default function ModernHeader() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2 font-semibold capitalize"
+                      className="hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2 font-semibold capitalize"
+                      style={{ color: '#161D6F' }}
                     >
                       <span>More</span>
                       <ChevronDown className="h-4 w-4" />
