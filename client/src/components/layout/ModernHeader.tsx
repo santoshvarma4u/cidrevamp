@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import leftLogoSrc from "@assets/leftlogo_1753517979998.png";
 import tsLogoSrc from "@assets/TSLogo_1754309846963.png";
-import policeLogoSrc from "@assets/WhatsApp Image 2025-08-18 at 11.52.23_f2cec4c6_1755518006735.jpg";
+import policeLogoSrc from "@assets/unnamed_1755518260488.png";
 
 export default function ModernHeader() {
   const [location] = useLocation();
@@ -60,10 +60,6 @@ export default function ModernHeader() {
                 src={policeLogoSrc} 
                 alt="Telangana Police Logo" 
                 className="h-16 w-16 md:h-20 md:w-20 object-contain"
-                style={{ 
-                  mixBlendMode: 'multiply',
-                  filter: 'brightness(1.1) contrast(1.2)'
-                }}
               />
             </div>
             
