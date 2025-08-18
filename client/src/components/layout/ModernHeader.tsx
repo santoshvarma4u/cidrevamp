@@ -45,7 +45,7 @@ export default function ModernHeader() {
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Simple Top Navigation Bar like OSCORE */}
       <div className="text-white py-4 px-6 backdrop-blur-sm" style={{
-        background: 'linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%)'
+        background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)'
       }}>
         <div className="container mx-auto">
           <div className="flex justify-between items-center">

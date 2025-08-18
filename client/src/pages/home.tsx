@@ -35,7 +35,7 @@ import adgpImagePath from "@assets/adgpImage_1753520299812.png";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
-  const [currentTheme, setCurrentTheme] = useState("purple-cyan");
+  const [currentTheme, setCurrentTheme] = useState("ocean-blue");
   const [currentPhotoSlide, setCurrentPhotoSlide] = useState(0);
 
   useEffect(() => {
@@ -162,7 +162,7 @@ export default function Home() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, #672676 0%, rgba(103, 38, 118, 0.9) 50%, #020104 100%)",
+              "linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%)",
           }}
         ></div>
 

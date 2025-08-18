@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette, ChevronDown, ChevronUp } from 'lucide-react';
 
-export type Theme = 'light-teal' | 'mulberry' | 'soft-peach' | 'purple-cyan';
+export type Theme = 'light-teal' | 'mulberry' | 'soft-peach' | 'purple-cyan' | 'ocean-blue';
 
 // Theme configurations with complete color palettes
 const themeConfigs = {
@@ -70,6 +70,22 @@ const themeConfigs = {
     '--card': 'hsl(0, 0%, 100%)', // White cards for contrast
     '--card-foreground': 'hsl(282, 58%, 25%)', // Dark purple text on cards
   },
+  'ocean-blue': {
+    '--background': 'hsl(172, 100%, 97%)', // #EFFFFD - Very light ocean
+    '--foreground': 'hsl(232, 63%, 26%)', // #161D6F - Dark navy text
+    '--primary': 'hsl(187, 100%, 76%)', // #85F4FF - Bright ocean blue
+    '--primary-foreground': 'hsl(232, 63%, 26%)', // Dark navy on bright blue
+    '--secondary': 'hsl(172, 100%, 86%)', // #B8FFF9 - Light ocean
+    '--secondary-foreground': 'hsl(232, 63%, 26%)', // Dark navy
+    '--muted': 'hsl(172, 100%, 90%)', // Lighter version of #B8FFF9
+    '--muted-foreground': 'hsl(232, 40%, 50%)', // Medium navy
+    '--accent': 'hsl(172, 100%, 86%)', // #B8FFF9 - Light ocean
+    '--accent-foreground': 'hsl(232, 63%, 26%)', // Dark navy
+    '--border': 'hsl(187, 100%, 76%)', // #85F4FF - Bright ocean blue
+    '--ring': 'hsl(187, 100%, 76%)', // #85F4FF - Bright ocean blue
+    '--card': 'hsl(0, 0%, 100%)', // White cards for contrast
+    '--card-foreground': 'hsl(232, 63%, 26%)', // Dark navy text on cards
+  },
 } as const;
 
 interface ThemeSelectorProps {
@@ -92,6 +108,7 @@ const themes = [
   { id: 'mulberry', name: 'Mulberry', color: 'bg-rose-900' },
   { id: 'soft-peach', name: 'Soft Peach', color: 'bg-orange-300' },
   { id: 'purple-cyan', name: 'Purple & Cyan', color: 'bg-gradient-to-r from-purple-600 to-cyan-400' },
+  { id: 'ocean-blue', name: 'Ocean Blue', color: 'bg-gradient-to-r from-blue-900 via-cyan-400 to-blue-200' },
 ] as const;
 
 export function ThemeSelector({ currentTheme, onThemeChange }: ThemeSelectorProps) {
