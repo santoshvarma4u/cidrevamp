@@ -441,7 +441,7 @@ export default function Home() {
                     Latest News Updates
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-6 flex-1 min-h-0 overflow-y-auto bg-white">
+                <CardContent className="p-6 flex-1 min-h-0 overflow-y-auto bg-white rounded-b-2xl">
                   {latestNews.length > 0 ? (
                     <div className="space-y-4">
                       {latestNews.slice(0, 3).map((news: any) => (
