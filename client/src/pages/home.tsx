@@ -250,7 +250,7 @@ export default function Home() {
             <div className="lg:flex-1 flex flex-col gap-6">
               {/* Latest Videos Card - Bigger */}
               <Card
-                className={`flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}
+                className={`flex-[2] ${themeClasses.cardBg} main-card shadow-xl rounded-2xl`}
               >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
@@ -280,7 +280,7 @@ export default function Home() {
 
               {/* NCL Card - Smaller */}
               <Card
-                className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}
+                className={`${themeClasses.cardBg} main-card shadow-xl rounded-2xl`}
               >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-lg flex items-center gap-3">
@@ -313,7 +313,7 @@ export default function Home() {
             {/* Photo Gallery */}
             <div className="lg:col-span-2">
               <Card
-                className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl h-96 flex flex-col`}
+                className={`${themeClasses.cardBg} main-card shadow-xl rounded-2xl h-96 flex flex-col`}
               >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
@@ -433,7 +433,7 @@ export default function Home() {
             {/* News Section */}
             <div>
               <Card
-                className={`${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl h-96 flex flex-col`}
+                className={`${themeClasses.cardBg} main-card shadow-xl rounded-2xl h-96 flex flex-col`}
               >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
