@@ -18,6 +18,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import leftLogoSrc from "@assets/leftlogo_1753517979998.png";
+import tsLogoSrc from "@assets/TSLogo_1754309846963.png";
 
 export default function ModernHeader() {
   const [location] = useLocation();
@@ -43,24 +44,51 @@ export default function ModernHeader() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Simple Top Navigation Bar like OSCORE */}
-      <div className="py-4 px-6 backdrop-blur-sm" style={{
+      {/* First Row - Logos and Department Name */}
+      <div className="py-3 px-6 backdrop-blur-sm" style={{
         background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
         color: '#161D6F'
       }}>
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
-            {/* Logo Section */}
-            <Link href="/">
-              <div className="flex items-center space-x-3 cursor-pointer">
-                <img 
-                  src={leftLogoSrc} 
-                  alt="CID Logo" 
-                  className="h-8 w-8"
-                />
-                <span className="text-xl font-bold">CID Telangana</span>
-              </div>
-            </Link>
+            {/* Left Logo */}
+            <div className="flex items-center">
+              <img 
+                src={leftLogoSrc} 
+                alt="CID Logo" 
+                className="h-12 w-12"
+              />
+            </div>
+
+            {/* Center Text */}
+            <div className="flex-1 text-center">
+              <h1 className="text-xl md:text-2xl font-bold uppercase tracking-wider" style={{ color: '#161D6F' }}>
+                Crime Investigation Department
+              </h1>
+              <p className="text-sm md:text-base font-medium" style={{ color: '#161D6F' }}>
+                Government of Telangana
+              </p>
+            </div>
+
+            {/* Right Logo */}
+            <div className="flex items-center">
+              <img 
+                src={tsLogoSrc} 
+                alt="Telangana State Logo" 
+                className="h-12 w-12"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Second Row - Navigation Menu */}
+      <div className="py-2 px-6 backdrop-blur-sm border-t border-white/20" style={{
+        background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
+        color: '#161D6F'
+      }}>
+        <div className="container mx-auto">
+          <div className="flex justify-center items-center">
 
             {/* Navigation Menu - Desktop */}
             <nav className="hidden md:flex items-center space-x-4">
@@ -187,7 +215,8 @@ export default function ModernHeader() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors flex items-center space-x-2 px-3 py-2 font-semibold"
+                      className="hover:bg-transparent transition-colors flex items-center space-x-2 px-3 py-2 font-semibold"
+                      style={{ color: '#161D6F' }}
                     >
                       <User className="h-4 w-4" />
                       <span>{user.firstName || user.email}</span>
@@ -214,7 +243,8 @@ export default function ModernHeader() {
               ) : (
                 <Button
                   variant="ghost"
-                  className="text-white hover:text-cyan-300 hover:bg-transparent transition-colors px-3 py-2 font-semibold"
+                  className="hover:bg-transparent transition-colors px-3 py-2 font-semibold"
+                  style={{ color: '#161D6F' }}
                   onClick={() => (window.location.href = "/admin/login")}
                 >
                   <User className="mr-2 h-4 w-4" />
@@ -226,7 +256,7 @@ export default function ModernHeader() {
             {/* Mobile Menu Button */}
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" className="md:hidden text-white hover:text-cyan-300">
+                <Button variant="ghost" className="md:hidden" style={{ color: '#161D6F' }}>
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
