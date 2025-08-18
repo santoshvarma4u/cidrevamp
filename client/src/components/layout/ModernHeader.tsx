@@ -44,43 +44,27 @@ export default function ModernHeader() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* First Row - Logos and Department Name */}
-      <div className="py-3 px-6 backdrop-blur-sm" style={{
+      {/* First Row - Department Name */}
+      <div className="py-5 backdrop-blur-sm" style={{
         background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
-        color: '#161D6F'
+        color: '#161D6F',
+        paddingLeft: '20px',
+        paddingRight: '20px'
       }}>
         <div className="container mx-auto">
-          <div className="flex justify-between items-center">
-            {/* Left Logo */}
-            <div className="flex items-center">
-              <img 
-                src={leftLogoSrc} 
-                alt="CID Logo" 
-                className="h-16 w-16 md:h-20 md:w-20"
-              />
-            </div>
-
-            {/* Center Text */}
-            <div className="flex-1 text-center">
+          <div className="flex justify-end items-center">
+            {/* Right-aligned Text */}
+            <div className="text-right">
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider bg-gradient-to-r from-[#161D6F] to-[#0F1454] bg-clip-text text-transparent">
                 Crime Investigation Department
               </h1>
-            </div>
-
-            {/* Right Logo */}
-            <div className="flex items-center">
-              <img 
-                src={tsLogoSrc} 
-                alt="Telangana State Logo" 
-                className="h-16 w-16 md:h-20 md:w-20"
-              />
             </div>
           </div>
         </div>
       </div>
 
       {/* Second Row - Navigation Menu */}
-      <div className="py-2 px-6 backdrop-blur-sm border-t border-white/20" style={{
+      <div className="py-2 px-6 backdrop-blur-sm" style={{
         background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
         color: '#161D6F'
       }}>
