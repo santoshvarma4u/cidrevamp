@@ -155,14 +155,14 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       <ModernHeader />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32">
-        {/* Hero Background with Gradient - Matching Card Headers */}
+      {/* Hero Section - Seamless with Header */}
+      <section className="relative overflow-hidden" style={{ paddingTop: '180px' }}>
+        {/* Hero Background with Gradient - Seamless continuation */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%)",
+              "linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)",
           }}
         ></div>
 

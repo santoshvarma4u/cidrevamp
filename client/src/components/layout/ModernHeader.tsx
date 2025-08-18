@@ -45,11 +45,12 @@ export default function ModernHeader() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* First Row - Department Name */}
+      {/* Unified Header with Seamless Gradient */}
       <div className="backdrop-blur-sm" style={{
         background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
         color: '#161D6F'
       }}>
+        {/* First Row - Department Name */}
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             {/* Left Logo */}
@@ -69,15 +70,11 @@ export default function ModernHeader() {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Second Row - Navigation Menu */}
-      <div className="py-2 backdrop-blur-sm" style={{
-        background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
-        color: '#161D6F'
-      }}>
-        <div className="container mx-auto">
-          <div className="flex justify-end items-center">
+        {/* Second Row - Navigation Menu (No separation border) */}
+        <div className="py-2">
+          <div className="container mx-auto">
+            <div className="flex justify-end items-center">
 
             {/* Navigation Menu - Desktop */}
             <nav className="hidden md:flex items-center space-x-4">
@@ -343,6 +340,7 @@ export default function ModernHeader() {
                 </div>
               </SheetContent>
             </Sheet>
+            </div>
           </div>
         </div>
       </div>
