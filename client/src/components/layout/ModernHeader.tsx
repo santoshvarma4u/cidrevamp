@@ -59,7 +59,7 @@ export default function ModernHeader() {
               <img 
                 src={policeLogoSrc} 
                 alt="Telangana Police Logo" 
-                className="h-32 w-32 md:h-40 md:w-40 object-contain"
+                className="h-40 w-40 md:h-48 md:w-48 object-contain"
               />
             </div>
             
@@ -79,7 +79,7 @@ export default function ModernHeader() {
         color: '#161D6F'
       }}>
         <div className="container mx-auto">
-          <div className="flex justify-center items-center">
+          <div className="flex justify-end items-center">
 
             {/* Navigation Menu - Desktop */}
             <nav className="hidden md:flex items-center space-x-4">
