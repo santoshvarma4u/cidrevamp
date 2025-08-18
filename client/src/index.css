@@ -65,13 +65,13 @@
 
 /* Gradient ONLY for card headers */
 [data-theme="ocean-blue"] .bg-primary {
-  background: linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%) !important;
-  color: #161D6F !important;
+  background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%) !important;
+  color: #2C3680 !important;
 }
 
 [data-theme="ocean-blue"] .card-header-gradient {
-  background: linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%) !important;
-  color: #161D6F !important;
+  background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%) !important;
+  color: #2C3680 !important;
 }
 
 /* Ensure card content areas remain white */
@@ -91,20 +91,20 @@
 
 /* Global page hero section styling */
 .page-hero-gradient {
-  background: linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
+  background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
 }
 
 /* Global header styling for consistency */
 .cid-page-header {
-  background: linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
-  color: #161D6F;
+  background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
+  color: #2C3680;
   font-weight: 600;
 }
 
 /* Global card header styling */
 .cid-card-header {
-  background: linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%) !important;
-  color: #161D6F !important;
+  background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%) !important;
+  color: #2C3680 !important;
   font-weight: 600;
 }
 
