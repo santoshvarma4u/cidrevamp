@@ -56,18 +56,15 @@ export default function ModernHeader() {
               <img 
                 src={leftLogoSrc} 
                 alt="CID Logo" 
-                className="h-12 w-12"
+                className="h-16 w-16 md:h-20 md:w-20"
               />
             </div>
 
             {/* Center Text */}
             <div className="flex-1 text-center">
-              <h1 className="text-xl md:text-2xl font-bold uppercase tracking-wider" style={{ color: '#161D6F' }}>
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider" style={{ color: '#161D6F' }}>
                 Crime Investigation Department
               </h1>
-              <p className="text-sm md:text-base font-medium" style={{ color: '#161D6F' }}>
-                Government of Telangana
-              </p>
             </div>
 
             {/* Right Logo */}
@@ -75,7 +72,7 @@ export default function ModernHeader() {
               <img 
                 src={tsLogoSrc} 
                 alt="Telangana State Logo" 
-                className="h-12 w-12"
+                className="h-16 w-16 md:h-20 md:w-20"
               />
             </div>
           </div>
