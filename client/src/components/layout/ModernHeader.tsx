@@ -47,7 +47,7 @@ export default function ModernHeader() {
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* First Row - Department Name */}
       <div className="backdrop-blur-sm" style={{
-        background: 'linear-gradient(135deg, #00FFF0 0%, rgba(133, 244, 255, 0.9) 50%, #161D6F 100%)',
+        background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
         color: '#161D6F'
       }}>
         <div className="container mx-auto">
@@ -73,7 +73,7 @@ export default function ModernHeader() {
 
       {/* Second Row - Navigation Menu */}
       <div className="py-2 backdrop-blur-sm" style={{
-        background: 'linear-gradient(135deg, #00FFF0 0%, rgba(133, 244, 255, 0.9) 50%, #161D6F 100%)',
+        background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
         color: '#161D6F'
       }}>
         <div className="container mx-auto">
