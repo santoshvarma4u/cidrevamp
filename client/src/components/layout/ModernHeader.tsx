@@ -60,6 +60,10 @@ export default function ModernHeader() {
                 src={policeLogoSrc} 
                 alt="Telangana Police Logo" 
                 className="h-16 w-16 md:h-20 md:w-20 object-contain"
+                style={{ 
+                  mixBlendMode: 'multiply',
+                  filter: 'brightness(1.1) contrast(1.2)'
+                }}
               />
             </div>
             
