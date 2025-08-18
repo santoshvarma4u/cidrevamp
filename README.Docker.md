@@ -310,6 +310,29 @@ docker-compose pull
 docker image prune
 ```
 
+### Build Issues and Troubleshooting
+
+#### Vite Import Errors in Production
+If you encounter `Cannot find package 'vite'` errors in production:
+
+1. **Check build process**: The custom build script excludes Vite from production bundle
+2. **Verify build script**: Ensure `scripts/build-production.sh` is executable
+3. **Test build locally**: Run `./scripts/test-docker.sh` to test the build process
+
+#### Common Docker Build Errors
+```bash
+# Error: Cannot find package 'vite' 
+# Solution: Custom build script excludes development dependencies
+
+# Error: Permission denied on scripts
+# Solution: 
+chmod +x scripts/*.sh
+chmod +x scripts/backup/*.sh
+
+# Error: Build context too large
+# Solution: Check .dockerignore file excludes unnecessary files
+```
+
 ## 📝 Additional Resources
 
 - [Docker Documentation](https://docs.docker.com/)

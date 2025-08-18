@@ -22,6 +22,8 @@ This full-stack web application serves as a public information portal and conten
   - **Security Features**: Nginx rate limiting, security headers, SSL/HTTPS ready configuration, and proper file permissions
   - **Multi-Environment Support**: Separate configurations for development (port 5001) and production (port 5000) environments
   - **Backup Automation**: Scripts for manual and automated backups with cleanup of old backups (30-day retention)
+  - **Production Build Fix**: Custom build scripts to exclude Vite dependencies from production bundle, resolving "Cannot find package 'vite'" errors
+  - **Build Testing**: Added test scripts for validating Docker builds and troubleshooting deployment issues
 - **Database Export**: Updated database export (database_export.sql) with latest schema and data for Docker initialization
 - **Menu Case Consistency**: Fixed all uppercase menu items to proper case (ABOUT → About, MEDIA → Media, etc.) for professional appearance
 - **Hero Section Simplification**: Removed "Report a Crime" and "Learn More" buttons for cleaner professional look

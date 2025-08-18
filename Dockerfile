@@ -7,14 +7,14 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install ALL dependencies (including dev dependencies for build)
+RUN npm ci
 
 # Copy source code
 COPY . .
 
-# Build the application
-RUN npm run build
+# Build the application using custom script
+RUN chmod +x scripts/build-production.sh && ./scripts/build-production.sh
 
 # Production stage
 FROM node:20-alpine AS production
@@ -39,8 +39,11 @@ RUN npm ci --only=production && npm cache clean --force
 COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
 COPY --from=builder --chown=nextjs:nodejs /app/server ./server
 COPY --from=builder --chown=nextjs:nodejs /app/shared ./shared
-COPY --from=builder --chown=nextjs:nodejs /app/uploads ./uploads
 COPY --from=builder --chown=nextjs:nodejs /app/drizzle.config.ts ./
+COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
+
+# Create uploads directory
+RUN mkdir -p uploads
 
 # Create uploads directory if it doesn't exist
 RUN mkdir -p uploads && chown -R nextjs:nodejs uploads
@@ -60,4 +63,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 # Start the application
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["npm", "start"]
+CMD ["node", "scripts/start-production.js"]

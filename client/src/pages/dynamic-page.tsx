@@ -8,19 +8,14 @@ export default function DynamicPage() {
   const params = useParams<{ slug: string }>();
   const slug = params.slug;
 
-  console.log("DynamicPage rendered with slug:", slug); // Debug log
-
   const { data: page, isLoading, error } = useQuery({
     queryKey: ["/api/pages/slug", slug],
     queryFn: async () => {
-      console.log("Fetching page data for slug:", slug); // Debug log
       const response = await fetch(`/api/pages/slug/${slug}`);
       if (!response.ok) {
         throw new Error(`Page not found: ${response.status}`);
       }
-      const data = await response.json();
-      console.log("Page data received:", data); // Debug log
-      return data;
+      return response.json();
     },
     enabled: !!slug,
     retry: 1,
