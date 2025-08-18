@@ -183,13 +183,13 @@ export default function Home() {
           <div className="max-w-3xl">
             {/* Hero Content */}
             <div className="mb-12">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 leading-tight" style={{ color: '#161D6F' }}>
                 Excellence in
-                <span className="block text-transparent bg-gradient-to-r from-cyan-400 to-purple-300 bg-clip-text">
+                <span className="block font-bold" style={{ color: '#161D6F' }}>
                   Crime Investigation
                 </span>
               </h1>
-              <p className="text-lg md:text-xl lg:text-2xl text-purple-100 mb-10 leading-relaxed max-w-2xl">
+              <p className="text-lg md:text-xl lg:text-2xl mb-10 leading-relaxed max-w-2xl" style={{ color: '#161D6F' }}>
                 Telangana State's premier law enforcement agency ensuring public
                 safety through specialized investigations, advanced technology,
                 and community engagement
