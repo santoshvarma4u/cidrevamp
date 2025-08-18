@@ -48,9 +48,7 @@ export default function ModernHeader() {
       {/* First Row - Department Name */}
       <div className="backdrop-blur-sm" style={{
         background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
-        color: '#161D6F',
-        paddingLeft: '20px',
-        paddingRight: '20px'
+        color: '#161D6F'
       }}>
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
@@ -74,7 +72,7 @@ export default function ModernHeader() {
       </div>
 
       {/* Second Row - Navigation Menu */}
-      <div className="py-2 px-6 backdrop-blur-sm" style={{
+      <div className="py-2 backdrop-blur-sm" style={{
         background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
         color: '#161D6F'
       }}>
