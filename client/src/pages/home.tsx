@@ -206,7 +206,7 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row gap-6 min-h-[500px]">
             {/* Large Director Message Card with Photo */}
             <Card
-              className={`lg:flex-[2] ${themeClasses.cardBg} main-card border-2 border-gray-200 shadow-xl rounded-2xl`}
+              className={`lg:flex-[2] ${themeClasses.cardBg} main-card shadow-xl rounded-2xl`}
             >
               <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                 <CardTitle className="text-2xl flex items-center gap-3">
