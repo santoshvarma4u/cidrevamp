@@ -46,7 +46,7 @@ export default function ModernHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* First Row - Department Name */}
-      <div className="py-5 backdrop-blur-sm" style={{
+      <div className="backdrop-blur-sm" style={{
         background: 'linear-gradient(135deg, #161D6F 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)',
         color: '#161D6F',
         paddingLeft: '20px',
