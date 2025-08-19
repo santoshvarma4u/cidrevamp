@@ -139,26 +139,7 @@ export default function Footer() {
                 All rights reserved.
               </p>
             </div>
-            <div className="flex space-x-6">
-              <Link
-                href="/privacy-policy"
-                className="text-gray-400 hover:text-white transition text-sm"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/terms-of-service"
-                className="text-gray-400 hover:text-white transition text-sm"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                href="/accessibility"
-                className="text-gray-400 hover:text-white transition text-sm"
-              >
-                Accessibility
-              </Link>
-            </div>
+
           </div>
         </div>
       </div>
