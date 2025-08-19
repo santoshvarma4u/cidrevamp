@@ -267,27 +267,6 @@ export default function Home() {
                   </div>
                 </CardContent>
               </Card>
-
-              {/* NCL Card - Smaller */}
-              <Card
-                className={`${themeClasses.cardBg} main-card shadow-xl rounded-2xl`}
-              >
-                <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
-                  <CardTitle className="text-lg flex items-center gap-3">
-                    <Scale className="h-5 w-5" />
-                    NCL
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 flex items-center justify-center bg-white rounded-b-2xl">
-                  <div className="text-center">
-                    <p className="text-base text-gray-800 font-medium">
-                      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vS_dO5aAJbeoGT2EnBK3dDrOae9iMCE7-hKuinw7bL-9rbWL7tETIzh9TKzds0cfHKxNUb2Rn9wD1Ep/pubhtml">
-                        National Criminal Laws
-                      </a>
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>
