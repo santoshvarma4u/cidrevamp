@@ -55,7 +55,7 @@ export default function ModernHeader() {
               <img 
                 src={policeLogoSrc} 
                 alt="Telangana Police Logo" 
-                className="h-40 w-40 md:h-48 md:w-48 object-contain"
+                className="h-44 w-44 md:h-52 md:w-52 object-contain"
               />
             </div>
             
