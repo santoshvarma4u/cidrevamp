@@ -287,12 +287,23 @@ export function setupAuth(app: Express) {
     })(req, res, next);
   });
 
-  app.post("/api/logout", (req, res, next) => {
-    req.logout((err) => {
+  // Logout route (both GET and POST for compatibility)
+  const logoutHandler = (req: any, res: any, next: any) => {
+    req.logout((err: any) => {
       if (err) return next(err);
-      res.json({ message: "Logged out successfully" });
+      
+      // If it's an API request (POST or Accept: application/json), send JSON
+      if (req.method === 'POST' || req.accepts('json')) {
+        res.json({ message: "Logged out successfully" });
+      } else {
+        // If it's a browser navigation (GET), redirect to home
+        res.redirect('/');
+      }
     });
-  });
+  };
+
+  app.post("/api/logout", logoutHandler);
+  app.get("/api/logout", logoutHandler);
 
   app.get("/api/auth/user", (req, res) => {
     if (!req.isAuthenticated()) {
