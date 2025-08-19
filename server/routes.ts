@@ -5,22 +5,58 @@ import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
 import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
+import { body, validationResult } from "express-validator";
 import multer from "multer";
 import path from "path";
 import { z } from "zod";
 
-// Configure multer for file uploads
+// Enhanced file upload security
 const storage_multer = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    // Sanitize filename
+    const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(sanitizedName));
   }
 });
 
-const upload = multer({ storage: storage_multer });
+// File type validation and size limits
+const upload = multer({ 
+  storage: storage_multer,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB limit
+    files: 1, // Single file upload
+  },
+  fileFilter: (req, file, cb) => {
+    // Allow only specific file types for security
+    const allowedMimes = [
+      'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp',
+      'video/mp4', 'video/webm', 'video/ogg',
+      'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+    
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only images, videos, and documents are allowed.'));
+    }
+  }
+});
+
+// Input validation middleware
+const validateInput = (req: any, res: any, next: any) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ 
+      message: 'Validation failed', 
+      errors: errors.array() 
+    });
+  }
+  next();
+};
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Serve static files from uploads directory
