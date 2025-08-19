@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { ThemeSelector } from "@/components/ThemeSelector";
+
 import { Link } from "wouter";
 import {
   Shield,
@@ -35,13 +35,7 @@ import adgpImagePath from "@assets/adgpImage_1753520299812.png";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
-  const [currentTheme, setCurrentTheme] = useState("ocean-blue");
   const [currentPhotoSlide, setCurrentPhotoSlide] = useState(0);
-
-  useEffect(() => {
-    localStorage.setItem("theme", currentTheme);
-    document.documentElement.setAttribute("data-theme", currentTheme);
-  }, [currentTheme]);
 
   // Fetch real data
   const { data: latestVideos = [] } = useQuery({
@@ -528,12 +522,6 @@ export default function Home() {
       </section>
 
       <Footer />
-
-      {/* Theme Selector */}
-      <ThemeSelector
-        currentTheme={currentTheme as any}
-        onThemeChange={setCurrentTheme}
-      />
     </div>
   );
 }

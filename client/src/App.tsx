@@ -4,6 +4,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/toaster";
 import Watermark from "@/components/layout/Watermark";
 import LoadingSpinner from "@/components/ui/loading-spinner";
+import { ThemeSelector } from "@/components/ThemeSelector";
+import { useState, useEffect } from "react";
 
 // Public pages
 import Home from "@/pages/home";
@@ -96,12 +98,25 @@ function Router() {
 }
 
 function App() {
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    return localStorage.getItem("theme") || "ocean-blue";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("theme", currentTheme);
+    document.documentElement.setAttribute("data-theme", currentTheme);
+  }, [currentTheme]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen bg-background">
         <Watermark type="pattern" opacity={0.015} size={120} />
         <Router />
         <Toaster />
+        <ThemeSelector
+          currentTheme={currentTheme as any}
+          onThemeChange={setCurrentTheme}
+        />
       </div>
     </QueryClientProvider>
   );
