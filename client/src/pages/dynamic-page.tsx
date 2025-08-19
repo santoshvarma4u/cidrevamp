@@ -64,7 +64,7 @@ export default function DynamicPage() {
     <div className="min-h-screen bg-background">
       <ModernHeader />
       
-      <main className="pt-24 pb-16">
+      <main className="header-spacing pb-16">
         <div className="container mx-auto px-4 max-w-7xl">
           {/* Page Header */}
           <div className="text-center mb-12 cid-page-header rounded-2xl p-8">
