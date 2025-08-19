@@ -118,29 +118,39 @@
 
 /* ========== TEAL THEME ========== */
 [data-theme="teal"] .page-hero-gradient {
-  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.8) 50%, hsl(180, 100%, 97%) 100%);
+  background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%);
 }
 
 [data-theme="teal"] .cid-page-header {
-  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.8) 50%, hsl(180, 100%, 97%) 100%);
-  color: hsl(175, 80%, 20%);
+  background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%);
+  color: #006666;
   font-weight: 600;
 }
 
 [data-theme="teal"] .cid-card-header {
-  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.8) 50%, hsl(180, 100%, 97%) 100%) !important;
-  color: hsl(175, 80%, 20%) !important;
+  background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%) !important;
+  color: #006666 !important;
   font-weight: 600;
 }
 
 [data-theme="teal"] .hero-section {
-  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.8) 50%, hsl(180, 100%, 97%) 100%);
-  color: hsl(175, 80%, 20%);
+  background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%);
+  color: #006666;
 }
 
 [data-theme="teal"] .header-gradient {
-  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.9) 50%, hsl(180, 100%, 97%) 100%) !important;
-  color: hsl(175, 80%, 20%);
+  background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%) !important;
+  color: #006666;
+}
+
+[data-theme="teal"] .bg-primary {
+  background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%) !important;
+  color: #006666 !important;
+}
+
+[data-theme="teal"] .card-header-gradient {
+  background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%) !important;
+  color: #006666 !important;
 }
 
 /* ========== MULBERRY THEME ========== */

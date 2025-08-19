@@ -6,8 +6,9 @@ This full-stack web application serves as a public information portal and conten
 
 ## Recent Changes (August 2025)
 
-- **Complete Theme System Integration**: Header and hero sections now fully integrated with theme system for seamless color scheme switching across Ocean Blue, Teal, and Mulberry themes
+- **Complete Theme System Integration**: Header and hero sections now fully integrated with theme system for seamless color scheme switching across Ocean Blue, Teal (custom gradient), and Mulberry themes
 - **Lighter Blue Ocean Theme**: Updated default Ocean Blue theme from dark navy (#161D6F) to lighter, more appealing blue (#3B4A9C) with enhanced visual harmony
+- **Custom Teal Theme**: Added new Teal theme using specified colors (#51EAEA, #00FFF0, #B8FFF9, #85F4FF) with full gradient integration across header, hero section, and card headers
 - **Theme-Aware Gradients**: All header gradients, hero section backgrounds, and card headers now automatically adapt to selected theme using CSS theme variables
 - **Complete Senior Officers Directory**: Added all 13 senior officers with authentic photos and contact details, including Sri M. DHARMA TATA RAO (Director, FPB) and SMT VENKATA LAXMI KOLLI (SP, EOW)
 - **CID Structure Pages**: Created comprehensive pages for all four specialized wings:

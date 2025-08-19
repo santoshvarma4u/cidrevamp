@@ -2,10 +2,26 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette, ChevronDown, ChevronUp } from 'lucide-react';
 
-export type Theme = 'light-teal' | 'mulberry' | 'soft-peach' | 'purple-cyan' | 'ocean-blue';
+export type Theme = 'teal' | 'light-teal' | 'mulberry' | 'soft-peach' | 'purple-cyan' | 'ocean-blue';
 
 // Theme configurations with complete color palettes
 const themeConfigs = {
+  'teal': {
+    '--background': 'hsl(180, 95%, 98%)',
+    '--foreground': 'hsl(180, 60%, 15%)',
+    '--primary': 'hsl(180, 75%, 55%)',
+    '--primary-foreground': 'hsl(180, 60%, 15%)',
+    '--secondary': 'hsl(180, 65%, 85%)',
+    '--secondary-foreground': 'hsl(180, 60%, 15%)',
+    '--muted': 'hsl(180, 55%, 90%)',
+    '--muted-foreground': 'hsl(180, 40%, 40%)',
+    '--accent': 'hsl(180, 85%, 75%)',
+    '--accent-foreground': 'hsl(180, 60%, 15%)',
+    '--border': 'hsl(180, 45%, 70%)',
+    '--ring': 'hsl(180, 75%, 55%)',
+    '--card': 'hsl(0, 0%, 100%)',
+    '--card-foreground': 'hsl(180, 60%, 15%)',
+  },
   'light-teal': {
     '--background': 'hsl(180, 70%, 98%)',
     '--foreground': 'hsl(180, 18%, 20%)',
@@ -104,6 +120,7 @@ const applyTheme = (theme: Theme) => {
 };
 
 const themes = [
+  { id: 'teal', name: 'Teal', color: 'bg-gradient-to-r from-teal-400 via-cyan-300 to-teal-200' },
   { id: 'light-teal', name: 'Light Teal', color: 'bg-purple-400' },
   { id: 'mulberry', name: 'Mulberry', color: 'bg-rose-900' },
   { id: 'soft-peach', name: 'Soft Peach', color: 'bg-orange-300' },
