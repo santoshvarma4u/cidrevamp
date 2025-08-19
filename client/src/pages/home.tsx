@@ -158,13 +158,7 @@ export default function Home() {
       {/* Hero Section - Seamless with Header */}
       <section className="relative overflow-hidden" style={{ paddingTop: '180px' }}>
         {/* Hero Background with Gradient - Seamless continuation */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%)",
-          }}
-        ></div>
+        <div className="absolute inset-0 hero-section"></div>
 
         {/* Geometric Background Elements */}
         <div className="absolute inset-0">

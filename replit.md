@@ -4,8 +4,11 @@
 
 This full-stack web application serves as a public information portal and content management system for the Crime Investigation Department (CID) of Telangana State. It supports law enforcement activities, including specialized wings for various crime types, citizen complaint management, and media galleries. The project aims to provide a streamlined, user-friendly platform for public engagement and internal content management for the CID.
 
-## Recent Changes (February 2025)
+## Recent Changes (August 2025)
 
+- **Complete Theme System Integration**: Header and hero sections now fully integrated with theme system for seamless color scheme switching across Ocean Blue, Teal, and Mulberry themes
+- **Lighter Blue Ocean Theme**: Updated default Ocean Blue theme from dark navy (#161D6F) to lighter, more appealing blue (#3B4A9C) with enhanced visual harmony
+- **Theme-Aware Gradients**: All header gradients, hero section backgrounds, and card headers now automatically adapt to selected theme using CSS theme variables
 - **Complete Senior Officers Directory**: Added all 13 senior officers with authentic photos and contact details, including Sri M. DHARMA TATA RAO (Director, FPB) and SMT VENKATA LAXMI KOLLI (SP, EOW)
 - **CID Structure Pages**: Created comprehensive pages for all four specialized wings:
   - Economic Offences Wing (EOW) - handling financial frauds and economic crimes

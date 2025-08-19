@@ -89,23 +89,85 @@
   transition: background 0.3s ease;
 }
 
-/* Global page hero section styling */
-.page-hero-gradient {
+/* ========== OCEAN BLUE THEME ========== */
+[data-theme="ocean-blue"] .page-hero-gradient {
   background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
 }
 
-/* Global header styling for consistency */
-.cid-page-header {
+[data-theme="ocean-blue"] .cid-page-header {
   background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
   color: #2C3680;
   font-weight: 600;
 }
 
-/* Global card header styling */
-.cid-card-header {
+[data-theme="ocean-blue"] .cid-card-header {
   background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%) !important;
   color: #2C3680 !important;
   font-weight: 600;
+}
+
+[data-theme="ocean-blue"] .hero-section {
+  background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
+  color: #2C3680;
+}
+
+[data-theme="ocean-blue"] .header-gradient {
+  background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%) !important;
+  color: #2C3680;
+}
+
+/* ========== TEAL THEME ========== */
+[data-theme="teal"] .page-hero-gradient {
+  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.8) 50%, hsl(180, 100%, 97%) 100%);
+}
+
+[data-theme="teal"] .cid-page-header {
+  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.8) 50%, hsl(180, 100%, 97%) 100%);
+  color: hsl(175, 80%, 20%);
+  font-weight: 600;
+}
+
+[data-theme="teal"] .cid-card-header {
+  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.8) 50%, hsl(180, 100%, 97%) 100%) !important;
+  color: hsl(175, 80%, 20%) !important;
+  font-weight: 600;
+}
+
+[data-theme="teal"] .hero-section {
+  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.8) 50%, hsl(180, 100%, 97%) 100%);
+  color: hsl(175, 80%, 20%);
+}
+
+[data-theme="teal"] .header-gradient {
+  background: linear-gradient(135deg, hsl(175, 60%, 50%) 0%, rgba(13, 148, 136, 0.9) 50%, hsl(180, 100%, 97%) 100%) !important;
+  color: hsl(175, 80%, 20%);
+}
+
+/* ========== MULBERRY THEME ========== */
+[data-theme="mulberry"] .page-hero-gradient {
+  background: linear-gradient(135deg, #4C0121 0%, rgba(76, 1, 33, 0.8) 50%, #F8F9FA 100%);
+}
+
+[data-theme="mulberry"] .cid-page-header {
+  background: linear-gradient(135deg, #4C0121 0%, rgba(76, 1, 33, 0.8) 50%, #F8F9FA 100%);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+[data-theme="mulberry"] .cid-card-header {
+  background: linear-gradient(135deg, #4C0121 0%, rgba(76, 1, 33, 0.8) 50%, #F8F9FA 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+}
+
+[data-theme="mulberry"] .hero-section {
+  background: linear-gradient(135deg, #4C0121 0%, rgba(76, 1, 33, 0.8) 50%, #F8F9FA 100%);
+  color: #FFFFFF;
+}
+
+[data-theme="mulberry"] .header-gradient {
+  background: linear-gradient(135deg, #4C0121 0%, rgba(76, 1, 33, 0.9) 50%, #F8F9FA 100%) !important;
+  color: #FFFFFF;
 }
 
 /* Consistent navigation typography */
