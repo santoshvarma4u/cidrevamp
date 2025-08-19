@@ -50,6 +50,10 @@ const applyTheme = (theme: Theme) => {
   const root = document.documentElement;
   const config = themeConfigs[theme];
   
+  // Set data-theme attribute for CSS selectors
+  root.setAttribute('data-theme', theme);
+  
+  // Apply CSS custom properties
   Object.entries(config).forEach(([property, value]) => {
     root.style.setProperty(property, value);
   });
