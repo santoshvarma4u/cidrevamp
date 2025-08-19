@@ -99,7 +99,7 @@ export default function EconomicOffences() {
     <div className="min-h-screen bg-gray-50">
       <ModernHeader />
       {/* Header Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16">
+      <section className="page-hero-gradient text-white py-16 pt-24">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
             <div className="flex items-center space-x-4 mb-6">

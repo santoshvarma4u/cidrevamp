@@ -63,7 +63,7 @@ export default function PhotoGallery() {
     <>
       <ModernHeader />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 pt-24 pb-8">
         {/* Header */}
         <div className="text-center mb-12 cid-page-header rounded-2xl p-8">
           <h1 className="text-4xl font-bold text-white mb-4 cid-nav-text">Photo Gallery</h1>

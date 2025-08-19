@@ -78,7 +78,7 @@ export default function ComplaintStatus() {
       <ModernHeader />
       
       {/* Header Section */}
-      <section className="bg-green-600 text-white py-12">
+      <section className="page-hero-gradient text-white py-12 pt-24">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <Search className="h-12 w-12 mx-auto mb-4" />
