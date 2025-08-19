@@ -116,7 +116,7 @@ export default function OrganizationStructure() {
       <ModernHeader />
 
       {/* Header Section */}
-      <section className="page-hero-gradient text-white py-16 pt-24">
+      <section className="page-hero-gradient text-white header-spacing pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl">
             <div className="flex items-center space-x-4 mb-6">

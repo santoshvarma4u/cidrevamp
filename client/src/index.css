@@ -48,6 +48,15 @@
   background: white;
 }
 
+/* Header spacing to account for fixed header height */
+.header-spacing {
+  padding-top: 240px; /* Adjust for large logo + navigation */
+}
+
+.page-content-spacing {
+  padding-top: 220px; /* For page content below fixed header */
+}
+
 [data-theme="purple-cyan"] .bg-white {
   background: white !important;
 }
