@@ -51,11 +51,11 @@ export default function ModernHeader() {
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             {/* Left Logo */}
-            <div className="flex items-center">
+            <div className="flex items-center py-2">
               <img 
                 src={policeLogoSrc} 
                 alt="Telangana Police Logo" 
-                className="h-44 w-44 md:h-52 md:w-52 object-contain"
+                className="h-40 w-40 md:h-48 md:w-48 object-contain transform scale-110"
               />
             </div>
             
