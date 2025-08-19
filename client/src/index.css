@@ -201,10 +201,12 @@
 [data-theme="ocean-blue"] .page-hero-gradient h1,
 [data-theme="ocean-blue"] .page-hero-gradient p,
 [data-theme="ocean-blue"] .page-hero-gradient .text-gray-500,
+[data-theme="ocean-blue"] .page-hero-gradient .text-purple-200,
 [data-theme="ocean-blue"] .cid-page-header h1,
 [data-theme="ocean-blue"] .cid-page-header p,
 [data-theme="ocean-blue"] .cid-page-header .text-gray-500,
 [data-theme="ocean-blue"] .cid-page-header .text-purple-100,
+[data-theme="ocean-blue"] .cid-page-header .text-purple-200,
 [data-theme="ocean-blue"] .cid-nav-text {
   color: #2C3680 !important;
 }
@@ -212,10 +214,12 @@
 [data-theme="teal"] .page-hero-gradient h1,
 [data-theme="teal"] .page-hero-gradient p,
 [data-theme="teal"] .page-hero-gradient .text-gray-500,
+[data-theme="teal"] .page-hero-gradient .text-purple-200,
 [data-theme="teal"] .cid-page-header h1,
 [data-theme="teal"] .cid-page-header p,
 [data-theme="teal"] .cid-page-header .text-gray-500,
 [data-theme="teal"] .cid-page-header .text-purple-100,
+[data-theme="teal"] .cid-page-header .text-purple-200,
 [data-theme="teal"] .cid-nav-text {
   color: #006666 !important;
 }
@@ -223,10 +227,12 @@
 [data-theme="mulberry"] .page-hero-gradient h1,
 [data-theme="mulberry"] .page-hero-gradient p,
 [data-theme="mulberry"] .page-hero-gradient .text-gray-500,
+[data-theme="mulberry"] .page-hero-gradient .text-purple-200,
 [data-theme="mulberry"] .cid-page-header h1,
 [data-theme="mulberry"] .cid-page-header p,
 [data-theme="mulberry"] .cid-page-header .text-gray-500,
 [data-theme="mulberry"] .cid-page-header .text-purple-100,
+[data-theme="mulberry"] .cid-page-header .text-purple-200,
 [data-theme="mulberry"] .cid-nav-text {
   color: #FFFFFF !important;
 }
