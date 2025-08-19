@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette, ChevronDown, ChevronUp } from 'lucide-react';
 
-export type Theme = 'teal' | 'light-teal' | 'mulberry' | 'soft-peach' | 'purple-cyan' | 'ocean-blue';
+export type Theme = 'teal' | 'ocean-blue';
 
 // Theme configurations with complete color palettes
 const themeConfigs = {
@@ -21,70 +21,6 @@ const themeConfigs = {
     '--ring': 'hsl(180, 75%, 55%)',
     '--card': 'hsl(0, 0%, 100%)',
     '--card-foreground': 'hsl(180, 60%, 15%)',
-  },
-  'light-teal': {
-    '--background': 'hsl(180, 70%, 98%)',
-    '--foreground': 'hsl(180, 18%, 20%)',
-    '--primary': 'hsl(180, 75%, 55%)',
-    '--primary-foreground': 'hsl(0, 0%, 100%)',
-    '--secondary': 'hsl(180, 45%, 92%)',
-    '--secondary-foreground': 'hsl(180, 18%, 20%)',
-    '--muted': 'hsl(180, 35%, 94%)',
-    '--muted-foreground': 'hsl(180, 12%, 55%)',
-    '--accent': 'hsl(180, 55%, 90%)',
-    '--accent-foreground': 'hsl(180, 18%, 20%)',
-    '--border': 'hsl(180, 35%, 80%)',
-    '--ring': 'hsl(180, 75%, 55%)',
-    '--card': 'hsl(0, 0%, 100%)',
-    '--card-foreground': 'hsl(180, 18%, 20%)',
-  },
-  'mulberry': {
-    '--background': 'hsl(340, 95%, 96%)',
-    '--foreground': 'hsl(340, 30%, 15%)',
-    '--primary': 'hsl(340, 95%, 15%)',
-    '--primary-foreground': 'hsl(0, 0%, 100%)',
-    '--secondary': 'hsl(340, 50%, 88%)',
-    '--secondary-foreground': 'hsl(340, 30%, 15%)',
-    '--muted': 'hsl(340, 40%, 90%)',
-    '--muted-foreground': 'hsl(340, 25%, 50%)',
-    '--accent': 'hsl(340, 60%, 85%)',
-    '--accent-foreground': 'hsl(340, 30%, 15%)',
-    '--border': 'hsl(340, 40%, 75%)',
-    '--ring': 'hsl(340, 95%, 15%)',
-    '--card': 'hsl(0, 0%, 100%)',
-    '--card-foreground': 'hsl(340, 30%, 15%)',
-  },
-  'soft-peach': {
-    '--background': 'hsl(15, 80%, 96%)',
-    '--foreground': 'hsl(15, 30%, 15%)',
-    '--primary': 'hsl(15, 85%, 60%)',
-    '--primary-foreground': 'hsl(0, 0%, 100%)',
-    '--secondary': 'hsl(15, 50%, 88%)',
-    '--secondary-foreground': 'hsl(15, 30%, 15%)',
-    '--muted': 'hsl(15, 40%, 90%)',
-    '--muted-foreground': 'hsl(15, 25%, 50%)',
-    '--accent': 'hsl(15, 60%, 85%)',
-    '--accent-foreground': 'hsl(15, 30%, 15%)',
-    '--border': 'hsl(15, 40%, 75%)',
-    '--ring': 'hsl(15, 85%, 60%)',
-    '--card': 'hsl(0, 0%, 100%)',
-    '--card-foreground': 'hsl(15, 30%, 15%)',
-  },
-  'purple-cyan': {
-    '--background': 'hsl(282, 50%, 95%)', // Very light purple-tinted background
-    '--foreground': 'hsl(0, 0%, 100%)', // White text for gradient background
-    '--primary': 'hsl(282, 58%, 46%)', // Main purple #672676
-    '--primary-foreground': 'hsl(0, 0%, 100%)',
-    '--secondary': 'hsl(282, 40%, 75%)', // Light purple
-    '--secondary-foreground': 'hsl(282, 58%, 20%)',
-    '--muted': 'hsl(282, 20%, 85%)', // Muted purple
-    '--muted-foreground': 'hsl(282, 30%, 40%)',
-    '--accent': 'hsl(188, 100%, 50%)', // Bright cyan for accents
-    '--accent-foreground': 'hsl(282, 58%, 20%)',
-    '--border': 'hsl(282, 30%, 70%)', // Purple border
-    '--ring': 'hsl(188, 100%, 50%)', // Cyan ring
-    '--card': 'hsl(0, 0%, 100%)', // White cards for contrast
-    '--card-foreground': 'hsl(282, 58%, 25%)', // Dark purple text on cards
   },
   'ocean-blue': {
     '--background': 'hsl(172, 100%, 97%)', // #EFFFFD - Very light ocean
@@ -121,10 +57,6 @@ const applyTheme = (theme: Theme) => {
 
 const themes = [
   { id: 'teal', name: 'Teal', color: 'bg-gradient-to-r from-teal-400 via-cyan-300 to-teal-200' },
-  { id: 'light-teal', name: 'Light Teal', color: 'bg-purple-400' },
-  { id: 'mulberry', name: 'Mulberry', color: 'bg-rose-900' },
-  { id: 'soft-peach', name: 'Soft Peach', color: 'bg-orange-300' },
-  { id: 'purple-cyan', name: 'Purple & Cyan', color: 'bg-gradient-to-r from-purple-600 to-cyan-400' },
   { id: 'ocean-blue', name: 'Ocean Blue', color: 'bg-gradient-to-r from-blue-900 via-cyan-400 to-blue-200' },
 ] as const;
 

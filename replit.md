@@ -6,7 +6,7 @@ This full-stack web application serves as a public information portal and conten
 
 ## Recent Changes (August 2025)
 
-- **Complete Theme System Integration**: Header and hero sections now fully integrated with theme system for seamless color scheme switching across Ocean Blue, Teal (custom gradient), and Mulberry themes
+- **Streamlined Theme System**: Simplified to two main themes - Ocean Blue (lighter professional blue) and Teal (custom gradient with #51EAEA, #00FFF0, #B8FFF9, #85F4FF colors)
 - **Lighter Blue Ocean Theme**: Updated default Ocean Blue theme from dark navy (#161D6F) to lighter, more appealing blue (#3B4A9C) with enhanced visual harmony
 - **Custom Teal Theme**: Added new Teal theme using specified colors (#51EAEA, #00FFF0, #B8FFF9, #85F4FF) with full gradient integration across header, hero section, and card headers
 - **Theme-Aware Gradients**: All header gradients, hero section backgrounds, and card headers now automatically adapt to selected theme using CSS theme variables
