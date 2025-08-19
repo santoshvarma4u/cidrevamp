@@ -48,6 +48,8 @@ This full-stack web application serves as a public information portal and conten
   - **Modernized Admin Sidebar**: Updated to use theme colors (background, foreground, primary, secondary, border) instead of hardcoded grays
   - **Dashboard Theme Compatibility**: Ensured admin dashboard background and components properly respond to theme selection
   - **Removed Complaints Dependencies**: Cleaned up all complaints-related code, queries, and components from admin dashboard
+  - **Admin Contrast Fixes**: Fixed text visibility issues with dark sidebar (bg-gray-900) and white text for proper contrast
+  - **Unified Logout Handler**: Fixed 404 errors by supporting both GET and POST logout requests with appropriate responses
 - **Theme System Overhaul**: Complete theme switcher implementation with CSS variables, replaced all hardcoded teal colors with dynamic theme-aware classes
 - **Mulberry Theme**: Replaced purple theme with user-requested Mulberry color (#4C0121) for professional government aesthetic
 - **Three-Card Asymmetric Layout**: Successfully implemented asymmetric layout with flexbox approach:
@@ -72,12 +74,13 @@ This full-stack web application serves as a public information portal and conten
     - `.cid-card-header` for card headers
     - `.cid-nav-text` for navigation typography
   - **Complete Page Coverage**: Applied consistent styling to all pages including:
-    - Dynamic pages, About/Mission, Wings pages, RTI page, Contact page, Alerts page
+    - Dynamic pages, About/Mission, Wings pages, RTI page, Contact page, Alerts page, Links page
     - Economic Offences Wing, Photo Gallery, Video Gallery, Admin Dashboard
     - Specialized wing pages and all content management pages
   - **Typography Consistency**: Unified font-weight (600/semibold) and font-family across all navigation and header elements
   - **Visual Harmony**: Perfect alignment between header gradient, hero section gradient, and card header gradients throughout the application
   - **Professional Government Aesthetic**: Maintained professional appearance while ensuring visual consistency across all user-facing pages
+  - **Theme Verification Complete**: Confirmed all pages use proper theme classes (cid-page-header, cid-nav-text) for Ocean Blue and Teal theme compatibility
 
 ## User Preferences
 
