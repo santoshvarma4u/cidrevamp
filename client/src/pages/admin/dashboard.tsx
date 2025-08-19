@@ -11,7 +11,6 @@ import {
   FileText,
   Video,
   Image,
-  MessageSquare,
   TrendingUp,
   AlertCircle,
   CheckCircle,
@@ -52,10 +51,7 @@ export default function AdminDashboard() {
     enabled: isAuthenticated,
   });
 
-  const { data: complaints = [] } = useQuery({
-    queryKey: ["/api/admin/complaints"],
-    enabled: isAuthenticated,
-  });
+
 
   const { data: news = [] } = useQuery({
     queryKey: ["/api/news"],
@@ -99,13 +95,7 @@ export default function AdminDashboard() {
       color: "green",
       published: photos.filter((p: any) => p.isPublished).length,
     },
-    {
-      title: "Complaints",
-      value: complaints.length,
-      icon: MessageSquare,
-      color: "red",
-      pending: complaints.filter((c: any) => c.status === 'pending').length,
-    },
+
     {
       title: "News Articles",
       value: news.length,
@@ -115,10 +105,10 @@ export default function AdminDashboard() {
     },
   ];
 
-  const recentComplaints = complaints.slice(0, 5);
+
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="flex">
         <AdminSidebar />
         
@@ -156,57 +146,8 @@ export default function AdminDashboard() {
               ))}
             </div>
 
+            {/* System Status */}
             <div className="grid lg:grid-cols-2 gap-8">
-              {/* Recent Complaints */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <MessageSquare className="h-5 w-5" />
-                    <span>Recent Complaints</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {recentComplaints.length > 0 ? (
-                    <div className="space-y-4">
-                      {recentComplaints.map((complaint: any) => (
-                        <div key={complaint.id} className="border-l-2 border-blue-200 pl-4">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <h4 className="font-semibold text-gray-900">{complaint.subject}</h4>
-                              <p className="text-sm text-gray-600 mt-1">
-                                {complaint.complainantName} • {complaint.complaintNumber}
-                              </p>
-                              <div className="flex items-center space-x-2 mt-2">
-                                <Badge variant={
-                                  complaint.status === 'resolved' ? 'default' :
-                                  complaint.status === 'under_investigation' ? 'secondary' :
-                                  'destructive'
-                                }>
-                                  {complaint.status.replace('_', ' ')}
-                                </Badge>
-                                <Badge variant="outline">{complaint.type}</Badge>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div className="flex items-center text-sm text-gray-500">
-                                <Clock className="h-4 w-4 mr-1" />
-                                {new Date(complaint.createdAt).toLocaleDateString()}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-600">No complaints available</p>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* System Status */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
@@ -242,12 +183,42 @@ export default function AdminDashboard() {
                     
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <AlertCircle className="h-5 w-5 text-yellow-600" />
-                        <span className="font-medium">Pending Reviews</span>
+                        <CheckCircle className="h-5 w-5 text-green-600" />
+                        <span className="font-medium">Content Management</span>
                       </div>
-                      <Badge variant="secondary">
-                        {complaints.filter((c: any) => c.status === 'pending').length}
-                      </Badge>
+                      <Badge variant="default" className="bg-green-600">Active</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <TrendingUp className="h-5 w-5" />
+                    <span>Quick Stats</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">Total Content Items</span>
+                      <Badge variant="outline">{pages.length + videos.length + photos.length + news.length}</Badge>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">Published Pages</span>
+                      <Badge variant="outline">{pages.filter((p: any) => p.isPublished).length}</Badge>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">Active Videos</span>
+                      <Badge variant="outline">{videos.filter((v: any) => v.isPublished).length}</Badge>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">Photo Gallery Items</span>
+                      <Badge variant="outline">{photos.filter((p: any) => p.isPublished).length}</Badge>
                     </div>
                   </div>
                 </CardContent>

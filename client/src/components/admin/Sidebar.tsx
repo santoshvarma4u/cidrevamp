@@ -41,20 +41,10 @@ export default function AdminSidebar() {
       ],
     },
     {
-      title: "Complaints",
-      href: "/admin/complaints",
-      icon: MessageSquare,
-    },
-    {
       title: "Users",
       href: "/admin/users",
       icon: Users,
       adminOnly: true,
-    },
-    {
-      title: "Settings",
-      href: "/admin/settings",
-      icon: Settings,
     },
   ];
 
@@ -73,30 +63,30 @@ export default function AdminSidebar() {
   };
 
   return (
-    <div className="fixed left-0 top-0 z-40 h-screen w-64 bg-gray-900 text-white shadow-lg">
+    <div className="fixed left-0 top-0 z-40 h-screen w-64 bg-card border-r border-border text-foreground shadow-lg">
       <div className="flex h-full flex-col">
         {/* Header */}
-        <div className="flex items-center space-x-3 p-6 border-b border-gray-700">
-          <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-            <Shield className="h-5 w-5 text-white" />
+        <div className="flex items-center space-x-3 p-6 border-b border-border cid-page-header rounded-none">
+          <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+            <Shield className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <h2 className="text-lg font-bold">CID Admin</h2>
-            <p className="text-sm text-gray-400">Management Panel</p>
+            <h2 className="text-lg font-bold text-white">CID Admin</h2>
+            <p className="text-sm text-purple-100">Management Panel</p>
           </div>
         </div>
 
         {/* User Info */}
         {user && (
-          <div className="p-4 border-b border-gray-700">
+          <div className="p-4 border-b border-border">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium">
+              <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
+                <span className="text-sm font-medium text-foreground">
                   {user.firstName?.charAt(0) || user.email?.charAt(0) || 'U'}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">
+                <p className="text-sm font-medium truncate text-foreground">
                   {user.firstName || user.email}
                 </p>
                 <div className="flex items-center space-x-2">
@@ -121,7 +111,7 @@ export default function AdminSidebar() {
               if (item.items) {
                 return (
                   <div key={item.title} className="space-y-1">
-                    <div className="flex items-center space-x-3 px-3 py-2 text-gray-400">
+                    <div className="flex items-center space-x-3 px-3 py-2 text-muted-foreground">
                       <item.icon className="h-4 w-4" />
                       <span className="text-sm font-medium">{item.title}</span>
                     </div>
@@ -130,8 +120,8 @@ export default function AdminSidebar() {
                         <Link key={subItem.href} href={subItem.href}>
                           <div className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
                             isActive(subItem.href)
-                              ? "bg-blue-600 text-white"
-                              : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                              ? "bg-primary text-primary-foreground"
+                              : "text-foreground hover:bg-secondary hover:text-foreground"
                           }`}>
                             <subItem.icon className="h-4 w-4" />
                             <span>{subItem.title}</span>
@@ -147,8 +137,8 @@ export default function AdminSidebar() {
                 <Link key={item.href} href={item.href}>
                   <div className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
                     isActive(item.href)
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-foreground hover:bg-secondary hover:text-foreground"
                   }`}>
                     <item.icon className="h-4 w-4" />
                     <span>{item.title}</span>
@@ -160,17 +150,17 @@ export default function AdminSidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4 border-t border-border">
           <div className="space-y-2">
             <Link href="/">
-              <Button variant="ghost" className="w-full justify-start text-gray-300 hover:text-white">
+              <Button variant="ghost" className="w-full justify-start text-foreground hover:bg-secondary hover:text-foreground">
                 <Menu className="mr-2 h-4 w-4" />
                 View Site
               </Button>
             </Link>
             <Button 
               variant="ghost" 
-              className="w-full justify-start text-gray-300 hover:text-white"
+              className="w-full justify-start text-foreground hover:bg-secondary hover:text-foreground"
               onClick={() => window.location.href = '/api/logout'}
             >
               <LogOut className="mr-2 h-4 w-4" />
