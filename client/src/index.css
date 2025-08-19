@@ -50,11 +50,11 @@
 
 /* Header spacing to account for fixed header height */
 .header-spacing {
-  padding-top: 240px; /* Adjust for large logo + navigation */
+  padding-top: 280px; /* Increased for large logo + navigation */
 }
 
 .page-content-spacing {
-  padding-top: 220px; /* For page content below fixed header */
+  padding-top: 260px; /* For page content below fixed header */
 }
 
 [data-theme="purple-cyan"] .bg-white {
@@ -101,11 +101,12 @@
 /* ========== OCEAN BLUE THEME ========== */
 [data-theme="ocean-blue"] .page-hero-gradient {
   background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
+  color: #2C3680 !important;
 }
 
 [data-theme="ocean-blue"] .cid-page-header {
   background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
-  color: #2C3680;
+  color: #2C3680 !important;
   font-weight: 600;
 }
 
@@ -117,22 +118,23 @@
 
 [data-theme="ocean-blue"] .hero-section {
   background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.8) 50%, #EFFFFD 100%);
-  color: #2C3680;
+  color: #2C3680 !important;
 }
 
 [data-theme="ocean-blue"] .header-gradient {
   background: linear-gradient(135deg, #3B4A9C 0%, rgba(133, 244, 255, 0.9) 50%, #EFFFFD 100%) !important;
-  color: #2C3680;
+  color: #2C3680 !important;
 }
 
 /* ========== TEAL THEME ========== */
 [data-theme="teal"] .page-hero-gradient {
   background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%);
+  color: #006666 !important;
 }
 
 [data-theme="teal"] .cid-page-header {
   background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%);
-  color: #006666;
+  color: #006666 !important;
   font-weight: 600;
 }
 
@@ -144,12 +146,12 @@
 
 [data-theme="teal"] .hero-section {
   background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%);
-  color: #006666;
+  color: #006666 !important;
 }
 
 [data-theme="teal"] .header-gradient {
   background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%) !important;
-  color: #006666;
+  color: #006666 !important;
 }
 
 [data-theme="teal"] .bg-primary {
@@ -193,6 +195,31 @@
 .cid-nav-text {
   font-weight: 600;
   font-family: 'Inter', 'Poppins', 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Force dark blue text on gradient backgrounds for readability */
+[data-theme="ocean-blue"] .page-hero-gradient h1,
+[data-theme="ocean-blue"] .page-hero-gradient p,
+[data-theme="ocean-blue"] .cid-page-header h1,
+[data-theme="ocean-blue"] .cid-page-header p,
+[data-theme="ocean-blue"] .cid-nav-text {
+  color: #2C3680 !important;
+}
+
+[data-theme="teal"] .page-hero-gradient h1,
+[data-theme="teal"] .page-hero-gradient p,
+[data-theme="teal"] .cid-page-header h1,
+[data-theme="teal"] .cid-page-header p,
+[data-theme="teal"] .cid-nav-text {
+  color: #006666 !important;
+}
+
+[data-theme="mulberry"] .page-hero-gradient h1,
+[data-theme="mulberry"] .page-hero-gradient p,
+[data-theme="mulberry"] .cid-page-header h1,
+[data-theme="mulberry"] .cid-page-header p,
+[data-theme="mulberry"] .cid-nav-text {
+  color: #FFFFFF !important;
 }
 
 /* Menu bar gradient styling - only for header */
