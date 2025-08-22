@@ -111,18 +111,11 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-gray-400" />
-                <p className="text-gray-300">+91-40-2324-4444</p>
+                <p className="text-gray-300">040-27852274/8172656333</p>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-gray-400" />
-                <p className="text-gray-300">help.tspolice@cgg.gov.in</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <Clock className="h-5 w-5 text-gray-400 mt-0.5" />
-                <div>
-                  <p className="text-gray-300">Mon - Fri: 9:00 AM - 6:00 PM</p>
-                  <p className="text-gray-300">Emergency: 24/7</p>
-                </div>
+                <p className="text-gray-300">adgcid-ts@tspolice.gov.in</p>
               </div>
             </div>
           </div>
@@ -139,7 +132,6 @@ export default function Footer() {
                 All rights reserved.
               </p>
             </div>
-
           </div>
         </div>
       </div>

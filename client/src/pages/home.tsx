@@ -72,18 +72,7 @@ export default function Home() {
       icon: CreditCard,
       href: "/economic-offences",
     },
-    {
-      title: "Cyber Crimes Unit",
-      description:
-        "Digital forensics and cybercrime investigation with cutting-edge technology",
-      features: [
-        "Digital evidence recovery",
-        "Online fraud investigation",
-        "Cyber security consulting",
-      ],
-      icon: Computer,
-      href: "/cyber-crimes",
-    },
+
     {
       title: "Women & Child Protection",
       description:
