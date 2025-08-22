@@ -54,7 +54,7 @@ export default function AdminDirectorManager() {
   // Fetch all director info
   const { data: directorInfoList = [], isLoading: isLoadingDirectors } = useQuery({
     queryKey: ["/api/admin/director-info"],
-    queryFn: () => apiRequest("/api/admin/director-info").then((res) => res.json()),
+    queryFn: () => apiRequest("/api/admin/director-info"),
   });
 
   // Create mutation
