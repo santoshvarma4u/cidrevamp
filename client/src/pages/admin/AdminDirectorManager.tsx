@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import queryClient from "@/lib/queryClient";
+import { useAuth } from "@/hooks/useAuth";
+import AdminSidebar from "@/components/admin/Sidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +26,7 @@ interface DirectorInfo {
 
 export default function AdminDirectorManager() {
   const { toast } = useToast();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
@@ -34,8 +37,22 @@ export default function AdminDirectorManager() {
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      toast({
+        title: "Unauthorized",
+        description: "You are logged out. Logging in again...",
+        variant: "destructive",
+      });
+      setTimeout(() => {
+        window.location.href = "/api/login";
+      }, 500);
+      return;
+    }
+  }, [isAuthenticated, isLoading, toast]);
+
   // Fetch all director info
-  const { data: directorInfoList = [], isLoading } = useQuery({
+  const { data: directorInfoList = [], isLoading: isLoadingDirectors } = useQuery({
     queryKey: ["/api/admin/director-info"],
     queryFn: () => apiRequest("/api/admin/director-info").then((res) => res.json()),
   });
@@ -165,16 +182,24 @@ export default function AdminDirectorManager() {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isLoadingDirectors) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-lg">Loading director information...</div>
+      <div className="flex">
+        <AdminSidebar />
+        <div className="flex-1 ml-64">
+          <div className="flex items-center justify-center p-8">
+            <div className="text-lg">Loading director information...</div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="flex">
+      <AdminSidebar />
+      <div className="flex-1 ml-64">
+        <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <User className="h-6 w-6" />
@@ -345,6 +370,8 @@ export default function AdminDirectorManager() {
           )}
         </CardContent>
       </Card>
+        </div>
+      </div>
     </div>
   );
 }
