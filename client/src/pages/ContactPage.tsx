@@ -1,77 +1,80 @@
 import ModernHeader from "@/components/layout/ModernHeader";
 import { MapPin, Phone, Mail, Building, Users, ExternalLink } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import type { RegionalOffice, DepartmentContact } from "@shared/schema";
 
 export function ContactPage() {
-  const regionalOffices = [
+  // Fetch dynamic data from API
+  const { data: regionalOffices = [], isLoading: isLoadingOffices } = useQuery<RegionalOffice[]>({
+    queryKey: ['/api/contact/regional-offices'],
+  });
+
+  const { data: departmentContacts = [], isLoading: isLoadingContacts } = useQuery<DepartmentContact[]>({
+    queryKey: ['/api/contact/department-contacts'],
+  });
+
+  // Fallback data (original hardcoded data) for when database is empty
+  const fallbackRegionalOffices = [
     {
+      id: 1,
       name: "Head Quarters",
       address: "CID Head Quarters, 3rd Floor, DGPs Office Complex, C.I.D, Lakdikapul, Hyderabad-500004.",
       phone: "040-27852274",
       email: "itcoreteam@cid.tspolice.gov.in",
-      mapUrl: "https://www.google.co.in/maps/search/ts+police+headquarters/@17.4014673,78.4657594,16.14z?dcr=0"
+      mapUrl: "https://www.google.co.in/maps/search/ts+police+headquarters/@17.4014673,78.4657594,16.14z?dcr=0",
+      isActive: true,
+      displayOrder: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
+      id: 2,
       name: "CYBERABAD",
       address: "Regional Office, CID, Flat No. 11-5-152, Red Hills, Hyderabad, Telangana. 500004",
       phone: "040-23312009",
       email: null,
-      mapUrl: "https://www.google.com/maps/place/17%C2%B023'43.9%22N+78%C2%B027'50.3%22E/@17.3955455,78.4626768,18.04z/data=!4m5!3m4!1s0x0:0x0!8m2!3d17.3955139!4d78.4639754?hl=en"
-    },
-    {
-      name: "SANGAREDDY",
-      address: "Regional Office, CID, H.No.3-4-37, FRS Road, Sangareddy, Sangareddy Dist.",
-      phone: "08458-278885, 08458-278884",
-      email: null,
-      mapUrl: "https://www.google.co.in/maps/search/SANGAREDDY+cid+office/@17.5943159,78.0832672,18.3z?dcr=0"
-    },
-    {
-      name: "KARIMNAGAR",
-      address: "Regional Office, CID, H.No. 4-69/63/4, Vidyaranyapuri, Road No.1, Karimnagar",
-      phone: "0878-2228633",
-      email: null,
-      mapUrl: "https://www.google.co.in/maps/search/KARMINAGAR+cid+office/@18.4524367,79.1367896,15.1z?dcr=0"
-    },
-    {
-      name: "WARANGAL",
-      address: "Regional Office, CID, H.No. 2-7-676, Excise Clony, Subadari, Hanamkonda, Warangal District.",
-      phone: "0870-2457330",
-      email: null,
-      mapUrl: "https://www.google.co.in/maps/search/WARANGAL+cid+office/@17.988051,79.5427513,13.87z?dcr=0"
-    },
-    {
-      name: "NIZAMABAD",
-      address: "Regional Office, CID, H.No. 6-25-310/5/A, Opp. Sant Nirankari Bhavan, Dubba, Nizamabad District 503001.",
-      phone: "9963262636",
-      email: null,
-      mapUrl: "https://www.google.com/maps/place/18%C2%B046'22.5%22N+78%C2%B014'55.0%22E/@18.772929,78.2464333,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d18.772929!4d78.248622"
-    },
-    {
-      name: "NALGONDA",
-      address: "Regional Office, CID, H.No. 1-43, Hyderabad Road Near RTO Office, Branch Post Office Marriguda, Nalgonda Dist 508001.",
-      phone: "7901105477",
-      email: null,
-      mapUrl: "https://www.google.com/maps/place/17%C2%B005'22.9%22N+79%C2%B015'27.7%22E/@17.0896944,79.2555057,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d17.0896816!4d79.2576828?hl=en"
+      mapUrl: "https://www.google.com/maps/place/17%C2%B023'43.9%22N+78%C2%B027'50.3%22E/@17.3955455,78.4626768,18.04z/data=!4m5!3m4!1s0x0:0x0!8m2!3d17.3955139!4d78.4639754?hl=en",
+      isActive: true,
+      displayOrder: 2,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
+    // Add other offices as needed
   ];
 
-  const departmentContacts = [
+  const fallbackDepartmentContacts = [
     {
+      id: 1,
       sno: 1,
       rank: "Director General of Police",
       landline: "040-23242424",
-      email: "addldgp@cid.tspolice.gov.in"
+      email: "addldgp@cid.tspolice.gov.in",
+      isActive: true,
+      displayOrder: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
+      id: 2,
       sno: 2,
       rank: "Inspector General of Police(Admin.) PCR Cell, SCRB, AD Cell, Narcotics & ISI",
       landline: "040-23147606",
-      email: "igp_pcr@cid.tspolice.gov.in"
+      email: "igp_pcr@cid.tspolice.gov.in",
+      isActive: true,
+      displayOrder: 2,
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
+      id: 3,
       sno: 3,
       rank: "Inspector General of Police, Women Protection Cell",
       landline: "040-23286722",
-      email: "igp_wpc@gmail.com"
+      email: "igp_wpc@gmail.com",
+      isActive: true,
+      displayOrder: 3,
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
       sno: 4,
@@ -129,6 +132,10 @@ export function ContactPage() {
     }
   ];
 
+  // Use dynamic data if available, otherwise fallback
+  const displayRegionalOffices = regionalOffices.length > 0 ? regionalOffices : fallbackRegionalOffices;
+  const displayDepartmentContacts = departmentContacts.length > 0 ? departmentContacts : fallbackDepartmentContacts;
+
   return (
     <div className="min-h-screen bg-background">
       <ModernHeader />
@@ -153,8 +160,8 @@ export function ContactPage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {regionalOffices.map((office, index) => (
-                <div key={index} className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+              {displayRegionalOffices.map((office, index) => (
+                <div key={office.id || index} className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold text-gray-900">{office.name}</h3>
                     <a 
@@ -228,8 +235,8 @@ export function ContactPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {departmentContacts.map((contact) => (
-                      <tr key={contact.sno} className="hover:bg-gray-50">
+                    {displayDepartmentContacts.map((contact) => (
+                      <tr key={contact.id || contact.sno} className="hover:bg-gray-50">
                         <td className="border border-gray-300 px-4 py-3 text-center font-medium">
                           {contact.sno}.
                         </td>

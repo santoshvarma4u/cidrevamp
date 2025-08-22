@@ -10,6 +10,8 @@ import {
   menuItems,
   directorInfo,
   wings,
+  regionalOffices,
+  departmentContacts,
   type User,
   type InsertUser,
   type InsertPage,
@@ -30,6 +32,10 @@ import {
   type InsertDirectorInfo,
   type Wing,
   type InsertWing,
+  type RegionalOffice,
+  type InsertRegionalOffice,
+  type DepartmentContact,
+  type InsertDepartmentContact,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, like, sql } from "drizzle-orm";
@@ -106,6 +112,20 @@ export interface IStorage {
 
   // Menu operations
   getMenuItems(): Promise<MenuItem[]>;
+
+  // Regional offices operations
+  createRegionalOffice(office: InsertRegionalOffice): Promise<RegionalOffice>;
+  updateRegionalOffice(id: number, office: Partial<InsertRegionalOffice>): Promise<RegionalOffice>;
+  deleteRegionalOffice(id: number): Promise<void>;
+  getRegionalOffice(id: number): Promise<RegionalOffice | undefined>;
+  getRegionalOffices(activeOnly?: boolean): Promise<RegionalOffice[]>;
+
+  // Department contacts operations
+  createDepartmentContact(contact: InsertDepartmentContact): Promise<DepartmentContact>;
+  updateDepartmentContact(id: number, contact: Partial<InsertDepartmentContact>): Promise<DepartmentContact>;
+  deleteDepartmentContact(id: number): Promise<void>;
+  getDepartmentContact(id: number): Promise<DepartmentContact | undefined>;
+  getDepartmentContacts(activeOnly?: boolean): Promise<DepartmentContact[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -450,6 +470,76 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(menuItems)
       .where(eq(menuItems.isActive, true))
       .orderBy(menuItems.sortOrder);
+  }
+
+  // Regional offices operations
+  async createRegionalOffice(officeData: InsertRegionalOffice): Promise<RegionalOffice> {
+    const [newOffice] = await db.insert(regionalOffices).values(officeData).returning();
+    return newOffice;
+  }
+
+  async updateRegionalOffice(id: number, officeData: Partial<InsertRegionalOffice>): Promise<RegionalOffice> {
+    const [updatedOffice] = await db
+      .update(regionalOffices)
+      .set({ ...officeData, updatedAt: new Date() })
+      .where(eq(regionalOffices.id, id))
+      .returning();
+    return updatedOffice;
+  }
+
+  async deleteRegionalOffice(id: number): Promise<void> {
+    await db.delete(regionalOffices).where(eq(regionalOffices.id, id));
+  }
+
+  async getRegionalOffice(id: number): Promise<RegionalOffice | undefined> {
+    const [office] = await db.select().from(regionalOffices).where(eq(regionalOffices.id, id));
+    return office;
+  }
+
+  async getRegionalOffices(activeOnly: boolean = false): Promise<RegionalOffice[]> {
+    if (activeOnly) {
+      return await db.select().from(regionalOffices)
+        .where(eq(regionalOffices.isActive, true))
+        .orderBy(regionalOffices.displayOrder, regionalOffices.name);
+    }
+    
+    return await db.select().from(regionalOffices)
+      .orderBy(regionalOffices.displayOrder, regionalOffices.name);
+  }
+
+  // Department contacts operations
+  async createDepartmentContact(contactData: InsertDepartmentContact): Promise<DepartmentContact> {
+    const [newContact] = await db.insert(departmentContacts).values(contactData).returning();
+    return newContact;
+  }
+
+  async updateDepartmentContact(id: number, contactData: Partial<InsertDepartmentContact>): Promise<DepartmentContact> {
+    const [updatedContact] = await db
+      .update(departmentContacts)
+      .set({ ...contactData, updatedAt: new Date() })
+      .where(eq(departmentContacts.id, id))
+      .returning();
+    return updatedContact;
+  }
+
+  async deleteDepartmentContact(id: number): Promise<void> {
+    await db.delete(departmentContacts).where(eq(departmentContacts.id, id));
+  }
+
+  async getDepartmentContact(id: number): Promise<DepartmentContact | undefined> {
+    const [contact] = await db.select().from(departmentContacts).where(eq(departmentContacts.id, id));
+    return contact;
+  }
+
+  async getDepartmentContacts(activeOnly: boolean = false): Promise<DepartmentContact[]> {
+    if (activeOnly) {
+      return await db.select().from(departmentContacts)
+        .where(eq(departmentContacts.isActive, true))
+        .orderBy(departmentContacts.displayOrder, departmentContacts.sno);
+    }
+    
+    return await db.select().from(departmentContacts)
+      .orderBy(departmentContacts.displayOrder, departmentContacts.sno);
   }
 }
 

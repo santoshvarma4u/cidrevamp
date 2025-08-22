@@ -201,6 +201,33 @@ export const menuItems = pgTable("menu_items", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Regional offices table for contact page
+export const regionalOffices = pgTable("regional_offices", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  address: text("address").notNull(),
+  phone: varchar("phone").notNull(),
+  email: varchar("email"),
+  mapUrl: text("map_url"),
+  isActive: boolean("is_active").default(true),
+  displayOrder: integer("display_order").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Department contacts table for contact page
+export const departmentContacts = pgTable("department_contacts", {
+  id: serial("id").primaryKey(),
+  sno: integer("sno").notNull(),
+  rank: text("rank").notNull(),
+  landline: varchar("landline").notNull(),
+  email: varchar("email").notNull(),
+  isActive: boolean("is_active").default(true),
+  displayOrder: integer("display_order").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Relations
 export const userRelations = relations(users, ({ many }) => ({
   pages: many(pages),
@@ -364,3 +391,19 @@ export const insertWingSchema = createInsertSchema(wings).omit({
 });
 export type InsertWing = z.infer<typeof insertWingSchema>;
 export type Wing = typeof wings.$inferSelect;
+
+export const insertRegionalOfficeSchema = createInsertSchema(regionalOffices).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertRegionalOffice = z.infer<typeof insertRegionalOfficeSchema>;
+export type RegionalOffice = typeof regionalOffices.$inferSelect;
+
+export const insertDepartmentContactSchema = createInsertSchema(departmentContacts).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertDepartmentContact = z.infer<typeof insertDepartmentContactSchema>;
+export type DepartmentContact = typeof departmentContacts.$inferSelect;

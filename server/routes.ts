@@ -3,7 +3,7 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
-import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema, insertWingSchema } from "@shared/schema";
+import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema, insertWingSchema, insertRegionalOfficeSchema, insertDepartmentContactSchema } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
 import { body, validationResult } from "express-validator";
 import multer from "multer";
@@ -763,6 +763,128 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting wing:", error);
       res.status(500).json({ message: "Failed to delete wing" });
+    }
+  });
+
+  // Contact management routes
+  app.get('/api/contact/regional-offices', async (req, res) => {
+    try {
+      const offices = await storage.getRegionalOffices(true);
+      res.json(offices);
+    } catch (error) {
+      console.error("Error fetching regional offices:", error);
+      res.status(500).json({ message: "Failed to fetch regional offices" });
+    }
+  });
+
+  app.get('/api/contact/department-contacts', async (req, res) => {
+    try {
+      const contacts = await storage.getDepartmentContacts(true);
+      res.json(contacts);
+    } catch (error) {
+      console.error("Error fetching department contacts:", error);
+      res.status(500).json({ message: "Failed to fetch department contacts" });
+    }
+  });
+
+  // Admin routes for contact management
+  app.get('/api/admin/regional-offices', requireAdmin, async (req, res) => {
+    try {
+      const offices = await storage.getRegionalOffices();
+      res.json(offices);
+    } catch (error) {
+      console.error("Error fetching regional offices:", error);
+      res.status(500).json({ message: "Failed to fetch regional offices" });
+    }
+  });
+
+  app.post('/api/admin/regional-offices', requireAdmin, async (req: any, res) => {
+    try {
+      const validatedData = insertRegionalOfficeSchema.parse(req.body);
+      const office = await storage.createRegionalOffice(validatedData);
+      res.json(office);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating regional office:", error);
+      res.status(500).json({ message: "Failed to create regional office" });
+    }
+  });
+
+  app.put('/api/admin/regional-offices/:id', requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertRegionalOfficeSchema.partial().parse(req.body);
+      const office = await storage.updateRegionalOffice(id, validatedData);
+      res.json(office);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating regional office:", error);
+      res.status(500).json({ message: "Failed to update regional office" });
+    }
+  });
+
+  app.delete('/api/admin/regional-offices/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteRegionalOffice(id);
+      res.json({ message: "Regional office deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting regional office:", error);
+      res.status(500).json({ message: "Failed to delete regional office" });
+    }
+  });
+
+  app.get('/api/admin/department-contacts', requireAdmin, async (req, res) => {
+    try {
+      const contacts = await storage.getDepartmentContacts();
+      res.json(contacts);
+    } catch (error) {
+      console.error("Error fetching department contacts:", error);
+      res.status(500).json({ message: "Failed to fetch department contacts" });
+    }
+  });
+
+  app.post('/api/admin/department-contacts', requireAdmin, async (req: any, res) => {
+    try {
+      const validatedData = insertDepartmentContactSchema.parse(req.body);
+      const contact = await storage.createDepartmentContact(validatedData);
+      res.json(contact);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating department contact:", error);
+      res.status(500).json({ message: "Failed to create department contact" });
+    }
+  });
+
+  app.put('/api/admin/department-contacts/:id', requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertDepartmentContactSchema.partial().parse(req.body);
+      const contact = await storage.updateDepartmentContact(id, validatedData);
+      res.json(contact);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating department contact:", error);
+      res.status(500).json({ message: "Failed to update department contact" });
+    }
+  });
+
+  app.delete('/api/admin/department-contacts/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteDepartmentContact(id);
+      res.json({ message: "Department contact deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting department contact:", error);
+      res.status(500).json({ message: "Failed to delete department contact" });
     }
   });
 
