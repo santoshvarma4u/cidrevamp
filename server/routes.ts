@@ -343,6 +343,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       
+      console.log("Received update request for page ID:", id);
+      console.log("Raw request body:", JSON.stringify(req.body, null, 2));
+      
       // Process request body to handle empty strings for nullable fields
       const processedBody = {
         ...req.body,
@@ -354,11 +357,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         menuDescription: req.body.menuDescription === "" ? null : req.body.menuDescription,
       };
       
+      console.log("Processed body:", JSON.stringify(processedBody, null, 2));
+      
       const validatedData = insertPageSchema.partial().parse(processedBody);
+      console.log("Validation successful, updating page...");
       const page = await storage.updatePage(id, validatedData);
       res.json(page);
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.error("Validation errors:", JSON.stringify(error.errors, null, 2));
         return res.status(400).json({ message: "Invalid data", errors: error.errors });
       }
       console.error("Error updating page:", error);
