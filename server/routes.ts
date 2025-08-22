@@ -3,7 +3,7 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
-import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema } from "@shared/schema";
+import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
 import { body, validationResult } from "express-validator";
 import multer from "multer";
@@ -592,6 +592,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting news ticker:", error);
       res.status(500).json({ message: "Failed to delete news ticker" });
+    }
+  });
+
+  // Director Information endpoints
+  app.get('/api/director-info', async (req, res) => {
+    try {
+      const directorInfo = await storage.getDirectorInfo();
+      res.json(directorInfo);
+    } catch (error) {
+      console.error("Error fetching director info:", error);
+      res.status(500).json({ message: "Failed to fetch director information" });
+    }
+  });
+
+  app.get('/api/admin/director-info', requireAdmin, async (req, res) => {
+    try {
+      const allDirectorInfo = await storage.getAllDirectorInfo();
+      res.json(allDirectorInfo);
+    } catch (error) {
+      console.error("Error fetching all director info:", error);
+      res.status(500).json({ message: "Failed to fetch director information" });
+    }
+  });
+
+  app.post('/api/admin/director-info', requireAdmin, upload.single('photo'), async (req: any, res) => {
+    try {
+      const validatedData = insertDirectorInfoSchema.parse({
+        name: req.body.name,
+        title: req.body.title || "Director General of Police",
+        message: req.body.message,
+        photoPath: req.file ? req.file.path : undefined,
+        isActive: req.body.isActive !== 'false'
+      });
+      
+      const directorInfo = await storage.createDirectorInfo(validatedData);
+      res.json(directorInfo);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating director info:", error);
+      res.status(500).json({ message: "Failed to create director information" });
+    }
+  });
+
+  app.put('/api/admin/director-info/:id', requireAdmin, upload.single('photo'), async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updateData: any = {
+        name: req.body.name,
+        title: req.body.title,
+        message: req.body.message,
+        isActive: req.body.isActive !== 'false'
+      };
+      
+      if (req.file) {
+        updateData.photoPath = req.file.path;
+      }
+      
+      const validatedData = insertDirectorInfoSchema.partial().parse(updateData);
+      const directorInfo = await storage.updateDirectorInfo(id, validatedData);
+      res.json(directorInfo);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating director info:", error);
+      res.status(500).json({ message: "Failed to update director information" });
+    }
+  });
+
+  app.delete('/api/admin/director-info/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteDirectorInfo(id);
+      res.json({ message: "Director information deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting director info:", error);
+      res.status(500).json({ message: "Failed to delete director information" });
     }
   });
 

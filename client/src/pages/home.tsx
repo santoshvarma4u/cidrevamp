@@ -53,6 +53,11 @@ export default function Home() {
     queryFn: () => fetch("/api/news").then((res) => res.json()),
   });
 
+  const { data: directorInfo } = useQuery({
+    queryKey: ["/api/director-info"],
+    queryFn: () => fetch("/api/director-info").then((res) => res.json()),
+  });
+
   // Static data
   const specializedWings = [
     {
@@ -206,29 +211,31 @@ export default function Home() {
               </CardHeader>
               <CardContent className="p-8 flex-1 flex bg-white rounded-b-2xl">
                 <div className="flex flex-col md:flex-row gap-6">
-                  {/* DGP Photo */}
+                  {/* Director Photo */}
                   <div className="flex-shrink-0">
                     <img
-                      src={adgpImagePath}
-                      alt="Director General of Police"
-                      className="w-32 h-40 object-cover rounded-lg "
+                      src={directorInfo?.photoPath ? `/${directorInfo.photoPath}` : adgpImagePath}
+                      alt={directorInfo?.name || "Director General of Police"}
+                      className="w-32 h-40 object-cover rounded-lg"
                     />
                   </div>
 
                   {/* Message Content */}
                   <div className="flex-1">
                     <blockquote className="text-base text-gray-800 mb-6 leading-relaxed">
-                      "Crime Investigation Department is the premier
-                      investigation agency of Telangana State. Our endeavour is
-                      to provide transparent, impartial, efficient and
-                      systematic investigation using high end, state of the art
-                      equipment with quality forensic support in coordination
-                      with national and international agencies. We follow the
-                      principle that 'men may lie but material will not'."
+                      {directorInfo?.message || 
+                        `"Crime Investigation Department is the premier
+                        investigation agency of Telangana State. Our endeavour is
+                        to provide transparent, impartial, efficient and
+                        systematic investigation using high end, state of the art
+                        equipment with quality forensic support in coordination
+                        with national and international agencies. We follow the
+                        principle that 'men may lie but material will not'."`
+                      }
                     </blockquote>
                     <div className="mt-6 pt-4">
                       <p className="text-sm text-gray-600 font-medium">
-                        - Director General of Police, Telangana State
+                        - {directorInfo?.name || "Director General of Police"}, {directorInfo?.title || "Telangana State"}
                       </p>
                     </div>
                   </div>

@@ -8,6 +8,7 @@ import {
   news,
   newsTicker,
   menuItems,
+  directorInfo,
   type User,
   type InsertUser,
   type InsertPage,
@@ -24,6 +25,8 @@ import {
   type NewsTicker,
   type PhotoAlbum,
   type MenuItem,
+  type DirectorInfo,
+  type InsertDirectorInfo,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, like, sql } from "drizzle-orm";
@@ -83,6 +86,13 @@ export interface IStorage {
   getNewsTicker(id: number): Promise<NewsTicker | undefined>;
   getActiveNewsTickers(): Promise<NewsTicker[]>;
   getAllNewsTickers(): Promise<NewsTicker[]>;
+
+  // Director info operations
+  createDirectorInfo(directorInfo: InsertDirectorInfo): Promise<DirectorInfo>;
+  updateDirectorInfo(id: number, directorInfo: Partial<InsertDirectorInfo>): Promise<DirectorInfo>;
+  deleteDirectorInfo(id: number): Promise<void>;
+  getDirectorInfo(): Promise<DirectorInfo | undefined>;
+  getAllDirectorInfo(): Promise<DirectorInfo[]>;
 
   // Menu operations
   getMenuItems(): Promise<MenuItem[]>;
@@ -356,6 +366,38 @@ export class DatabaseStorage implements IStorage {
   async getAllNewsTickers(): Promise<NewsTicker[]> {
     return await db.select().from(newsTicker)
       .orderBy(desc(newsTicker.priority), desc(newsTicker.createdAt));
+  }
+
+  // Director info operations
+  async createDirectorInfo(directorInfoData: InsertDirectorInfo): Promise<DirectorInfo> {
+    const [newDirectorInfo] = await db.insert(directorInfo).values(directorInfoData).returning();
+    return newDirectorInfo;
+  }
+
+  async updateDirectorInfo(id: number, directorInfoData: Partial<InsertDirectorInfo>): Promise<DirectorInfo> {
+    const [updatedDirectorInfo] = await db
+      .update(directorInfo)
+      .set({ ...directorInfoData, updatedAt: new Date() })
+      .where(eq(directorInfo.id, id))
+      .returning();
+    return updatedDirectorInfo;
+  }
+
+  async deleteDirectorInfo(id: number): Promise<void> {
+    await db.delete(directorInfo).where(eq(directorInfo.id, id));
+  }
+
+  async getDirectorInfo(): Promise<DirectorInfo | undefined> {
+    const [info] = await db.select().from(directorInfo)
+      .where(eq(directorInfo.isActive, true))
+      .orderBy(desc(directorInfo.createdAt))
+      .limit(1);
+    return info;
+  }
+
+  async getAllDirectorInfo(): Promise<DirectorInfo[]> {
+    return await db.select().from(directorInfo)
+      .orderBy(desc(directorInfo.createdAt));
   }
 
   // Menu operations

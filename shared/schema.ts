@@ -160,6 +160,18 @@ export const newsTicker = pgTable("news_ticker", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Director information table
+export const directorInfo = pgTable("director_info", {
+  id: serial("id").primaryKey(),
+  name: varchar("name").notNull(),
+  title: varchar("title").notNull().default("Director General of Police"),
+  message: text("message").notNull(),
+  photoPath: varchar("photo_path"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Menu items table
 export const menuItems = pgTable("menu_items", {
   id: serial("id").primaryKey(),
@@ -318,3 +330,11 @@ export type InsertNewsTicker = z.infer<typeof insertNewsTickerSchema>;
 export type NewsTicker = typeof newsTicker.$inferSelect;
 export type PhotoAlbum = typeof photoAlbums.$inferSelect;
 export type MenuItem = typeof menuItems.$inferSelect;
+
+export const insertDirectorInfoSchema = createInsertSchema(directorInfo).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertDirectorInfo = z.infer<typeof insertDirectorInfoSchema>;
+export type DirectorInfo = typeof directorInfo.$inferSelect;

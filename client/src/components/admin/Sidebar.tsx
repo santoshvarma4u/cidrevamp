@@ -41,6 +41,11 @@ export default function AdminSidebar() {
       ],
     },
     {
+      title: "Director Management",
+      href: "/admin/director",
+      icon: Users,
+    },
+    {
       title: "Users",
       href: "/admin/users",
       icon: Users,
