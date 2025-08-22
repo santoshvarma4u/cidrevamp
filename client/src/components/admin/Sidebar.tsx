@@ -18,6 +18,7 @@ import {
   FolderOpen,
   Megaphone,
   Building,
+  Phone,
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -50,6 +51,11 @@ export default function AdminSidebar() {
       title: "Wings Management",
       href: "/admin/wings",
       icon: Building,
+    },
+    {
+      title: "Contact Management",
+      href: "/admin/contact",
+      icon: Phone,
     },
     {
       title: "Users",

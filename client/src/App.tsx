@@ -37,6 +37,7 @@ import AdminComplaints from "@/pages/admin/complaints/list";
 import AdminNewsTicker from "@/pages/admin/news-ticker";
 import AdminDirectorManager from "@/pages/admin/AdminDirectorManager";
 import AdminWingsManager from "@/pages/admin/AdminWingsManager";
+import { ContactManagement } from "@/pages/admin/contact/ContactManagement";
 
 import queryClient from "@/lib/queryClient";
 
@@ -90,6 +91,7 @@ function Router() {
           <Route path="/admin/news-ticker" component={AdminNewsTicker} />
           <Route path="/admin/director" component={AdminDirectorManager} />
           <Route path="/admin/wings" component={AdminWingsManager} />
+          <Route path="/admin/contact" component={ContactManagement} />
         </>
       )}
 
