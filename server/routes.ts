@@ -315,10 +315,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin Pages
   app.post('/api/admin/pages', requireAdmin, async (req: any, res) => {
     try {
-      // Process request body to handle empty strings for nullable fields
+      // Process request body to handle empty strings for nullable fields and convert date strings
       const processedBody = {
         ...req.body,
-        displayUntilDate: req.body.displayUntilDate === "" ? null : req.body.displayUntilDate,
+        displayUntilDate: req.body.displayUntilDate === "" ? null : 
+          req.body.displayUntilDate ? new Date(req.body.displayUntilDate) : null,
         menuParent: req.body.menuParent === "" ? null : req.body.menuParent,
         metaTitle: req.body.metaTitle === "" ? null : req.body.metaTitle,
         metaDescription: req.body.metaDescription === "" ? null : req.body.metaDescription,
@@ -346,10 +347,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log("Received update request for page ID:", id);
       console.log("Raw request body:", JSON.stringify(req.body, null, 2));
       
-      // Process request body to handle empty strings for nullable fields
+      // Process request body to handle empty strings for nullable fields and convert date strings
       const processedBody = {
         ...req.body,
-        displayUntilDate: req.body.displayUntilDate === "" ? null : req.body.displayUntilDate,
+        displayUntilDate: req.body.displayUntilDate === "" ? null : 
+          req.body.displayUntilDate ? new Date(req.body.displayUntilDate) : null,
         menuParent: req.body.menuParent === "" ? null : req.body.menuParent,
         metaTitle: req.body.metaTitle === "" ? null : req.body.metaTitle,
         metaDescription: req.body.metaDescription === "" ? null : req.body.metaDescription,
