@@ -315,10 +315,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin Pages
   app.post('/api/admin/pages', requireAdmin, async (req: any, res) => {
     try {
-      const validatedData = insertPageSchema.parse({
+      // Process request body to handle empty strings for nullable fields
+      const processedBody = {
         ...req.body,
+        displayUntilDate: req.body.displayUntilDate === "" ? null : req.body.displayUntilDate,
+        menuParent: req.body.menuParent === "" ? null : req.body.menuParent,
+        metaTitle: req.body.metaTitle === "" ? null : req.body.metaTitle,
+        metaDescription: req.body.metaDescription === "" ? null : req.body.metaDescription,
+        menuTitle: req.body.menuTitle === "" ? null : req.body.menuTitle,
+        menuDescription: req.body.menuDescription === "" ? null : req.body.menuDescription,
         authorId: req.user.id
-      });
+      };
+      
+      const validatedData = insertPageSchema.parse(processedBody);
       const page = await storage.createPage(validatedData);
       res.json(page);
     } catch (error) {
@@ -333,7 +342,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put('/api/admin/pages/:id', requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const validatedData = insertPageSchema.partial().parse(req.body);
+      
+      // Process request body to handle empty strings for nullable fields
+      const processedBody = {
+        ...req.body,
+        displayUntilDate: req.body.displayUntilDate === "" ? null : req.body.displayUntilDate,
+        menuParent: req.body.menuParent === "" ? null : req.body.menuParent,
+        metaTitle: req.body.metaTitle === "" ? null : req.body.metaTitle,
+        metaDescription: req.body.metaDescription === "" ? null : req.body.metaDescription,
+        menuTitle: req.body.menuTitle === "" ? null : req.body.menuTitle,
+        menuDescription: req.body.menuDescription === "" ? null : req.body.menuDescription,
+      };
+      
+      const validatedData = insertPageSchema.partial().parse(processedBody);
       const page = await storage.updatePage(id, validatedData);
       res.json(page);
     } catch (error) {

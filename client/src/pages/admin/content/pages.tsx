@@ -215,10 +215,14 @@ export default function AdminPages() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Convert "none" back to empty string for database
+    // Convert "none" back to empty string for database and handle date formatting
     const submissionData = {
       ...formData,
-      menuParent: formData.menuParent === "none" ? "" : formData.menuParent
+      menuParent: formData.menuParent === "none" ? "" : formData.menuParent,
+      // Convert date string to proper timestamp if provided
+      displayUntilDate: formData.displayUntilDate ? 
+        new Date(formData.displayUntilDate + 'T23:59:59').toISOString() : 
+        ""
     };
     
     if (editingPage) {
