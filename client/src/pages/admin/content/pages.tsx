@@ -45,6 +45,7 @@ interface PageFormData {
   menuDescription: string;
   menuLocation: string;
   displayUntilDate: string;
+  isNew: boolean;
 }
 
 export default function AdminPages() {
@@ -67,6 +68,7 @@ export default function AdminPages() {
     menuDescription: "",
     menuLocation: "more",
     displayUntilDate: "",
+    isNew: false,
   });
 
   useEffect(() => {
@@ -209,6 +211,7 @@ export default function AdminPages() {
       menuDescription: "",
       menuLocation: "more",
       displayUntilDate: "",
+      isNew: false,
     });
   };
 
@@ -248,6 +251,7 @@ export default function AdminPages() {
       menuDescription: page.menuDescription || "",
       menuLocation: page.menuLocation || "more",
       displayUntilDate: page.displayUntilDate ? new Date(page.displayUntilDate).toISOString().split('T')[0] : "",
+      isNew: page.isNew || false,
     });
     setIsDialogOpen(true);
   };
@@ -346,7 +350,7 @@ export default function AdminPages() {
                       </div>
                     </div>
                     
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid md:grid-cols-3 gap-4">
                       <div className="flex items-center space-x-2">
                         <Switch
                           id="published"
@@ -363,6 +367,20 @@ export default function AdminPages() {
                           onCheckedChange={(checked) => setFormData({ ...formData, showInMenu: checked })}
                         />
                         <Label htmlFor="showInMenu">Show in Navigation Menu</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="isNew"
+                          checked={formData.isNew}
+                          onCheckedChange={(checked) => setFormData({ ...formData, isNew: checked })}
+                        />
+                        <Label htmlFor="isNew">
+                          <span className="flex items-center gap-1">
+                            New Badge 
+                            <span className="text-xs text-orange-600 font-bold animate-pulse">✨NEW</span>
+                          </span>
+                        </Label>
                       </div>
                     </div>
                     

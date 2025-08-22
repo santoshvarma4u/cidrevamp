@@ -154,6 +154,64 @@
   color: #006666 !important;
 }
 
+/* Rainbow blinking animation for NEW badge */
+@keyframes rainbow-blink {
+  0% { 
+    color: #ff0000; 
+    text-shadow: 0 0 8px #ff0000;
+    opacity: 1;
+  }
+  14% { 
+    color: #ff8800; 
+    text-shadow: 0 0 8px #ff8800;
+    opacity: 0.8;
+  }
+  28% { 
+    color: #ffff00; 
+    text-shadow: 0 0 8px #ffff00;
+    opacity: 1;
+  }
+  42% { 
+    color: #00ff00; 
+    text-shadow: 0 0 8px #00ff00;
+    opacity: 0.8;
+  }
+  57% { 
+    color: #0088ff; 
+    text-shadow: 0 0 8px #0088ff;
+    opacity: 1;
+  }
+  71% { 
+    color: #4400ff; 
+    text-shadow: 0 0 8px #4400ff;
+    opacity: 0.8;
+  }
+  85% { 
+    color: #ff00ff; 
+    text-shadow: 0 0 8px #ff00ff;
+    opacity: 1;
+  }
+  100% { 
+    color: #ff0000; 
+    text-shadow: 0 0 8px #ff0000;
+    opacity: 0.8;
+  }
+}
+
+.new-badge {
+  animation: rainbow-blink 1.5s ease-in-out infinite;
+  font-weight: 800;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+}
+
 [data-theme="teal"] .bg-primary {
   background: linear-gradient(135deg, #51EAEA 0%, #00FFF0 30%, #B8FFF9 70%, #85F4FF 100%) !important;
   color: #006666 !important;

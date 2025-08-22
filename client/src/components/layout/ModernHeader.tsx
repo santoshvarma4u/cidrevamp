@@ -117,7 +117,10 @@ export default function ModernHeader() {
                           style={{ color: '#2C3680' }}
                           onClick={() => (window.location.href = `/${page.slug}`)}
                         >
-                          {page.menuTitle || page.title}
+                          <span className="flex items-center">
+                            {page.menuTitle || page.title}
+                            {page.isNew && <span className="new-badge">NEW</span>}
+                          </span>
                         </Button>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -138,7 +141,10 @@ export default function ModernHeader() {
                                 }
                                 className="capitalize"
                               >
-                                {childPage.menuTitle || childPage.title}
+                                <span className="flex items-center justify-between w-full">
+                                  <span>{childPage.menuTitle || childPage.title}</span>
+                                  {childPage.isNew && <span className="new-badge">NEW</span>}
+                                </span>
                               </DropdownMenuItem>
                             ))}
                           </DropdownMenuContent>
@@ -156,7 +162,10 @@ export default function ModernHeader() {
                       style={{ color: '#2C3680' }}
                       onClick={() => (window.location.href = `/${page.slug}`)}
                     >
-                      {page.menuTitle || page.title}
+                      <span className="flex items-center">
+                        {page.menuTitle || page.title}
+                        {page.isNew && <span className="new-badge">NEW</span>}
+                      </span>
                     </Button>
                   );
                 }
@@ -186,7 +195,10 @@ export default function ModernHeader() {
                             onClick={() => (window.location.href = `/${page.slug}`)}
                             className="font-medium capitalize"
                           >
-                            {page.menuTitle || page.title}
+                            <span className="flex items-center justify-between w-full">
+                              <span>{page.menuTitle || page.title}</span>
+                              {page.isNew && <span className="new-badge">NEW</span>}
+                            </span>
                           </DropdownMenuItem>
                           {childPages.length > 0 && (
                             <div className="ml-4 border-l border-gray-200 pl-2">
@@ -196,7 +208,10 @@ export default function ModernHeader() {
                                   onClick={() => (window.location.href = `/${childPage.slug}`)}
                                   className="capitalize text-sm"
                                 >
-                                  {childPage.menuTitle || childPage.title}
+                                  <span className="flex items-center justify-between w-full">
+                                    <span>{childPage.menuTitle || childPage.title}</span>
+                                    {childPage.isNew && <span className="new-badge">NEW</span>}
+                                  </span>
                                 </DropdownMenuItem>
                               ))}
                             </div>
@@ -220,7 +235,10 @@ export default function ModernHeader() {
                             onClick={() => (window.location.href = `/${page.slug}`)}
                             className="font-medium capitalize"
                           >
-                            {page.menuTitle || page.title}
+                            <span className="flex items-center justify-between w-full">
+                              <span>{page.menuTitle || page.title}</span>
+                              {page.isNew && <span className="new-badge">NEW</span>}
+                            </span>
                           </DropdownMenuItem>
                           {childPages.length > 0 && (
                             <div className="ml-4 border-l border-gray-200 pl-2">
@@ -232,7 +250,10 @@ export default function ModernHeader() {
                                   }
                                   className="text-sm text-gray-600 capitalize"
                                 >
-                                  {childPage.menuTitle || childPage.title}
+                                  <span className="flex items-center justify-between w-full">
+                                    <span>{childPage.menuTitle || childPage.title}</span>
+                                    {childPage.isNew && <span className="new-badge">NEW</span>}
+                                  </span>
                                 </DropdownMenuItem>
                               ))}
                             </div>

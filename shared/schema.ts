@@ -58,6 +58,7 @@ export const pages = pgTable("pages", {
   // Dynamic menu management fields
   menuLocation: varchar("menu_location").default("more"), // 'main_menu' or 'more'
   displayUntilDate: timestamp("display_until_date"), // Date until which page shows in main menu
+  isNew: boolean("is_new").default(false), // Show "NEW" badge with rainbow animation
   // End menu fields
   authorId: varchar("author_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
