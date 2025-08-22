@@ -3,7 +3,7 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
-import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema } from "@shared/schema";
+import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema, insertWingSchema } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
 import { body, validationResult } from "express-validator";
 import multer from "multer";
@@ -671,6 +671,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting director info:", error);
       res.status(500).json({ message: "Failed to delete director information" });
+    }
+  });
+
+  // Wings management routes
+  app.get('/api/wings', async (req, res) => {
+    try {
+      const activeOnly = req.query.active === 'true';
+      const wings = await storage.getWings(activeOnly);
+      res.json(wings);
+    } catch (error) {
+      console.error("Error fetching wings:", error);
+      res.status(500).json({ message: "Failed to fetch wings" });
+    }
+  });
+
+  app.get('/api/admin/wings', requireAdmin, async (req, res) => {
+    try {
+      const wings = await storage.getWings(false); // Get all wings for admin
+      res.json(wings);
+    } catch (error) {
+      console.error("Error fetching wings:", error);
+      res.status(500).json({ message: "Failed to fetch wings" });
+    }
+  });
+
+  app.post('/api/admin/wings', requireAdmin, async (req: any, res) => {
+    try {
+      const validatedData = insertWingSchema.parse(req.body);
+      const wing = await storage.createWing(validatedData);
+      res.json(wing);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating wing:", error);
+      res.status(500).json({ message: "Failed to create wing" });
+    }
+  });
+
+  app.put('/api/admin/wings/:id', requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertWingSchema.partial().parse(req.body);
+      const wing = await storage.updateWing(id, validatedData);
+      res.json(wing);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating wing:", error);
+      res.status(500).json({ message: "Failed to update wing" });
+    }
+  });
+
+  app.delete('/api/admin/wings/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteWing(id);
+      res.json({ message: "Wing deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting wing:", error);
+      res.status(500).json({ message: "Failed to delete wing" });
     }
   });
 

@@ -9,6 +9,7 @@ import {
   newsTicker,
   menuItems,
   directorInfo,
+  wings,
   type User,
   type InsertUser,
   type InsertPage,
@@ -27,6 +28,8 @@ import {
   type MenuItem,
   type DirectorInfo,
   type InsertDirectorInfo,
+  type Wing,
+  type InsertWing,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, like, sql } from "drizzle-orm";
@@ -93,6 +96,13 @@ export interface IStorage {
   deleteDirectorInfo(id: number): Promise<void>;
   getDirectorInfo(): Promise<DirectorInfo | undefined>;
   getAllDirectorInfo(): Promise<DirectorInfo[]>;
+
+  // Wings operations
+  createWing(wing: InsertWing): Promise<Wing>;
+  updateWing(id: number, wing: Partial<InsertWing>): Promise<Wing>;
+  deleteWing(id: number): Promise<void>;
+  getWing(id: number): Promise<Wing | undefined>;
+  getWings(activeOnly?: boolean): Promise<Wing[]>;
 
   // Menu operations
   getMenuItems(): Promise<MenuItem[]>;
@@ -398,6 +408,41 @@ export class DatabaseStorage implements IStorage {
   async getAllDirectorInfo(): Promise<DirectorInfo[]> {
     return await db.select().from(directorInfo)
       .orderBy(desc(directorInfo.createdAt));
+  }
+
+  // Wings operations
+  async createWing(wingData: InsertWing): Promise<Wing> {
+    const [newWing] = await db.insert(wings).values(wingData).returning();
+    return newWing;
+  }
+
+  async updateWing(id: number, wingData: Partial<InsertWing>): Promise<Wing> {
+    const [updatedWing] = await db
+      .update(wings)
+      .set({ ...wingData, updatedAt: new Date() })
+      .where(eq(wings.id, id))
+      .returning();
+    return updatedWing;
+  }
+
+  async deleteWing(id: number): Promise<void> {
+    await db.delete(wings).where(eq(wings.id, id));
+  }
+
+  async getWing(id: number): Promise<Wing | undefined> {
+    const [wing] = await db.select().from(wings).where(eq(wings.id, id));
+    return wing;
+  }
+
+  async getWings(activeOnly: boolean = false): Promise<Wing[]> {
+    if (activeOnly) {
+      return await db.select().from(wings)
+        .where(eq(wings.isActive, true))
+        .orderBy(wings.displayOrder, wings.title);
+    }
+    
+    return await db.select().from(wings)
+      .orderBy(wings.displayOrder, wings.title);
   }
 
   // Menu operations

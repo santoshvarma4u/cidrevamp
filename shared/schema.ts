@@ -172,6 +172,20 @@ export const directorInfo = pgTable("director_info", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Wings table for specialized CID wings
+export const wings = pgTable("wings", {
+  id: serial("id").primaryKey(),
+  title: varchar("title").notNull(),
+  description: text("description").notNull(),
+  features: text("features").array().notNull(), // Array of feature strings
+  icon: varchar("icon").notNull(), // Icon name (e.g., "CreditCard", "Heart", "Scale")
+  href: varchar("href").notNull(), // Link to wing page
+  isActive: boolean("is_active").default(true),
+  displayOrder: integer("display_order").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Menu items table
 export const menuItems = pgTable("menu_items", {
   id: serial("id").primaryKey(),
@@ -338,3 +352,11 @@ export const insertDirectorInfoSchema = createInsertSchema(directorInfo).omit({
 });
 export type InsertDirectorInfo = z.infer<typeof insertDirectorInfoSchema>;
 export type DirectorInfo = typeof directorInfo.$inferSelect;
+
+export const insertWingSchema = createInsertSchema(wings).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertWing = z.infer<typeof insertWingSchema>;
+export type Wing = typeof wings.$inferSelect;

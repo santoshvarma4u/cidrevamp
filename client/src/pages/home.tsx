@@ -58,46 +58,46 @@ export default function Home() {
     queryFn: () => fetch("/api/director-info").then((res) => res.json()),
   });
 
-  // Static data
-  const specializedWings = [
-    {
-      title: "Economic Offences Wing",
-      description:
-        "Specialized investigation of financial crimes, fraud cases, and economic offenses",
-      features: [
-        "Banking fraud investigations",
-        "Corporate crime analysis",
-        "Money laundering detection",
-      ],
-      icon: CreditCard,
-      href: "/economic-offences",
-    },
+  // Fetch wings data dynamically
+  const { data: wingsData = [] } = useQuery({
+    queryKey: ["/api/wings"],
+    queryFn: () => fetch("/api/wings?active=true").then((res) => res.json()),
+  });
 
-    {
-      title: "Women & Child Protection",
-      description:
-        "Dedicated protection services for women and children against violence and exploitation",
-      features: [
-        "24/7 helpline services",
-        "Specialized investigation teams",
-        "Victim support programs",
-      ],
-      icon: Heart,
-      href: "/women-child-protection",
-    },
-    {
-      title: "General Offences Wing",
-      description:
-        "Investigation of serious crimes with state-level ramifications and complex cases",
-      features: [
-        "Inter-district coordination",
-        "Organized crime investigation",
-        "Special operations",
-      ],
-      icon: Scale,
-      href: "/general-offences",
-    },
-  ];
+  // Map wings data to include proper icon components
+  const specializedWings = wingsData.map((wing: any) => {
+    let IconComponent;
+    switch (wing.icon) {
+      case "CreditCard":
+        IconComponent = CreditCard;
+        break;
+      case "Heart":
+        IconComponent = Heart;
+        break;
+      case "Scale":
+        IconComponent = Scale;
+        break;
+      case "Computer":
+        IconComponent = Computer;
+        break;
+      case "Shield":
+        IconComponent = Shield;
+        break;
+      case "Users":
+        IconComponent = Users;
+        break;
+      default:
+        IconComponent = Shield; // Default fallback
+    }
+
+    return {
+      title: wing.title,
+      description: wing.description,
+      features: wing.features,
+      icon: IconComponent,
+      href: wing.href,
+    };
+  });
 
   const safetyAlerts = [
     {
