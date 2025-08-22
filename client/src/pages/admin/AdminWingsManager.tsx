@@ -306,7 +306,7 @@ export default function AdminWingsManager() {
                   <Input
                     id="displayOrder"
                     type="number"
-                    value={formData.displayOrder}
+                    value={formData.displayOrder ?? 0}
                     onChange={(e) => setFormData(prev => ({ ...prev, displayOrder: parseInt(e.target.value) || 0 }))}
                     placeholder="0"
                   />
@@ -345,7 +345,7 @@ export default function AdminWingsManager() {
               <div className="flex items-center space-x-2">
                 <Switch
                   id="isActive"
-                  checked={formData.isActive}
+                  checked={formData.isActive ?? true}
                   onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isActive: checked }))}
                 />
                 <Label htmlFor="isActive">Active</Label>
