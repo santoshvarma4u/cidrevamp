@@ -60,10 +60,18 @@ export default function AdminDirectorManager() {
   // Create mutation
   const createMutation = useMutation({
     mutationFn: async (data: FormData) => {
-      return apiRequest("/api/admin/director-info", {
+      const response = await fetch("/api/admin/director-info", {
         method: "POST",
+        credentials: "include",
         body: data,
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`${response.status}: ${errorData.message || response.statusText}`);
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       toast({
@@ -74,10 +82,11 @@ export default function AdminDirectorManager() {
       queryClient.invalidateQueries({ queryKey: ["/api/director-info"] });
       resetForm();
     },
-    onError: () => {
+    onError: (error: Error) => {
+      console.error("Create director error:", error);
       toast({
         title: "Error",
-        description: "Failed to create director information",
+        description: error.message || "Failed to create director information",
         variant: "destructive",
       });
     },
@@ -86,10 +95,18 @@ export default function AdminDirectorManager() {
   // Update mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: FormData }) => {
-      return apiRequest(`/api/admin/director-info/${id}`, {
+      const response = await fetch(`/api/admin/director-info/${id}`, {
         method: "PUT",
+        credentials: "include",
         body: data,
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`${response.status}: ${errorData.message || response.statusText}`);
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       toast({
@@ -100,10 +117,11 @@ export default function AdminDirectorManager() {
       queryClient.invalidateQueries({ queryKey: ["/api/director-info"] });
       resetForm();
     },
-    onError: () => {
+    onError: (error: Error) => {
+      console.error("Update director error:", error);
       toast({
-        title: "Error",
-        description: "Failed to update director information",
+        title: "Error", 
+        description: error.message || "Failed to update director information",
         variant: "destructive",
       });
     },
