@@ -31,9 +31,26 @@ export default function ModernHeader() {
   const pages = Array.isArray(menuPages) ? menuPages : [];
   const allMenuPages = pages.filter((page: any) => page.showInMenu);
 
-  // Get parent pages (no menuParent)
-  const parentPages = allMenuPages
-    .filter((page: any) => !page.menuParent)
+  // Function to check if a page should be in main menu based on expiry date
+  const isInMainMenu = (page: any) => {
+    if (page.menuLocation === 'more') return false;
+    if (page.menuLocation === 'main_menu') {
+      if (!page.displayUntilDate) return true; // No expiry date set
+      const expiryDate = new Date(page.displayUntilDate);
+      const now = new Date();
+      return now <= expiryDate;
+    }
+    return false; // Default to 'more' section
+  };
+
+  // Get parent pages for main menu (no menuParent, in main_menu location, not expired)
+  const mainMenuPages = allMenuPages
+    .filter((page: any) => !page.menuParent && isInMainMenu(page))
+    .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
+
+  // Get parent pages for more section (no menuParent, in more location or expired)
+  const moreMenuPages = allMenuPages
+    .filter((page: any) => !page.menuParent && !isInMainMenu(page))
     .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
 
   // Get child pages grouped by parent
@@ -86,7 +103,7 @@ export default function ModernHeader() {
               </Button>
 
               {/* First 4 Main Menu Items */}
-              {parentPages.slice(0, 4).map((page: any) => {
+              {mainMenuPages.slice(0, 4).map((page: any) => {
                 const childPages = getChildPages(page.slug);
 
                 if (childPages.length > 0) {
@@ -145,8 +162,8 @@ export default function ModernHeader() {
                 }
               })}
 
-              {/* More Dropdown for Remaining Menu Items */}
-              {parentPages.length > 4 && (
+              {/* More Dropdown for Remaining Menu Items and More Section Pages */}
+              {(mainMenuPages.length > 4 || moreMenuPages.length > 0) && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -159,7 +176,42 @@ export default function ModernHeader() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-56">
-                    {parentPages.slice(4).map((page: any) => {
+                    {/* Remaining main menu pages after first 4 */}
+                    {mainMenuPages.slice(4).map((page: any) => {
+                      const childPages = getChildPages(page.slug);
+                      
+                      return (
+                        <div key={page.slug}>
+                          <DropdownMenuItem
+                            onClick={() => (window.location.href = `/${page.slug}`)}
+                            className="font-medium capitalize"
+                          >
+                            {page.menuTitle || page.title}
+                          </DropdownMenuItem>
+                          {childPages.length > 0 && (
+                            <div className="ml-4 border-l border-gray-200 pl-2">
+                              {childPages.map((childPage: any) => (
+                                <DropdownMenuItem
+                                  key={childPage.slug}
+                                  onClick={() => (window.location.href = `/${childPage.slug}`)}
+                                  className="capitalize text-sm"
+                                >
+                                  {childPage.menuTitle || childPage.title}
+                                </DropdownMenuItem>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                    
+                    {/* Separator if both main menu overflow and more section pages exist */}
+                    {mainMenuPages.length > 4 && moreMenuPages.length > 0 && (
+                      <div className="border-t border-gray-200 my-2"></div>
+                    )}
+                    
+                    {/* Pages in more section */}
+                    {moreMenuPages.map((page: any) => {
                       const childPages = getChildPages(page.slug);
                       
                       return (
@@ -257,8 +309,8 @@ export default function ModernHeader() {
                       Home
                     </Button>
 
-                    {/* Parent menu pages with potential submenus */}
-                    {parentPages.map((page: any) => {
+                    {/* All parent menu pages (both main menu and more section) */}
+                    {[...mainMenuPages, ...moreMenuPages].map((page: any) => {
                       const childPages = getChildPages(page.slug);
 
                       return (

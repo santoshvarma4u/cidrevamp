@@ -55,6 +55,9 @@ export const pages = pgTable("pages", {
   menuParent: varchar("menu_parent"), // Parent menu group (e.g., 'about', 'citizen-services', 'wings')
   menuOrder: integer("menu_order").default(0), // Order within menu group
   menuDescription: text("menu_description"), // Optional description for dropdown menus
+  // Dynamic menu management fields
+  menuLocation: varchar("menu_location").default("more"), // 'main_menu' or 'more'
+  displayUntilDate: timestamp("display_until_date"), // Date until which page shows in main menu
   // End menu fields
   authorId: varchar("author_id").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),

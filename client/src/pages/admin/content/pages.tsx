@@ -43,6 +43,8 @@ interface PageFormData {
   menuParent: string;
   menuOrder: number;
   menuDescription: string;
+  menuLocation: string;
+  displayUntilDate: string;
 }
 
 export default function AdminPages() {
@@ -63,6 +65,8 @@ export default function AdminPages() {
     menuParent: "none",
     menuOrder: 0,
     menuDescription: "",
+    menuLocation: "more",
+    displayUntilDate: "",
   });
 
   useEffect(() => {
@@ -203,6 +207,8 @@ export default function AdminPages() {
       menuParent: "none",
       menuOrder: 0,
       menuDescription: "",
+      menuLocation: "more",
+      displayUntilDate: "",
     });
   };
 
@@ -236,6 +242,8 @@ export default function AdminPages() {
       menuParent: page.menuParent || "none",
       menuOrder: page.menuOrder || 0,
       menuDescription: page.menuDescription || "",
+      menuLocation: page.menuLocation || "more",
+      displayUntilDate: page.displayUntilDate ? new Date(page.displayUntilDate).toISOString().split('T')[0] : "",
     });
     setIsDialogOpen(true);
   };
@@ -417,6 +425,50 @@ export default function AdminPages() {
                               placeholder="Brief description for dropdown menus"
                             />
                             <p className="text-xs text-gray-500 mt-1">Shown in dropdown tooltips</p>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                          <h4 className="font-semibold text-blue-900">Menu Location & Visibility</h4>
+                          
+                          <div className="grid md:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="menuLocation">Menu Location</Label>
+                              <Select 
+                                value={formData.menuLocation} 
+                                onValueChange={(value) => setFormData({ ...formData, menuLocation: value })}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select menu location" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="more">More Section (Always visible)</SelectItem>
+                                  <SelectItem value="main_menu">Main Menu Bar (Temporary)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <p className="text-xs text-blue-600 mt-1">
+                                {formData.menuLocation === 'main_menu' ? 
+                                  'Will appear in main navigation until expiry date' : 
+                                  'Will appear in "More" dropdown menu'
+                                }
+                              </p>
+                            </div>
+                            
+                            {formData.menuLocation === 'main_menu' && (
+                              <div>
+                                <Label htmlFor="displayUntilDate">Display Until Date</Label>
+                                <Input
+                                  id="displayUntilDate"
+                                  type="date"
+                                  value={formData.displayUntilDate}
+                                  onChange={(e) => setFormData({ ...formData, displayUntilDate: e.target.value })}
+                                  min={new Date().toISOString().split('T')[0]}
+                                />
+                                <p className="text-xs text-blue-600 mt-1">
+                                  After this date, page will automatically move to "More" section
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
