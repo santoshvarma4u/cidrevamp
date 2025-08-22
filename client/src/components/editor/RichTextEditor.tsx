@@ -133,10 +133,170 @@ export default function RichTextEditor({
   };
 
   const insertTable = () => {
-    const tableHtml = `<table border="1" style="border-collapse: collapse; width: 100%; margin: 10px 0;"><tr><th style="padding: 8px; background-color: #f5f5f5;">Header 1</th><th style="padding: 8px; background-color: #f5f5f5;">Header 2</th><th style="padding: 8px; background-color: #f5f5f5;">Header 3</th></tr><tr><td style="padding: 8px;">Cell 1</td><td style="padding: 8px;">Cell 2</td><td style="padding: 8px;">Cell 3</td></tr><tr><td style="padding: 8px;">Cell 4</td><td style="padding: 8px;">Cell 5</td><td style="padding: 8px;">Cell 6</td></tr></table>`;
+    const tableHtml = `<table border="1" style="border-collapse: collapse; width: 100%; margin: 10px 0;" class="editor-table"><tr><th style="padding: 8px; background-color: #f5f5f5; border: 1px solid #ddd;" contenteditable="true">Header 1</th><th style="padding: 8px; background-color: #f5f5f5; border: 1px solid #ddd;" contenteditable="true">Header 2</th><th style="padding: 8px; background-color: #f5f5f5; border: 1px solid #ddd;" contenteditable="true">Header 3</th></tr><tr><td style="padding: 8px; border: 1px solid #ddd;" contenteditable="true">Cell 1</td><td style="padding: 8px; border: 1px solid #ddd;" contenteditable="true">Cell 2</td><td style="padding: 8px; border: 1px solid #ddd;" contenteditable="true">Cell 3</td></tr><tr><td style="padding: 8px; border: 1px solid #ddd;" contenteditable="true">Cell 4</td><td style="padding: 8px; border: 1px solid #ddd;" contenteditable="true">Cell 5</td><td style="padding: 8px; border: 1px solid #ddd;" contenteditable="true">Cell 6</td></tr></table>`;
     document.execCommand('insertHTML', false, tableHtml);
     editorRef.current?.focus();
     handleInput();
+  };
+
+  const addTableRow = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      let element = selection.anchorNode as Element;
+      
+      // Find the table element
+      while (element && element.tagName !== 'TABLE') {
+        element = element.parentElement!;
+      }
+      
+      if (element && element.tagName === 'TABLE') {
+        const table = element as HTMLTableElement;
+        const columnCount = table.rows[0]?.cells.length || 3;
+        const newRow = table.insertRow();
+        
+        for (let i = 0; i < columnCount; i++) {
+          const cell = newRow.insertCell();
+          cell.style.padding = '8px';
+          cell.style.border = '1px solid #ddd';
+          cell.contentEditable = 'true';
+          cell.textContent = `New Cell ${i + 1}`;
+        }
+        
+        handleInput();
+        toast({
+          title: "Row added",
+          description: "New row has been added to the table",
+        });
+      } else {
+        toast({
+          title: "No table selected",
+          description: "Please click inside a table to add rows",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const addTableColumn = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      let element = selection.anchorNode as Element;
+      
+      // Find the table element
+      while (element && element.tagName !== 'TABLE') {
+        element = element.parentElement!;
+      }
+      
+      if (element && element.tagName === 'TABLE') {
+        const table = element as HTMLTableElement;
+        
+        for (let i = 0; i < table.rows.length; i++) {
+          const cell = table.rows[i].insertCell();
+          cell.style.padding = '8px';
+          cell.style.border = '1px solid #ddd';
+          cell.contentEditable = 'true';
+          
+          if (i === 0 && table.rows[0].cells[0].tagName === 'TH') {
+            // First row with headers
+            cell.outerHTML = `<th style="padding: 8px; background-color: #f5f5f5; border: 1px solid #ddd;" contenteditable="true">New Header</th>`;
+          } else {
+            cell.textContent = `New Cell`;
+          }
+        }
+        
+        handleInput();
+        toast({
+          title: "Column added",
+          description: "New column has been added to the table",
+        });
+      } else {
+        toast({
+          title: "No table selected",
+          description: "Please click inside a table to add columns",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const removeTableRow = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      let element = selection.anchorNode as Element;
+      
+      // Find the row element
+      while (element && element.tagName !== 'TR') {
+        element = element.parentElement!;
+      }
+      
+      if (element && element.tagName === 'TR') {
+        const row = element as HTMLTableRowElement;
+        const table = row.parentElement as HTMLTableElement;
+        
+        if (table.rows.length > 1) {
+          row.remove();
+          handleInput();
+          toast({
+            title: "Row removed",
+            description: "Row has been removed from the table",
+          });
+        } else {
+          toast({
+            title: "Cannot remove row",
+            description: "Table must have at least one row",
+            variant: "destructive",
+          });
+        }
+      } else {
+        toast({
+          title: "No row selected",
+          description: "Please click inside a table row to remove it",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  const removeTableColumn = () => {
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      let element = selection.anchorNode as Element;
+      
+      // Find the cell element
+      while (element && element.tagName !== 'TD' && element.tagName !== 'TH') {
+        element = element.parentElement!;
+      }
+      
+      if (element && (element.tagName === 'TD' || element.tagName === 'TH')) {
+        const cell = element as HTMLTableCellElement;
+        const table = cell.closest('table') as HTMLTableElement;
+        const cellIndex = cell.cellIndex;
+        
+        if (table.rows[0].cells.length > 1) {
+          for (let i = 0; i < table.rows.length; i++) {
+            table.rows[i].deleteCell(cellIndex);
+          }
+          
+          handleInput();
+          toast({
+            title: "Column removed",
+            description: "Column has been removed from the table",
+          });
+        } else {
+          toast({
+            title: "Cannot remove column",
+            description: "Table must have at least one column",
+            variant: "destructive",
+          });
+        }
+      } else {
+        toast({
+          title: "No column selected",
+          description: "Please click inside a table cell to remove the column",
+          variant: "destructive",
+        });
+      }
+    }
   };
 
   const insertOfficerGrid = () => {
@@ -335,6 +495,38 @@ export default function RichTextEditor({
           title="Insert Table"
         >
           📊
+        </button>
+        <button
+          type="button"
+          onClick={addTableRow}
+          className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-200"
+          title="Add Table Row"
+        >
+          ➕📋
+        </button>
+        <button
+          type="button"
+          onClick={addTableColumn}
+          className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-200"
+          title="Add Table Column"
+        >
+          ➕📊
+        </button>
+        <button
+          type="button"
+          onClick={removeTableRow}
+          className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-200"
+          title="Remove Table Row"
+        >
+          ➖📋
+        </button>
+        <button
+          type="button"
+          onClick={removeTableColumn}
+          className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-200"
+          title="Remove Table Column"
+        >
+          ➖📊
         </button>
         <button
           type="button"
