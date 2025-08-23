@@ -148,78 +148,93 @@ export default function OrganizationStructure() {
       <div className="container mx-auto px-4 py-12">
         {/* Leadership Structure */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Leadership Structure</h2>
-          <div className="space-y-6">
-            {officersLoading ? (
-              <div className="text-center py-8">
-                <div className="text-lg">Loading senior officers...</div>
-              </div>
-            ) : leadership.length > 0 ? (
-              leadership.map((leader) => (
-                <Card key={leader.id} className="border-l-4 border-l-blue-600">
-                  <CardContent className="p-6">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">Senior Officers Directory</h2>
+          {officersLoading ? (
+            <div className="text-center py-8">
+              <div className="text-lg">Loading senior officers...</div>
+            </div>
+          ) : leadership.length > 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {leadership.map((leader) => (
+                <Card key={leader.id} className="hover:shadow-lg transition-shadow border-t-4 border-t-blue-600">
+                  <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">{leader.position}</h3>
-                        <p className="text-lg font-semibold text-blue-600 mb-2">{leader.name}</p>
-                        <p className="text-gray-600 mb-3">{leader.description}</p>
-                        {leader.location && (
-                          <div className="flex items-center space-x-2 text-sm text-gray-500">
-                            <MapPin className="h-4 w-4" />
-                            <span>{leader.location}</span>
-                          </div>
-                        )}
-                        {(leader.phone || leader.email) && (
-                          <div className="flex items-center space-x-4 text-sm text-gray-500 mt-2">
-                            {leader.phone && (
-                              <div className="flex items-center space-x-1">
-                                <Phone className="h-4 w-4" />
-                                <span>{leader.phone}</span>
-                              </div>
-                            )}
-                            {leader.email && (
-                              <div className="flex items-center space-x-1">
-                                <Mail className="h-4 w-4" />
-                                <span>{leader.email}</span>
-                              </div>
-                            )}
-                          </div>
-                        )}
+                        <CardTitle className="text-lg font-bold text-gray-900 mb-2 leading-tight">
+                          {leader.name}
+                        </CardTitle>
+                        <p className="text-sm font-semibold text-blue-600">{leader.position}</p>
                       </div>
-                      {leader.photoPath && (
-                        <div className="ml-6">
-                          <img
-                            src={leader.photoPath}
-                            alt={leader.name}
-                            className="w-20 h-20 rounded-lg object-cover border-2 border-gray-200"
-                          />
+                      {leader.photoPath ? (
+                        <img
+                          src={leader.photoPath}
+                          alt={leader.name}
+                          className="w-16 h-16 rounded-lg object-cover border-2 border-gray-200 ml-3"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center ml-3">
+                          <Users className="h-8 w-8 text-white" />
+                        </div>
+                      )}
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    {leader.description && (
+                      <p className="text-gray-600 text-sm mb-4 leading-relaxed">{leader.description}</p>
+                    )}
+                    <div className="space-y-2">
+                      {leader.location && (
+                        <div className="flex items-center space-x-2 text-xs text-gray-500">
+                          <MapPin className="h-3 w-3" />
+                          <span>{leader.location}</span>
+                        </div>
+                      )}
+                      {leader.phone && (
+                        <div className="flex items-center space-x-2 text-xs text-gray-500">
+                          <Phone className="h-3 w-3" />
+                          <span>{leader.phone}</span>
+                        </div>
+                      )}
+                      {leader.email && (
+                        <div className="flex items-center space-x-2 text-xs text-gray-500">
+                          <Mail className="h-3 w-3" />
+                          <span>{leader.email}</span>
                         </div>
                       )}
                     </div>
                   </CardContent>
                 </Card>
-              ))
-            ) : (
-              // Fallback to hardcoded data if no dynamic data available
-              fallbackLeadership.map((leader, index) => (
-                <Card key={`fallback-${index}`} className="border-l-4 border-l-blue-600">
-                  <CardContent className="p-6">
+              ))}
+            </div>
+          ) : (
+            // Fallback to hardcoded data if no dynamic data available
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {fallbackLeadership.map((leader, index) => (
+                <Card key={`fallback-${index}`} className="hover:shadow-lg transition-shadow border-t-4 border-t-blue-600">
+                  <CardHeader className="pb-3">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">{leader.position}</h3>
-                        <p className="text-lg font-semibold text-blue-600 mb-2">{leader.name}</p>
-                        <p className="text-gray-600 mb-3">{leader.description}</p>
-                        <div className="flex items-center space-x-2 text-sm text-gray-500">
-                          <MapPin className="h-4 w-4" />
-                          <span>{leader.location}</span>
-                        </div>
+                        <CardTitle className="text-lg font-bold text-gray-900 mb-2 leading-tight">
+                          {leader.name}
+                        </CardTitle>
+                        <p className="text-sm font-semibold text-blue-600">{leader.position}</p>
                       </div>
+                      <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center ml-3">
+                        <Users className="h-8 w-8 text-white" />
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-gray-600 text-sm mb-4 leading-relaxed">{leader.description}</p>
+                    <div className="flex items-center space-x-2 text-xs text-gray-500">
+                      <MapPin className="h-3 w-3" />
+                      <span>{leader.location}</span>
                     </div>
                   </CardContent>
                 </Card>
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Specialized Wings */}
