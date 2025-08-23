@@ -18,6 +18,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Trash2, Edit2, Plus, Save, X } from "lucide-react";
+import AdminSidebar from "@/components/admin/Sidebar";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 import type { Wing, InsertWing } from "@shared/schema";
 
 const iconOptions = [
@@ -63,34 +65,25 @@ export default function AdminWingsManager() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  // Fetch all wings
-  const { data: wingsList = [], isLoading: isLoadingWings } = useQuery({
+  // Fetch wings
+  const { data: wings = [] } = useQuery<Wing[]>({
     queryKey: ["/api/admin/wings"],
-    queryFn: () => apiRequest("/api/admin/wings"),
+    enabled: isAuthenticated,
   });
 
-  // Create mutation
+  // Create wing mutation
   const createMutation = useMutation({
-    mutationFn: async (data: InsertWing) => {
-      return apiRequest("/api/admin/wings", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    },
+    mutationFn: (data: InsertWing) => apiRequest("/api/admin/wings", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    }),
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Wing created successfully",
-      });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/wings"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/wings"] });
+      toast({ title: "Success", description: "Wing created successfully" });
       resetForm();
     },
     onError: (error: Error) => {
-      console.error("Create wing error:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to create wing",
@@ -99,28 +92,20 @@ export default function AdminWingsManager() {
     },
   });
 
-  // Update mutation
+  // Update wing mutation
   const updateMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<InsertWing> }) => {
-      return apiRequest(`/api/admin/wings/${id}`, {
+    mutationFn: ({ id, data }: { id: number; data: InsertWing }) => 
+      apiRequest(`/api/admin/wings/${id}`, {
         method: "PUT",
         body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    },
+        headers: { "Content-Type": "application/json" },
+      }),
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Wing updated successfully",
-      });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/wings"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/wings"] });
+      toast({ title: "Success", description: "Wing updated successfully" });
       resetForm();
     },
     onError: (error: Error) => {
-      console.error("Update wing error:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to update wing",
@@ -129,23 +114,16 @@ export default function AdminWingsManager() {
     },
   });
 
-  // Delete mutation
+  // Delete wing mutation
   const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      return apiRequest(`/api/admin/wings/${id}`, {
-        method: "DELETE",
-      });
-    },
+    mutationFn: (id: number) => apiRequest(`/api/admin/wings/${id}`, {
+      method: "DELETE",
+    }),
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Wing deleted successfully",
-      });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/wings"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/wings"] });
+      toast({ title: "Success", description: "Wing deleted successfully" });
     },
     onError: (error: Error) => {
-      console.error("Delete wing error:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to delete wing",
@@ -164,9 +142,9 @@ export default function AdminWingsManager() {
       isActive: true,
       displayOrder: 0
     });
-    setFeatureInput("");
     setIsEditing(false);
     setEditingId(null);
+    setFeatureInput("");
   };
 
   const handleEdit = (wing: Wing) => {
@@ -219,220 +197,245 @@ export default function AdminWingsManager() {
     }));
   };
 
+  // Loading state
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <LoadingSpinner size="xl" />
+          <p className="mt-4 text-lg text-gray-600 font-medium">Loading admin...</p>
+        </div>
+      </div>
+    );
   }
 
+  // Authentication check
   if (!isAuthenticated) {
     return null;
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Wings Management</h1>
-        {!isEditing && (
-          <Button onClick={() => setIsEditing(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add New Wing
-          </Button>
-        )}
-      </div>
+    <div className="min-h-screen bg-gray-50">
+      <AdminSidebar />
+      <div className="flex-1 lg:ml-64">
+        <div className="container mx-auto py-8 px-4">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold">Wings Management</h1>
+            {!isEditing && (
+              <Button onClick={() => setIsEditing(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add New Wing
+              </Button>
+            )}
+          </div>
 
-      {/* Create/Edit Form */}
-      {isEditing && (
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>{editingId ? "Edit Wing" : "Create New Wing"}</CardTitle>
-            <CardDescription>
-              {editingId ? "Update the wing information" : "Add a new specialized wing to the CID"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="title">Title *</Label>
-                  <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Wing title (e.g., Economic Offences Wing)"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="href">Page Link *</Label>
-                  <Input
-                    id="href"
-                    value={formData.href}
-                    onChange={(e) => setFormData(prev => ({ ...prev, href: e.target.value }))}
-                    placeholder="/economic-offences"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="description">Description *</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Brief description of the wing's purpose"
-                  className="min-h-[100px]"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="icon">Icon</Label>
-                  <Select value={formData.icon} onValueChange={(value) => setFormData(prev => ({ ...prev, icon: value }))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select an icon" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {iconOptions.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="displayOrder">Display Order</Label>
-                  <Input
-                    id="displayOrder"
-                    type="number"
-                    value={formData.displayOrder ?? 0}
-                    onChange={(e) => setFormData(prev => ({ ...prev, displayOrder: parseInt(e.target.value) || 0 }))}
-                    placeholder="0"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label>Features</Label>
-                <div className="flex gap-2 mb-2">
-                  <Input
-                    value={featureInput}
-                    onChange={(e) => setFeatureInput(e.target.value)}
-                    placeholder="Add a feature (e.g., Banking fraud investigations)"
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addFeature())}
-                  />
-                  <Button type="button" onClick={addFeature}>Add</Button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {formData.features.map((feature, index) => (
-                    <Badge key={index} variant="secondary" className="px-2 py-1">
-                      {feature}
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="ml-1 h-4 w-4 p-0"
-                        onClick={() => removeFeature(index)}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="isActive"
-                  checked={formData.isActive ?? true}
-                  onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isActive: checked }))}
-                />
-                <Label htmlFor="isActive">Active</Label>
-              </div>
-
-              <div className="flex gap-2">
-                <Button 
-                  type="submit" 
-                  disabled={createMutation.isPending || updateMutation.isPending}
-                >
-                  <Save className="h-4 w-4 mr-2" />
-                  {editingId ? "Update Wing" : "Create Wing"}
-                </Button>
-                <Button type="button" variant="outline" onClick={resetForm}>
-                  <X className="h-4 w-4 mr-2" />
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Wings List */}
-      <div className="grid gap-4">
-        <h2 className="text-2xl font-semibold">Existing Wings</h2>
-        {isLoadingWings ? (
-          <div>Loading wings...</div>
-        ) : wingsList.length === 0 ? (
-          <Card>
-            <CardContent className="py-8 text-center text-muted-foreground">
-              No wings found. Create your first wing to get started.
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid gap-4">
-            {wingsList.map((wing: Wing) => (
-              <Card key={wing.id}>
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-xl font-semibold">{wing.title}</h3>
-                        <Badge variant={wing.isActive ? "default" : "secondary"}>
-                          {wing.isActive ? "Active" : "Inactive"}
-                        </Badge>
-                        <Badge variant="outline">Order: {wing.displayOrder}</Badge>
-                      </div>
-                      <p className="text-muted-foreground mb-3">{wing.description}</p>
-                      <div className="mb-3">
-                        <strong>Features:</strong>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {wing.features.map((feature, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
-                              {feature}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        <strong>Icon:</strong> {wing.icon} | <strong>Link:</strong> {wing.href}
-                      </div>
+          {/* Create/Edit Form */}
+          {isEditing && (
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle>{editingId ? "Edit Wing" : "Create New Wing"}</CardTitle>
+                <CardDescription>
+                  {editingId ? "Update the wing information" : "Add a new specialized wing to the CID"}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="title">Title *</Label>
+                      <Input
+                        id="title"
+                        value={formData.title}
+                        onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                        placeholder="Wing title (e.g., Economic Offences Wing)"
+                        required
+                      />
                     </div>
-                    <div className="flex gap-2 ml-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(wing)}
-                        disabled={isEditing}
-                      >
-                        <Edit2 className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => deleteMutation.mutate(wing.id)}
-                        disabled={deleteMutation.isPending}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                    <div>
+                      <Label htmlFor="href">Page Link *</Label>
+                      <Input
+                        id="href"
+                        value={formData.href}
+                        onChange={(e) => setFormData(prev => ({ ...prev, href: e.target.value }))}
+                        placeholder="/economic-offences"
+                        required
+                      />
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+
+                  <div>
+                    <Label htmlFor="description">Description *</Label>
+                    <Textarea
+                      id="description"
+                      value={formData.description}
+                      onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                      placeholder="Brief description of the wing"
+                      required
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="icon">Icon</Label>
+                      <Select 
+                        value={formData.icon} 
+                        onValueChange={(value) => setFormData(prev => ({ ...prev, icon: value }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select an icon" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {iconOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="displayOrder">Display Order</Label>
+                      <Input
+                        id="displayOrder"
+                        type="number"
+                        value={formData.displayOrder}
+                        onChange={(e) => setFormData(prev => ({ ...prev, displayOrder: parseInt(e.target.value) || 0 }))}
+                        placeholder="0"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label>Features</Label>
+                    <div className="flex gap-2 mb-2">
+                      <Input
+                        value={featureInput}
+                        onChange={(e) => setFeatureInput(e.target.value)}
+                        placeholder="Enter a feature"
+                        onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addFeature())}
+                      />
+                      <Button type="button" onClick={addFeature} size="sm">
+                        Add
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.features.map((feature, index) => (
+                        <Badge key={index} variant="outline" className="pr-1">
+                          {feature}
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="h-auto p-0 ml-1 hover:bg-transparent"
+                            onClick={() => removeFeature(index)}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Switch 
+                      id="isActive" 
+                      checked={formData.isActive}
+                      onCheckedChange={(checked) => setFormData(prev => ({ ...prev, isActive: checked }))}
+                    />
+                    <Label htmlFor="isActive">Active</Label>
+                  </div>
+
+                  <div className="flex gap-2 pt-4">
+                    <Button 
+                      type="submit" 
+                      disabled={createMutation.isPending || updateMutation.isPending}
+                    >
+                      <Save className="h-4 w-4 mr-2" />
+                      {createMutation.isPending || updateMutation.isPending ? "Saving..." : "Save Wing"}
+                    </Button>
+                    <Button type="button" variant="outline" onClick={resetForm}>
+                      <X className="h-4 w-4 mr-2" />
+                      Cancel
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Wings List */}
+          {wings.length === 0 ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center h-64">
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold text-gray-600 mb-2">
+                    No wings found
+                  </h3>
+                  <p className="text-gray-500 mb-4">
+                    Create specialized wings for your CID structure
+                  </p>
+                  <Button onClick={() => setIsEditing(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create First Wing
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid gap-4">
+              {wings.map((wing) => (
+                <Card key={wing.id} className="w-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="text-xl font-semibold">{wing.title}</h3>
+                          <Badge variant={wing.isActive ? "default" : "secondary"}>
+                            {wing.isActive ? "Active" : "Inactive"}
+                          </Badge>
+                          <Badge variant="outline">Order: {wing.displayOrder}</Badge>
+                        </div>
+                        <p className="text-muted-foreground mb-3">{wing.description}</p>
+                        <div className="mb-3">
+                          <strong>Features:</strong>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {wing.features.map((feature, index) => (
+                              <Badge key={index} variant="outline" className="text-xs">
+                                {feature}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          <strong>Icon:</strong> {wing.icon} | <strong>Link:</strong> {wing.href}
+                        </div>
+                      </div>
+                      <div className="flex gap-2 ml-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEdit(wing)}
+                          disabled={isEditing}
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => deleteMutation.mutate(wing.id)}
+                          disabled={deleteMutation.isPending}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
