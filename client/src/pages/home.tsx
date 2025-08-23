@@ -304,7 +304,7 @@ export default function Home() {
             {/* Photo Gallery */}
             <div className="lg:col-span-2">
               <Card
-                className={`${themeClasses.cardBg} main-card shadow-xl rounded-2xl h-96 flex flex-col`}
+                className={`${themeClasses.cardBg} main-card shadow-xl rounded-2xl h-[420px] flex flex-col`}
               >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
@@ -316,7 +316,7 @@ export default function Home() {
                   {latestPhotos.length > 0 ? (
                     <div className="h-full relative">
                       {/* 2 Photos Display with Navigation */}
-                      <div className="h-full relative">
+                      <div className="h-full relative pb-8">
                         <div className="grid grid-cols-2 gap-4 h-full">
                           {latestPhotos
                             .slice(
@@ -326,7 +326,7 @@ export default function Home() {
                             .map((photo: any, index: number) => (
                               <Dialog key={photo.id}>
                                 <DialogTrigger asChild>
-                                  <div className="aspect-square rounded-lg overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-all group">
+                                  <div className="rounded-lg overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-all group h-full">
                                     <img
                                       src={`/${photo.filePath}`}
                                       alt={photo.title || "CID Photo"}
