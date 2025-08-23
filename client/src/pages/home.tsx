@@ -429,7 +429,7 @@ export default function Home() {
             {/* News Section */}
             <div>
               <Card
-                className={`${themeClasses.cardBg} main-card shadow-xl rounded-2xl h-96 flex flex-col`}
+                className={`${themeClasses.cardBg} main-card shadow-xl rounded-2xl h-[420px] flex flex-col`}
               >
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
