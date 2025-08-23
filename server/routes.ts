@@ -930,6 +930,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const data = { ...req.body };
+      
+      console.log("Received update data:", data);
+      
       if (req.file) {
         data.photoPath = '/api/uploads/' + req.file.filename;
       }
@@ -942,11 +945,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         data.isActive = data.isActive === 'true';
       }
       
+      console.log("Data before validation:", data);
+      
       const validatedData = insertSeniorOfficerSchema.partial().parse(data);
       const officer = await storage.updateSeniorOfficer(id, validatedData);
       res.json(officer);
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.log("Validation errors:", error.errors);
         return res.status(400).json({ message: "Invalid data", errors: error.errors });
       }
       console.error("Error updating senior officer:", error);
