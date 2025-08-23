@@ -4,7 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
-import Breadcrumb from "@/components/ui/breadcrumb";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,9 +12,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useQuery, useMutation, queryClient } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-import ContentEditor from "@/components/admin/ContentEditor";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import ContentEditor from "@/components/admin/content-editor";
 import { 
   FileText, 
   Edit, 
@@ -75,7 +75,7 @@ export default function ContentManagement() {
 
   const createNewsMutation = useMutation({
     mutationFn: async (data: any) => {
-      await apiRequest("POST", "/api/admin/news", data);
+      return await apiRequest("POST", "/api/admin/news", data);
     },
     onSuccess: () => {
       toast({
@@ -107,7 +107,7 @@ export default function ContentManagement() {
 
   const updateNewsMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: any }) => {
-      await apiRequest("PUT", `/api/admin/news/${id}`, data);
+      return await apiRequest("PUT", `/api/admin/news/${id}`, data);
     },
     onSuccess: () => {
       toast({
@@ -140,7 +140,7 @@ export default function ContentManagement() {
 
   const deleteNewsMutation = useMutation({
     mutationFn: async (id: string) => {
-      await apiRequest("DELETE", `/api/admin/news/${id}`);
+      return await apiRequest("DELETE", `/api/admin/news/${id}`);
     },
     onSuccess: () => {
       toast({
@@ -171,7 +171,7 @@ export default function ContentManagement() {
 
   const createPageMutation = useMutation({
     mutationFn: async (data: any) => {
-      await apiRequest("POST", "/api/admin/pages", data);
+      return await apiRequest("POST", "/api/admin/pages", data);
     },
     onSuccess: () => {
       toast({
@@ -203,7 +203,7 @@ export default function ContentManagement() {
 
   const createSafetyAlertMutation = useMutation({
     mutationFn: async (data: any) => {
-      await apiRequest("POST", "/api/admin/safety-alerts", data);
+      return await apiRequest("POST", "/api/admin/safety-alerts", data);
     },
     onSuccess: () => {
       toast({
@@ -330,9 +330,9 @@ export default function ContentManagement() {
     }) || [];
   };
 
-  const filteredNews = filterContent(news);
-  const filteredPages = filterContent(pages);
-  const filteredAlerts = filterContent(safetyAlerts);
+  const filteredNews = filterContent(news || []);
+  const filteredPages = filterContent(pages || []);
+  const filteredAlerts = filterContent(safetyAlerts || []);
 
   return (
     <div className="min-h-screen bg-gray-50">

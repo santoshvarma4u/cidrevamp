@@ -9,13 +9,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bold, Italic, List, Link, Image, Save, Eye } from "lucide-react";
 
 interface ContentEditorProps {
+  type?: string;
   title?: string;
+  slug?: string;
   content?: string;
   metaTitle?: string;
   metaDescription?: string;
   isPublished?: boolean;
-  onSave: (data: {
+  onSubmit: (data: {
     title: string;
+    slug?: string;
     content: string;
     metaTitle: string;
     metaDescription: string;
@@ -25,16 +28,19 @@ interface ContentEditorProps {
 }
 
 export default function ContentEditor({
+  type = "page",
   title = "",
+  slug = "",
   content = "",
   metaTitle = "",
   metaDescription = "",
   isPublished = false,
-  onSave,
+  onSubmit,
   isLoading = false
 }: ContentEditorProps) {
   const [formData, setFormData] = useState({
     title,
+    slug,
     content,
     metaTitle,
     metaDescription,
@@ -45,7 +51,25 @@ export default function ContentEditor({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(formData);
+    onSubmit(formData);
+  };
+
+  // Auto-generate slug from title if it's empty
+  const generateSlug = (title: string) => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+  };
+
+  const handleTitleChange = (newTitle: string) => {
+    setFormData(prev => ({
+      ...prev,
+      title: newTitle,
+      slug: prev.slug || generateSlug(newTitle)
+    }));
   };
 
   const insertText = (before: string, after: string = "") => {
@@ -112,11 +136,27 @@ export default function ContentEditor({
                 <Input
                   id="title"
                   value={formData.title}
-                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={(e) => handleTitleChange(e.target.value)}
                   placeholder="Enter title..."
                   required
                 />
               </div>
+
+              {type === "page" && (
+                <div>
+                  <Label htmlFor="slug">URL Slug</Label>
+                  <Input
+                    id="slug"
+                    value={formData.slug}
+                    onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                    placeholder="url-slug-for-page"
+                    required
+                  />
+                  <p className="text-sm text-gray-500 mt-1">
+                    URL-friendly version of the title (automatically generated from title)
+                  </p>
+                </div>
+              )}
 
               <div>
                 <Label htmlFor="content">Content</Label>
