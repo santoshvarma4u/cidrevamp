@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { Pencil, Trash2, Plus, FileText, Eye } from "lucide-react";
 import {
   Dialog,
@@ -15,6 +16,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { apiRequest } from "@/lib/queryClient";
+import AdminSidebar from "@/components/admin/Sidebar";
+import LoadingSpinner from "@/components/ui/loading-spinner";
 import type { NclContent } from "@shared/schema";
 
 // Rich text editor component (simplified for this context)
@@ -170,6 +173,7 @@ const NclContentForm = ({ content, onSubmit, onCancel, isLoading }: {
 };
 
 export default function NclContentAdmin() {
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [editingContent, setEditingContent] = useState<NclContent | null>(null);
@@ -269,16 +273,39 @@ export default function NclContentAdmin() {
     }
   };
 
+  // Loading state
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <LoadingSpinner size="xl" />
+          <p className="mt-4 text-lg text-gray-600 font-medium">Loading admin...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Authentication check
+  if (!isAuthenticated) {
+    return null;
+  }
+
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Loading NCL content...</div>
+      <div className="min-h-screen bg-gray-50">
+        <AdminSidebar />
+        <div className="flex-1 lg:ml-64">
+          <div className="p-4">Loading NCL content...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gray-50">
+      <AdminSidebar />
+      <div className="flex-1 lg:ml-64">
+        <div className="container mx-auto p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold flex items-center gap-2">
           <FileText className="h-8 w-8" />
@@ -383,6 +410,8 @@ export default function NclContentAdmin() {
           />
         </DialogContent>
       </Dialog>
+        </div>
+      </div>
     </div>
   );
 }
