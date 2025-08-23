@@ -69,6 +69,11 @@ export default function AdminSidebar() {
       icon: AlertTriangle,
     },
     {
+      title: "NCL Content Management",
+      href: "/admin/ncl-content",
+      icon: FileText,
+    },
+    {
       title: "Users",
       href: "/admin/users",
       icon: Users,

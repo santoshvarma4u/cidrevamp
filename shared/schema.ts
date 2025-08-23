@@ -454,3 +454,21 @@ export const insertAlertSchema = createInsertSchema(alerts).omit({
 });
 export type InsertAlert = z.infer<typeof insertAlertSchema>;
 export type Alert = typeof alerts.$inferSelect;
+
+// NCL Content table
+export const nclContent = pgTable("ncl_content", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 255 }).notNull().default("National Criminal Laws (NCL) Update"),
+  content: text("content").notNull(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertNclContentSchema = createInsertSchema(nclContent).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertNclContent = z.infer<typeof insertNclContentSchema>;
+export type NclContent = typeof nclContent.$inferSelect;

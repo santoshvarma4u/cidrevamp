@@ -14,6 +14,7 @@ import {
   departmentContacts,
   seniorOfficers,
   alerts,
+  nclContent,
   type User,
   type InsertUser,
   type InsertPage,
@@ -42,6 +43,8 @@ import {
   type InsertSeniorOfficer,
   type Alert,
   type InsertAlert,
+  type NclContent,
+  type InsertNclContent,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, like, sql } from "drizzle-orm";
@@ -147,6 +150,14 @@ export interface IStorage {
   getAlert(id: number): Promise<Alert | undefined>;
   getAlerts(activeOnly?: boolean): Promise<Alert[]>;
   getAlertsByCategory(category: string, activeOnly?: boolean): Promise<Alert[]>;
+
+  // NCL Content operations
+  createNclContent(nclContent: InsertNclContent): Promise<NclContent>;
+  updateNclContent(id: number, nclContent: Partial<InsertNclContent>): Promise<NclContent>;
+  deleteNclContent(id: number): Promise<void>;
+  getNclContent(id: number): Promise<NclContent | undefined>;
+  getActiveNclContent(): Promise<NclContent | undefined>;
+  getAllNclContent(): Promise<NclContent[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -643,6 +654,46 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(alerts)
       .where(eq(alerts.category, category))
       .orderBy(alerts.priority, alerts.title);
+  }
+
+  // NCL Content operations
+  async createNclContent(nclContentData: InsertNclContent): Promise<NclContent> {
+    const [newNclContent] = await db
+      .insert(nclContent)
+      .values(nclContentData)
+      .returning();
+    return newNclContent;
+  }
+
+  async updateNclContent(id: number, nclContentData: Partial<InsertNclContent>): Promise<NclContent> {
+    const [updatedNclContent] = await db
+      .update(nclContent)
+      .set({ ...nclContentData, updatedAt: new Date() })
+      .where(eq(nclContent.id, id))
+      .returning();
+    return updatedNclContent;
+  }
+
+  async deleteNclContent(id: number): Promise<void> {
+    await db.delete(nclContent).where(eq(nclContent.id, id));
+  }
+
+  async getNclContent(id: number): Promise<NclContent | undefined> {
+    const [content] = await db.select().from(nclContent).where(eq(nclContent.id, id));
+    return content;
+  }
+
+  async getActiveNclContent(): Promise<NclContent | undefined> {
+    const [content] = await db.select().from(nclContent)
+      .where(eq(nclContent.isActive, true))
+      .orderBy(desc(nclContent.updatedAt))
+      .limit(1);
+    return content;
+  }
+
+  async getAllNclContent(): Promise<NclContent[]> {
+    return await db.select().from(nclContent)
+      .orderBy(desc(nclContent.updatedAt));
   }
 }
 

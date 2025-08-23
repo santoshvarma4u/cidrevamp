@@ -64,6 +64,12 @@ export default function Home() {
     queryFn: () => fetch("/api/wings?active=true").then((res) => res.json()),
   });
 
+  // Fetch NCL content dynamically
+  const { data: nclContent } = useQuery({
+    queryKey: ["/api/ncl-content"],
+    queryFn: () => fetch("/api/ncl-content").then((res) => res.json()),
+  });
+
   // Map wings data to include proper icon components
   const specializedWings = wingsData.map((wing: any) => {
     let IconComponent;
@@ -262,24 +268,25 @@ export default function Home() {
                     )}
                   </div>
                   
-                  {/* NCL Information Section */}
-                  <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
-                    <div className="flex items-start">
-                      <div className="flex-shrink-0">
-                        <FileText className="h-5 w-5 text-blue-600 mt-1" />
-                      </div>
-                      <div className="ml-3">
-                        <h4 className="text-sm font-semibold text-blue-800 mb-1">
-                          National Criminal Laws (NCL) Update
-                        </h4>
-                        <p className="text-xs text-blue-700 leading-relaxed">
-                          Implementation of new National Criminal Laws including Bharatiya Nyaya Sanhita, 
-                          Bharatiya Nagarik Suraksha Sanhita, and Bharatiya Sakshya Adhiniyam. 
-                          Training programs for all police personnel are ongoing.
-                        </p>
+                  {/* NCL Information Section - Dynamic Content */}
+                  {nclContent && (
+                    <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0">
+                          <FileText className="h-5 w-5 text-blue-600 mt-1" />
+                        </div>
+                        <div className="ml-3">
+                          <h4 className="text-sm font-semibold text-blue-800 mb-1">
+                            {nclContent.title}
+                          </h4>
+                          <div 
+                            className="text-xs text-blue-700 leading-relaxed prose prose-sm max-w-none"
+                            dangerouslySetInnerHTML={{ __html: nclContent.content }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

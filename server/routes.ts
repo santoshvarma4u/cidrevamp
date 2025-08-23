@@ -3,7 +3,7 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
-import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema, insertWingSchema, insertRegionalOfficeSchema, insertDepartmentContactSchema, insertSeniorOfficerSchema, insertAlertSchema } from "@shared/schema";
+import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema, insertWingSchema, insertRegionalOfficeSchema, insertDepartmentContactSchema, insertSeniorOfficerSchema, insertAlertSchema, insertNclContentSchema } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
 import { body, validationResult } from "express-validator";
 import multer from "multer";
@@ -1046,6 +1046,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting alert:", error);
       res.status(500).json({ message: "Failed to delete alert" });
+    }
+  });
+
+  // NCL Content routes - Public API
+  app.get('/api/ncl-content', async (req, res) => {
+    try {
+      const content = await storage.getActiveNclContent();
+      res.json(content);
+    } catch (error) {
+      console.error("Error fetching NCL content:", error);
+      res.status(500).json({ message: "Failed to fetch NCL content" });
+    }
+  });
+
+  // NCL Content routes - Admin API
+  app.get('/api/admin/ncl-content', requireAdmin, async (req, res) => {
+    try {
+      const content = await storage.getAllNclContent();
+      res.json(content);
+    } catch (error) {
+      console.error("Error fetching NCL content:", error);
+      res.status(500).json({ message: "Failed to fetch NCL content" });
+    }
+  });
+
+  app.post('/api/admin/ncl-content', requireAdmin, async (req: any, res) => {
+    try {
+      const validatedData = insertNclContentSchema.parse(req.body);
+      const content = await storage.createNclContent(validatedData);
+      res.json(content);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating NCL content:", error);
+      res.status(500).json({ message: "Failed to create NCL content" });
+    }
+  });
+
+  app.put('/api/admin/ncl-content/:id', requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertNclContentSchema.partial().parse(req.body);
+      const content = await storage.updateNclContent(id, validatedData);
+      res.json(content);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating NCL content:", error);
+      res.status(500).json({ message: "Failed to update NCL content" });
+    }
+  });
+
+  app.delete('/api/admin/ncl-content/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteNclContent(id);
+      res.json({ message: "NCL content deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting NCL content:", error);
+      res.status(500).json({ message: "Failed to delete NCL content" });
     }
   });
 

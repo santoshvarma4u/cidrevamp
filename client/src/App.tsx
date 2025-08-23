@@ -41,6 +41,7 @@ import AdminWingsManager from "@/pages/admin/AdminWingsManager";
 import { ContactManagement } from "@/pages/admin/contact/ContactManagement";
 import { SeniorOfficersManagement } from "@/pages/admin/senior-officers/SeniorOfficersManagement";
 import { AlertsAdmin } from "@/pages/admin/alerts/AlertsAdmin";
+import NclContentAdmin from "@/pages/admin/ncl-content/NclContentAdmin";
 
 import queryClient from "@/lib/queryClient";
 
@@ -98,6 +99,7 @@ function Router() {
           <Route path="/admin/contact" component={ContactManagement} />
           <Route path="/admin/senior-officers" component={SeniorOfficersManagement} />
           <Route path="/admin/alerts" component={AlertsAdmin} />
+          <Route path="/admin/ncl-content" component={NclContentAdmin} />
         </>
       )}
 
