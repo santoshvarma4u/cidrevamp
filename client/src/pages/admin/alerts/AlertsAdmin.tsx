@@ -451,4 +451,4 @@ function AlertsAdmin() {
   );
 }
 
-export default AlertsAdmin;
+export { AlertsAdmin };
