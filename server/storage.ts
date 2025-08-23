@@ -13,6 +13,7 @@ import {
   regionalOffices,
   departmentContacts,
   seniorOfficers,
+  alerts,
   type User,
   type InsertUser,
   type InsertPage,
@@ -39,6 +40,8 @@ import {
   type InsertDepartmentContact,
   type SeniorOfficer,
   type InsertSeniorOfficer,
+  type Alert,
+  type InsertAlert,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, like, sql } from "drizzle-orm";
@@ -136,6 +139,14 @@ export interface IStorage {
   deleteSeniorOfficer(id: number): Promise<void>;
   getSeniorOfficer(id: number): Promise<SeniorOfficer | undefined>;
   getSeniorOfficers(activeOnly?: boolean): Promise<SeniorOfficer[]>;
+
+  // Alerts operations
+  createAlert(alert: InsertAlert): Promise<Alert>;
+  updateAlert(id: number, alert: Partial<InsertAlert>): Promise<Alert>;
+  deleteAlert(id: number): Promise<void>;
+  getAlert(id: number): Promise<Alert | undefined>;
+  getAlerts(activeOnly?: boolean): Promise<Alert[]>;
+  getAlertsByCategory(category: string, activeOnly?: boolean): Promise<Alert[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -585,6 +596,53 @@ export class DatabaseStorage implements IStorage {
     
     return await db.select().from(seniorOfficers)
       .orderBy(seniorOfficers.displayOrder, seniorOfficers.position);
+  }
+
+  // Alerts operations
+  async createAlert(alertData: InsertAlert): Promise<Alert> {
+    const [newAlert] = await db.insert(alerts).values(alertData).returning();
+    return newAlert;
+  }
+
+  async updateAlert(id: number, alertData: Partial<InsertAlert>): Promise<Alert> {
+    const [updatedAlert] = await db
+      .update(alerts)
+      .set({ ...alertData, updatedAt: new Date() })
+      .where(eq(alerts.id, id))
+      .returning();
+    return updatedAlert;
+  }
+
+  async deleteAlert(id: number): Promise<void> {
+    await db.delete(alerts).where(eq(alerts.id, id));
+  }
+
+  async getAlert(id: number): Promise<Alert | undefined> {
+    const [alert] = await db.select().from(alerts).where(eq(alerts.id, id));
+    return alert;
+  }
+
+  async getAlerts(activeOnly: boolean = false): Promise<Alert[]> {
+    if (activeOnly) {
+      return await db.select().from(alerts)
+        .where(eq(alerts.isActive, true))
+        .orderBy(alerts.priority, alerts.title);
+    }
+    
+    return await db.select().from(alerts)
+      .orderBy(alerts.priority, alerts.title);
+  }
+
+  async getAlertsByCategory(category: string, activeOnly: boolean = false): Promise<Alert[]> {
+    if (activeOnly) {
+      return await db.select().from(alerts)
+        .where(and(eq(alerts.category, category), eq(alerts.isActive, true)))
+        .orderBy(alerts.priority, alerts.title);
+    }
+    
+    return await db.select().from(alerts)
+      .where(eq(alerts.category, category))
+      .orderBy(alerts.priority, alerts.title);
   }
 }
 

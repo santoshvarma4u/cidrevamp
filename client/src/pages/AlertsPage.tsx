@@ -1,53 +1,42 @@
 import ModernHeader from "@/components/layout/ModernHeader";
 import { AlertTriangle, Shield, Check, X, Users, FileText, Globe, Building } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+
+// Icon mapping for dynamic icons
+const iconMap = {
+  AlertTriangle,
+  Shield,
+  Users,
+  Building,
+  Globe,
+};
 
 export function AlertsPage() {
-  const cyberSafetyTopics = [
-    { title: "Ransomware Attack", slug: "ransomware" },
-    { title: "Social Media Deception", slug: "social-media" },
-    { title: "E-Banking Fraud", slug: "e-banking" },
-    { title: "Email Scam", slug: "email-scam" },
-    { title: "Online Social Networking Traps", slug: "online-social" },
-    { title: "Online Blackmail", slug: "online-blackmail" }
-  ];
+  const { data: cyberSafetyTopics = [] } = useQuery({
+    queryKey: ["/api/alerts/category/cyber-safety"],
+    retry: false,
+  });
 
-  const womenChildrenSafety = [
-    { title: "Do's & Don'ts", slug: "childwomensafety" },
-    { title: "Banners & Posters", slug: "childandwomensaftey" }
-  ];
+  const { data: womenChildrenSafety = [] } = useQuery({
+    queryKey: ["/api/alerts/category/women-children"],
+    retry: false,
+  });
 
-  const safetyTopics = [
-    { title: "Security of Residential Areas", slug: "residentialareas", icon: Building },
-    { title: "Senior Citizens", slug: "seniorcitizens", icon: Users },
-    { title: "Precautions for Banking", slug: "precautionsbanking", icon: Shield },
-    { title: "Double Your Money Schemes", slug: "moneyschemes", icon: AlertTriangle },
-    { title: "Emergency Situations", slug: "emergencysituations", icon: AlertTriangle },
-    { title: "Gulf Jobs", slug: "gulfjobs", icon: Globe },
-    { title: "Prevent Vehicle Theft", slug: "vehicletheft", icon: Shield }
-  ];
+  const { data: safetyTopics = [] } = useQuery({
+    queryKey: ["/api/alerts/category/general-safety"],
+    retry: false,
+  });
 
-  const dos = [
-    "Do evacuate people immediately to a safe distance.",
-    "Open all windows & doors.",
-    "Place sand bags around the suspected object.",
-    "Inform bomb disposal squad.",
-    "Inform fire brigade, Hospital & Ambulance."
-  ];
+  const { data: dosAlerts = [] } = useQuery({
+    queryKey: ["/api/alerts/category/dos"],
+    retry: false,
+  });
 
-  const donts = [
-    "Do not touch or remove the object unless you are duty bound.",
-    "Do not open the package. Do not puncture package.",
-    "Do not submerge packet into water.",
-    "Do not accept identification marks on its face value.",
-    "Do not pass metallic object over the package.",
-    "Do not direct flash light directly over the suspected object.",
-    "Do not cut the strings or wire.",
-    "Do not bring suspected device in security control room or police station. Always remove the people and not the bomb from scene.",
-    "Do not attempt to open the baggage by hand.",
-    "Do not reveal CVV/ PIN/ OTP unless you initiated the transaction",
-    "Don't be a dead-hero.",
-    "You can reconstruct a building or house but you cannot recreate a dead man alive."
-  ];
+  const { data: dontsAlerts = [] } = useQuery({
+    queryKey: ["/api/alerts/category/donts"],
+    retry: false,
+  });
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -83,10 +72,10 @@ export function AlertsPage() {
                   </div>
                   <div className="bg-green-50 rounded-lg p-6">
                     <ul className="space-y-3">
-                      {dos.map((item, index) => (
+                      {dosAlerts.map((item: any, index: number) => (
                         <li key={index} className="flex items-start">
                           <Check className="h-5 w-5 text-primary mr-3 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{item}</span>
+                          <span className="text-gray-700">{item.content || item.title}</span>
                         </li>
                       ))}
                     </ul>
@@ -101,10 +90,10 @@ export function AlertsPage() {
                   </div>
                   <div className="bg-red-50 rounded-lg p-6">
                     <ul className="space-y-3">
-                      {donts.map((item, index) => (
+                      {dontsAlerts.map((item: any, index: number) => (
                         <li key={index} className="flex items-start">
                           <X className="h-5 w-5 text-red-600 mr-3 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{item}</span>
+                          <span className="text-gray-700">{item.content || item.title}</span>
                         </li>
                       ))}
                     </ul>
@@ -160,9 +149,9 @@ export function AlertsPage() {
                       <div>
                         <h5 className="font-semibold text-gray-800 mb-2">CYBER SAFETY</h5>
                         <div className="space-y-2 ml-4">
-                          {cyberSafetyTopics.map((topic, index) => (
+                          {cyberSafetyTopics.map((topic: any, index: number) => (
                             <div key={index} className="border-l-2 border-gray-200 pl-3">
-                              <a href={`/cid/${topic.slug}`} className="text-sm text-gray-600 hover:text-purple-600">
+                              <a href={`/cid/${topic.slug || '#'}`} className="text-sm text-gray-600 hover:text-purple-600">
                                 {topic.title}
                               </a>
                             </div>
@@ -174,9 +163,9 @@ export function AlertsPage() {
                       <div>
                         <h5 className="font-semibold text-gray-800 mb-2">CHILDREN & WOMEN SAFETY</h5>
                         <div className="space-y-2 ml-4">
-                          {womenChildrenSafety.map((topic, index) => (
+                          {womenChildrenSafety.map((topic: any, index: number) => (
                             <div key={index} className="border-l-2 border-gray-200 pl-3">
-                              <a href={`/cid/${topic.slug}`} className="text-sm text-gray-600 hover:text-purple-600">
+                              <a href={`/cid/${topic.slug || '#'}`} className="text-sm text-gray-600 hover:text-purple-600">
                                 {topic.title}
                               </a>
                             </div>
@@ -186,14 +175,17 @@ export function AlertsPage() {
 
                       {/* Other Safety Topics */}
                       <div className="space-y-2">
-                        {safetyTopics.map((topic, index) => (
-                          <div key={index} className="border-l-4 border-gray-200 pl-4">
-                            <a href={`/cid/${topic.slug}`} className="text-gray-600 hover:text-purple-600 font-medium text-sm flex items-center">
-                              <topic.icon className="h-4 w-4 mr-2" />
-                              {topic.title.toUpperCase()}
-                            </a>
-                          </div>
-                        ))}
+                        {safetyTopics.map((topic: any, index: number) => {
+                          const IconComponent = topic.iconName ? iconMap[topic.iconName as keyof typeof iconMap] || Shield : Shield;
+                          return (
+                            <div key={index} className="border-l-4 border-gray-200 pl-4">
+                              <a href={`/cid/${topic.slug || '#'}`} className="text-gray-600 hover:text-purple-600 font-medium text-sm flex items-center">
+                                <IconComponent className="h-4 w-4 mr-2" />
+                                {topic.title.toUpperCase()}
+                              </a>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>

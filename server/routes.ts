@@ -3,7 +3,7 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
-import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema, insertWingSchema, insertRegionalOfficeSchema, insertDepartmentContactSchema, insertSeniorOfficerSchema } from "@shared/schema";
+import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema, insertWingSchema, insertRegionalOfficeSchema, insertDepartmentContactSchema, insertSeniorOfficerSchema, insertAlertSchema } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
 import { body, validationResult } from "express-validator";
 import multer from "multer";
@@ -973,6 +973,79 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching public senior officers:", error);
       res.status(500).json({ message: "Failed to fetch senior officers" });
+    }
+  });
+
+  // Alerts routes - Public API
+  app.get('/api/alerts', async (req, res) => {
+    try {
+      const alerts = await storage.getAlerts(true); // Only active alerts for public
+      res.json(alerts);
+    } catch (error) {
+      console.error("Error fetching alerts:", error);
+      res.status(500).json({ message: "Failed to fetch alerts" });
+    }
+  });
+
+  app.get('/api/alerts/category/:category', async (req, res) => {
+    try {
+      const { category } = req.params;
+      const alerts = await storage.getAlertsByCategory(category, true); // Only active alerts for public
+      res.json(alerts);
+    } catch (error) {
+      console.error("Error fetching alerts by category:", error);
+      res.status(500).json({ message: "Failed to fetch alerts" });
+    }
+  });
+
+  // Alerts routes - Admin API
+  app.get('/api/admin/alerts', requireAdmin, async (req, res) => {
+    try {
+      const alerts = await storage.getAlerts(); // All alerts for admin
+      res.json(alerts);
+    } catch (error) {
+      console.error("Error fetching alerts:", error);
+      res.status(500).json({ message: "Failed to fetch alerts" });
+    }
+  });
+
+  app.post('/api/admin/alerts', requireAdmin, async (req: any, res) => {
+    try {
+      const validatedData = insertAlertSchema.parse(req.body);
+      const alert = await storage.createAlert(validatedData);
+      res.json(alert);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating alert:", error);
+      res.status(500).json({ message: "Failed to create alert" });
+    }
+  });
+
+  app.put('/api/admin/alerts/:id', requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertAlertSchema.partial().parse(req.body);
+      const alert = await storage.updateAlert(id, validatedData);
+      res.json(alert);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating alert:", error);
+      res.status(500).json({ message: "Failed to update alert" });
+    }
+  });
+
+  app.delete('/api/admin/alerts/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteAlert(id);
+      res.json({ message: "Alert deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting alert:", error);
+      res.status(500).json({ message: "Failed to delete alert" });
     }
   });
 

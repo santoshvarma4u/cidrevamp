@@ -431,3 +431,26 @@ export const insertSeniorOfficerSchema = createInsertSchema(seniorOfficers).omit
 });
 export type InsertSeniorOfficer = z.infer<typeof insertSeniorOfficerSchema>;
 export type SeniorOfficer = typeof seniorOfficers.$inferSelect;
+
+// Alerts table
+export const alerts = pgTable("alerts", {
+  id: serial("id").primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  category: varchar("category", { length: 100 }).notNull(), // cyber-safety, women-children, general-safety, dos, donts
+  slug: varchar("slug", { length: 255 }),
+  content: text("content"),
+  iconName: varchar("icon_name", { length: 50 }), // lucide icon name (optional)
+  priority: integer("priority").default(0), // for ordering
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertAlertSchema = createInsertSchema(alerts).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertAlert = z.infer<typeof insertAlertSchema>;
+export type Alert = typeof alerts.$inferSelect;

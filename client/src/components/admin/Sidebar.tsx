@@ -19,6 +19,7 @@ import {
   Megaphone,
   Building,
   Phone,
+  AlertTriangle,
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -61,6 +62,11 @@ export default function AdminSidebar() {
       title: "Senior Officers Management",
       href: "/admin/senior-officers",
       icon: Users,
+    },
+    {
+      title: "Alerts Management",
+      href: "/admin/alerts",
+      icon: AlertTriangle,
     },
     {
       title: "Users",
