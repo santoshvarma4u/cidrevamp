@@ -90,6 +90,7 @@ export const photos = pgTable("photos", {
   filePath: varchar("file_path").notNull(),
   category: varchar("category").default("operations"), // operations, events, awards, training
   isPublished: boolean("is_published").default(false),
+  displayOrder: integer("display_order").default(0), // For ordering photos in display
   uploadedBy: varchar("uploaded_by").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Image, Plus, Edit, Trash2, Upload } from "lucide-react";
+import { Image, Plus, Edit, Trash2, Upload, ArrowUp, ArrowDown } from "lucide-react";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import type { Photo } from "@shared/schema";
 
@@ -18,6 +18,7 @@ interface PhotoFormData {
   description: string;
   category: string;
   isPublished: boolean;
+  displayOrder?: number;
   photo?: File;
 }
 
@@ -31,6 +32,7 @@ export default function AdminPhotos() {
     description: "",
     category: "operations",
     isPublished: false,
+    displayOrder: 0,
   });
   
   const { toast } = useToast();
@@ -48,6 +50,7 @@ export default function AdminPhotos() {
       formDataToSend.append('description', data.description || '');
       formDataToSend.append('category', data.category);
       formDataToSend.append('isPublished', data.isPublished.toString());
+      formDataToSend.append('displayOrder', (data.displayOrder || 0).toString());
       
       if (data.photo) {
         formDataToSend.append('photo', data.photo);
@@ -150,6 +153,7 @@ export default function AdminPhotos() {
       description: "",
       category: "operations",
       isPublished: false,
+      displayOrder: 0,
     });
     setEditingPhoto(null);
   };
@@ -173,6 +177,7 @@ export default function AdminPhotos() {
           title: formData.title,
           description: formData.description,
           category: formData.category,
+          displayOrder: formData.displayOrder,
           isPublished: formData.isPublished,
         }
       });
@@ -279,6 +284,19 @@ export default function AdminPhotos() {
                     <SelectItem value="training">Training</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="displayOrder">Display Order</Label>
+                <Input
+                  id="displayOrder"
+                  type="number"
+                  min="0"
+                  value={formData.displayOrder || 0}
+                  onChange={(e) => setFormData({ ...formData, displayOrder: parseInt(e.target.value) || 0 })}
+                  placeholder="0"
+                />
+                <p className="text-xs text-gray-500 mt-1">Lower numbers appear first</p>
               </div>
 
               {!editingPhoto && (

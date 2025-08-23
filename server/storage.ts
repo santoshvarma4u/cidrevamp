@@ -47,7 +47,7 @@ import {
   type InsertNclContent,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and, like, sql } from "drizzle-orm";
+import { eq, desc, asc, and, like, sql } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -274,6 +274,15 @@ export class DatabaseStorage implements IStorage {
     return updatedPhoto;
   }
 
+  async updatePhotoOrder(id: number, displayOrder: number): Promise<Photo> {
+    const [updatedPhoto] = await db
+      .update(photos)
+      .set({ displayOrder, updatedAt: new Date() })
+      .where(eq(photos.id, id))
+      .returning();
+    return updatedPhoto;
+  }
+
   async deletePhoto(id: number): Promise<void> {
     await db.delete(photos).where(eq(photos.id, id));
   }
@@ -287,10 +296,10 @@ export class DatabaseStorage implements IStorage {
     if (published !== undefined) {
       return await db.select().from(photos)
         .where(eq(photos.isPublished, published))
-        .orderBy(desc(photos.createdAt));
+        .orderBy(asc(photos.displayOrder), desc(photos.createdAt));
     }
     return await db.select().from(photos)
-      .orderBy(desc(photos.createdAt));
+      .orderBy(asc(photos.displayOrder), desc(photos.createdAt));
   }
 
   async getPhotosByCategory(category: string): Promise<Photo[]> {

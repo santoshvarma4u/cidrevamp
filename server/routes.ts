@@ -455,6 +455,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         description: req.body.description || "",
         category: req.body.category || "operations",
         isPublished: req.body.isPublished === 'true',
+        displayOrder: parseInt(req.body.displayOrder) || 0,
         fileName: req.file.filename,
         filePath: req.file.path,
         uploadedBy: req.user.id
@@ -497,6 +498,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting photo:", error);
       res.status(500).json({ message: "Failed to delete photo" });
+    }
+  });
+
+  app.put('/api/admin/photos/:id/order', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { displayOrder } = req.body;
+      
+      if (typeof displayOrder !== 'number') {
+        return res.status(400).json({ message: "Display order must be a number" });
+      }
+      
+      const photo = await storage.updatePhotoOrder(id, displayOrder);
+      res.json(photo);
+    } catch (error) {
+      console.error("Error updating photo order:", error);
+      res.status(500).json({ message: "Failed to update photo order" });
     }
   });
 

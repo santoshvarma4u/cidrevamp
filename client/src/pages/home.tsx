@@ -6,7 +6,7 @@ import AutoScrollNews from "@/components/common/AutoScrollNews";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
 
 import { Link } from "wouter";
 import {
@@ -315,65 +315,102 @@ export default function Home() {
                 <CardContent className="p-4 flex-1 min-h-0 overflow-hidden relative bg-white rounded-b-2xl">
                   {latestPhotos.length > 0 ? (
                     <div className="h-full relative">
-                      {/* Horizontal Scrollable Photo Gallery */}
-                      <div 
-                        className="flex gap-3 h-full overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100"
-                        style={{ scrollbarWidth: 'thin' }}
-                      >
-                        {latestPhotos.slice(0, 8).map((photo: any, index: number) => (
-                          <Dialog key={photo.id}>
-                            <DialogTrigger asChild>
-                              <div className="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-all group">
-                                <img
-                                  src={`/${photo.filePath}`}
-                                  alt={photo.title || "CID Photo"}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                                />
-                              </div>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-4xl max-h-[90vh] p-4">
-                              <div className="relative">
-                                <img
-                                  src={`/${photo.filePath}`}
-                                  alt={photo.title || "CID Photo"}
-                                  className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
-                                />
-                                {photo.title && (
-                                  <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4 rounded-b-lg">
-                                    <h3 className="text-lg font-semibold">
-                                      {photo.title}
-                                    </h3>
-                                    {photo.description && (
-                                      <p className="text-sm text-gray-200">
-                                        {photo.description}
-                                      </p>
+                      {/* 2 Photos Display with Navigation */}
+                      <div className="h-full relative">
+                        <div className="grid grid-cols-2 gap-4 h-full">
+                          {latestPhotos
+                            .slice(
+                              currentPhotoSlide * 2,
+                              currentPhotoSlide * 2 + 2,
+                            )
+                            .map((photo: any, index: number) => (
+                              <Dialog key={photo.id}>
+                                <DialogTrigger asChild>
+                                  <div className="aspect-square rounded-lg overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-all group">
+                                    <img
+                                      src={`/${photo.filePath}`}
+                                      alt={photo.title || "CID Photo"}
+                                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                    />
+                                  </div>
+                                </DialogTrigger>
+                                    <DialogContent className="max-w-4xl max-h-[90vh] p-4">
+                                  <DialogTitle className="sr-only">
+                                    {photo.title || "CID Photo"}
+                                  </DialogTitle>
+                                  <div className="relative">
+                                    <img
+                                      src={`/${photo.filePath}`}
+                                      alt={photo.title || "CID Photo"}
+                                      className="w-full h-auto max-h-[80vh] object-contain rounded-lg"
+                                    />
+                                    {photo.title && (
+                                      <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-4 rounded-b-lg">
+                                        <h3 className="text-lg font-semibold">
+                                          {photo.title}
+                                        </h3>
+                                        {photo.description && (
+                                          <p className="text-sm text-gray-200">
+                                            {photo.description}
+                                          </p>
+                                        )}
+                                      </div>
                                     )}
                                   </div>
-                                )}
-                              </div>
-                            </DialogContent>
-                          </Dialog>
-                        ))}
-                        
-                        {/* View All Photos Link */}
-                        {latestPhotos.length > 8 && (
-                          <Link href="/photo-gallery">
-                            <div className="flex-shrink-0 w-32 h-32 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
-                              <Images className="h-6 w-6 text-gray-400 mb-1" />
-                              <span className="text-xs text-gray-500 text-center px-2">
-                                +{latestPhotos.length - 8} more photos
-                              </span>
-                            </div>
-                          </Link>
+                                </DialogContent>
+                              </Dialog>
+                            ))}
+                        </div>
+
+                        {/* Navigation Arrows */}
+                        {latestPhotos.length > 2 && (
+                          <>
+                            <button
+                              onClick={() =>
+                                setCurrentPhotoSlide((prev) =>
+                                  prev > 0
+                                    ? prev - 1
+                                    : Math.ceil(latestPhotos.length / 2) - 1,
+                                )
+                              }
+                              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                            >
+                              <ChevronLeft className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() =>
+                                setCurrentPhotoSlide((prev) =>
+                                  prev < Math.ceil(latestPhotos.length / 2) - 1
+                                    ? prev + 1
+                                    : 0,
+                                )
+                              }
+                              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </button>
+                          </>
+                        )}
+
+                        {/* Photo Indicators */}
+                        {latestPhotos.length > 2 && (
+                          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2">
+                            {Array.from({
+                              length: Math.ceil(latestPhotos.length / 2),
+                            }).map((_, index) => (
+                              <button
+                                key={index}
+                                onClick={() => setCurrentPhotoSlide(index)}
+                                className={`w-2 h-2 rounded-full transition-colors ${
+                                  currentPhotoSlide === index
+                                    ? "bg-blue-600"
+                                    : "bg-gray-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
                         )}
                       </div>
-                      
-                      {/* Scroll Hint */}
-                      {latestPhotos.length > 3 && (
-                        <div className="absolute bottom-1 right-2 text-xs text-gray-400 flex items-center gap-1">
-                          <span>Scroll →</span>
-                        </div>
-                      )}
                     </div>
                   ) : (
                     <div className="text-center h-full flex items-center justify-center">
