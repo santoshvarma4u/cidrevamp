@@ -47,10 +47,16 @@ const queryClient = new QueryClient({
 export default queryClient;
 
 export async function apiRequest(url: string, options: RequestInit = {}) {
+  // Don't set Content-Type for FormData - let browser handle it
+  const headers: HeadersInit = {};
+  if (!(options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const response = await fetch(url, {
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json',
+      ...headers,
       ...options.headers,
     },
     ...options,
