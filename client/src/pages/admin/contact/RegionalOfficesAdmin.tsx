@@ -137,19 +137,16 @@ export function RegionalOfficesAdmin() {
 
   if (isLoading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-64 bg-gray-200 rounded"></div>
-        </div>
+      <div className="animate-pulse space-y-4 p-6">
+        <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+        <div className="h-64 bg-gray-200 rounded"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
+    <div className="bg-white rounded-b-lg p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Regional Offices Management</h1>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={openCreateDialog} data-testid="button-create-office">
