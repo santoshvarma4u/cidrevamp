@@ -246,7 +246,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="p-6 bg-white rounded-b-2xl">
                   {/* Video Player */}
-                  <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video">
+                  <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video mb-4">
                     {latestVideos.length > 0 ? (
                       <video className="w-full h-full object-cover" controls>
                         <source
@@ -260,6 +260,25 @@ export default function Home() {
                         <Play className="h-16 w-16 opacity-50" />
                       </div>
                     )}
+                  </div>
+                  
+                  {/* NCL Information Section */}
+                  <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0">
+                        <FileText className="h-5 w-5 text-blue-600 mt-1" />
+                      </div>
+                      <div className="ml-3">
+                        <h4 className="text-sm font-semibold text-blue-800 mb-1">
+                          National Criminal Laws (NCL) Update
+                        </h4>
+                        <p className="text-xs text-blue-700 leading-relaxed">
+                          Implementation of new National Criminal Laws including Bharatiya Nyaya Sanhita, 
+                          Bharatiya Nagarik Suraksha Sanhita, and Bharatiya Sakshya Adhiniyam. 
+                          Training programs for all police personnel are ongoing.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
