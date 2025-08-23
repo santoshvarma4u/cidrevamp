@@ -76,6 +76,7 @@ export const videos = pgTable("videos", {
   duration: integer("duration"), // in seconds
   category: varchar("category").default("news"), // news, operations, awareness
   isPublished: boolean("is_published").default(false),
+  displayOrder: integer("display_order").default(0), // For ordering videos in display
   uploadedBy: varchar("uploaded_by").references(() => users.id),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

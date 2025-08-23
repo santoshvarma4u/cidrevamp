@@ -26,6 +26,7 @@ interface PhotoFormData {
   description: string;
   category: string;
   isPublished: boolean;
+  displayOrder: number;
 }
 
 export default function AdminPhotos() {
@@ -40,6 +41,7 @@ export default function AdminPhotos() {
     description: "",
     category: "operations",
     isPublished: false,
+    displayOrder: 0,
   });
 
   useEffect(() => {
@@ -148,6 +150,7 @@ export default function AdminPhotos() {
       description: "",
       category: "operations",
       isPublished: false,
+      displayOrder: 0,
     });
     setSelectedFile(null);
   };
@@ -171,6 +174,7 @@ export default function AdminPhotos() {
       uploadFormData.append("description", formData.description);
       uploadFormData.append("category", formData.category);
       uploadFormData.append("isPublished", formData.isPublished.toString());
+      uploadFormData.append("displayOrder", formData.displayOrder.toString());
 
       uploadPhotoMutation.mutate({ formData: uploadFormData });
     }
@@ -190,6 +194,7 @@ export default function AdminPhotos() {
       description: photo.description || "",
       category: photo.category,
       isPublished: photo.isPublished,
+      displayOrder: photo.displayOrder || 0,
     });
     setIsDialogOpen(true);
   };
@@ -298,6 +303,19 @@ export default function AdminPhotos() {
                       </Select>
                     </div>
                     
+                    <div>
+                      <Label htmlFor="displayOrder">Display Order</Label>
+                      <Input
+                        id="displayOrder"
+                        type="number"
+                        value={formData.displayOrder}
+                        onChange={(e) => setFormData({ ...formData, displayOrder: parseInt(e.target.value) || 0 })}
+                        placeholder="Enter display order (0 = first)"
+                        min="0"
+                      />
+                      <p className="text-sm text-gray-500 mt-1">Lower numbers appear first in galleries</p>
+                    </div>
+
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="published"

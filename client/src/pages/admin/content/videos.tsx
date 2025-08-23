@@ -35,6 +35,7 @@ interface VideoFormData {
   description: string;
   category: string;
   isPublished: boolean;
+  displayOrder: number;
 }
 
 export default function AdminVideos() {
@@ -49,6 +50,7 @@ export default function AdminVideos() {
     description: "",
     category: "news",
     isPublished: false,
+    displayOrder: 0,
   });
 
   useEffect(() => {
@@ -194,6 +196,7 @@ export default function AdminVideos() {
       description: "",
       category: "news",
       isPublished: false,
+      displayOrder: 0,
     });
     setSelectedFile(null);
   };
@@ -219,6 +222,7 @@ export default function AdminVideos() {
       uploadFormData.append("description", formData.description);
       uploadFormData.append("category", formData.category);
       uploadFormData.append("isPublished", formData.isPublished.toString());
+      uploadFormData.append("displayOrder", formData.displayOrder.toString());
 
       uploadVideoMutation.mutate({ formData: uploadFormData });
     }
@@ -231,6 +235,7 @@ export default function AdminVideos() {
       description: video.description || "",
       category: video.category,
       isPublished: video.isPublished,
+      displayOrder: video.displayOrder || 0,
     });
     setIsDialogOpen(true);
   };
@@ -347,6 +352,19 @@ export default function AdminVideos() {
                       </Select>
                     </div>
                     
+                    <div>
+                      <Label htmlFor="displayOrder">Display Order</Label>
+                      <Input
+                        id="displayOrder"
+                        type="number"
+                        value={formData.displayOrder}
+                        onChange={(e) => setFormData({ ...formData, displayOrder: parseInt(e.target.value) || 0 })}
+                        placeholder="Enter display order (0 = first)"
+                        min="0"
+                      />
+                      <p className="text-sm text-gray-500 mt-1">Lower numbers appear first in galleries</p>
+                    </div>
+
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="published"

@@ -398,6 +398,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         description: req.body.description || "",
         category: req.body.category || "news",
         isPublished: req.body.isPublished === 'true',
+        displayOrder: parseInt(req.body.displayOrder) || 0,
         fileName: req.file.filename,
         filePath: req.file.path,
         uploadedBy: req.user.id
