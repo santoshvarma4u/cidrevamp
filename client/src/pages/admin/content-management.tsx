@@ -13,7 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { apiRequest } from "@/lib/queryClient";
+import queryClient from "@/lib/queryClient";
 import ContentEditor from "@/components/admin/content-editor";
 import { 
   FileText, 
@@ -75,7 +76,10 @@ export default function ContentManagement() {
 
   const createNewsMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("POST", "/api/admin/news", data);
+      return await apiRequest("/api/admin/news", {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
     },
     onSuccess: () => {
       toast({
@@ -107,7 +111,10 @@ export default function ContentManagement() {
 
   const updateNewsMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: any }) => {
-      return await apiRequest("PUT", `/api/admin/news/${id}`, data);
+      return await apiRequest(`/api/admin/news/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data)
+      });
     },
     onSuccess: () => {
       toast({
@@ -140,7 +147,9 @@ export default function ContentManagement() {
 
   const deleteNewsMutation = useMutation({
     mutationFn: async (id: string) => {
-      return await apiRequest("DELETE", `/api/admin/news/${id}`);
+      return await apiRequest(`/api/admin/news/${id}`, {
+        method: "DELETE"
+      });
     },
     onSuccess: () => {
       toast({
@@ -171,7 +180,10 @@ export default function ContentManagement() {
 
   const createPageMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("POST", "/api/admin/pages", data);
+      return await apiRequest("/api/admin/pages", {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
     },
     onSuccess: () => {
       toast({
@@ -203,7 +215,10 @@ export default function ContentManagement() {
 
   const createSafetyAlertMutation = useMutation({
     mutationFn: async (data: any) => {
-      return await apiRequest("POST", "/api/admin/safety-alerts", data);
+      return await apiRequest("/api/admin/safety-alerts", {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
     },
     onSuccess: () => {
       toast({
@@ -330,9 +345,9 @@ export default function ContentManagement() {
     }) || [];
   };
 
-  const filteredNews = filterContent(news || []);
-  const filteredPages = filterContent(pages || []);
-  const filteredAlerts = filterContent(safetyAlerts || []);
+  const filteredNews = filterContent(Array.isArray(news) ? news : []);
+  const filteredPages = filterContent(Array.isArray(pages) ? pages : []);
+  const filteredAlerts = filterContent(Array.isArray(safetyAlerts) ? safetyAlerts : []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -341,7 +356,13 @@ export default function ContentManagement() {
       {/* Page Header */}
       <section className="bg-white border-b py-6">
         <div className="container mx-auto px-4">
-          <Breadcrumb items={breadcrumbItems} className="mb-4" />
+          <Breadcrumb className="mb-4">
+            <div className="flex space-x-1 text-sm text-gray-600">
+              <a href="/admin" className="hover:text-blue-600">Admin Dashboard</a>
+              <span>/</span>
+              <span>Content Management</span>
+            </div>
+          </Breadcrumb>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="bg-blue-100 p-3 rounded-lg">
@@ -481,7 +502,11 @@ export default function ContentManagement() {
           {selectedContent && (
             <ContentEditor 
               type="news"
-              initialData={selectedContent}
+              title={selectedContent.title}
+              content={selectedContent.content}
+              metaTitle={selectedContent.metaTitle}
+              metaDescription={selectedContent.metaDescription}
+              isPublished={selectedContent.isPublished}
               onSubmit={handleUpdateContent}
               isLoading={updateNewsMutation.isPending}
             />
