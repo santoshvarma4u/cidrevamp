@@ -58,6 +58,11 @@ export default function AdminSidebar() {
       icon: Phone,
     },
     {
+      title: "Senior Officers Management",
+      href: "/admin/senior-officers",
+      icon: Users,
+    },
+    {
       title: "Users",
       href: "/admin/users",
       icon: Users,

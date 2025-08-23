@@ -3,7 +3,7 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
-import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema, insertWingSchema, insertRegionalOfficeSchema, insertDepartmentContactSchema } from "@shared/schema";
+import { insertPageSchema, insertVideoSchema, insertPhotoSchema, insertComplaintSchema, insertNewsSchema, insertNewsTickerSchema, insertDirectorInfoSchema, insertWingSchema, insertRegionalOfficeSchema, insertDepartmentContactSchema, insertSeniorOfficerSchema } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
 import { body, validationResult } from "express-validator";
 import multer from "multer";
@@ -885,6 +885,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting department contact:", error);
       res.status(500).json({ message: "Failed to delete department contact" });
+    }
+  });
+
+  // Senior Officers admin routes
+  app.get('/api/admin/senior-officers', requireAdmin, async (req, res) => {
+    try {
+      const officers = await storage.getSeniorOfficers();
+      res.json(officers);
+    } catch (error) {
+      console.error("Error fetching senior officers:", error);
+      res.status(500).json({ message: "Failed to fetch senior officers" });
+    }
+  });
+
+  app.post('/api/admin/senior-officers', requireAdmin, upload.single('photo'), async (req: any, res) => {
+    try {
+      const data = { ...req.body };
+      if (req.file) {
+        data.photoPath = '/api/uploads/' + req.file.filename;
+      }
+      const validatedData = insertSeniorOfficerSchema.parse(data);
+      const officer = await storage.createSeniorOfficer(validatedData);
+      res.json(officer);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating senior officer:", error);
+      res.status(500).json({ message: "Failed to create senior officer" });
+    }
+  });
+
+  app.put('/api/admin/senior-officers/:id', requireAdmin, upload.single('photo'), async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const data = { ...req.body };
+      if (req.file) {
+        data.photoPath = '/api/uploads/' + req.file.filename;
+      }
+      const validatedData = insertSeniorOfficerSchema.partial().parse(data);
+      const officer = await storage.updateSeniorOfficer(id, validatedData);
+      res.json(officer);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating senior officer:", error);
+      res.status(500).json({ message: "Failed to update senior officer" });
+    }
+  });
+
+  app.delete('/api/admin/senior-officers/:id', requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteSeniorOfficer(id);
+      res.json({ message: "Senior officer deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting senior officer:", error);
+      res.status(500).json({ message: "Failed to delete senior officer" });
+    }
+  });
+
+  // Public senior officers route
+  app.get('/api/senior-officers', async (req, res) => {
+    try {
+      const officers = await storage.getSeniorOfficers(true); // Only active officers
+      res.json(officers);
+    } catch (error) {
+      console.error("Error fetching public senior officers:", error);
+      res.status(500).json({ message: "Failed to fetch senior officers" });
     }
   });
 

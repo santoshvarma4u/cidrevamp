@@ -407,3 +407,27 @@ export const insertDepartmentContactSchema = createInsertSchema(departmentContac
 });
 export type InsertDepartmentContact = z.infer<typeof insertDepartmentContactSchema>;
 export type DepartmentContact = typeof departmentContacts.$inferSelect;
+
+// Senior Officers table
+export const seniorOfficers = pgTable("senior_officers", {
+  id: serial("id").primaryKey(),
+  position: varchar("position", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  location: varchar("location", { length: 255 }),
+  phone: varchar("phone", { length: 20 }),
+  email: varchar("email", { length: 255 }),
+  photoPath: varchar("photo_path", { length: 500 }),
+  displayOrder: integer("display_order").default(0),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertSeniorOfficerSchema = createInsertSchema(seniorOfficers).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertSeniorOfficer = z.infer<typeof insertSeniorOfficerSchema>;
+export type SeniorOfficer = typeof seniorOfficers.$inferSelect;

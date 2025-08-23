@@ -2,6 +2,8 @@ import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
+import type { SeniorOfficer } from "@shared/schema";
 import {
   Users,
   Shield,
@@ -20,7 +22,13 @@ import {
 } from "lucide-react";
 
 export default function OrganizationStructure() {
-  const leadership = [
+  // Fetch senior officers from API
+  const { data: leadership = [], isLoading: officersLoading } = useQuery<SeniorOfficer[]>({
+    queryKey: ["/api/senior-officers"],
+  });
+
+  // Fallback data in case API fails
+  const fallbackLeadership = [
     {
       position: "Director General of Police (DGP)",
       name: "Dr. Jitender",
@@ -142,23 +150,75 @@ export default function OrganizationStructure() {
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Leadership Structure</h2>
           <div className="space-y-6">
-            {leadership.map((leader, index) => (
-              <Card key={index} className="border-l-4 border-l-blue-600">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">{leader.position}</h3>
-                      <p className="text-lg font-semibold text-blue-600 mb-2">{leader.name}</p>
-                      <p className="text-gray-600 mb-3">{leader.description}</p>
-                      <div className="flex items-center space-x-2 text-sm text-gray-500">
-                        <MapPin className="h-4 w-4" />
-                        <span>{leader.location}</span>
+            {officersLoading ? (
+              <div className="text-center py-8">
+                <div className="text-lg">Loading senior officers...</div>
+              </div>
+            ) : leadership.length > 0 ? (
+              leadership.map((leader) => (
+                <Card key={leader.id} className="border-l-4 border-l-blue-600">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{leader.position}</h3>
+                        <p className="text-lg font-semibold text-blue-600 mb-2">{leader.name}</p>
+                        <p className="text-gray-600 mb-3">{leader.description}</p>
+                        {leader.location && (
+                          <div className="flex items-center space-x-2 text-sm text-gray-500">
+                            <MapPin className="h-4 w-4" />
+                            <span>{leader.location}</span>
+                          </div>
+                        )}
+                        {(leader.phone || leader.email) && (
+                          <div className="flex items-center space-x-4 text-sm text-gray-500 mt-2">
+                            {leader.phone && (
+                              <div className="flex items-center space-x-1">
+                                <Phone className="h-4 w-4" />
+                                <span>{leader.phone}</span>
+                              </div>
+                            )}
+                            {leader.email && (
+                              <div className="flex items-center space-x-1">
+                                <Mail className="h-4 w-4" />
+                                <span>{leader.email}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      {leader.photoPath && (
+                        <div className="ml-6">
+                          <img
+                            src={leader.photoPath}
+                            alt={leader.name}
+                            className="w-20 h-20 rounded-lg object-cover border-2 border-gray-200"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              // Fallback to hardcoded data if no dynamic data available
+              fallbackLeadership.map((leader, index) => (
+                <Card key={`fallback-${index}`} className="border-l-4 border-l-blue-600">
+                  <CardContent className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{leader.position}</h3>
+                        <p className="text-lg font-semibold text-blue-600 mb-2">{leader.name}</p>
+                        <p className="text-gray-600 mb-3">{leader.description}</p>
+                        <div className="flex items-center space-x-2 text-sm text-gray-500">
+                          <MapPin className="h-4 w-4" />
+                          <span>{leader.location}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
         </section>
 

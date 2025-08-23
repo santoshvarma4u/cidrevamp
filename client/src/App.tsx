@@ -26,6 +26,7 @@ import { RTIPage } from "@/pages/RTIPage";
 import { ContactPage } from "@/pages/ContactPage";
 import { AlertsPage } from "@/pages/AlertsPage";
 import DynamicPage from "@/pages/dynamic-page";
+import SeniorOfficersPage from "@/pages/SeniorOfficers";
 
 // Admin pages
 import AdminDashboard from "@/pages/admin/dashboard";
@@ -38,6 +39,7 @@ import AdminNewsTicker from "@/pages/admin/news-ticker";
 import AdminDirectorManager from "@/pages/admin/AdminDirectorManager";
 import AdminWingsManager from "@/pages/admin/AdminWingsManager";
 import { ContactManagement } from "@/pages/admin/contact/ContactManagement";
+import { SeniorOfficersManagement } from "@/pages/admin/senior-officers/SeniorOfficersManagement";
 
 import queryClient from "@/lib/queryClient";
 
@@ -75,6 +77,7 @@ function Router() {
       <Route path="/rti" component={RTIPage} />
       <Route path="/contact" component={ContactPage} />
       <Route path="/alerts" component={AlertsPage} />
+      <Route path="/officers" component={SeniorOfficersPage} />
 
       {/* Admin auth route (public) */}
       <Route path="/admin/login" component={AdminAuth} />
@@ -92,6 +95,7 @@ function Router() {
           <Route path="/admin/director" component={AdminDirectorManager} />
           <Route path="/admin/wings" component={AdminWingsManager} />
           <Route path="/admin/contact" component={ContactManagement} />
+          <Route path="/admin/senior-officers" component={SeniorOfficersManagement} />
         </>
       )}
 

@@ -12,6 +12,7 @@ import {
   wings,
   regionalOffices,
   departmentContacts,
+  seniorOfficers,
   type User,
   type InsertUser,
   type InsertPage,
@@ -36,6 +37,8 @@ import {
   type InsertRegionalOffice,
   type DepartmentContact,
   type InsertDepartmentContact,
+  type SeniorOfficer,
+  type InsertSeniorOfficer,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, like, sql } from "drizzle-orm";
@@ -126,6 +129,13 @@ export interface IStorage {
   deleteDepartmentContact(id: number): Promise<void>;
   getDepartmentContact(id: number): Promise<DepartmentContact | undefined>;
   getDepartmentContacts(activeOnly?: boolean): Promise<DepartmentContact[]>;
+
+  // Senior officers operations
+  createSeniorOfficer(officer: InsertSeniorOfficer): Promise<SeniorOfficer>;
+  updateSeniorOfficer(id: number, officer: Partial<InsertSeniorOfficer>): Promise<SeniorOfficer>;
+  deleteSeniorOfficer(id: number): Promise<void>;
+  getSeniorOfficer(id: number): Promise<SeniorOfficer | undefined>;
+  getSeniorOfficers(activeOnly?: boolean): Promise<SeniorOfficer[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -540,6 +550,41 @@ export class DatabaseStorage implements IStorage {
     
     return await db.select().from(departmentContacts)
       .orderBy(departmentContacts.displayOrder, departmentContacts.sno);
+  }
+
+  // Senior officers operations
+  async createSeniorOfficer(officerData: InsertSeniorOfficer): Promise<SeniorOfficer> {
+    const [newOfficer] = await db.insert(seniorOfficers).values(officerData).returning();
+    return newOfficer;
+  }
+
+  async updateSeniorOfficer(id: number, officerData: Partial<InsertSeniorOfficer>): Promise<SeniorOfficer> {
+    const [updatedOfficer] = await db
+      .update(seniorOfficers)
+      .set({ ...officerData, updatedAt: new Date() })
+      .where(eq(seniorOfficers.id, id))
+      .returning();
+    return updatedOfficer;
+  }
+
+  async deleteSeniorOfficer(id: number): Promise<void> {
+    await db.delete(seniorOfficers).where(eq(seniorOfficers.id, id));
+  }
+
+  async getSeniorOfficer(id: number): Promise<SeniorOfficer | undefined> {
+    const [officer] = await db.select().from(seniorOfficers).where(eq(seniorOfficers.id, id));
+    return officer;
+  }
+
+  async getSeniorOfficers(activeOnly: boolean = false): Promise<SeniorOfficer[]> {
+    if (activeOnly) {
+      return await db.select().from(seniorOfficers)
+        .where(eq(seniorOfficers.isActive, true))
+        .orderBy(seniorOfficers.displayOrder, seniorOfficers.position);
+    }
+    
+    return await db.select().from(seniorOfficers)
+      .orderBy(seniorOfficers.displayOrder, seniorOfficers.position);
   }
 }
 
