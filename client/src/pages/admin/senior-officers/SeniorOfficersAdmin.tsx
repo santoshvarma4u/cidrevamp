@@ -52,7 +52,14 @@ export function SeniorOfficersAdmin() {
         if (key === "photo" && value instanceof File) {
           formDataToSend.append("photo", value);
         } else if (value !== undefined && value !== null) {
-          formDataToSend.append(key, String(value));
+          // Handle special data type conversions for server validation
+          if (key === "displayOrder") {
+            formDataToSend.append(key, String(Number(value)));
+          } else if (key === "isActive") {
+            formDataToSend.append(key, String(Boolean(value)));
+          } else {
+            formDataToSend.append(key, String(value));
+          }
         }
       });
       
@@ -86,7 +93,14 @@ export function SeniorOfficersAdmin() {
         if (key === "photo" && value instanceof File) {
           formDataToSend.append("photo", value);
         } else if (value !== undefined && value !== null) {
-          formDataToSend.append(key, String(value));
+          // Handle special data type conversions for server validation
+          if (key === "displayOrder") {
+            formDataToSend.append(key, String(Number(value)));
+          } else if (key === "isActive") {
+            formDataToSend.append(key, String(Boolean(value)));
+          } else {
+            formDataToSend.append(key, String(value));
+          }
         }
       });
       

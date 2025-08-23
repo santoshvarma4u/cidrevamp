@@ -905,6 +905,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (req.file) {
         data.photoPath = '/api/uploads/' + req.file.filename;
       }
+      
+      // Convert FormData strings back to proper types
+      if (data.displayOrder !== undefined) {
+        data.displayOrder = parseInt(data.displayOrder) || 0;
+      }
+      if (data.isActive !== undefined) {
+        data.isActive = data.isActive === 'true';
+      }
+      
       const validatedData = insertSeniorOfficerSchema.parse(data);
       const officer = await storage.createSeniorOfficer(validatedData);
       res.json(officer);
@@ -924,6 +933,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (req.file) {
         data.photoPath = '/api/uploads/' + req.file.filename;
       }
+      
+      // Convert FormData strings back to proper types
+      if (data.displayOrder !== undefined) {
+        data.displayOrder = parseInt(data.displayOrder) || 0;
+      }
+      if (data.isActive !== undefined) {
+        data.isActive = data.isActive === 'true';
+      }
+      
       const validatedData = insertSeniorOfficerSchema.partial().parse(data);
       const officer = await storage.updateSeniorOfficer(id, validatedData);
       res.json(officer);
