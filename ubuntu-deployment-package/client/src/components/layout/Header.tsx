@@ -20,8 +20,7 @@ import {
   Settings,
   ChevronDown,
 } from "lucide-react";
-import leftLogoSrc from "@assets/leftlogo_1753517979998.png";
-import rightLogoSrc from "@assets/police-logo_1753517995022.png";
+import { LOGO_PLACEHOLDERS } from "@/utils/placeholders";
 
 export default function Header() {
   const [location] = useLocation();
@@ -92,7 +91,7 @@ export default function Header() {
           {/* Left Logo */}
           <div className="flex-shrink-0">
             <img
-              src={leftLogoSrc}
+              src={LOGO_PLACEHOLDERS.telanganaGov}
               alt="Government of Telangana"
               className="w-20 h-20 object-contain"
             />
@@ -112,7 +111,7 @@ export default function Header() {
           {/* Right Logo and User Menu */}
           <div className="flex-shrink-0 flex items-center space-x-4">
             <img
-              src={rightLogoSrc}
+              src={LOGO_PLACEHOLDERS.policeShield}
               alt="Telangana State Police"
               className="w-20 h-20 object-contain"
             />

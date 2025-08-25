@@ -17,9 +17,7 @@ import {
   Settings,
   ChevronDown,
 } from "lucide-react";
-import leftLogoSrc from "@assets/leftlogo_1753517979998.png";
-import tsLogoSrc from "@assets/TSLogo_1754309846963.png";
-import policeLogoSrc from "@assets/unnamed_1755518260488.png";
+import { LOGO_PLACEHOLDERS } from "@/utils/placeholders";
 
 export default function ModernHeader() {
   const [location] = useLocation();
@@ -70,7 +68,7 @@ export default function ModernHeader() {
             {/* Left Logo */}
             <div className="flex items-center py-2">
               <img 
-                src={policeLogoSrc} 
+                src={LOGO_PLACEHOLDERS.policeShield} 
                 alt="Telangana Police Logo" 
                 className="h-40 w-40 md:h-48 md:w-48 object-contain transform scale-110"
               />

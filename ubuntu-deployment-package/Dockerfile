@@ -32,8 +32,16 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the application using custom script
-RUN chmod +x scripts/build-production.sh && ./scripts/build-production.sh
+# Build the application (client and server)
+RUN npm run build
+
+# The build command creates dist/client (from vite build) and dist/index.js (from esbuild)
+# Also prepare server files for production
+RUN mkdir -p dist/server && \
+    cp -r server/* dist/server/ && \
+    cp -r shared dist/ && \
+    cp drizzle.config.ts dist/ && \
+    mkdir -p dist/uploads
 
 # Production stage
 FROM node:20-alpine AS production
@@ -99,4 +107,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 # Start the application
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "scripts/start-production.js"]
+CMD ["npx", "tsx", "server/index.prod.ts"]

@@ -3,43 +3,7 @@ import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import { ExternalLink, Shield, Globe, Building, MapPin } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import bprdLogo from "@assets/logo-bprd_1754309296617.png";
-import cbiLogo from "@assets/cbi_logo-1_1754309364119.png";
-import cyberDostLogo from "@assets/cyber_dost_1754309439375.jpg";
-import cybercrimeLogo from "@assets/cybercrime_1754309439375.jpg";
-import mhaLogo from "@assets/MinistryofHomeAffairs_1754309439374.png";
-import ncbLogo from "@assets/NarcoticsControlBureau_1754309439374.jpg";
-import niaLogo from "@assets/nia-logo_1754309439374.png";
-import ncrbLogo from "@assets/NCRB-Logo_1754309439374.jpg";
-import svpnpaLogo from "@assets/nationalpoliceacademy_logo_1754309439374.png";
-import westBengalCidLogo from "@assets/WestBengalCID_1754309667445.jpg";
-import jkCidLogo from "@assets/JammuandkashimirCIDLogo_1754309667445.png";
-import maharastraCidLogo from "@assets/MaharastraCID_1754309667446.png";
-import mizoramCidLogo from "@assets/nationalpoliceacademy_logo (1)_1754309667446.png";
-import odishaCidLogo from "@assets/OrissaCID_1754309667446.png";
-import telanganaStatePoliceLogo from "@assets/police_1754309846963.png";
-import telanganaGovLogo from "@assets/TSLogo_1754309846963.png";
-import cyberabadPoliceLogo from "@assets/HeadLogo_1754309846963.png";
-import hydPoliceLogo from "@assets/hyd-police_1754309846963.png";
-import bpPoliceLogo from "@assets/bp_1754310158218.jpg";
-import chandigarhPoliceLogo from "@assets/chandigarh_1754310158218.jpg";
-import cgPoliceLogo from "@assets/cg_1754310158218.jpg";
-import hpPoliceLogo from "@assets/hp_1754310158218.jpg";
-import ddpPoliceLogo from "@assets/ddp_1754310158218.png";
-import gpPoliceLogo from "@assets/gp_1754310158218.jpg";
-import gp2PoliceLogo from "@assets/gp2_1754310158219.jpg";
-import hp2PoliceLogo from "@assets/hp2_1754310158219.jpg";
-import jkPoliceLogo from "@assets/jk_1754310158219.jpg";
-import jhPoliceLogo from "@assets/jh_1754310158219.jpg";
-import kpPoliceLogo from "@assets/kp_1754310158219.jpg";
-import kePoliceLogo from "@assets/ke_1754310158220.jpg";
-import andamanPoliceLogo from "@assets/andaman_1754310318707.jpg";
-import apPoliceLogo from "@assets/ap_1754310336571.jpg";
-import arunachalPoliceLogo from "@assets/ap2_1754310353719.jpg";
-import assamPoliceLogo from "@assets/ap3_1754310367811.jpg";
-import dnhPoliceLogo from "@assets/dnhp_1754310421743.png";
-import mpPoliceLogo from "@assets/mp_1754310449139.jpg";
-import mahPoliceLogo from "@assets/mah_1754310460101.jpg";
+import { LOGO_PLACEHOLDERS, createLogoPlaceholder } from "@/utils/placeholders";
 
 interface LinkItem {
   title: string;
@@ -57,63 +21,63 @@ export default function LinksPage() {
       url: "http://www.bprd.nic.in/",
       description: "Bureau of Police Research and Development",
       category: "Central Agencies",
-      image: bprdLogo
+      image: LOGO_PLACEHOLDERS.bprd
     },
     {
       title: "Central Bureau of Investigation",
       url: "http://cbi.gov.in/",
       description: "Premier investigating agency of India",
       category: "Central Agencies",
-      image: cbiLogo
+      image: LOGO_PLACEHOLDERS.cbi
     },
     {
       title: "@Cyber Dost 2018",
       url: "https://twitter.com/cyberdost?lang=en",
       description: "Cyber security awareness initiative",
       category: "Central Agencies",
-      image: cyberDostLogo
+      image: LOGO_PLACEHOLDERS.cyberDost
     },
     {
       title: "Cybercrime.gov.in",
       url: "https://cybercrime.gov.in/cybercitizen/home.htm",
       description: "National cybercrime reporting portal",
       category: "Central Agencies",
-      image: cybercrimeLogo
+      image: LOGO_PLACEHOLDERS.cybercrime
     },
     {
       title: "Ministry of Home Affairs",
       url: "https://mha.gov.in/",
       description: "Government of India, Ministry of Home Affairs",
       category: "Central Agencies",
-      image: mhaLogo
+      image: LOGO_PLACEHOLDERS.mha
     },
     {
       title: "Narcotics Control Bureau",
       url: "http://narcoticsindia.nic.in/",
       description: "Nodal drug law enforcement agency",
       category: "Central Agencies",
-      image: ncbLogo
+      image: LOGO_PLACEHOLDERS.ncb
     },
     {
       title: "National Investigation Agency",
       url: "http://www.nia.gov.in/",
       description: "Counter-terrorism task force of India",
       category: "Central Agencies",
-      image: niaLogo
+      image: LOGO_PLACEHOLDERS.nia
     },
     {
       title: "National Crime Records Bureau",
       url: "http://ncrb.gov.in/",
       description: "Repository of information on crime and criminals",
       category: "Central Agencies",
-      image: ncrbLogo
+      image: LOGO_PLACEHOLDERS.ncrb
     },
     {
       title: "Sardar Vallabhbhai Patel National Police Academy",
       url: "http://www.svpnpa.gov.in/",
       description: "Premier police training academy",
       category: "Central Agencies",
-      image: svpnpaLogo
+      image: LOGO_PLACEHOLDERS.svpnpa
     },
 
     // Other States - CID
@@ -128,35 +92,35 @@ export default function LinksPage() {
       url: "http://crimebranchjkpolice.nic.in/",
       description: "Crime Branch, J&K Police",
       category: "Other States - CID",
-      image: jkCidLogo
+      image: LOGO_PLACEHOLDERS.jkCid
     },
     {
       title: "Maharashtra CID",
       url: "http://mahacid.com/",
       description: "Crime Investigation Department, Maharashtra",
       category: "Other States - CID",
-      image: maharastraCidLogo
+      image: LOGO_PLACEHOLDERS.maharastraCid
     },
     {
       title: "Mizoram CID",
       url: "https://cidcrime.mizoram.gov.in/",
       description: "Crime Investigation Department, Mizoram",
       category: "Other States - CID",
-      image: mizoramCidLogo
+      image: LOGO_PLACEHOLDERS.mizoramCid
     },
     {
       title: "Odisha CID",
       url: "http://odishapolicecidcb.gov.in/",
       description: "Crime Investigation Department, Odisha",
       category: "Other States - CID",
-      image: odishaCidLogo
+      image: LOGO_PLACEHOLDERS.odishaCid
     },
     {
       title: "West Bengal CID",
       url: "https://cidwestbengal.gov.in/",
       description: "Crime Investigation Department, West Bengal",
       category: "Other States - CID",
-      image: westBengalCidLogo
+      image: LOGO_PLACEHOLDERS.westBengalCid
     },
 
     // Telangana State
@@ -165,28 +129,28 @@ export default function LinksPage() {
       url: "http://www.cyberabadpolice.gov.in/",
       description: "Cyberabad Police Commissionerate",
       category: "Telangana State",
-      image: cyberabadPoliceLogo
+      image: LOGO_PLACEHOLDERS.cyberabadPolice
     },
     {
       title: "Hyderabad Police",
       url: "http://www.hyderabadpolice.gov.in/",
       description: "Hyderabad City Police",
       category: "Telangana State",
-      image: hydPoliceLogo
+      image: LOGO_PLACEHOLDERS.hydPolice
     },
     {
       title: "Telangana State Police",
       url: "http://www.tspolice.gov.in/",
       description: "Official website of Telangana State Police",
       category: "Telangana State",
-      image: telanganaStatePoliceLogo
+      image: LOGO_PLACEHOLDERS.telanganaStatePolice
     },
     {
       title: "Telangana State Government",
       url: "http://www.telangana.gov.in/",
       description: "Official website of Government of Telangana",
       category: "Telangana State",
-      image: telanganaGovLogo
+      image: LOGO_PLACEHOLDERS.telanganaGov
     },
 
     // Other States - Police (Major states only for brevity)
@@ -195,133 +159,133 @@ export default function LinksPage() {
       url: "http://www.police.andaman.gov.in",
       description: "Police Department, Port Blair",
       category: "Other States - Police",
-      image: andamanPoliceLogo
+      image: createLogoPlaceholder("Andaman Police")
     },
     {
       title: "Andhra Pradesh Police",
       url: "http://www.appolice.gov.in",
       description: "Andhra Pradesh Police, Amaravathi",
       category: "Other States - Police",
-      image: apPoliceLogo
+      image: createLogoPlaceholder("AP Police")
     },
     {
       title: "Arunachal Pradesh Police",
       url: "http://www.arunpol.nic.in",
       description: "Arunachal Pradesh Police, Itanagar",
       category: "Other States - Police",
-      image: arunachalPoliceLogo
+      image: createLogoPlaceholder("Arunachal Police")
     },
     {
       title: "Assam Police",
       url: "http://www.assampolice.gov.in",
       description: "Assam Police, Dispur",
       category: "Other States - Police",
-      image: assamPoliceLogo
+      image: createLogoPlaceholder("Assam Police")
     },
     {
       title: "Bihar Police",
       url: "http://www.biharpolice.bih.nic.in",
       description: "Bihar Police, Patna",
       category: "Other States - Police",
-      image: bpPoliceLogo
+      image: createLogoPlaceholder("BP Police")
     },
     {
       title: "Chandigarh Police",
       url: "http://chandigarhpolice.gov.in/",
       description: "Chandigarh Police",
       category: "Other States - Police",
-      image: chandigarhPoliceLogo
+      image: createLogoPlaceholder("Chandigarh Police")
     },
     {
       title: "Chhattisgarh Police",
       url: "http://www.cgpolice.gov.in",
       description: "Chhattisgarh Police, Raipur",
       category: "Other States - Police",
-      image: cgPoliceLogo
+      image: createLogoPlaceholder("CG Police")
     },
     {
       title: "Dadra and Nagar Haveli Police",
       url: "http://www.dnhpolice.gov.in",
       description: "DNH Police, Silvassa",
       category: "Other States - Police",
-      image: dnhPoliceLogo
+      image: createLogoPlaceholder("DNH Police")
     },
     {
       title: "Daman and Diu Police",
       url: "http://www.ddpolice.gov.in",
       description: "Daman and Diu Police",
       category: "Other States - Police",
-      image: ddpPoliceLogo
+      image: createLogoPlaceholder("DDP Police")
     },
     {
       title: "Goa Police",
       url: "https://www.goapolice.gov.in/",
       description: "Goa Police, Panaji",
       category: "Other States - Police",
-      image: gpPoliceLogo
+      image: createLogoPlaceholder("GP Police")
     },
     {
       title: "Gujarat Police",
       url: "https://police.gujarat.gov.in",
       description: "Gujarat Police, Gandhinagar",
       category: "Other States - Police",
-      image: gp2PoliceLogo
+      image: createLogoPlaceholder("GP Police")
     },
     {
       title: "Haryana Police",
       url: "http://www.haryanapoliceonline.gov.in",
       description: "Haryana Police, Chandigarh",
       category: "Other States - Police",
-      image: hp2PoliceLogo
+      image: createLogoPlaceholder("HP Police")
     },
     {
       title: "Himachal Pradesh Police",
       url: "http://www.citizenportal.hppolice.gov.in",
       description: "Himachal Pradesh Police, Shimla",
       category: "Other States - Police",
-      image: hpPoliceLogo
+      image: createLogoPlaceholder("HP Police")
     },
     {
       title: "Jammu & Kashmir Police",
       url: "http://www.jkpolice.gov.in",
       description: "J&K Police, Srinagar & Jammu",
       category: "Other States - Police",
-      image: jkPoliceLogo
+      image: createLogoPlaceholder("J&K Police")
     },
     {
       title: "Jharkhand Police",
       url: "https://jhpolice.gov.in/",
       description: "Jharkhand Police, Ranchi",
       category: "Other States - Police",
-      image: jhPoliceLogo
+      image: createLogoPlaceholder("JH Police")
     },
     {
       title: "Karnataka Police",
       url: "http://www.ksp.gov.in",
       description: "Karnataka State Police, Bangalore",
       category: "Other States - Police",
-      image: kpPoliceLogo
+      image: createLogoPlaceholder("KP Police")
     },
     {
       title: "Kerala Police",
       url: "http://www.keralapolice.org",
       description: "Kerala Police, Thiruvananthapuram",
       category: "Other States - Police",
-      image: kePoliceLogo
+      image: createLogoPlaceholder("KE Police")
     },
     {
       title: "Madhya Pradesh Police",
       url: "http://www.mppolice.gov.in",
       description: "Madhya Pradesh Police, Bhopal",
       category: "Other States - Police",
-      image: mpPoliceLogo
+      image: createLogoPlaceholder("MP Police")
     },
     {
       title: "Maharashtra Police",
       url: "http://www.mahapolice.gov.in",
       description: "Maharashtra Police, Mumbai",
       category: "Other States - Police",
-      image: mahPoliceLogo
+      image: createLogoPlaceholder("MH Police")
     }
   ];
 

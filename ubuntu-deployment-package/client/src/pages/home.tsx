@@ -30,7 +30,6 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import adgpImagePath from "@assets/adgpImage_1753520299812.png";
 // Removed unused import
 import { useQuery } from "@tanstack/react-query";
 
@@ -209,9 +208,13 @@ export default function Home() {
                   {/* Director Photo */}
                   <div className="flex-shrink-0">
                     <img
-                      src={directorInfo?.photoPath ? `/${directorInfo.photoPath}` : adgpImagePath}
+                      src={directorInfo?.photoPath ? `/${directorInfo.photoPath}` : "/uploads/police-logo.png"}
                       alt={directorInfo?.name || "Director General of Police"}
                       className="w-32 h-40 object-cover rounded-lg"
+                      onError={(e) => {
+                        // Fallback to a placeholder if image fails to load
+                        e.currentTarget.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjE2MCIgdmlld0JveD0iMCAwIDEyOCAxNjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjgiIGhlaWdodD0iMTYwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik02NCA4MEM3MS43MzIgODAgNzggNzMuNzMyIDc4IDY2Qzc4IDU4LjI2OCA3MS43MzIgNTIgNjQgNTJDNTYuMjY4IDUyIDUwIDU4LjI2OCA1MCA2NkM1MCA3My43MzIgNTYuMjY4IDgwIDY0IDgwWk02NCA4MEMzNS44MiA4MCAzNiA5NyAzNiAxMDhIMTIwQzEyMCA5NyAxMjAuMTggODAgOTIgODBINjRaIiBmaWxsPSIjOUI5QkFCIi8+Cjx0ZXh0IHg9IjY0IiB5PSIxNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzlCOUJBQiI+RGlyZWN0b3I8L3RleHQ+Cjwvc3ZnPg==";
+                      }}
                     />
                   </div>
 
