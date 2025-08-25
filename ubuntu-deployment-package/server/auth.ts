@@ -7,7 +7,7 @@ import { promisify } from "util";
 import bcrypt from "bcrypt";
 import { storage } from "./storage";
 import { verifyCaptcha } from "./captcha";
-import { User as SelectUser, LoginData } from "@shared/schema";
+import { User as SelectUser, LoginData } from "../shared/schema.js";
 import { validatePassword, trackLoginAttempt, logSecurityEvent, sanitizeInput } from "./security";
 import connectPg from "connect-pg-simple";
 import createMemoryStore from "memorystore";

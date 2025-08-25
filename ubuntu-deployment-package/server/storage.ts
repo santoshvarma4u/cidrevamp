@@ -45,7 +45,7 @@ import {
   type InsertAlert,
   type NclContent,
   type InsertNclContent,
-} from "@shared/schema";
+} from "../shared/schema.js";
 import { db } from "./db";
 import { eq, desc, asc, and, like, sql } from "drizzle-orm";
 
