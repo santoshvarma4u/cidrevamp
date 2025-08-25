@@ -25,6 +25,26 @@ services:
       timeout: 5s
       retries: 5
 
+  # pgAdmin - Web-based PostgreSQL Administration (Development)
+  pgadmin-dev:
+    image: dpage/pgadmin4:latest
+    container_name: cid-pgadmin-dev
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@cid.local
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "5051:80"
+    volumes:
+      - pgadmin_dev_data:/var/lib/pgadmin
+    networks:
+      - cid-dev-network
+    depends_on:
+      postgres-dev:
+        condition: service_healthy
+    restart: unless-stopped
+
   # Development App (hot reload enabled)
   app-dev:
     build:
@@ -73,6 +93,8 @@ volumes:
   postgres_dev_data:
     driver: local
   dev_uploads:
+    driver: local
+  pgadmin_dev_data:
     driver: local
 
 networks:
