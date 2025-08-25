@@ -15,26 +15,26 @@ fi
 if [ ! -f .env.production ]; then
     echo "📝 Creating production environment file..."
     
-    # Generate secure passwords
-    DB_PASSWORD=$(openssl rand -base64 32 | tr -d /=+ | cut -c -25)
-    SESSION_SECRET=$(openssl rand -base64 64)
+    # Generate secure passwords (remove special characters that cause issues)
+    DB_PASSWORD=$(openssl rand -base64 32 | tr -d '/=+' | cut -c -25)
+    SESSION_SECRET=$(openssl rand -base64 64 | tr -d '/=+' | cut -c -50)
     
-    # Create environment file
+    # Create environment file with proper quoting
     cat > .env.production << EOF
 # Production Environment Configuration
 NODE_ENV=production
 PORT=5000
 
 # Database Configuration
-DB_PASSWORD=$DB_PASSWORD
-DATABASE_URL=postgresql://ciduser:$DB_PASSWORD@postgres:5432/ciddb_prod
+DB_PASSWORD="$DB_PASSWORD"
+DATABASE_URL="postgresql://ciduser:$DB_PASSWORD@postgres:5432/ciddb_prod"
 
 # Session Security
-SESSION_SECRET=$SESSION_SECRET
+SESSION_SECRET="$SESSION_SECRET"
 
 # PostgreSQL Environment Variables
 PGUSER=ciduser
-PGPASSWORD=$DB_PASSWORD
+PGPASSWORD="$DB_PASSWORD"
 PGDATABASE=ciddb_prod
 PGHOST=postgres
 PGPORT=5432

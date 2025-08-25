@@ -1,8 +1,27 @@
 # Multi-stage build for production optimization
 FROM node:20-alpine AS builder
 
+# Install build dependencies for canvas and native modules
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    make \
+    g++ \
+    cairo-dev \
+    jpeg-dev \
+    pango-dev \
+    musl-dev \
+    giflib-dev \
+    pixman-dev \
+    pangomm-dev \
+    libjpeg-turbo-dev \
+    freetype-dev
+
 # Set working directory
 WORKDIR /app
+
+# Set Python path for node-gyp before installing packages
+ENV PYTHON=/usr/bin/python3
 
 # Copy package files
 COPY package*.json ./
@@ -19,8 +38,22 @@ RUN chmod +x scripts/build-production.sh && ./scripts/build-production.sh
 # Production stage
 FROM node:20-alpine AS production
 
-# Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+# Install dependencies required for canvas and other native modules
+RUN apk add --no-cache \
+    dumb-init \
+    python3 \
+    py3-pip \
+    make \
+    g++ \
+    cairo-dev \
+    jpeg-dev \
+    pango-dev \
+    musl-dev \
+    giflib-dev \
+    pixman-dev \
+    pangomm-dev \
+    libjpeg-turbo-dev \
+    freetype-dev
 
 # Create app user
 RUN addgroup -g 1001 -S nodejs
@@ -32,8 +65,11 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
+# Set Python path for node-gyp
+ENV PYTHON=/usr/bin/python3
+
 # Install only production dependencies
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 # Copy built application from builder stage
 COPY --from=builder --chown=nextjs:nodejs /app/dist ./dist
