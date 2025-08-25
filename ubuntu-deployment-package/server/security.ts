@@ -194,7 +194,7 @@ export const CSP_CONFIG = {
     styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
     fontSrc: ["'self'", "https://fonts.gstatic.com"],
     scriptSrc: process.env.NODE_ENV === 'production' 
-      ? ["'self'"]
+      ? ["'self'", "'unsafe-inline'", "'unsafe-eval'"] // Allow inline scripts for Vite builds
       : ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // Dev mode for Vite
     imgSrc: ["'self'", "data:", "https:", "blob:"],
     connectSrc: ["'self'", "ws:", "wss:"],
