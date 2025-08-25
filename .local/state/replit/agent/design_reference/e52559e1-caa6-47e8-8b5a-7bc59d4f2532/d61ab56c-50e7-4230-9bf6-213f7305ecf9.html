@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Investigation Department - Telangana State Police</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'gov-blue': '#1e40af',
+                    'gov-blue-light': '#3b82f6',
+                    'gov-success': '#10b981',
+                    'gov-warning': '#f59e0b',
+                    'gov-error': '#ef4444'
+                },
+                fontFamily: {
+                    'sans': ['Inter', 'sans-serif']
+                }
+            }
+        }
+    };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- @COMPONENT: Header Navigation -->
+    <header class="bg-white shadow-lg border-b-4 border-gov-blue sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <!-- Top Bar -->
+            <div class="bg-gov-blue text-white text-sm py-2 -mx-4 px-4">
+                <div class="container mx-auto flex justify-between items-center">
+                    <div class="flex items-center space-x-6">
+                        <span><i class="fas fa-phone mr-2"></i>Helpline: 100</span>
+                        <span><i class="fas fa-envelope mr-2"></i>cid@tspolice.gov.in</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button data-event="click:toggleLanguage" class="hover:text-gov-warning transition-colors">
+                            <i class="fas fa-language mr-1"></i>తెలుగు | English
+                        </button>
+                        <button data-event="click:showAdminLogin" class="bg-gov-warning px-3 py-1 rounded text-xs font-medium hover:bg-yellow-500 transition-colors">
+                            <i class="fas fa-user-shield mr-1"></i>Admin Login
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Navigation -->
+            <nav class="py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <!-- Government emblem and logo placeholder -->
+                        <div class="flex items-center space-x-3">
+                            <div class="w-16 h-16 bg-gov-blue rounded-full flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-white text-2xl"></i>
+                            </div>
+                            <div>
+                                <h1 class="text-xl font-bold text-gray-800">Crime Investigation Department</h1>
+                                <p class="text-sm text-gray-600">Telangana State Police</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Desktop Navigation -->
+                    <div class="hidden lg:flex items-center space-x-6">
+                        <a href="#home" class="text-gray-700 hover:text-gov-blue font-medium transition-colors">Home</a>
+                        <div class="relative group">
+                            <button class="text-gray-700 hover:text-gov-blue font-medium flex items-center">
+                                About CID <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <!-- @FUNCTIONALITY: Dropdown menu for CID information -->
+                        </div>
+                        <div class="relative group">
+                            <button class="text-gray-700 hover:text-gov-blue font-medium flex items-center">
+                                Wings <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                        </div>
+                        <a href="#services" class="text-gray-700 hover:text-gov-blue font-medium transition-colors">Services</a>
+                        <a href="#safety" class="text-gray-700 hover:text-gov-blue font-medium transition-colors">Safety Tips</a>
+                        <a href="#contact" class="text-gray-700 hover:text-gov-blue font-medium transition-colors">Contact</a>
+                        <button data-event="click:openReportCrime" class="bg-gov-error text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>Report Crime
+                        </button>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="lg:hidden text-gray-700 hover:text-gov-blue">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header Navigation -->
+
+    <!-- @COMPONENT: Hero Section -->
+    <section class="relative bg-gradient-to-r from-gov-blue to-blue-800 text-white">
+        <!-- Modern government building with Indian flag -->
+        <div class="absolute inset-0 bg-black/40"></div>
+        <div style="background-image: url('https://images.unsplash.com/photo-1590012314607-cda9d9b699ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080'); background-size: cover; background-position: center;" class="absolute inset-0"></div>
+        
+        <div class="relative container mx-auto px-4 py-20">
+            <div class="max-w-4xl">
+                <h1 class="text-5xl font-bold mb-6 leading-tight">
+                    Crime Investigation Department
+                    <span class="block text-2xl font-normal text-blue-200 mt-2">Telangana State Police</span>
+                </h1>
+                <p class="text-xl mb-8 text-blue-100 leading-relaxed max-w-2xl">
+                    Ensuring transparent, impartial, efficient and systematic investigation using state-of-the-art equipment with quality forensic support for the safety and security of Telangana citizens.
+                </p>
+                
+                <div class="flex flex-wrap gap-4">
+                    <button data-event="click:reportCrime" class="bg-gov-error hover:bg-red-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
+                        <i class="fas fa-file-alt mr-2"></i>File Complaint
+                    </button>
+                    <button data-event="click:caseStatus" class="bg-white/20 hover:bg-white/30 text-white border-2 border-white/30 px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
+                        <i class="fas fa-search mr-2"></i>Check Case Status
+                    </button>
+                    <button data-event="click:emergencyContact" class="bg-gov-warning hover:bg-yellow-500 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
+                        <i class="fas fa-phone mr-2"></i>Emergency: 100
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i class="fas fa-chevron-down text-white/70 text-xl"></i>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Hero Section -->
+
+    <!-- @COMPONENT: Quick Services -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Quick Services</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Access essential CID services and information quickly and efficiently</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div data-service="crime-report" class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow cursor-pointer group">
+                    <div class="w-16 h-16 bg-gov-error/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gov-error/20 transition-colors">
+                        <i class="fas fa-file-alt text-gov-error text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">File Complaint</h3>
+                    <p class="text-gray-600 text-sm mb-4">Report crimes and file official complaints online</p>
+                    <button class="text-gov-blue font-medium text-sm hover:text-blue-600 transition-colors">
+                        File Now <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+                
+                <div data-service="case-status" class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow cursor-pointer group">
+                    <div class="w-16 h-16 bg-gov-blue/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-gov-blue/20 transition-colors">
+                        <i class="fas fa-search text-gov-blue text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Case Status</h3>
+                    <p class="text-gray-600 text-sm mb-4">Track the progress of your filed complaints</p>
+                    <button class="text-gov-blue font-medium text-sm hover:text-blue-600 transition-colors">
+                        Check Status <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+                
+                <div data-service="cyber-help" class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow cursor-pointer group">
+                    <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors">
+                        <i class="fas fa-shield-alt text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Cyber Crime Help</h3>
+                    <p class="text-gray-600 text-sm mb-4">Report online fraud and cyber crimes</p>
+                    <button class="text-gov-blue font-medium text-sm hover:text-blue-600 transition-colors">
+                        Get Help <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+                
+                <div data-service="women-safety" class="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow cursor-pointer group">
+                    <div class="w-16 h-16 bg-pink-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-pink-200 transition-colors">
+                        <i class="fas fa-female text-pink-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Women Safety</h3>
+                    <p class="text-gray-600 text-sm mb-4">Access women and child protection services</p>
+                    <button class="text-gov-blue font-medium text-sm hover:text-blue-600 transition-colors">
+                        Learn More <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Quick Services -->
+
+    <!-- @COMPONENT: CID Wings Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Specialized Investigation Wings</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Our dedicated wings handle specialized crimes with expert investigation teams and modern forensic support</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Economic Offences Wing -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                    <!-- Professional police officers in meeting room discussing case files -->
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=300" alt="Police officers investigating economic crimes" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-chart-line text-green-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Economic Offences Wing</h3>
+                                <p class="text-gray-600 text-sm">Fighting Financial Crimes</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">Specialized investigation of financial fraud, embezzlement, money laundering, and corporate crimes affecting the economic security of Telangana.</p>
+                        <ul class="text-sm text-gray-600 mb-6 space-y-2">
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Banking and Financial Fraud</li>
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Corporate Embezzlement</li>
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Investment Scams</li>
+                        </ul>
+                        <button data-wing="economic" class="text-gov-blue font-medium hover:text-blue-600 transition-colors">
+                            Learn More <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Cyber Crimes Wing -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                    <!-- Cybersecurity expert working with multiple computer screens and digital forensics equipment -->
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=300" alt="Cybersecurity investigation with digital forensics" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-laptop-code text-blue-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Cyber Crimes Wing</h3>
+                                <p class="text-gray-600 text-sm">Digital Investigation Unit</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">Advanced digital forensics and cybercrime investigation using cutting-edge technology to combat online fraud, hacking, and digital harassment.</p>
+                        <ul class="text-sm text-gray-600 mb-6 space-y-2">
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Online Fraud Investigation</li>
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Digital Forensics</li>
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Social Media Crimes</li>
+                        </ul>
+                        <button data-wing="cyber" class="text-gov-blue font-medium hover:text-blue-600 transition-colors">
+                            Learn More <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- General Offences Wing -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                    <!-- Crime scene investigation with forensic evidence collection equipment -->
+                    <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=300" alt="Crime scene investigation with forensic equipment" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-user-secret text-red-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">General Offences Wing</h3>
+                                <p class="text-gray-600 text-sm">Criminal Investigation Unit</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">Comprehensive investigation of serious crimes including murder, robbery, kidnapping, and other major criminal offences across Telangana state.</p>
+                        <ul class="text-sm text-gray-600 mb-6 space-y-2">
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Murder Investigations</li>
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Robbery & Theft Cases</li>
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Kidnapping Cases</li>
+                        </ul>
+                        <button data-wing="general" class="text-gov-blue font-medium hover:text-blue-600 transition-colors">
+                            Learn More <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Child and Women Protection Wing -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                    <!-- Professional female police officers in a supportive environment for victims -->
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=300" alt="Female police officers providing support services" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-heart text-pink-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Child & Women Protection Wing</h3>
+                                <p class="text-gray-600 text-sm">Safety & Protection Unit</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4">Dedicated protection and investigation services for crimes against women and children, ensuring sensitive handling of cases with specialized support systems.</p>
+                        <ul class="text-sm text-gray-600 mb-6 space-y-2">
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Domestic Violence Cases</li>
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Child Abuse Investigation</li>
+                            <li><i class="fas fa-check text-gov-success mr-2"></i>Women Harassment Cases</li>
+                        </ul>
+                        <button data-wing="protection" class="text-gov-blue font-medium hover:text-blue-600 transition-colors">
+                            Learn More <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: CID Wings Section -->
+
+    <!-- @COMPONENT: Safety Advisories -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Safety Advisories & Awareness</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Stay informed about latest threats and protection measures to keep yourself and your family safe</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6 border border-red-200">
+                    <div class="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-exclamation-triangle text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-red-800 mb-3">Cyber Fraud Alert</h3>
+                    <p class="text-red-700 text-sm mb-4">Beware of fake lottery messages, OTP frauds, and suspicious banking calls. Never share your personal information.</p>
+                    <button class="text-red-600 font-medium text-sm hover:text-red-800 transition-colors">
+                        Read Full Alert <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+                
+                <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
+                    <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-credit-card text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-3">Banking Security</h3>
+                    <p class="text-yellow-700 text-sm mb-4">Always verify banking communications directly with your bank. Use secure networks for online transactions.</p>
+                    <button class="text-yellow-600 font-medium text-sm hover:text-yellow-800 transition-colors">
+                        Security Tips <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+                
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                    <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-mobile-alt text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-blue-800 mb-3">Social Media Safety</h3>
+                    <p class="text-blue-700 text-sm mb-4">Protect your privacy settings, avoid sharing personal details, and report suspicious accounts immediately.</p>
+                    <button class="text-blue-600 font-medium text-sm hover:text-blue-800 transition-colors">
+                        Safety Guide <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Emergency Contacts -->
+            <div class="mt-12 bg-gov-blue rounded-xl p-8 text-white text-center">
+                <h3 class="text-2xl font-bold mb-4">Emergency Contacts</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <div class="text-3xl font-bold text-yellow-300">100</div>
+                        <div class="text-sm">Police Emergency</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-yellow-300">1930</div>
+                        <div class="text-sm">Cyber Crime Helpline</div>
+                    </div>
+                    <div>
+                        <div class="text-3xl font-bold text-yellow-300">181</div>
+                        <div class="text-sm">Women Helpline</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Safety Advisories -->
+
+    <!-- @COMPONENT: Latest News & Updates -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Latest News & Updates</h2>
+                    <p class="text-gray-600">Stay updated with latest CID activities and announcements</p>
+                </div>
+                <button data-event="click:viewAllNews" class="text-gov-blue font-medium hover:text-blue-600 transition-colors">
+                    View All News <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            
+            <!-- @MAP: news.map(article => ( -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <article data-mock="true" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                    <div class="h-48 bg-gradient-to-r from-gov-blue to-blue-600 flex items-center justify-center">
+                        <i class="fas fa-newspaper text-white text-4xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-xs text-gray-500 mb-2">March 15, 2024</div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Major Economic Fraud Case Solved</h3>
+                        <p class="text-gray-600 text-sm mb-4">CID Economic Offences Wing successfully investigates multi-crore investment fraud case...</p>
+                        <button class="text-gov-blue font-medium text-sm hover:text-blue-600 transition-colors">
+                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </article>
+                
+                <article data-mock="true" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                    <div class="h-48 bg-gradient-to-r from-purple-500 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-shield-alt text-white text-4xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-xs text-gray-500 mb-2">March 12, 2024</div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Cyber Crime Awareness Campaign</h3>
+                        <p class="text-gray-600 text-sm mb-4">State-wide campaign launched to educate citizens about online safety and fraud prevention...</p>
+                        <button class="text-gov-blue font-medium text-sm hover:text-blue-600 transition-colors">
+                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </article>
+                
+                <article data-mock="true" class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                    <div class="h-48 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
+                        <i class="fas fa-award text-white text-4xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-xs text-gray-500 mb-2">March 10, 2024</div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">CID Team Receives National Recognition</h3>
+                        <p class="text-gray-600 text-sm mb-4">Telangana CID honored for outstanding performance in crime investigation and prevention...</p>
+                        <button class="text-gov-blue font-medium text-sm hover:text-blue-600 transition-colors">
+                            Read More <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </article>
+            </div>
+            <!-- @END_MAP )) -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Latest News & Updates -->
+
+    <!-- @COMPONENT: Admin Panel Preview -->
+    <section class="py-16 bg-white" id="admin-panel" style="display: none;">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">CMS Admin Panel</h2>
+                    <p class="text-gray-600">Comprehensive content management system for website administration</p>
+                </div>
+                
+                <!-- Admin Login Form -->
+                <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-8">
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="w-16 h-16 bg-gov-blue rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user-shield text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Admin Authentication</h3>
+                            <p class="text-gray-600 text-sm">Secure login for authorized personnel</p>
+                        </div>
+                    </div>
+                    
+                    <form data-form="admin-login" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                            <input type="text" data-bind="admin.username" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gov-blue focus:border-transparent transition-colors" placeholder="Enter your username">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                            <input type="password" data-bind="admin.password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gov-blue focus:border-transparent transition-colors" placeholder="Enter your password">
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember" class="rounded border-gray-300 text-gov-blue focus:ring-gov-blue">
+                            <label for="remember" class="ml-2 text-sm text-gray-600">Remember me</label>
+                        </div>
+                        <button type="submit" data-event="click:adminLogin" class="w-full bg-gov-blue text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Login to Admin Panel
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Admin Dashboard Preview -->
+                <div class="bg-gray-50 rounded-xl p-8">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-6">Admin Dashboard Features</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-edit text-gov-blue mr-3"></i>
+                                <h5 class="font-medium text-gray-800">Content Management</h5>
+                            </div>
+                            <p class="text-sm text-gray-600">WYSIWYG editor for all website content</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-newspaper text-green-600 mr-3"></i>
+                                <h5 class="font-medium text-gray-800">News Management</h5>
+                            </div>
+                            <p class="text-sm text-gray-600">Add, edit, and publish news articles</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-image text-purple-600 mr-3"></i>
+                                <h5 class="font-medium text-gray-800">Media Library</h5>
+                            </div>
+                            <p class="text-sm text-gray-600">Upload and organize images/documents</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-users text-blue-600 mr-3"></i>
+                                <h5 class="font-medium text-gray-800">User Management</h5>
+                            </div>
+                            <p class="text-sm text-gray-600">Manage admin roles and permissions</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-envelope text-yellow-600 mr-3"></i>
+                                <h5 class="font-medium text-gray-800">Contact Forms</h5>
+                            </div>
+                            <p class="text-sm text-gray-600">View and respond to citizen inquiries</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-chart-bar text-red-600 mr-3"></i>
+                                <h5 class="font-medium text-gray-800">Analytics</h5>
+                            </div>
+                            <p class="text-sm text-gray-600">Website traffic and user analytics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Admin Panel Preview -->
+
+    <!-- @COMPONENT: Footer -->
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Organization Info -->
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-12 h-12 bg-gov-blue rounded-full flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold">CID Telangana</h3>
+                            <p class="text-gray-400 text-sm">State Police</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Crime Investigation Department, Telangana State Police - committed to transparent, efficient investigation and public safety.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">File Complaint</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Check Case Status</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Cyber Crime Help</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Women Safety</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Safety Tips</a></li>
+                    </ul>
+                </div>
+                
+                <!-- CID Wings -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">CID Wings</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Economic Offences</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">General Offences</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Cyber Crimes</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Child & Women Protection</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Civil Rights Protection</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-gov-blue mt-1 mr-3"></i>
+                            <div>
+                                <p class="text-gray-400">3rd Floor, DGP Office</p>
+                                <p class="text-gray-400">Lakadikapul, Hyderabad-004</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-gov-blue mr-3"></i>
+                            <p class="text-gray-400">Emergency: 100</p>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-gov-blue mr-3"></i>
+                            <p class="text-gray-400">cid@tspolice.gov.in</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2024 Crime Investigation Department, Telangana State Police. All rights reserved.</p>
+                <div class="flex space-x-6 text-sm">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <script>
+    (function() {
+        'use strict';
+        
+        // TODO: Implement business logic, API calls, and state management
+        
+        // Basic interactivity for demo purposes
+        const adminLoginBtn = document.querySelector('[data-event="click:showAdminLogin"]');
+        const adminPanel = document.getElementById('admin-panel');
+        
+        if (adminLoginBtn && adminPanel) {
+            adminLoginBtn.addEventListener('click', function() {
+                adminPanel.style.display = adminPanel.style.display === 'none' ? 'block' : 'none';
+                adminPanel.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+        
+        // Smooth scrolling for anchor links
+        document.addEventListener('click', function(e) {
+            const target = e.target.closest('a[href^="#"]');
+            if (target) {
+                e.preventDefault();
+                const targetId = target.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+        
+        // Service cards hover effects
+        const serviceCards = document.querySelectorAll('[data-service]');
+        serviceCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const service = this.getAttribute('data-service');
+                console.log(`Navigate to ${service} service`);
+                // TODO: Implement service navigation logic
+            });
+        });
+        
+        // Wing cards interaction
+        const wingCards = document.querySelectorAll('[data-wing]');
+        wingCards.forEach(card => {
+            const button = card.querySelector('button');
+            if (button) {
+                button.addEventListener('click', function() {
+                    const wing = card.getAttribute('data-wing');
+                    console.log(`Navigate to ${wing} wing details`);
+                    // TODO: Implement wing details navigation
+                });
+            }
+        });
+        
+        // Mobile menu toggle (placeholder)
+        const mobileMenuBtn = document.querySelector('.lg\\:hidden button');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function() {
+                console.log('Toggle mobile menu');
+                // TODO: Implement mobile menu toggle
+            });
+        }
+    })();
+    </script>
+</body>
+</html>

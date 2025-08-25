@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Investigation Department - Telangana State Police</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'heading': ['Inter', 'sans-serif'],
+                    'body': ['Open Sans', 'sans-serif'],
+                },
+                colors: {
+                    'primary': '#1E40AF',
+                    'primary-dark': '#1E3A8A',
+                    'accent': '#F59E0B',
+                    'success': '#10B981',
+                    'warning': '#F97316',
+                }
+            }
+        }
+    };
+    </script>
+</head>
+<body class="font-body bg-gray-50">
+    <!-- @COMPONENT: Header [navigation, logo, mobile menu] -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <!-- Top Government Bar -->
+        <div class="bg-primary text-white py-1 text-sm">
+            <div class="container mx-auto px-4 flex justify-between items-center">
+                <span data-mock="true">Government of Telangana | भारत सरकार</span>
+                <div class="flex space-x-4">
+                    <a href="#" class="hover:text-accent transition-colors" data-mock="true">हिंदी</a>
+                    <a href="#" class="hover:text-accent transition-colors" data-mock="true">తెలుగు</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Header -->
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <!-- Government Emblem placeholder -->
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-heading text-2xl font-bold text-gray-800" data-bind="site.title">Crime Investigation Department</h1>
+                        <p class="text-gray-600 text-sm" data-bind="site.subtitle">Telangana State Police</p>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex space-x-8">
+                    <a href="#" class="text-gray-700 hover:text-primary transition-colors font-medium" data-mock="true">Home</a>
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-primary transition-colors font-medium flex items-center" data-mock="true">
+                            About CID <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <!-- Dropdown would be implemented in React -->
+                    </div>
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-primary transition-colors font-medium flex items-center" data-mock="true">
+                            Wings <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                    </div>
+                    <a href="#" class="text-gray-700 hover:text-primary transition-colors font-medium" data-mock="true">Services</a>
+                    <a href="#" class="text-gray-700 hover:text-primary transition-colors font-medium" data-mock="true">Contact</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button class="lg:hidden text-gray-700 hover:text-primary" data-event="click:toggleMobileMenu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation (hidden by default) -->
+        <div class="lg:hidden bg-gray-50 border-t" data-mock="true" style="display: none;">
+            <!-- Mobile menu items would be dynamically generated -->
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <!-- @COMPONENT: Hero [video section, announcements] -->
+    <section class="relative bg-gradient-to-r from-primary to-primary-dark text-white">
+        <!-- Modern government building with national flag -->
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div style="background-image: url('https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&h=800'); background-size: cover; background-position: center;" class="absolute inset-0"></div>
+        
+        <div class="relative container mx-auto px-4 py-16 lg:py-24">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="font-heading text-4xl lg:text-5xl font-bold mb-6" data-bind="hero.title" data-mock="true">
+                        Ensuring Justice Through Professional Investigation
+                    </h2>
+                    <p class="text-xl text-gray-200 mb-8" data-bind="hero.description" data-mock="true">
+                        Transparent, impartial, efficient and systematic investigation using state-of-the-art equipment with quality forensic support.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#" class="bg-accent hover:bg-yellow-500 text-gray-900 px-6 py-3 rounded-lg font-semibold transition-colors" data-mock="true">
+                            Report a Crime
+                        </a>
+                        <a href="#" class="border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 rounded-lg font-semibold transition-colors" data-mock="true">
+                            Case Inquiry
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Video News Section -->
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6" data-implementation="CMS managed video content">
+                    <h3 class="font-heading text-2xl font-semibold mb-4" data-bind="news.video.title" data-mock="true">Latest News & Updates</h3>
+                    <div class="aspect-video bg-gray-900 rounded-lg mb-4 flex items-center justify-center relative">
+                        <!-- Video Player Placeholder -->
+                        <i class="fas fa-play-circle text-6xl text-white opacity-80"></i>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <div class="bg-black bg-opacity-50 text-white text-sm px-3 py-2 rounded" data-bind="news.video.current.title" data-mock="true">
+                                CID Telangana Solves Major Cybercrime Case
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @FUNCTIONALITY: Video player with admin upload capability, supports MP4/WebM formats -->
+                    <div class="text-sm text-gray-200" data-bind="news.video.current.date" data-mock="true">
+                        <i class="fas fa-calendar mr-2"></i>Published: December 15, 2024
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: Hero -->
+
+    <!-- @COMPONENT: QuickServices [emergency services, quick links] -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-exclamation-triangle text-red-500 text-2xl mr-3"></i>
+                        <h3 class="font-heading text-xl font-semibold text-red-700" data-mock="true">Emergency</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4" data-mock="true">24/7 Emergency Response</p>
+                    <div class="text-2xl font-bold text-red-600" data-bind="emergency.number" data-mock="true">100</div>
+                </div>
+
+                <div class="bg-blue-50 border-l-4 border-primary p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-file-alt text-primary text-2xl mr-3"></i>
+                        <h3 class="font-heading text-xl font-semibold text-primary" data-mock="true">Online FIR</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4" data-mock="true">File complaints online</p>
+                    <a href="#" class="text-primary font-semibold hover:underline" data-mock="true">File Now →</a>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-success p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-search text-success text-2xl mr-3"></i>
+                        <h3 class="font-heading text-xl font-semibold text-success" data-mock="true">Case Status</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4" data-mock="true">Track your case</p>
+                    <a href="#" class="text-success font-semibold hover:underline" data-mock="true">Check Status →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: QuickServices -->
+
+    <!-- @COMPONENT: WingsSection [specialized departments] -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="font-heading text-3xl lg:text-4xl font-bold text-gray-800 mb-4" data-bind="wings.title" data-mock="true">
+                    CID Specialized Wings
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-bind="wings.description" data-mock="true">
+                    Our specialized departments ensure comprehensive investigation capabilities across all crime categories
+                </p>
+            </div>
+
+            <!-- @MAP: wings.map(wing => ( -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6" data-mock="true">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-semibold mb-3" data-bind="wing.name">Economic Offences Wing</h3>
+                    <p class="text-gray-600 mb-4" data-bind="wing.description">Handles financial crimes, fraud cases, and white-collar crime investigations</p>
+                    <a href="#" class="text-primary font-semibold hover:underline" data-mock="true">Learn More →</a>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6" data-mock="true">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-gavel text-white text-2xl"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-semibold mb-3" data-bind="wing.name">General Offences Wing</h3>
+                    <p class="text-gray-600 mb-4" data-bind="wing.description">Criminal investigations, murder cases, and serious crime matters</p>
+                    <a href="#" class="text-primary font-semibold hover:underline" data-mock="true">Learn More →</a>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6" data-mock="true">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-semibold mb-3" data-bind="wing.name">Child & Women Protection Wing</h3>
+                    <p class="text-gray-600 mb-4" data-bind="wing.description">Child abuse, women safety, domestic violence investigations</p>
+                    <a href="#" class="text-primary font-semibold hover:underline" data-mock="true">Learn More →</a>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6" data-mock="true">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-laptop text-white text-2xl"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-semibold mb-3" data-bind="wing.name">Cyber Crimes Wing</h3>
+                    <p class="text-gray-600 mb-4" data-bind="wing.description">Digital forensics, online fraud, cybercrime investigation</p>
+                    <a href="#" class="text-primary font-semibold hover:underline" data-mock="true">Learn More →</a>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6" data-mock="true">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-balance-scale text-white text-2xl"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-semibold mb-3" data-bind="wing.name">Protection of Civil Rights Wing</h3>
+                    <p class="text-gray-600 mb-4" data-bind="wing.description">Constitutional rights violations, discrimination cases</p>
+                    <a href="#" class="text-primary font-semibold hover:underline" data-mock="true">Learn More →</a>
+                </div>
+
+                <div class="bg-gradient-to-br from-accent to-yellow-500 rounded-xl shadow-lg hover:shadow-xl transition-shadow p-6 text-white">
+                    <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-phone text-white text-2xl"></i>
+                    </div>
+                    <h3 class="font-heading text-xl font-semibold mb-3" data-mock="true">Need Help?</h3>
+                    <p class="mb-4 text-yellow-100" data-mock="true">Contact our specialized wings directly</p>
+                    <a href="#" class="text-white font-semibold hover:underline" data-mock="true">Contact Directory →</a>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: WingsSection -->
+
+    <!-- @COMPONENT: PhotoGallery [admin managed image collections] -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <div>
+                    <h2 class="font-heading text-3xl lg:text-4xl font-bold text-gray-800 mb-4" data-bind="gallery.title" data-mock="true">
+                        Photo Gallery
+                    </h2>
+                    <p class="text-gray-600" data-bind="gallery.description" data-mock="true">Recent events, achievements, and public awareness programs</p>
+                </div>
+                <a href="#" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors" data-mock="true">
+                    View All
+                </a>
+            </div>
+
+            <!-- Gallery Categories -->
+            <div class="flex flex-wrap gap-4 mb-8" data-implementation="CMS managed gallery categories">
+                <button class="bg-primary text-white px-4 py-2 rounded-lg font-medium" data-mock="true">All</button>
+                <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors" data-mock="true">Events</button>
+                <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors" data-mock="true">Training</button>
+                <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors" data-mock="true">Awards</button>
+                <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors" data-mock="true">Public Awareness</button>
+            </div>
+
+            <!-- Photo Grid -->
+            <!-- @MAP: gallery.photos.map(photo => ( -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Professional police officers in uniform during a ceremonial event -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="aspect-square overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=600" 
+                             alt="Police officers ceremony" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                             data-mock-image="true" />
+                    </div>
+                    <h4 class="font-semibold mt-3" data-bind="photo.title">Annual Achievement Awards</h4>
+                    <p class="text-sm text-gray-600" data-bind="photo.date">December 2024</p>
+                </div>
+
+                <!-- Modern cybersecurity operations center with multiple monitors -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="aspect-square overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=600" 
+                             alt="Cybersecurity operations center" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                             data-mock-image="true" />
+                    </div>
+                    <h4 class="font-semibold mt-3" data-bind="photo.title">Cyber Crime Wing Setup</h4>
+                    <p class="text-sm text-gray-600" data-bind="photo.date">November 2024</p>
+                </div>
+
+                <!-- Crime scene investigation equipment and forensic tools -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="aspect-square overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=600" 
+                             alt="Forensic investigation equipment" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                             data-mock-image="true" />
+                    </div>
+                    <h4 class="font-semibold mt-3" data-bind="photo.title">Forensic Lab Upgrade</h4>
+                    <p class="text-sm text-gray-600" data-bind="photo.date">October 2024</p>
+                </div>
+
+                <!-- Modern government building with Indian architecture -->
+                <div class="group cursor-pointer" data-mock="true">
+                    <div class="aspect-square overflow-hidden rounded-lg">
+                        <img src="https://pixabay.com/get/gdc7702441a3b1d80e94cbe47fb1825bee42064929e7e476c224d5c507a644e455d434d589030b7a554a0cc98762e0c4da7084b91b1f81f8b72f76e1a7933b37f_1280.jpg" 
+                             alt="Modern government building" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                             data-mock-image="true" />
+                    </div>
+                    <h4 class="font-semibold mt-3" data-bind="photo.title">New CID Headquarters</h4>
+                    <p class="text-sm text-gray-600" data-bind="photo.date">September 2024</p>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: PhotoGallery -->
+
+    <!-- @COMPONENT: SafetyAdvisories [public awareness content] -->
+    <section class="py-16 bg-gradient-to-r from-yellow-50 to-orange-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="font-heading text-3xl lg:text-4xl font-bold text-gray-800 mb-4" data-bind="safety.title" data-mock="true">
+                    Safety Advisories
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto" data-bind="safety.description" data-mock="true">
+                    Stay informed about the latest safety guidelines and protect yourself from various types of crimes
+                </p>
+            </div>
+
+            <!-- @MAP: advisories.map(advisory => ( -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-warning" data-mock="true">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-credit-card text-warning text-2xl mr-3"></i>
+                        <h3 class="font-heading text-xl font-semibold" data-bind="advisory.title">Banking Fraud Prevention</h3>
+                    </div>
+                    <ul class="text-gray-600 space-y-2 text-sm" data-bind="advisory.points" data-mock="true">
+                        <li>• Never share OTP with anyone</li>
+                        <li>• Verify bank communications independently</li>
+                        <li>• Use secure networks for transactions</li>
+                        <li>• Report suspicious activities immediately</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-primary" data-mock="true">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-wifi text-primary text-2xl mr-3"></i>
+                        <h3 class="font-heading text-xl font-semibold" data-bind="advisory.title">Cyber Security Tips</h3>
+                    </div>
+                    <ul class="text-gray-600 space-y-2 text-sm" data-bind="advisory.points" data-mock="true">
+                        <li>• Use strong, unique passwords</li>
+                        <li>• Avoid suspicious email attachments</li>
+                        <li>• Keep software updated</li>
+                        <li>• Be cautious on social media</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-success" data-mock="true">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-gift text-success text-2xl mr-3"></i>
+                        <h3 class="font-heading text-xl font-semibold" data-bind="advisory.title">Lottery Scam Awareness</h3>
+                    </div>
+                    <ul class="text-gray-600 space-y-2 text-sm" data-bind="advisory.points" data-mock="true">
+                        <li>• No legitimate lottery requires payment</li>
+                        <li>• Verify through official channels</li>
+                        <li>• Don't provide personal information</li>
+                        <li>• Report fake lottery communications</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+
+            <div class="text-center mt-12">
+                <a href="#" class="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-colors" data-mock="true">
+                    View All Safety Guidelines
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: SafetyAdvisories -->
+
+    <!-- @COMPONENT: NewsAnnouncements [latest updates] -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-12">
+                <div>
+                    <h2 class="font-heading text-3xl lg:text-4xl font-bold text-gray-800 mb-4" data-bind="news.title" data-mock="true">
+                        Latest News & Announcements
+                    </h2>
+                    <p class="text-gray-600" data-bind="news.description" data-mock="true">Stay updated with recent developments and important announcements</p>
+                </div>
+                <a href="#" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors" data-mock="true">
+                    View All News
+                </a>
+            </div>
+
+            <!-- News Ticker -->
+            <div class="bg-red-600 text-white p-4 rounded-lg mb-8 overflow-hidden" data-implementation="CMS managed news ticker">
+                <div class="flex items-center">
+                    <span class="bg-white text-red-600 px-3 py-1 rounded font-semibold mr-4 flex-shrink-0" data-mock="true">BREAKING</span>
+                    <div class="overflow-hidden">
+                        <p class="animate-pulse" data-bind="news.ticker.current" data-mock="true">
+                            CID Telangana successfully resolves major cybercrime case involving ₹50 crores fraud - Three arrested
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- @MAP: news.articles.map(article => ( -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <article class="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-shadow" data-mock="true">
+                    <!-- Professional police officers conducting investigation -->
+                    <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=300" 
+                         alt="Police investigation in progress" 
+                         class="w-full h-48 object-cover" 
+                         data-mock-image="true" />
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                            <i class="fas fa-calendar mr-2" data-mock="true"></i>
+                            <span data-bind="article.date">December 15, 2024</span>
+                        </div>
+                        <h3 class="font-heading text-xl font-semibold mb-3" data-bind="article.title">Major Economic Fraud Case Solved</h3>
+                        <p class="text-gray-600 mb-4" data-bind="article.excerpt">CID Economic Offences Wing successfully investigates multi-crore financial fraud case...</p>
+                        <a href="#" class="text-primary font-semibold hover:underline" data-mock="true">Read More →</a>
+                    </div>
+                </article>
+
+                <article class="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-shadow" data-mock="true">
+                    <!-- Modern cybersecurity monitoring center -->
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&h=300" 
+                         alt="Cybersecurity monitoring center" 
+                         class="w-full h-48 object-cover" 
+                         data-mock-image="true" />
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                            <i class="fas fa-calendar mr-2" data-mock="true"></i>
+                            <span data-bind="article.date">December 12, 2024</span>
+                        </div>
+                        <h3 class="font-heading text-xl font-semibold mb-3" data-bind="article.title">New Cyber Crime Unit Launched</h3>
+                        <p class="text-gray-600 mb-4" data-bind="article.excerpt">State-of-the-art cyber crime investigation unit equipped with latest technology...</p>
+                        <a href="#" class="text-primary font-semibold hover:underline" data-mock="true">Read More →</a>
+                    </div>
+                </article>
+
+                <article class="bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-shadow" data-mock="true">
+                    <!-- Government building representing official announcements -->
+                    <img src="https://pixabay.com/get/gacb7f6386a7a30d85366793d9787b86ab1be42fd840bd9e4ed6b2fd8a28792d875265b0f82a2d98ae4d5bab7fd308371f6f1f4f2abfe7f3000bf2c0b697a781c_1280.jpg" 
+                         alt="Government building" 
+                         class="w-full h-48 object-cover" 
+                         data-mock-image="true" />
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-gray-600 mb-2">
+                            <i class="fas fa-calendar mr-2" data-mock="true"></i>
+                            <span data-bind="article.date">December 10, 2024</span>
+                        </div>
+                        <h3 class="font-heading text-xl font-semibold mb-3" data-bind="article.title">Public Awareness Program</h3>
+                        <p class="text-gray-600 mb-4" data-bind="article.excerpt">CID organizes district-wide awareness program on cyber safety and fraud prevention...</p>
+                        <a href="#" class="text-primary font-semibold hover:underline" data-mock="true">Read More →</a>
+                    </div>
+                </article>
+            </div>
+            <!-- @END_MAP )) -->
+        </div>
+    </section>
+    <!-- @END_COMPONENT: NewsAnnouncements -->
+
+    <!-- @COMPONENT: ContactSection [contact information, office details] -->
+    <section class="py-16 bg-primary text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="font-heading text-3xl lg:text-4xl font-bold mb-6" data-bind="contact.title" data-mock="true">
+                        Contact Crime Investigation Department
+                    </h2>
+                    <p class="text-blue-100 text-lg mb-8" data-bind="contact.description" data-mock="true">
+                        We are committed to serving the people of Telangana with transparency and efficiency. Reach out to us for any assistance.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-accent text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold mb-2" data-mock="true">Address</h3>
+                                <p class="text-blue-100" data-bind="contact.address" data-mock="true">
+                                    3rd Floor, DGP Office<br>
+                                    Lakdikapul, Hyderabad - 004<br>
+                                    Telangana, India
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <i class="fas fa-phone text-accent text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold mb-2" data-mock="true">Emergency</h3>
+                                <p class="text-blue-100 text-2xl font-bold" data-bind="contact.emergency" data-mock="true">100</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-accent text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h3 class="font-semibold mb-2" data-mock="true">Email</h3>
+                                <p class="text-blue-100" data-bind="contact.email" data-mock="true">info@cid.tspolice.gov.in</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-8" data-implementation="CMS managed contact form">
+                    <h3 class="font-heading text-2xl font-semibold mb-6" data-mock="true">Send us a Message</h3>
+                    <form class="space-y-4" data-event="submit:handleContactForm">
+                        <div>
+                            <input type="text" placeholder="Your Name" 
+                                   class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-accent" 
+                                   data-mock="true" />
+                        </div>
+                        <div>
+                            <input type="email" placeholder="Your Email" 
+                                   class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-accent" 
+                                   data-mock="true" />
+                        </div>
+                        <div>
+                            <textarea rows="4" placeholder="Your Message" 
+                                      class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-accent resize-none" 
+                                      data-mock="true"></textarea>
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-accent hover:bg-yellow-500 text-gray-900 py-3 px-6 rounded-lg font-semibold transition-colors" 
+                                data-mock="true">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- @END_COMPONENT: ContactSection -->
+
+    <!-- @COMPONENT: Footer [links, social media, legal info] -->
+    <footer class="bg-gray-900 text-white">
+        <!-- Main Footer -->
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-heading text-xl font-bold" data-bind="footer.title" data-mock="true">CID Telangana</h3>
+                            <p class="text-gray-400 text-sm" data-mock="true">Crime Investigation Department</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 mb-6" data-bind="footer.description" data-mock="true">
+                        Ensuring justice through professional investigation with transparency, efficiency, and state-of-the-art technology.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-accent transition-colors" data-mock="true">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-accent transition-colors" data-mock="true">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-accent transition-colors" data-mock="true">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-accent transition-colors" data-mock="true">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-heading text-lg font-semibold mb-6" data-mock="true">Quick Links</h4>
+                    <ul class="space-y-3" data-mock="true">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About CID</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Organization Structure</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Wings & Departments</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Annual Reports</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Tenders</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-heading text-lg font-semibold mb-6" data-mock="true">Citizen Services</h4>
+                    <ul class="space-y-3" data-mock="true">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Online FIR</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Case Status</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Complaint Portal</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Safety Guidelines</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Public Awareness</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-heading text-lg font-semibold mb-6" data-mock="true">Contact Info</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-phone text-accent mr-3 mt-1"></i>
+                            <div>
+                                <p class="text-gray-400 text-sm" data-mock="true">Emergency</p>
+                                <p class="text-white font-semibold" data-bind="footer.emergency" data-mock="true">100</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-accent mr-3 mt-1"></i>
+                            <div>
+                                <p class="text-gray-400 text-sm" data-mock="true">Email</p>
+                                <p class="text-white" data-bind="footer.email" data-mock="true">info@cid.tspolice.gov.in</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-clock text-accent mr-3 mt-1"></i>
+                            <div>
+                                <p class="text-gray-400 text-sm" data-mock="true">Office Hours</p>
+                                <p class="text-white" data-bind="footer.hours" data-mock="true">24/7 Emergency Services</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Footer -->
+        <div class="border-t border-gray-800">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm" data-bind="footer.copyright" data-mock="true">
+                        © 2024 Crime Investigation Department, Telangana State Police. All rights reserved.
+                    </p>
+                    <div class="flex space-x-6 mt-4 md:mt-0">
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-mock="true">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-mock="true">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors" data-mock="true">Accessibility</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <!-- @STATE: mobileMenuOpen:boolean = false -->
+    <!-- @STATE: galleryCategory:string = 'all' -->
+    <!-- @STATE: currentVideo:object = null -->
+    <script>
+    (function() {
+        // TODO: Implement business logic, API calls, or state management
+        // Placeholder for mobile menu toggle
+        // Placeholder for gallery filtering
+        // Placeholder for video player controls
+        // Placeholder for form submissions
+        // Placeholder for CMS integration
+        
+        console.log('CID Telangana Website - Modern Design Ready for React Implementation');
+    })();
+    </script>
+</body>
+</html>
