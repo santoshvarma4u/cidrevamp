@@ -48,7 +48,7 @@ export function SeniorOfficersAdmin() {
   const createMutation = useMutation({
     mutationFn: async (data: FormData) => {
       const formDataToSend = new FormData();
-      Object.entries(data).forEach(([key, value]) => {
+      Object.entries(data||{}).forEach(([key, value]) => {
         if (key === "photo" && value instanceof File) {
           formDataToSend.append("photo", value);
         } else if (value !== undefined && value !== null) {
@@ -62,7 +62,7 @@ export function SeniorOfficersAdmin() {
           }
         }
       });
-      
+
       return apiRequest("/api/admin/senior-officers", {
         method: "POST",
         body: formDataToSend,
@@ -103,7 +103,7 @@ export function SeniorOfficersAdmin() {
           }
         }
       });
-      
+
       return apiRequest(`/api/admin/senior-officers/${id}`, {
         method: "PUT",
         body: formDataToSend,
