@@ -71,7 +71,7 @@ export default function Home() {
   });
 
   // Map wings data to include proper icon components
-  const specializedWings = wingsData.map((wing: any) => {
+  const specializedWings = (wingsData || []).map((wing: any) => {
     let IconComponent;
     switch (wing.icon) {
       case "CreditCard":
@@ -218,7 +218,7 @@ export default function Home() {
                   {/* Message Content */}
                   <div className="flex-1">
                     <blockquote className="text-base text-gray-800 mb-6 leading-relaxed">
-                      {directorInfo?.message || 
+                      {directorInfo?.message ||
                         `"Crime Investigation Department is the premier
                         investigation agency of Telangana State. Our endeavour is
                         to provide transparent, impartial, efficient and
@@ -267,7 +267,7 @@ export default function Home() {
                       </div>
                     )}
                   </div>
-                  
+
                   {/* NCL Information Section - Dynamic Content */}
                   {nclContent && (
                     <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
@@ -279,7 +279,7 @@ export default function Home() {
                           <h4 className="text-sm font-semibold text-blue-800 mb-1">
                             {nclContent.title}
                           </h4>
-                          <div 
+                          <div
                             className="text-xs text-blue-700 leading-relaxed prose prose-sm max-w-none"
                             dangerouslySetInnerHTML={{ __html: nclContent.content }}
                           />

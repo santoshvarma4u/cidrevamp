@@ -29,7 +29,7 @@ export default function ModernHeader() {
 
   // Get all menu pages and organize them hierarchically
   const pages = Array.isArray(menuPages) ? menuPages : [];
-  const allMenuPages = pages.filter((page: any) => page.showInMenu);
+  const allMenuPages = (pages || []).filter((page: any) => page.showInMenu);
 
   // Function to check if a page should be in main menu based on expiry date
   const isInMainMenu = (page: any) => {
@@ -43,22 +43,22 @@ export default function ModernHeader() {
     return false; // Default to 'more' section
   };
 
-  // Get parent pages for main menu (no menuParent, in main_menu location, not expired)
-  const mainMenuPages = allMenuPages
-    .filter((page: any) => !page.menuParent && isInMainMenu(page))
-    .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
+    // Get parent pages for main menu (no menuParent, in main_menu location, not expired) - with null safety
+    const mainMenuPages = (allMenuPages || [])
+        .filter((page: any) => !page.menuParent && isInMainMenu(page))
+        .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
 
-  // Get parent pages for more section (no menuParent, in more location or expired)
-  const moreMenuPages = allMenuPages
-    .filter((page: any) => !page.menuParent && !isInMainMenu(page))
-    .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
+    // Get parent pages for more section (no menuParent, in more location or expired) - with null safety
+    const moreMenuPages = (allMenuPages || [])
+        .filter((page: any) => !page.menuParent && !isInMainMenu(page))
+        .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
 
-  // Get child pages grouped by parent
-  const getChildPages = (parentSlug: string) => {
-    return allMenuPages
-      .filter((page: any) => page.menuParent === parentSlug)
-      .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
-  };
+    // Get child pages grouped by parent - with null safety
+    const getChildPages = (parentSlug: string) => {
+        return (allMenuPages || [])
+            .filter((page: any) => page.menuParent === parentSlug)
+            .sort((a: any, b: any) => a.menuOrder - b.menuOrder);
+    };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -69,13 +69,13 @@ export default function ModernHeader() {
           <div className="flex justify-between items-center">
             {/* Left Logo */}
             <div className="flex items-center py-2">
-              <img 
-                src={policeLogoSrc} 
-                alt="Telangana Police Logo" 
+              <img
+                src={policeLogoSrc}
+                alt="Telangana Police Logo"
                 className="h-40 w-40 md:h-48 md:w-48 object-contain transform scale-110"
               />
             </div>
-            
+
             {/* Right-aligned Text */}
             <div className="text-right">
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C3680] to-[#1E2A5E] bg-clip-text text-transparent">
@@ -188,7 +188,7 @@ export default function ModernHeader() {
                     {/* Remaining main menu pages after first 4 */}
                     {mainMenuPages.slice(4).map((page: any) => {
                       const childPages = getChildPages(page.slug);
-                      
+
                       return (
                         <div key={page.slug}>
                           <DropdownMenuItem
@@ -219,16 +219,16 @@ export default function ModernHeader() {
                         </div>
                       );
                     })}
-                    
+
                     {/* Separator if both main menu overflow and more section pages exist */}
                     {mainMenuPages.length > 4 && moreMenuPages.length > 0 && (
                       <div className="border-t border-gray-200 my-2"></div>
                     )}
-                    
+
                     {/* Pages in more section */}
                     {moreMenuPages.map((page: any) => {
                       const childPages = getChildPages(page.slug);
-                      
+
                       return (
                         <div key={page.slug}>
                           <DropdownMenuItem
@@ -264,7 +264,7 @@ export default function ModernHeader() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
-              
+
               {/* Admin Menu */}
               {isAuthenticated && user ? (
                 <DropdownMenu>
