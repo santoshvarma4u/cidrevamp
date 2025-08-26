@@ -16,11 +16,11 @@ console.log('🚀 Starting CID Application in production mode...');
 // Set production environment
 process.env.NODE_ENV = 'production';
 
-// Path to the main server file
-const serverPath = path.join(__dirname, '..', 'server', 'index.ts');
+// Path to the built production server file
+const serverPath = path.join(__dirname, '..', 'dist', 'index.js');
 
-// Start the application using tsx (TypeScript executor)
-const app = spawn('npx', ['tsx', serverPath], {
+// Start the application using Node.js directly (no tsx needed for built JS)
+const app = spawn('node', [serverPath], {
   stdio: 'inherit',
   env: process.env
 });

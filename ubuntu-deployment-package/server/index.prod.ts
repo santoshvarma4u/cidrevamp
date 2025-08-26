@@ -76,7 +76,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // In production, serve pre-built static files
-const clientDist = path.join(__dirname);
+const clientDist = path.join(__dirname, '..', 'dist');
 app.use(express.static(clientDist));
 
 // Security monitoring middleware
