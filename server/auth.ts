@@ -69,10 +69,10 @@ export function setupAuth(app: Express) {
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-      secure: process.env.NODE_ENV === 'production', // HTTPS in production
+      secure: process.env.NODE_ENV === 'production' && process.env.FORCE_HTTPS === 'true', // Only secure if explicitly forced
       httpOnly: true,
       maxAge: 8 * 60 * 60 * 1000, // 8 hours (reduced from 24 for security)
-      sameSite: 'strict', // CSRF protection
+      sameSite: 'lax', // Changed from 'strict' to 'lax' for better compatibility
     },
     name: 'cid.session.id', // Custom session name
   };

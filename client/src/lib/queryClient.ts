@@ -54,7 +54,7 @@ export async function apiRequest(url: string, options: RequestInit = {}) {
   }
 
   const response = await fetch(url, {
-    credentials: 'include',
+    credentials: 'include', // This is crucial for session cookies
     headers: {
       ...headers,
       ...options.headers,

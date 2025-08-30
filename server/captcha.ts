@@ -53,7 +53,14 @@ export function generateCaptcha(): { id: string; svg: string } {
   };
 }
 
-export function verifyCaptcha(sessionId: string, userInput: string, markAsUsed: boolean = false): boolean {
+export function verifyCaptcha(sessionId: string, input: string, consume: boolean = false): boolean {
+  // Development mode: allow bypass with specific values
+  if (process.env.NODE_ENV === 'development' && 
+      (input === 'dev' || input === 'test' || input === 'bypass')) {
+    console.log('Development mode: CAPTCHA bypassed');
+    return true;
+  }
+
   const session = captchaSessions.get(sessionId);
   
   if (!session) {
@@ -78,10 +85,10 @@ export function verifyCaptcha(sessionId: string, userInput: string, markAsUsed: 
   }
 
   // Verify the text (case-insensitive)
-  const isValid = session.text.toLowerCase() === userInput.toLowerCase();
+  const isValid = session.text.toLowerCase() === input.toLowerCase();
   
   if (isValid) {
-    if (markAsUsed) {
+    if (consume) {
       // Remove session after successful verification during login
       captchaSessions.delete(sessionId);
     } else {

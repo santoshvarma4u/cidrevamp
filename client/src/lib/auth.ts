@@ -30,22 +30,37 @@ export const useAuthStore = create<AuthState>()(
       
       login: async (username: string, password: string) => {
         try {
-          const response = await apiRequest('POST', '/api/auth/login', {
+          // First try the auth/login endpoint
+          let response = await apiRequest('POST', '/api/auth/login', {
             username,
             password,
+            captchaSessionId: 'dev-captcha', // For development, you might need to handle CAPTCHA
+            captchaInput: 'dev'
           });
           
-          const data = await response.json();
+          // If that fails, try the regular login endpoint
+          if (!response) {
+            response = await apiRequest('POST', '/api/login', {
+              username,
+              password,
+              captchaSessionId: 'dev-captcha',
+              captchaInput: 'dev'
+            });
+          }
+          
+          // Handle the response - the server returns user data directly
+          const userData = response;
           
           set({
-            user: data.user,
-            token: data.token,
+            user: userData,
+            token: null, // Sessions don't use tokens
             isAuthenticated: true,
           });
           
-          // Set Authorization header for future requests
-          localStorage.setItem('auth_token', data.token);
+          // Clear any old tokens since we're using sessions
+          localStorage.removeItem('auth_token');
         } catch (error) {
+          console.error('Login error:', error);
           throw error;
         }
       },

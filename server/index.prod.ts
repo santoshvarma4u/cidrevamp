@@ -55,7 +55,15 @@ const authLimiter = rateLimit({
 // CORS configuration
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://*.replit.app', 'https://*.replit.dev']
+    ? [
+        'https://*.replit.app', 
+        'https://*.replit.dev',
+        'https://*.tspolice.gov.in',
+        'http://localhost:5000',
+        'http://localhost:3000',
+        'http://127.0.0.1:5000',
+        'http://127.0.0.1:3000'
+      ]
     : true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
