@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Quick test to identify the exact routing issue in production
+# Usage: ./test-production-routes.sh <PRODUCTION_SERVER_URL>
+
+PROD_URL="$1"
+
+echo "=== Production Routing Diagnosis ==="
+echo "Server: $PROD_URL"
+echo ""
+
+# Test different API endpoints to see which ones work
+echo "1. Testing various API endpoints..."
+
+endpoints=("/api/auth/user" "/api/pages/menu" "/api/captcha" "/api/videos" "/api/news")
+
+for endpoint in "${endpoints[@]}"; do
+    echo -n "Testing $endpoint: "
+    response=$(curl -s -w "%{http_code}" "$PROD_URL$endpoint")
+    http_code="${response: -3}"
+    body="${response%???}"
+    
+    if echo "$body" | grep -q "DOCTYPE html"; then
+        echo "❌ Returns HTML (routing broken)"
+    elif [ "$http_code" = "200" ] || [ "$http_code" = "401" ]; then
+        echo "✅ Returns JSON (working)"
+    else
+        echo "⚠️  HTTP $http_code"
+    fi
+done
+
+echo ""
+echo "2. Testing POST vs GET on login endpoint..."
+echo -n "GET /api/auth/login: "
+get_response=$(curl -s "$PROD_URL/api/auth/login")
+if echo "$get_response" | grep -q "DOCTYPE html"; then
+    echo "❌ Returns HTML"
+else
+    echo "✅ Returns JSON"
+fi
+
+echo -n "POST /api/auth/login: "
+post_response=$(curl -s -X POST -H "Content-Type: application/json" \
+    -d '{"test":"data"}' "$PROD_URL/api/auth/login")
+if echo "$post_response" | grep -q "DOCTYPE html"; then
+    echo "❌ Returns HTML (MAIN ISSUE)"
+else
+    echo "✅ Returns JSON"
+fi
+
+echo ""
+echo "3. Checking response headers..."
+echo "Content-Type header for POST /api/auth/login:"
+curl -s -I -X POST "$PROD_URL/api/auth/login" | grep -i content-type
+
+echo ""
+echo "=== DIAGNOSIS ==="
+if echo "$post_response" | grep -q "DOCTYPE html"; then
+    echo "PROBLEM: Express API routes not registered properly"
+    echo "CAUSE: Static file serving happening before API route registration"
+    echo ""
+    echo "SOLUTIONS TO TRY:"
+    echo "1. Check server/index.ts - ensure registerRoutes() called before static serving"
+    echo "2. Check nginx/proxy config - ensure /api/* routes go to Express"
+    echo "3. Check if there's an 'api' folder in your static build files"
+    echo "4. Restart your production server after fixing route order"
+else
+    echo "API routing appears to work - issue may be elsewhere"
+fi

@@ -47,11 +47,15 @@ async function comparePasswords(supplied: string, stored: string): Promise<boole
 }
 
 export function setupAuth(app: Express) {
+  console.log('🔑 Configuring authentication system...');
+  
   // Debug middleware to log all requests to auth routes
   app.use('/api', (req, res, next) => {
     console.log(`Auth middleware: ${req.method} ${req.path}`);
     next();
   });
+  
+  console.log('📝 Registering auth middleware and passport...');
 
   // Session configuration - use memory store for simplicity
   const MemoryStore = createMemoryStore(session);
@@ -201,11 +205,13 @@ export function setupAuth(app: Express) {
     }
   });
 
+  // Register login route explicitly with debugging
+  console.log('🔐 Registering login route: POST /api/login');
   app.post("/api/login", (req, res, next) => {
     const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
     const userAgent = req.get('User-Agent') || 'unknown';
     
-    console.log("Login request received:", req.method, req.path, { 
+    console.log("LOGIN ROUTE HIT - Login request received:", req.method, req.path, { 
       username: req.body.username, 
       ip: clientIp 
     });
@@ -320,6 +326,103 @@ export function setupAuth(app: Express) {
       lastName: user.lastName,
     });
   });
+  
+  // Additional explicit login route registration for production compatibility
+  console.log('🔧 Registering /api/auth/login route for frontend compatibility...');
+  app.post("/api/auth/login", (req, res, next) => {
+    console.log("AUTH LOGIN ROUTE HIT - processing login request");
+    const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
+    const userAgent = req.get('User-Agent') || 'unknown';
+    
+    console.log("AUTH Login request received:", req.method, req.path, { 
+      username: req.body.username, 
+      ip: clientIp 
+    });
+    
+    // Input sanitization
+    const username = sanitizeInput(req.body.username || '');
+    const password = req.body.password || '';
+    
+    if (!username || !password) {
+      logSecurityEvent('LOGIN_ATTEMPT_MISSING_CREDENTIALS', { username, ip: clientIp }, req);
+      return res.status(400).json({ message: "Username and password are required" });
+    }
+    
+    // Check for login attempt lockout
+    const canAttemptLogin = trackLoginAttempt(username, false);
+    if (!canAttemptLogin) {
+      logSecurityEvent('LOGIN_ATTEMPT_ACCOUNT_LOCKED', { username, ip: clientIp }, req);
+      return res.status(429).json({ 
+        message: "Account temporarily locked due to too many failed attempts. Please try again later." 
+      });
+    }
+    
+    // Verify CAPTCHA first
+    const { captchaSessionId, captchaInput } = req.body;
+    if (!captchaSessionId || !captchaInput) {
+      return res.status(400).json({ message: "CAPTCHA verification required" });
+    }
+    
+    const isCaptchaValid = verifyCaptcha(captchaSessionId, captchaInput, true);
+    if (!isCaptchaValid) {
+      logSecurityEvent('LOGIN_CAPTCHA_FAILED', { username, ip: clientIp }, req);
+      console.log("CAPTCHA verification failed for login attempt");
+      return res.status(400).json({ message: "Invalid CAPTCHA. Please try again." });
+    }
+    
+    console.log("CAPTCHA verification successful, proceeding with authentication");
+    
+    passport.authenticate("local", (err: any, user: SelectUser | false, info: any) => {
+      if (err) {
+        console.error("Authentication error:", err);
+        return res.status(500).json({ message: "Authentication failed" });
+      }
+      if (!user) {
+        logSecurityEvent('LOGIN_FAILED', { 
+          username, 
+          ip: clientIp, 
+          userAgent,
+          reason: info?.message || 'Invalid credentials'
+        }, req);
+        console.log("Login failed for user:", username, "Info:", info);
+        return res.status(401).json({ message: "Invalid username or password" });
+      }
+      
+      // Mark successful login attempt
+      trackLoginAttempt(username, true);
+      
+      req.login(user, (err) => {
+        if (err) {
+          console.error("Login session error:", err);
+          logSecurityEvent('LOGIN_SESSION_ERROR', { username, error: err.message }, req);
+          return res.status(500).json({ message: "Login failed" });
+        }
+        
+        logSecurityEvent('LOGIN_SUCCESS', { 
+          username: user.username, 
+          role: user.role,
+          ip: clientIp 
+        }, req);
+        console.log("Login successful for user:", user.username);
+        res.json({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        });
+      });
+    })(req, res, next);
+  });
+  
+  console.log('✅ Authentication routes registered:');
+  console.log('  - POST /api/login');
+  console.log('  - POST /api/auth/login (alias)');
+  console.log('  - POST /api/register');
+  console.log('  - GET /api/auth/user');
+  console.log('  - POST /api/logout');
+  console.log('  - GET /api/logout');
 }
 
 // Middleware to check if user is authenticated
