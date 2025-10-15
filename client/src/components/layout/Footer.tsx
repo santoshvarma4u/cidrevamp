@@ -10,6 +10,7 @@ import {
   Instagram,
   Youtube,
 } from "lucide-react";
+import vatinsLogoSrc from "@assets/vatins-logo.png";
 
 export default function Footer() {
   return (
@@ -131,6 +132,19 @@ export default function Footer() {
                 © 2025 Crime Investigation Department, Telangana State Police.
                 All rights reserved.
               </p>
+            </div>
+            
+            {/* Powered by VATINS */}
+            <div className="flex items-center space-x-3 text-gray-400">
+              <span className="text-sm">Powered by</span>
+              <div className="flex items-center space-x-2">
+                <img 
+                  src={vatinsLogoSrc} 
+                  alt="VATINS Logo" 
+                  className="h-6 w-auto object-contain"
+                />
+                <span className="text-sm font-medium text-white">VATINS</span>
+              </div>
             </div>
           </div>
         </div>
