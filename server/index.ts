@@ -4,23 +4,61 @@ import { setupVite, serveStatic, log } from "./vite";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
-import { xssProtection, CSP_CONFIG } from "./security";
+import { xssProtection, CSP_CONFIG, httpMethodFilter, validateHostHeader, getCorsOptions, cookieSecurityMiddleware } from "./security";
 
 const app = express();
 
-// Security Middleware
+// Host Header Validation - MUST be first for security
+app.use(validateHostHeader);
+
+// Enhanced Security Middleware with TLS protection
 app.use(helmet({
   contentSecurityPolicy: CSP_CONFIG,
   crossOriginEmbedderPolicy: false, // Required for some features
+  
+  // Enhanced HSTS (HTTP Strict Transport Security)
   hsts: {
     maxAge: 31536000, // 1 year
     includeSubDomains: true,
     preload: true,
+    // Force HTTPS even in development if FORCE_HTTPS is set
+    force: process.env.FORCE_HTTPS === 'true',
   },
+  
+  // Additional security headers for TLS protection
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  noSniff: true,
+  frameguard: { action: 'deny' },
+  
+  // Enhanced cookie security
+  crossOriginResourcePolicy: { policy: "cross-origin" },
 }));
 
 // Additional security headers
 app.use(xssProtection);
+
+// Cookie Security Middleware - Enforce secure cookie attributes
+app.use(cookieSecurityMiddleware);
+
+// TLS Security Middleware - Force HTTPS in production
+app.use((req, res, next) => {
+  // Force HTTPS in production
+  if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !== 'https') {
+    return res.redirect(301, `https://${req.get('host')}${req.url}`);
+  }
+  
+  // Add security headers for TLS protection
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  next();
+});
+
+// HTTP Method Filtering - Block insecure methods (TRACE, TRACK, etc.)
+app.use(httpMethodFilter);
 
 // Rate limiting
 const generalLimiter = rateLimit({
@@ -39,23 +77,9 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// CORS configuration
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [
-        'https://*.replit.app', 
-        'https://*.replit.dev',
-        'https://*.tspolice.gov.in',
-        'http://localhost:5000',
-        'http://localhost:3000',
-        'http://127.0.0.1:5000',
-        'http://127.0.0.1:3000'
-      ]
-    : true,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-}));
+// CORS configuration - Strict whitelist only (CWE-942)
+// NEVER set Access-Control-Allow-Origin to * for sensitive resources
+app.use(cors(getCorsOptions()));
 
 // Apply rate limiting
 app.use('/api', generalLimiter);

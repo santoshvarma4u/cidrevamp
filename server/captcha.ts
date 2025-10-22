@@ -1,51 +1,130 @@
 import svgCaptcha from 'svg-captcha';
-import { randomBytes } from 'crypto';
+import { randomBytes, createHash } from 'crypto';
 
 interface CaptchaSession {
   id: string;
-  text: string;
+  textHash: string;  // Store hash instead of plaintext (security best practice)
   createdAt: Date;
   attempts: number;
   verified: boolean;
+  used: boolean;     // Track if CAPTCHA has been used (prevent reuse)
+  ipAddress?: string; // Track IP for rate limiting
 }
 
 // In-memory store for CAPTCHA sessions (in production, use Redis or database)
 const captchaSessions = new Map<string, CaptchaSession>();
 
-// Clean up expired sessions every 5 minutes
+// Track CAPTCHA generation rate per IP for rate limiting
+const captchaRateLimit = new Map<string, { count: number; resetTime: number }>();
+
+// Security: Hash CAPTCHA text instead of storing plaintext
+function hashCaptchaText(text: string, sessionId: string): string {
+  return createHash('sha256')
+    .update(text.toUpperCase())
+    .update(sessionId)
+    .update(process.env.SESSION_SECRET || 'captcha-secret')
+    .digest('hex');
+}
+
+// Security: Verify hashed CAPTCHA text
+function verifyCaptchaHash(input: string, hash: string, sessionId: string): boolean {
+  const inputHash = hashCaptchaText(input, sessionId);
+  return inputHash === hash;
+}
+
+// Clean up expired sessions every 2 minutes (more frequent cleanup)
 setInterval(() => {
   const now = new Date();
+  
+  // Clean expired CAPTCHA sessions
   captchaSessions.forEach((session, id) => {
-    const expiryTime = new Date(session.createdAt.getTime() + 5 * 60 * 1000); // 5 minutes
+    const expiryTime = new Date(session.createdAt.getTime() + 3 * 60 * 1000); // 3 minutes (reduced from 5)
     if (now > expiryTime) {
       captchaSessions.delete(id);
     }
   });
-}, 5 * 60 * 1000);
+  
+  // Clean expired rate limit entries
+  const currentTime = Date.now();
+  captchaRateLimit.forEach((data, ip) => {
+    if (currentTime > data.resetTime) {
+      captchaRateLimit.delete(ip);
+    }
+  });
+}, 2 * 60 * 1000);
 
-export function generateCaptcha(): { id: string; svg: string } {
-  // Generate CAPTCHA with custom options
+// Security: Check rate limit for CAPTCHA generation
+function checkCaptchaRateLimit(ipAddress: string): boolean {
+  const now = Date.now();
+  const limit = captchaRateLimit.get(ipAddress);
+  
+  if (!limit || now > limit.resetTime) {
+    // Reset or initialize
+    captchaRateLimit.set(ipAddress, {
+      count: 1,
+      resetTime: now + (15 * 60 * 1000), // 15 minutes
+    });
+    return true;
+  }
+  
+  // Max 20 CAPTCHAs per 15 minutes per IP (rate limiting)
+  if (limit.count >= 20) {
+    console.warn(`CAPTCHA rate limit exceeded for IP: ${ipAddress}`);
+    return false;
+  }
+  
+  limit.count++;
+  return true;
+}
+
+export function generateCaptcha(ipAddress?: string): { id: string; svg: string } | null {
+  // Security: Rate limit CAPTCHA generation per IP
+  if (ipAddress && !checkCaptchaRateLimit(ipAddress)) {
+    console.warn(`CAPTCHA generation rate limit exceeded for IP: ${ipAddress}`);
+    return null;
+  }
+
+  // Security: Enhanced randomization to prevent pre-processing attacks
+  const backgrounds = [
+    '#f8f9fa', '#e9ecef', '#dee2e6', '#f1f3f5', '#e8eaf6', 
+    '#fff3e0', '#f3e5f5', '#e0f2f1'
+  ];
+  const noiseLevel = 3 + Math.floor(Math.random() * 3); // 3-5 noise lines (random)
+  const size = 5 + Math.floor(Math.random() * 2); // 5-6 characters (random length)
+  const fontSize = 45 + Math.floor(Math.random() * 15); // 45-60 (random size)
+  
+  // Generate CAPTCHA with enhanced random options
   const captcha = svgCaptcha.create({
-    size: 5, // 5 characters
-    noise: 3, // Add noise lines
+    size: size,
+    noise: noiseLevel,
     color: true, // Use colors
-    background: '#f8f9fa', // Light background
-    width: 200,
-    height: 80,
-    fontSize: 50,
-    charPreset: '23456789ABCDEFGHJKLMNPQRSTUVWXYZ', // Exclude confusing characters
+    background: backgrounds[Math.floor(Math.random() * backgrounds.length)],
+    width: 200 + Math.floor(Math.random() * 50), // 200-250 (random width)
+    height: 80 + Math.floor(Math.random() * 20),  // 80-100 (random height)
+    fontSize: fontSize,
+    // Exclude confusing characters (0, O, 1, I, l)
+    charPreset: '23456789ABCDEFGHJKLMNPQRSTUVWXYZ',
+    ignoreChars: '0O1Il', // Additional safety
   });
 
-  const sessionId = randomBytes(16).toString('hex');
+  // Generate cryptographically secure session ID
+  const sessionId = randomBytes(32).toString('hex'); // Increased from 16 to 32 bytes
   
-  // Store session
+  // Security: Hash the CAPTCHA text instead of storing plaintext
+  const textHash = hashCaptchaText(captcha.text, sessionId);
+  
+  // Store session with hash (never store plaintext)
   captchaSessions.set(sessionId, {
     id: sessionId,
-    text: captcha.text.toUpperCase(),
+    textHash: textHash,
     createdAt: new Date(),
     attempts: 0,
     verified: false,
+    used: false,
+    ipAddress: ipAddress,
   });
+
+  console.log(`CAPTCHA generated for session: ${sessionId} from IP: ${ipAddress || 'unknown'}`);
 
   return {
     id: sessionId,
@@ -53,7 +132,7 @@ export function generateCaptcha(): { id: string; svg: string } {
   };
 }
 
-export function verifyCaptcha(sessionId: string, input: string, consume: boolean = false): boolean {
+export function verifyCaptcha(sessionId: string, input: string, ipAddress?: string, consume: boolean = false): boolean {
   // Development mode: allow bypass with specific values
   if (process.env.NODE_ENV === 'development' && 
       (input === 'dev' || input === 'test' || input === 'bypass')) {
@@ -64,66 +143,107 @@ export function verifyCaptcha(sessionId: string, input: string, consume: boolean
   const session = captchaSessions.get(sessionId);
   
   if (!session) {
+    console.warn(`CAPTCHA verification failed: Session not found - ${sessionId}`);
     return false; // Session not found or expired
+  }
+
+  // Security: Prevent CAPTCHA reuse - once used, cannot be used again
+  if (session.used) {
+    console.warn(`CAPTCHA reuse attempt detected for session: ${sessionId} from IP: ${ipAddress || 'unknown'}`);
+    captchaSessions.delete(sessionId);
+    return false;
+  }
+
+  // Security: Verify IP address matches (optional but recommended)
+  if (ipAddress && session.ipAddress && session.ipAddress !== ipAddress) {
+    console.warn(`CAPTCHA IP mismatch: Session IP ${session.ipAddress} vs Request IP ${ipAddress}`);
+    captchaSessions.delete(sessionId);
+    return false;
   }
 
   // Increment attempt counter
   session.attempts++;
 
-  // Check if too many attempts (prevent brute force)
+  // Security: Check if too many attempts (prevent brute force) - reduced to 3 attempts
   if (session.attempts > 3) {
+    console.warn(`CAPTCHA brute force detected: ${session.attempts} attempts for session ${sessionId}`);
     captchaSessions.delete(sessionId);
     return false;
   }
 
-  // Check if expired (5 minutes)
+  // Security: Check if expired (3 minutes - reduced from 5)
   const now = new Date();
-  const expiryTime = new Date(session.createdAt.getTime() + 5 * 60 * 1000);
+  const expiryTime = new Date(session.createdAt.getTime() + 3 * 60 * 1000);
   if (now > expiryTime) {
+    console.warn(`CAPTCHA expired for session: ${sessionId}`);
     captchaSessions.delete(sessionId);
     return false;
   }
 
-  // Verify the text (case-insensitive)
-  const isValid = session.text.toLowerCase() === input.toLowerCase();
+  // Security: Verify using hash (constant-time comparison via hash)
+  const isValid = verifyCaptchaHash(input, session.textHash, sessionId);
   
   if (isValid) {
+    // Mark as used immediately to prevent reuse
+    session.used = true;
+    
     if (consume) {
-      // Remove session after successful verification during login
+      // Remove session after successful verification
       captchaSessions.delete(sessionId);
+      console.log(`CAPTCHA verified and consumed for session: ${sessionId}`);
     } else {
-      // Mark as verified but keep session for login
+      // Mark as verified but keep session temporarily
       session.verified = true;
+      console.log(`CAPTCHA verified for session: ${sessionId}`);
     }
+  } else {
+    console.warn(`CAPTCHA verification failed: Invalid input for session ${sessionId}`);
   }
 
   return isValid;
 }
 
-export function refreshCaptcha(sessionId: string): { id: string; svg: string } | null {
+export function refreshCaptcha(sessionId: string, ipAddress?: string): { id: string; svg: string } | null {
   const session = captchaSessions.get(sessionId);
   
   if (session) {
-    // Delete old session
+    // Delete old session (prevents reuse)
     captchaSessions.delete(sessionId);
+    console.log(`CAPTCHA refreshed for session: ${sessionId}`);
   }
   
-  // Generate new CAPTCHA
-  return generateCaptcha();
+  // Generate new CAPTCHA with rate limiting
+  return generateCaptcha(ipAddress);
 }
 
-// Get session info (for debugging)
-export function getCaptchaSession(sessionId: string): CaptchaSession | undefined {
-  return captchaSessions.get(sessionId);
-}
+// Security: Remove debugging functions that could leak CAPTCHA information
+// NEVER expose session information to client
 
-// Clean up specific session
-export function deleteCaptchaSession(sessionId: string): boolean {
-  return captchaSessions.delete(sessionId);
-}
-
-// Check if CAPTCHA is already verified
-export function isCaptchaVerified(sessionId: string): boolean {
+// Minimal session validation (no data exposure)
+export function isCaptchaSessionValid(sessionId: string): boolean {
   const session = captchaSessions.get(sessionId);
-  return session ? session.verified : false;
+  if (!session) return false;
+  
+  // Check if expired
+  const now = new Date();
+  const expiryTime = new Date(session.createdAt.getTime() + 3 * 60 * 1000);
+  if (now > expiryTime) {
+    captchaSessions.delete(sessionId);
+    return false;
+  }
+  
+  // Check if already used
+  if (session.used) {
+    return false;
+  }
+  
+  return true;
+}
+
+// Get CAPTCHA statistics (for monitoring only - no sensitive data)
+export function getCaptchaStats() {
+  return {
+    activeSessions: captchaSessions.size,
+    ratelimitedIPs: captchaRateLimit.size,
+  };
 }

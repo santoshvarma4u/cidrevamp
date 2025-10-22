@@ -23,7 +23,7 @@ import policeLogoSrc from "@assets/unnamed_1755518260488.png";
 
 export default function ModernHeader() {
   const [location] = useLocation();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: menuPages = [], isLoading: menuLoading } = useMenuPages();
 
@@ -289,7 +289,7 @@ export default function ModernHeader() {
                       </DropdownMenuItem>
                     ) : null}
                     <DropdownMenuItem
-                      onClick={() => (window.location.href = "/api/logout")}
+                      onClick={() => logout()}
                     >
                       <LogOut className="mr-2 h-4 w-4" />
                       Logout
@@ -385,7 +385,7 @@ export default function ModernHeader() {
                           variant="ghost"
                           className="w-full justify-start"
                           onClick={() => {
-                            window.location.href = "/api/logout";
+                            logout();
                             setIsMobileMenuOpen(false);
                           }}
                         >

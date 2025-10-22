@@ -2,13 +2,14 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Express } from "express";
 import session from "express-session";
-import { scrypt, randomBytes, timingSafeEqual } from "crypto";
+import { scrypt, randomBytes, timingSafeEqual, createHash, pbkdf2Sync } from "crypto";
 import { promisify } from "util";
 import bcrypt from "bcrypt";
 import { storage } from "./storage";
 import { verifyCaptcha } from "./captcha";
 import { User as SelectUser, LoginData } from "@shared/schema";
-import { validatePassword, trackLoginAttempt, logSecurityEvent, sanitizeInput } from "./security";
+import { validatePassword, trackLoginAttempt, logSecurityEvent, sanitizeInput, SECURITY_CONFIG } from "./security";
+import { logAuthenticationProcess, initializeLogging } from "./auditLogger";
 import connectPg from "connect-pg-simple";
 import createMemoryStore from "memorystore";
 
@@ -20,15 +21,36 @@ declare global {
 
 const scryptAsync = promisify(scrypt);
 
-// Enhanced password hashing with bcrypt (more secure than scrypt for this use case)
+// Enhanced password hashing with multiple algorithms for maximum security
 async function hashPassword(password: string): Promise<string> {
-  const saltRounds = 12; // Higher salt rounds for better security
-  return await bcrypt.hash(password, saltRounds);
+  // Generate cryptographically secure salt
+  const salt = randomBytes(32).toString('hex');
+  
+  // Use PBKDF2 with SHA-512 (more secure than bcrypt for this use case)
+  const iterations = 100000; // High iteration count for security
+  const keyLength = 64; // 512 bits
+  
+  const hash = pbkdf2Sync(password, salt, iterations, keyLength, 'sha512').toString('hex');
+  
+  // Return format: algorithm$iterations$salt$hash
+  return `pbkdf2-sha512$${iterations}$${salt}$${hash}`;
 }
 
 async function comparePasswords(supplied: string, stored: string): Promise<boolean> {
   try {
-    // Check if it's a bcrypt hash (starts with $2a$, $2b$, or $2y$)
+    // Check if it's a new PBKDF2-SHA512 hash
+    if (stored.startsWith('pbkdf2-sha512$')) {
+      const [, iterationsStr, salt, hash] = stored.split('$');
+      if (!iterationsStr || !salt || !hash) return false;
+      
+      const iterations = parseInt(iterationsStr, 10);
+      const keyLength = 64; // 512 bits
+      
+      const suppliedHash = pbkdf2Sync(supplied, salt, iterations, keyLength, 'sha512').toString('hex');
+      return timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(suppliedHash, 'hex'));
+    }
+    
+    // Check if it's a bcrypt hash (legacy support)
     if (stored.startsWith('$2')) {
       return await bcrypt.compare(supplied, stored);
     }
@@ -49,6 +71,9 @@ async function comparePasswords(supplied: string, stored: string): Promise<boole
 export function setupAuth(app: Express) {
   console.log('🔑 Configuring authentication system...');
   
+  // Initialize comprehensive logging system
+  initializeLogging();
+  
   // Debug middleware to log all requests to auth routes
   app.use('/api', (req, res, next) => {
     console.log(`Auth middleware: ${req.method} ${req.path}`);
@@ -63,16 +88,61 @@ export function setupAuth(app: Express) {
     checkPeriod: 86400000, // 24 hours
   });
 
+  // Enhanced session cleanup - destroy expired sessions
+  setInterval(() => {
+    sessionStore.all((err: any, sessions: any) => {
+      if (err) {
+        console.error('Session cleanup error:', err);
+        return;
+      }
+      
+      const now = Date.now();
+      let cleanedCount = 0;
+      
+      Object.keys(sessions).forEach(sessionId => {
+        const session = sessions[sessionId];
+        if (session && session.cookie) {
+          const maxAge = session.cookie.maxAge || SECURITY_CONFIG.SESSION_TIMEOUT;
+          const sessionAge = now - (session.cookie.originalMaxAge || now) + maxAge;
+          
+          // Destroy sessions older than configured timeout
+          if (sessionAge > SECURITY_CONFIG.SESSION_TIMEOUT) {
+            sessionStore.destroy(sessionId, (err: any) => {
+              if (err) {
+                console.error(`Failed to destroy expired session ${sessionId}:`, err);
+              } else {
+                cleanedCount++;
+                logSecurityEvent('SESSION_CLEANUP', { 
+                  sessionId,
+                  age: sessionAge,
+                  reason: 'expired'
+                });
+              }
+            });
+          }
+        }
+      });
+      
+      if (cleanedCount > 0) {
+        console.log(`Session cleanup: destroyed ${cleanedCount} expired sessions`);
+      }
+    });
+  }, 2 * 60 * 1000); // Run every 2 minutes (more frequent for 20-minute timeout)
+
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "CID-Telangana-Super-Secret-Key-2025-" + randomBytes(32).toString('hex'),
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
     cookie: {
-      secure: process.env.NODE_ENV === 'production' && process.env.FORCE_HTTPS === 'true', // Only secure if explicitly forced
-      httpOnly: true,
-      maxAge: 8 * 60 * 60 * 1000, // 8 hours (reduced from 24 for security)
-      sameSite: 'lax', // Changed from 'strict' to 'lax' for better compatibility
+      // Enhanced cookie security using centralized configuration
+      secure: SECURITY_CONFIG.COOKIE_SECURITY.secure,
+      httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly, // Prevent XSS attacks
+      maxAge: SECURITY_CONFIG.SESSION_TIMEOUT, // 20 minutes (enhanced security)
+      sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite, // Enhanced CSRF protection
+      domain: SECURITY_CONFIG.COOKIE_SECURITY.domain, // Allow domain restriction
+      path: SECURITY_CONFIG.COOKIE_SECURITY.path, // Path restriction
+      partitioned: SECURITY_CONFIG.COOKIE_SECURITY.partitioned, // Partitioned cookies for third-party context
     },
     name: 'cid.session.id', // Custom session name
   };
@@ -82,6 +152,48 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // Session activity tracking middleware - MUST be after session middleware
+  app.use((req: any, res: any, next: any) => {
+    if (req.session && req.sessionID) {
+      // Track last activity time
+      req.session.lastActivity = Date.now();
+      
+      // Check if session should be expired due to inactivity
+      const now = Date.now();
+      const lastActivity = req.session.lastActivity || req.session.cookie.originalMaxAge || now;
+      const inactivityTime = now - lastActivity;
+      
+      if (inactivityTime > SECURITY_CONFIG.SESSION_TIMEOUT) {
+        logSecurityEvent('SESSION_INACTIVITY_TIMEOUT', { 
+          sessionId: req.sessionID,
+          inactivityTime: inactivityTime,
+          ip: req.ip,
+          path: req.path
+        }, req);
+        
+        req.session.destroy((err: any) => {
+          if (err) {
+            console.error('Session destruction error:', err);
+          }
+        });
+        
+        return res.status(401).json({ 
+          message: "Session expired due to inactivity",
+          code: "SESSION_TIMEOUT"
+        });
+      }
+      
+      // Check if session is approaching timeout (warning)
+      const timeUntilTimeout = SECURITY_CONFIG.SESSION_TIMEOUT - inactivityTime;
+      if (timeUntilTimeout <= SECURITY_CONFIG.SESSION_WARNING_TIME && timeUntilTimeout > 0) {
+        // Add warning header for client-side handling
+        res.setHeader('X-Session-Warning', Math.ceil(timeUntilTimeout / 1000)); // seconds remaining
+      }
+    }
+    
+    next();
+  });
+
   // Passport local strategy
   passport.use(
     new LocalStrategy(async (username, password, done) => {
@@ -90,11 +202,15 @@ export function setupAuth(app: Express) {
         const user = await storage.getUserByUsername(username);
         if (!user) {
           console.log("User not found:", username);
+          logSecurityEvent('AUTH_FAILED_USER_NOT_FOUND', { username }, undefined, 'HIGH', 'FAILURE');
+          logAuthenticationProcess(username, false, { reason: 'User not found' });
           return done(null, false, { message: "User not found" });
         }
         
         if (!user.isActive) {
           console.log("User inactive:", username);
+          logSecurityEvent('AUTH_FAILED_INACTIVE_USER', { username, userId: user.id }, undefined, 'HIGH', 'FAILURE');
+          logAuthenticationProcess(username, false, { reason: 'Account inactive', userId: user.id });
           return done(null, false, { message: "Account inactive" });
         }
 
@@ -102,13 +218,23 @@ export function setupAuth(app: Express) {
         const isValid = await comparePasswords(password, user.password);
         if (!isValid) {
           console.log("Invalid password for user:", username);
+          logSecurityEvent('AUTH_FAILED_INVALID_PASSWORD', { username, userId: user.id }, undefined, 'HIGH', 'FAILURE');
+          logAuthenticationProcess(username, false, { reason: 'Invalid password', userId: user.id });
           return done(null, false, { message: "Invalid password" });
         }
 
         console.log("Authentication successful for user:", username);
+        logSecurityEvent('AUTH_SUCCESS', { username, userId: user.id, role: user.role }, undefined, 'LOW', 'SUCCESS');
+        logAuthenticationProcess(username, true, { 
+          userId: user.id,
+          role: user.role,
+          loginTime: new Date().toISOString()
+        });
         return done(null, user);
       } catch (error) {
         console.error("Authentication error:", error);
+        logSecurityEvent('AUTH_ERROR', { username, error: error.message }, undefined, 'CRITICAL', 'FAILURE');
+        logAuthenticationProcess(username, false, { reason: 'System error', error: error.message });
         return done(error);
       }
     })
@@ -240,7 +366,8 @@ export function setupAuth(app: Express) {
       return res.status(400).json({ message: "CAPTCHA verification required" });
     }
     
-    const isCaptchaValid = verifyCaptcha(captchaSessionId, captchaInput, true);
+    // Security: Pass IP address for CAPTCHA verification and consume on success
+    const isCaptchaValid = verifyCaptcha(captchaSessionId, captchaInput, clientIp, true);
     if (!isCaptchaValid) {
       logSecurityEvent('LOGIN_CAPTCHA_FAILED', { username, ip: clientIp }, req);
       console.log("CAPTCHA verification failed for login attempt");
@@ -293,18 +420,77 @@ export function setupAuth(app: Express) {
     })(req, res, next);
   });
 
-  // Logout route (both GET and POST for compatibility)
+  // Enhanced logout handler with complete session destruction
   const logoutHandler = (req: any, res: any, next: any) => {
+    const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
+    const userAgent = req.get('User-Agent') || 'unknown';
+    const username = req.user?.username || 'unknown';
+    
+    // Log logout attempt for security monitoring
+    logSecurityEvent('LOGOUT_ATTEMPT', { 
+      username, 
+      ip: clientIp,
+      userAgent,
+      sessionId: req.sessionID 
+    }, req);
+    
+    // Step 1: Destroy the session data
     req.logout((err: any) => {
-      if (err) return next(err);
-      
-      // If it's an API request (POST or Accept: application/json), send JSON
-      if (req.method === 'POST' || req.accepts('json')) {
-        res.json({ message: "Logged out successfully" });
-      } else {
-        // If it's a browser navigation (GET), redirect to home
-        res.redirect('/');
+      if (err) {
+        console.error("Logout error:", err);
+        logSecurityEvent('LOGOUT_ERROR', { username, error: err.message }, req);
+        return next(err);
       }
+      
+      // Step 2: Destroy the session completely (prevents session replay)
+      req.session.destroy((err: any) => {
+        if (err) {
+          console.error("Session destruction error:", err);
+          logSecurityEvent('SESSION_DESTRUCTION_ERROR', { username, error: err.message }, req);
+          return next(err);
+        }
+        
+            // Step 3: Clear the session cookie with enhanced security
+            res.clearCookie('cid.session.id', {
+              path: SECURITY_CONFIG.COOKIE_SECURITY.path,
+              httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly,
+              secure: SECURITY_CONFIG.COOKIE_SECURITY.secure,
+              sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite,
+              domain: SECURITY_CONFIG.COOKIE_SECURITY.domain,
+              partitioned: SECURITY_CONFIG.COOKIE_SECURITY.partitioned
+            });
+            
+            // Step 4: Clear any additional auth cookies
+            res.clearCookie('connect.sid', {
+              path: SECURITY_CONFIG.COOKIE_SECURITY.path,
+              httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly,
+              secure: SECURITY_CONFIG.COOKIE_SECURITY.secure,
+              sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite,
+              domain: SECURITY_CONFIG.COOKIE_SECURITY.domain,
+              partitioned: SECURITY_CONFIG.COOKIE_SECURITY.partitioned
+            });
+        
+        // Log successful logout
+        logSecurityEvent('LOGOUT_SUCCESS', { 
+          username, 
+          ip: clientIp,
+          sessionDestroyed: true 
+        }, req);
+        
+        console.log(`User ${username} logged out successfully from IP: ${clientIp}`);
+        
+        // Step 5: Send appropriate response
+        if (req.method === 'POST' || req.accepts('json')) {
+          res.json({ 
+            message: "Logged out successfully",
+            sessionDestroyed: true,
+            timestamp: new Date().toISOString()
+          });
+        } else {
+          // If it's a browser navigation (GET), redirect to home
+          res.redirect('/');
+        }
+      });
     });
   };
 
@@ -324,6 +510,73 @@ export function setupAuth(app: Express) {
       role: user.role,
       firstName: user.firstName,
       lastName: user.lastName,
+    });
+  });
+
+  // Session status endpoint - check session validity and remaining time
+  app.get("/api/auth/session-status", (req, res) => {
+    if (!req.session || !req.sessionID) {
+      return res.status(401).json({ 
+        valid: false, 
+        message: "No active session" 
+      });
+    }
+
+    const now = Date.now();
+    const lastActivity = req.session.lastActivity || req.session.cookie.originalMaxAge || now;
+    const inactivityTime = now - lastActivity;
+    const timeRemaining = Math.max(0, SECURITY_CONFIG.SESSION_TIMEOUT - inactivityTime);
+    const timeRemainingSeconds = Math.ceil(timeRemaining / 1000);
+
+    // Check if session is expired
+    if (inactivityTime > SECURITY_CONFIG.SESSION_TIMEOUT) {
+      req.session.destroy((err: any) => {
+        if (err) {
+          console.error('Session destruction error:', err);
+        }
+      });
+      
+      return res.status(401).json({ 
+        valid: false, 
+        message: "Session expired due to inactivity",
+        code: "SESSION_TIMEOUT"
+      });
+    }
+
+    // Check if session is approaching timeout
+    const isWarning = timeRemaining <= SECURITY_CONFIG.SESSION_WARNING_TIME;
+
+    res.json({
+      valid: true,
+      timeRemaining: timeRemainingSeconds,
+      isWarning: isWarning,
+      lastActivity: lastActivity,
+      sessionId: req.sessionID
+    });
+  });
+
+  // Session extension endpoint - extend session on user activity
+  app.post("/api/auth/extend-session", (req, res) => {
+    if (!req.session || !req.sessionID) {
+      return res.status(401).json({ 
+        success: false, 
+        message: "No active session" 
+      });
+    }
+
+    // Update last activity time
+    req.session.lastActivity = Date.now();
+    
+    logSecurityEvent('SESSION_EXTENDED', { 
+      sessionId: req.sessionID,
+      ip: req.ip,
+      userAgent: req.get('User-Agent')
+    }, req);
+
+    res.json({ 
+      success: true, 
+      message: "Session extended",
+      timeRemaining: Math.ceil(SECURITY_CONFIG.SESSION_TIMEOUT / 1000)
     });
   });
   
@@ -363,7 +616,8 @@ export function setupAuth(app: Express) {
       return res.status(400).json({ message: "CAPTCHA verification required" });
     }
     
-    const isCaptchaValid = verifyCaptcha(captchaSessionId, captchaInput, true);
+    // Security: Pass IP address for CAPTCHA verification and consume on success
+    const isCaptchaValid = verifyCaptcha(captchaSessionId, captchaInput, clientIp, true);
     if (!isCaptchaValid) {
       logSecurityEvent('LOGIN_CAPTCHA_FAILED', { username, ip: clientIp }, req);
       console.log("CAPTCHA verification failed for login attempt");
@@ -421,31 +675,102 @@ export function setupAuth(app: Express) {
   console.log('  - POST /api/auth/login (alias)');
   console.log('  - POST /api/register');
   console.log('  - GET /api/auth/user');
+  console.log('  - GET /api/auth/session-status');
+  console.log('  - POST /api/auth/extend-session');
   console.log('  - POST /api/logout');
   console.log('  - GET /api/logout');
 }
 
-// Middleware to check if user is authenticated
-export function requireAuth(req: any, res: any, next: any) {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: "Authentication required" });
+// Enhanced session validation to prevent replay attacks
+function validateSession(req: any, res: any, next: any) {
+  // Check if session exists and is valid
+  if (!req.session || !req.sessionID) {
+    logSecurityEvent('INVALID_SESSION', { 
+      ip: req.ip,
+      path: req.path,
+      userAgent: req.get('User-Agent')
+    }, req);
+    return res.status(401).json({ message: "Invalid session" });
   }
+  
+  // Check if session has been destroyed (replay attack prevention)
+  if (req.session.destroyed) {
+    logSecurityEvent('SESSION_REPLAY_ATTEMPT', { 
+      sessionId: req.sessionID,
+      ip: req.ip,
+      path: req.path,
+      userAgent: req.get('User-Agent')
+    }, req);
+    return res.status(401).json({ message: "Session has been terminated" });
+  }
+  
+  // Check session age (prevent stale sessions)
+  if (req.session.cookie && req.session.cookie.maxAge) {
+    const sessionAge = Date.now() - req.session.cookie.originalMaxAge + req.session.cookie.maxAge;
+    if (sessionAge > SECURITY_CONFIG.SESSION_TIMEOUT) {
+      logSecurityEvent('STALE_SESSION', { 
+        sessionId: req.sessionID,
+        age: sessionAge,
+        ip: req.ip
+      }, req);
+      req.session.destroy(() => {});
+      return res.status(401).json({ message: "Session expired" });
+    }
+  }
+  
   next();
 }
 
-// Middleware to check if user is admin
+// Middleware to check if user is authenticated with session validation
+export function requireAuth(req: any, res: any, next: any) {
+  // First validate the session
+  validateSession(req, res, (err: any) => {
+    if (err) return next(err);
+    
+    // Then check authentication
+    if (!req.isAuthenticated()) {
+      logSecurityEvent('UNAUTHENTICATED_ACCESS', { 
+        ip: req.ip,
+        path: req.path,
+        sessionId: req.sessionID
+      }, req);
+      return res.status(401).json({ message: "Authentication required" });
+    }
+    
+    next();
+  });
+}
+
+// Middleware to check if user is admin with session validation
 export function requireAdmin(req: any, res: any, next: any) {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: "Authentication required" });
-  }
-  
-  const user = req.user as SelectUser;
-  
-  if (user.role !== 'admin' && user.role !== 'super_admin') {
-    return res.status(403).json({ message: "Admin access required" });
-  }
-  
-  next();
+  // First validate the session
+  validateSession(req, res, (err: any) => {
+    if (err) return next(err);
+    
+    // Then check authentication
+    if (!req.isAuthenticated()) {
+      logSecurityEvent('ADMIN_UNAUTHENTICATED_ACCESS', { 
+        ip: req.ip,
+        path: req.path,
+        sessionId: req.sessionID
+      }, req);
+      return res.status(401).json({ message: "Authentication required" });
+    }
+    
+    const user = req.user as SelectUser;
+    if (user.role !== 'admin' && user.role !== 'super_admin') {
+      logSecurityEvent('ADMIN_ACCESS_DENIED', { 
+        username: user.username,
+        role: user.role,
+        ip: req.ip,
+        path: req.path,
+        sessionId: req.sessionID
+      }, req);
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    next();
+  });
 }
 
 export { hashPassword, comparePasswords };

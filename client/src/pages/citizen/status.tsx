@@ -1,13 +1,9 @@
+import ProtectedEmail from "@/components/common/ProtectedEmail";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import {
   Search,
   FileText,
@@ -101,7 +97,7 @@ export default function ComplaintStatus() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSearch} className="space-y-4">
+              <form onSubmit={handleSearch} className="space-y-4" autoComplete="off">
                 <div>
                   <Label htmlFor="complaintNumber">Complaint Number</Label>
                   <Input
@@ -298,7 +294,11 @@ export default function ComplaintStatus() {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Mail className="h-4 w-4 text-gray-600" />
-                      <span>help.tspolice@cgg.gov.in</span>
+                      <ProtectedEmail 
+                        email="help.tspolice@cgg.gov.in" 
+                        method="obfuscated"
+                        showIcon={false}
+                      />
                     </div>
                   </div>
                 </div>

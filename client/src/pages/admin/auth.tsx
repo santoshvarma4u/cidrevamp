@@ -159,7 +159,7 @@ export default function AdminAuth() {
           </CardHeader>
           
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
               <div className="space-y-2">
                 <Label htmlFor="username" className="text-sm font-medium text-gray-700">
                   Username
@@ -173,6 +173,7 @@ export default function AdminAuth() {
                     value={formData.username}
                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                     className="pl-10 placeholder:text-white/70"
+                    autoComplete="off"
                     required
                   />
                 </div>
@@ -191,6 +192,7 @@ export default function AdminAuth() {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="pl-10 placeholder:text-white/70"
+                    autoComplete="off"
                     required
                   />
                 </div>

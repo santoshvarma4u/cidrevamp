@@ -25,7 +25,7 @@ import rightLogoSrc from "@assets/police-logo_1753517995022.png";
 
 export default function Header() {
   const [location] = useLocation();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: menuPages = [], isLoading: menuLoading } = useMenuPages();
 
@@ -139,7 +139,7 @@ export default function Header() {
                     </DropdownMenuItem>
                   ) : null}
                   <DropdownMenuItem
-                    onClick={() => (window.location.href = "/api/logout")}
+                    onClick={() => logout()}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout

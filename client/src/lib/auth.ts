@@ -65,13 +65,38 @@ export const useAuthStore = create<AuthState>()(
         }
       },
       
-      logout: () => {
+      logout: async () => {
+        try {
+          // Call server logout endpoint to destroy session
+          await fetch('/api/logout', {
+            method: 'POST',
+            credentials: 'include', // Include cookies
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+        } catch (error) {
+          console.error('Logout API call failed:', error);
+          // Continue with client-side cleanup even if server call fails
+        }
+        
+        // Clear client-side state
         set({
           user: null,
           token: null,
           isAuthenticated: false,
         });
+        
+        // Clear localStorage
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+        
+        // Clear any other auth-related storage
+        sessionStorage.removeItem('auth_token');
+        sessionStorage.removeItem('user');
+        
+        // Redirect to home page
+        window.location.href = '/';
       },
       
       setUser: (user: User | null) => {

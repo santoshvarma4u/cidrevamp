@@ -1,3 +1,4 @@
+import ProtectedEmail from "@/components/common/ProtectedEmail";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -210,7 +211,7 @@ export default function ComplaintForm() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
                 <div>
                   <Label htmlFor="type">Complaint Type *</Label>
                   <Select value={formData.type} onValueChange={(value) => setFormData({ ...formData, type: value })}>
@@ -359,7 +360,11 @@ export default function ComplaintForm() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="h-4 w-4 text-gray-600" />
-                  <span>help.tspolice@cgg.gov.in</span>
+                  <ProtectedEmail 
+                    email="help.tspolice@cgg.gov.in" 
+                    method="obfuscated"
+                    showIcon={false}
+                  />
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4 text-gray-600" />

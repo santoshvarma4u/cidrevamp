@@ -3,6 +3,15 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
+import { setupLogManagementRoutes } from "./logManagement";
+import { setupEmailProtectionRoutes, emailProtectionMiddleware, initializeEmailProtection } from "./emailProtection";
+import { 
+  initializeFileUploadSecurity, 
+  createSecureUpload, 
+  enhancedFileValidation,
+  getFileUploadStats,
+  clearUploadTracking
+} from "./fileUploadSecurity";
 import {
   insertPageSchema,
   insertVideoSchema,
@@ -25,52 +34,9 @@ import path from "path";
 import { z } from "zod";
 
 // Enhanced file upload security
-const storage_multer = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    // Sanitize filename
-    const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, "_");
-    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(sanitizedName));
-  },
-});
-
-// File type validation and size limits
-const upload = multer({
-  storage: storage_multer,
-  limits: {
-    fileSize: 50 * 1024 * 1024, // 50MB limit
-    files: 1, // Single file upload
-  },
-  fileFilter: (req, file, cb) => {
-    // Allow only specific file types for security
-    const allowedMimes = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-      "image/webp",
-      "video/mp4",
-      "video/webm",
-      "video/ogg",
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
-
-    if (allowedMimes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(
-        new Error(
-          "Invalid file type. Only images, videos, and documents are allowed.",
-        ),
-      );
-    }
-  },
-});
+const secureImageUpload = createSecureUpload('images');
+const secureDocumentUpload = createSecureUpload('documents');
+const secureVideoUpload = createSecureUpload('videos');
 
 // Input validation middleware
 const validateInput = (req: any, res: any, next: any) => {
@@ -97,10 +63,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // CAPTCHA endpoints
+  // CAPTCHA endpoints - Enhanced security
   app.get("/api/captcha", (req, res) => {
     try {
-      const captcha = generateCaptcha();
+      // Security: Pass IP address for rate limiting
+      const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
+      const captcha = generateCaptcha(clientIp);
+      
+      if (!captcha) {
+        // Rate limit exceeded
+        return res.status(429).json({ 
+          message: "Too many CAPTCHA requests. Please try again later." 
+        });
+      }
+      
+      // Security: Only return session ID and SVG image (no plaintext data)
       res.json(captcha);
     } catch (error) {
       console.error("Error generating CAPTCHA:", error);
@@ -118,7 +95,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           .json({ message: "Session ID and user input are required" });
       }
 
-      const isValid = verifyCaptcha(sessionId, userInput);
+      // Security: Pass IP address for verification
+      const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
+      const isValid = verifyCaptcha(sessionId, userInput, clientIp, false);
+      
       res.json({ valid: isValid });
     } catch (error) {
       console.error("Error verifying CAPTCHA:", error);
@@ -129,10 +109,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/captcha/refresh", (req, res) => {
     try {
       const { sessionId } = req.body;
-      const newCaptcha = refreshCaptcha(sessionId);
+      
+      // Security: Pass IP address for rate limiting
+      const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
+      const newCaptcha = refreshCaptcha(sessionId, clientIp);
 
       if (!newCaptcha) {
-        return res.status(400).json({ message: "Failed to refresh CAPTCHA" });
+        // Rate limit exceeded or other error
+        return res.status(429).json({ 
+          message: "Too many CAPTCHA refresh requests. Please try again later." 
+        });
       }
 
       res.json(newCaptcha);
@@ -144,15 +130,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Serve static files from uploads directory
   app.use("/uploads", express.static("uploads"));
+  app.use("/uploads/images", express.static("uploads/images"));
+  app.use("/uploads/documents", express.static("uploads/documents"));
+  app.use("/uploads/videos", express.static("uploads/videos"));
 
   // Auth middleware
   await setupAuth(app);
+  
+  // Log management routes
+  setupLogManagementRoutes(app);
+  
+  // Email protection system
+  initializeEmailProtection();
+  setupEmailProtectionRoutes(app);
+  
+  // File upload security system
+  initializeFileUploadSecurity();
+  
+  // Email protection middleware for API responses
+  app.use('/api', emailProtectionMiddleware);
 
   // Image upload endpoint for rich text editor
   app.post(
     "/api/upload/image",
     requireAuth,
-    upload.single("image"),
+    secureImageUpload.single("image"),
+    enhancedFileValidation,
     (req, res) => {
       try {
         if (!req.file) {
@@ -160,12 +163,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
 
         // Return the file URL
-        const imageUrl = `/uploads/${req.file.filename}`;
+        const imageUrl = `/uploads/images/${req.file.filename}`;
         res.json({
           url: imageUrl,
           filename: req.file.filename,
           originalName: req.file.originalname,
           size: req.file.size,
+          category: 'images',
         });
       } catch (error) {
         console.error("Image upload error:", error);
@@ -173,6 +177,96 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     },
   );
+
+  // Document upload endpoint
+  app.post(
+    "/api/upload/document",
+    requireAuth,
+    secureDocumentUpload.single("document"),
+    enhancedFileValidation,
+    (req, res) => {
+      try {
+        if (!req.file) {
+          return res.status(400).json({ message: "No document file provided" });
+        }
+
+        const documentUrl = `/uploads/documents/${req.file.filename}`;
+        res.json({
+          url: documentUrl,
+          filename: req.file.filename,
+          originalName: req.file.originalname,
+          size: req.file.size,
+          category: 'documents',
+        });
+      } catch (error) {
+        console.error("Document upload error:", error);
+        res.status(500).json({ message: "Failed to upload document" });
+      }
+    },
+  );
+
+  // Video upload endpoint
+  app.post(
+    "/api/upload/video",
+    requireAuth,
+    secureVideoUpload.single("video"),
+    enhancedFileValidation,
+    (req, res) => {
+      try {
+        if (!req.file) {
+          return res.status(400).json({ message: "No video file provided" });
+        }
+
+        const videoUrl = `/uploads/videos/${req.file.filename}`;
+        res.json({
+          url: videoUrl,
+          filename: req.file.filename,
+          originalName: req.file.originalname,
+          size: req.file.size,
+          category: 'videos',
+        });
+      } catch (error) {
+        console.error("Video upload error:", error);
+        res.status(500).json({ message: "Failed to upload video" });
+      }
+    },
+  );
+
+  // File upload statistics endpoint
+  app.get("/api/admin/upload/stats", requireAdmin, (req, res) => {
+    try {
+      const stats = getFileUploadStats();
+      res.json({
+        success: true,
+        data: stats,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("Error getting upload stats:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to get upload statistics",
+      });
+    }
+  });
+
+  // Clear upload tracking endpoint
+  app.post("/api/admin/upload/clear-tracking", requireAdmin, (req, res) => {
+    try {
+      clearUploadTracking();
+      res.json({
+        success: true,
+        message: "Upload tracking cleared successfully",
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("Error clearing upload tracking:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to clear upload tracking",
+      });
+    }
+  });
 
   // Public routes are now handled in setupAuth()
 

@@ -24,6 +24,7 @@ import {
 
 export default function AdminSidebar() {
   const [location] = useLocation();
+  const { logout } = useAuth();
   const { user } = useAuth();
 
   const navigationItems = [
@@ -194,7 +195,7 @@ export default function AdminSidebar() {
             <Button 
               variant="ghost" 
               className="w-full justify-start text-gray-300 hover:bg-gray-800 hover:text-white"
-              onClick={() => window.location.href = '/api/logout'}
+              onClick={() => logout()}
             >
               <LogOut className="mr-2 h-4 w-4" />
               Logout

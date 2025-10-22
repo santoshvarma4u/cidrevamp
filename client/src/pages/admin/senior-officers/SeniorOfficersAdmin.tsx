@@ -1,3 +1,4 @@
+import ProtectedEmail from "@/components/common/ProtectedEmail";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -451,7 +452,11 @@ export function SeniorOfficersAdmin() {
                       {officer.email && (
                         <div className="flex items-center">
                           <Mail className="h-4 w-4 mr-1" />
-                          {officer.email}
+                          <ProtectedEmail 
+                            email={officer.email} 
+                            method="obfuscated"
+                            showIcon={false}
+                          />
                         </div>
                       )}
                     </div>
