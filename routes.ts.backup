@@ -3,15 +3,6 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth, requireAdmin } from "./auth";
-import { setupLogManagementRoutes } from "./logManagement";
-import { setupEmailProtectionRoutes, emailProtectionMiddleware, initializeEmailProtection } from "./emailProtection";
-import { 
-  initializeFileUploadSecurity, 
-  createSecureUpload, 
-  enhancedFileValidation,
-  getFileUploadStats,
-  clearUploadTracking
-} from "./fileUploadSecurity";
 import {
   insertPageSchema,
   insertVideoSchema,
@@ -32,12 +23,54 @@ import { body, validationResult } from "express-validator";
 import multer from "multer";
 import path from "path";
 import { z } from "zod";
-import { unlockAccount, unlockAllAccounts, getLockedAccounts, isAccountLocked } from "./security";
 
 // Enhanced file upload security
-const secureImageUpload = createSecureUpload('images');
-const secureDocumentUpload = createSecureUpload('documents');
-const secureVideoUpload = createSecureUpload('videos');
+const storage_multer = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    // Sanitize filename
+    const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, "_");
+    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(sanitizedName));
+  },
+});
+
+// File type validation and size limits
+const upload = multer({
+  storage: storage_multer,
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB limit
+    files: 1, // Single file upload
+  },
+  fileFilter: (req, file, cb) => {
+    // Allow only specific file types for security
+    const allowedMimes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "video/mp4",
+      "video/webm",
+      "video/ogg",
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(
+        new Error(
+          "Invalid file type. Only images, videos, and documents are allowed.",
+        ),
+      );
+    }
+  },
+});
 
 // Input validation middleware
 const validateInput = (req: any, res: any, next: any) => {
@@ -64,21 +97,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // CAPTCHA endpoints - Enhanced security
+  // CAPTCHA endpoints
   app.get("/api/captcha", (req, res) => {
     try {
-      // Security: Pass IP address for rate limiting
-      const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
-      const captcha = generateCaptcha(clientIp);
-      
-      if (!captcha) {
-        // Rate limit exceeded
-        return res.status(429).json({ 
-          message: "Too many CAPTCHA requests. Please try again later." 
-        });
-      }
-      
-      // Security: Only return session ID and SVG image (no plaintext data)
+      const captcha = generateCaptcha();
       res.json(captcha);
     } catch (error) {
       console.error("Error generating CAPTCHA:", error);
@@ -96,10 +118,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           .json({ message: "Session ID and user input are required" });
       }
 
-      // Security: Pass IP address for verification
-      const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
-      const isValid = verifyCaptcha(sessionId, userInput, clientIp, false);
-      
+      const isValid = verifyCaptcha(sessionId, userInput);
       res.json({ valid: isValid });
     } catch (error) {
       console.error("Error verifying CAPTCHA:", error);
@@ -110,16 +129,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/captcha/refresh", (req, res) => {
     try {
       const { sessionId } = req.body;
-      
-      // Security: Pass IP address for rate limiting
-      const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
-      const newCaptcha = refreshCaptcha(sessionId, clientIp);
+      const newCaptcha = refreshCaptcha(sessionId);
 
       if (!newCaptcha) {
-        // Rate limit exceeded or other error
-        return res.status(429).json({ 
-          message: "Too many CAPTCHA refresh requests. Please try again later." 
-        });
+        return res.status(400).json({ message: "Failed to refresh CAPTCHA" });
       }
 
       res.json(newCaptcha);
@@ -131,32 +144,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Serve static files from uploads directory
   app.use("/uploads", express.static("uploads"));
-  app.use("/uploads/images", express.static("uploads/images"));
-  app.use("/uploads/documents", express.static("uploads/documents"));
-  app.use("/uploads/videos", express.static("uploads/videos"));
 
   // Auth middleware
   await setupAuth(app);
-  
-  // Log management routes
-  setupLogManagementRoutes(app);
-  
-  // Email protection system
-  initializeEmailProtection();
-  setupEmailProtectionRoutes(app);
-  
-  // File upload security system
-  initializeFileUploadSecurity();
-  
-  // Email protection middleware for API responses
-  app.use('/api', emailProtectionMiddleware);
 
   // Image upload endpoint for rich text editor
   app.post(
     "/api/upload/image",
     requireAuth,
-    secureImageUpload.single("image"),
-    enhancedFileValidation,
+    upload.single("image"),
     (req, res) => {
       try {
         if (!req.file) {
@@ -164,13 +160,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
 
         // Return the file URL
-        const imageUrl = `/uploads/images/${req.file.filename}`;
+        const imageUrl = `/uploads/${req.file.filename}`;
         res.json({
           url: imageUrl,
           filename: req.file.filename,
           originalName: req.file.originalname,
           size: req.file.size,
-          category: 'images',
         });
       } catch (error) {
         console.error("Image upload error:", error);
@@ -178,96 +173,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     },
   );
-
-  // Document upload endpoint
-  app.post(
-    "/api/upload/document",
-    requireAuth,
-    secureDocumentUpload.single("document"),
-    enhancedFileValidation,
-    (req, res) => {
-      try {
-        if (!req.file) {
-          return res.status(400).json({ message: "No document file provided" });
-        }
-
-        const documentUrl = `/uploads/documents/${req.file.filename}`;
-        res.json({
-          url: documentUrl,
-          filename: req.file.filename,
-          originalName: req.file.originalname,
-          size: req.file.size,
-          category: 'documents',
-        });
-      } catch (error) {
-        console.error("Document upload error:", error);
-        res.status(500).json({ message: "Failed to upload document" });
-      }
-    },
-  );
-
-  // Video upload endpoint
-  app.post(
-    "/api/upload/video",
-    requireAuth,
-    secureVideoUpload.single("video"),
-    enhancedFileValidation,
-    (req, res) => {
-      try {
-        if (!req.file) {
-          return res.status(400).json({ message: "No video file provided" });
-        }
-
-        const videoUrl = `/uploads/videos/${req.file.filename}`;
-        res.json({
-          url: videoUrl,
-          filename: req.file.filename,
-          originalName: req.file.originalname,
-          size: req.file.size,
-          category: 'videos',
-        });
-      } catch (error) {
-        console.error("Video upload error:", error);
-        res.status(500).json({ message: "Failed to upload video" });
-      }
-    },
-  );
-
-  // File upload statistics endpoint
-  app.get("/api/admin/upload/stats", requireAdmin, (req, res) => {
-    try {
-      const stats = getFileUploadStats();
-      res.json({
-        success: true,
-        data: stats,
-        timestamp: new Date().toISOString(),
-      });
-    } catch (error) {
-      console.error("Error getting upload stats:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to get upload statistics",
-      });
-    }
-  });
-
-  // Clear upload tracking endpoint
-  app.post("/api/admin/upload/clear-tracking", requireAdmin, (req, res) => {
-    try {
-      clearUploadTracking();
-      res.json({
-        success: true,
-        message: "Upload tracking cleared successfully",
-        timestamp: new Date().toISOString(),
-      });
-    } catch (error) {
-      console.error("Error clearing upload tracking:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to clear upload tracking",
-      });
-    }
-  });
 
   // Public routes are now handled in setupAuth()
 
@@ -541,7 +446,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post(
     "/api/admin/videos",
     requireAdmin,
-    secureVideoUpload.single("video"),
+    upload.single("video"),
     async (req: any, res) => {
       try {
         if (!req.file) {
@@ -605,7 +510,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post(
     "/api/admin/photos",
     requireAdmin,
-    secureImageUpload.single("photo"),
+    upload.single("photo"),
     async (req: any, res) => {
       try {
         if (!req.file) {
@@ -851,7 +756,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post(
     "/api/admin/director-info",
     requireAdmin,
-    secureImageUpload.single("photo"),
+    upload.single("photo"),
     async (req: any, res) => {
       try {
         const validatedData = insertDirectorInfoSchema.parse({
@@ -881,7 +786,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put(
     "/api/admin/director-info/:id",
     requireAdmin,
-    secureImageUpload.single("photo"),
+    upload.single("photo"),
     async (req: any, res) => {
       try {
         const id = parseInt(req.params.id);
@@ -1178,7 +1083,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post(
     "/api/admin/senior-officers",
     requireAdmin,
-    secureImageUpload.single("photo"),
+    upload.single("photo"),
     async (req: any, res) => {
       try {
         const data = { ...req.body };
@@ -1212,7 +1117,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put(
     "/api/admin/senior-officers/:id",
     requireAdmin,
-    secureImageUpload.single("photo"),
+    upload.single("photo"),
     async (req: any, res) => {
       try {
         const id = parseInt(req.params.id);
@@ -1413,45 +1318,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-
-  // Admin routes for account lockout management
-  app.get("/api/admin/locked-accounts", requireAdmin, async (req, res) => {
-    try {
-      const lockedAccounts = getLockedAccounts();
-      res.json(lockedAccounts);
-    } catch (error) {
-      console.error("Error getting locked accounts:", error);
-      res.status(500).json({ message: "Failed to get locked accounts" });
-    }
-  });
-
-  app.post("/api/admin/unlock-account", requireAdmin, async (req, res) => {
-    try {
-      const { identifier } = req.body;
-      if (!identifier) {
-        return res.status(400).json({ message: "Identifier is required" });
-      }
-      const unlocked = unlockAccount(identifier);
-      if (unlocked) {
-        res.json({ message: `Account ${identifier} unlocked successfully` });
-      } else {
-        res.json({ message: `Account ${identifier} was not locked or does not exist` });
-      }
-    } catch (error) {
-      console.error("Error unlocking account:", error);
-      res.status(500).json({ message: "Failed to unlock account" });
-    }
-  });
-
-  app.post("/api/admin/unlock-all-accounts", requireAdmin, async (req, res) => {
-    try {
-      const count = unlockAllAccounts();
-      res.json({ message: `Successfully unlocked ${count} accounts` });
-    } catch (error) {
-      console.error("Error unlocking all accounts:", error);
-      res.status(500).json({ message: "Failed to unlock all accounts" });
-    }
-  });
   const httpServer = createServer(app);
   return httpServer;
 }

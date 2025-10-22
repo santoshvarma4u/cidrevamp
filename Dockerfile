@@ -83,6 +83,7 @@ RUN mkdir -p uploads
 
 # Create uploads directory if it doesn't exist
 RUN mkdir -p uploads && chown -R nextjs:nodejs uploads
+RUN mkdir -p logs && chown -R nextjs:nodejs logs
 
 # Switch to non-root user
 USER nextjs

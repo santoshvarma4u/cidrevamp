@@ -547,3 +547,46 @@ export const CSP_CONFIG = {
     ...(process.env.NODE_ENV === 'production' && { upgradeInsecureRequests: [] }),
   },
 };
+// Manual unlock functions for administrative use
+export function unlockAccount(identifier: string): boolean {
+  const deleted = loginAttempts.delete(identifier);
+  if (deleted) {
+    console.info(`Account manually unlocked: ${identifier}`);
+  }
+  return deleted;
+}
+
+export function unlockAllAccounts(): number {
+  const count = loginAttempts.size;
+  loginAttempts.clear();
+  console.info(`All accounts unlocked. Total: ${count}`);
+  return count;
+}
+
+export function getLockedAccounts(): Array<{identifier: string, attempts: number, lockedUntil?: number}> {
+  const now = Date.now();
+  const locked: Array<{identifier: string, attempts: number, lockedUntil?: number}> = [];
+  
+  for (const [identifier, data] of loginAttempts.entries()) {
+    if (data.lockedUntil && now < data.lockedUntil) {
+      locked.push({
+        identifier,
+        attempts: data.count,
+        lockedUntil: data.lockedUntil
+      });
+    }
+  }
+  
+  return locked;
+}
+
+export function isAccountLocked(identifier: string): boolean {
+  const now = Date.now();
+  const attempts = loginAttempts.get(identifier);
+  
+  if (!attempts || !attempts.lockedUntil) {
+    return false;
+  }
+  
+  return now < attempts.lockedUntil;
+}
