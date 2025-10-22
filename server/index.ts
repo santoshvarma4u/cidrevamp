@@ -60,21 +60,25 @@ app.use((req, res, next) => {
 // HTTP Method Filtering - Block insecure methods (TRACE, TRACK, etc.)
 app.use(httpMethodFilter);
 
-// Rate limiting
+// Rate limiting - Adjusted for development and normal usage
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: 1000, // Increased from 100 to 1000 requests per windowMs
   message: "Too many requests from this IP, please try again later.",
   standardHeaders: true,
   legacyHeaders: false,
+  // Skip rate limiting in development
+  skip: (req) => process.env.NODE_ENV === 'development',
 });
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 5 auth requests per windowMs
+  max: 20, // Increased from 5 to 20 auth requests per windowMs
   message: "Too many authentication attempts, please try again later.",
   standardHeaders: true,
   legacyHeaders: false,
+  // Skip rate limiting in development
+  skip: (req) => process.env.NODE_ENV === 'development',
 });
 
 // CORS configuration - Strict whitelist only (CWE-942)

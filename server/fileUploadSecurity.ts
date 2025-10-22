@@ -17,7 +17,7 @@ const FILE_UPLOAD_CONFIG = {
   
   // File count limits
   MAX_FILES_PER_REQUEST: 1,
-  MAX_FILES_PER_USER_PER_HOUR: 10,
+  MAX_FILES_PER_USER_PER_HOUR: 50, // Increased from 10 to 50 for normal usage
   
   // Upload directories
   UPLOAD_DIR: './uploads',
@@ -276,6 +276,11 @@ export function checkFileContent(buffer: Buffer): { safe: boolean; reason?: stri
 
 // Rate limiting for file uploads
 export function checkUploadRateLimit(userId: string): boolean {
+  // Skip rate limiting in development mode
+  if (process.env.NODE_ENV === 'development') {
+    return true;
+  }
+  
   const now = Date.now();
   const userUploads = uploadTracking.get(userId);
   

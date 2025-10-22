@@ -518,6 +518,18 @@ export function logSecurityEvent(
   enhancedLogSecurityEvent(event, details, req, severity, status, responseTime, requestSize, responseSize);
 }
 
+// Clear login attempts (for testing)
+export function clearLoginAttempts() {
+  loginAttempts.clear();
+  console.log('Login attempts cleared');
+}
+
+// Clear rate limit store (for testing)
+export function clearRateLimitStore() {
+  rateLimitStore.clear();
+  console.log('Rate limit store cleared');
+}
+
 // Content Security Policy configuration
 export const CSP_CONFIG = {
   directives: {

@@ -55,6 +55,11 @@ setInterval(() => {
 
 // Security: Check rate limit for CAPTCHA generation
 function checkCaptchaRateLimit(ipAddress: string): boolean {
+  // Skip rate limiting in development mode
+  if (process.env.NODE_ENV === 'development') {
+    return true;
+  }
+  
   const now = Date.now();
   const limit = captchaRateLimit.get(ipAddress);
   
@@ -67,8 +72,8 @@ function checkCaptchaRateLimit(ipAddress: string): boolean {
     return true;
   }
   
-  // Max 20 CAPTCHAs per 15 minutes per IP (rate limiting)
-  if (limit.count >= 20) {
+  // Max 50 CAPTCHAs per 15 minutes per IP (increased for normal usage)
+  if (limit.count >= 50) {
     console.warn(`CAPTCHA rate limit exceeded for IP: ${ipAddress}`);
     return false;
   }
@@ -246,4 +251,10 @@ export function getCaptchaStats() {
     activeSessions: captchaSessions.size,
     ratelimitedIPs: captchaRateLimit.size,
   };
+}
+
+// Clear CAPTCHA rate limiting (for testing/admin)
+export function clearCaptchaRateLimit() {
+  captchaRateLimit.clear();
+  console.log('CAPTCHA rate limiting cleared');
 }
