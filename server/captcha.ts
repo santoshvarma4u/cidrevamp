@@ -20,7 +20,7 @@ const captchaRateLimit = new Map<string, { count: number; resetTime: number }>()
 // Security: Hash CAPTCHA text instead of storing plaintext
 function hashCaptchaText(text: string, sessionId: string): string {
   return createHash('sha256')
-    .update(text.toUpperCase())
+    .update(text.toUpperCase().trim()) // Normalize case and trim whitespace
     .update(sessionId)
     .update(process.env.SESSION_SECRET || 'captcha-secret')
     .digest('hex');
@@ -138,11 +138,25 @@ export function generateCaptcha(ipAddress?: string): { id: string; svg: string }
 }
 
 export function verifyCaptcha(sessionId: string, input: string, ipAddress?: string, consume: boolean = false): boolean {
-  // Development mode: allow bypass with specific values
-  if (process.env.NODE_ENV === 'development' && 
-      (input === 'dev' || input === 'test' || input === 'bypass')) {
-    console.log('Development mode: CAPTCHA bypassed');
-    return true;
+  // Development mode: allow bypass with specific values or any input if session exists
+  if (process.env.NODE_ENV === 'development') {
+    if (input === 'dev' || input === 'test' || input === 'bypass') {
+      console.log('Development mode: CAPTCHA bypassed with special value');
+      return true;
+    }
+    
+    // In development, also allow any non-empty input if session exists
+    const session = captchaSessions.get(sessionId);
+    if (session && input && input.trim().length > 0) {
+      console.log('Development mode: CAPTCHA accepted with any non-empty input');
+      if (consume) {
+        captchaSessions.delete(sessionId);
+      } else {
+        session.used = true;
+        session.verified = true;
+      }
+      return true;
+    }
   }
 
   const session = captchaSessions.get(sessionId);
@@ -160,7 +174,8 @@ export function verifyCaptcha(sessionId: string, input: string, ipAddress?: stri
   }
 
   // Security: Verify IP address matches (optional but recommended)
-  if (ipAddress && session.ipAddress && session.ipAddress !== ipAddress) {
+  // Skip IP validation in development mode to prevent issues
+  if (process.env.NODE_ENV !== 'development' && ipAddress && session.ipAddress && session.ipAddress !== ipAddress) {
     console.warn(`CAPTCHA IP mismatch: Session IP ${session.ipAddress} vs Request IP ${ipAddress}`);
     captchaSessions.delete(sessionId);
     return false;

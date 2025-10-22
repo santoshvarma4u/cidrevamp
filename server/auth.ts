@@ -567,11 +567,14 @@ export function setupAuth(app: Express) {
     // Update last activity time
     req.session.lastActivity = Date.now();
     
-    logSecurityEvent('SESSION_EXTENDED', { 
-      sessionId: req.sessionID,
-      ip: req.ip,
-      userAgent: req.get('User-Agent')
-    }, req);
+    // Only log in production to reduce noise in development
+    if (process.env.NODE_ENV === 'production') {
+      logSecurityEvent('SESSION_EXTENDED', { 
+        sessionId: req.sessionID,
+        ip: req.ip,
+        userAgent: req.get('User-Agent')
+      }, req);
+    }
 
     res.json({ 
       success: true, 

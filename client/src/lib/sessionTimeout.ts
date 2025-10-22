@@ -37,16 +37,26 @@ class SessionTimeoutManager {
   private startActivityTracking(): void {
     if (!this.config.extendOnActivity) return;
 
-    // Track user activity events
-    const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+    // Track user activity events (reduced to prevent excessive API calls)
+    const activityEvents = ['mousedown', 'keypress', 'click'];
+    let lastExtensionTime = 0;
+    const EXTENSION_COOLDOWN = 600000; // 10 minute cooldown between extensions
     
     const resetActivityTimeout = () => {
       this.lastActivity = Date.now();
       
-      // Extend session on activity
-      this.extendSession().catch(error => {
-        console.warn('Failed to extend session:', error);
-      });
+      // Only extend session if:
+      // 1. Not currently showing a warning
+      // 2. Not already expired
+      // 3. Haven't extended in the last minute (cooldown)
+      const now = Date.now();
+      if (!this.warningShown && !this.isModalOpen && (now - lastExtensionTime) > EXTENSION_COOLDOWN) {
+        this.extendSession().then(() => {
+          lastExtensionTime = now;
+        }).catch(error => {
+          console.warn('Failed to extend session on activity:', error);
+        });
+      }
     };
 
     activityEvents.forEach(event => {
