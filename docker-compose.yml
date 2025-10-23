@@ -31,7 +31,7 @@ services:
     image: dpage/pgadmin4:latest
     container_name: cid-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@cid.local
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin123
       PGADMIN_CONFIG_SERVER_MODE: 'False'
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
@@ -85,6 +85,7 @@ services:
       - "5000:5000"
     volumes:
       - app_uploads:/app/uploads
+      - app_logs:/app/logs
     networks:
       - cid-network
     depends_on:
@@ -98,7 +99,7 @@ services:
       retries: 3
       start_period: 40s
 
-  # Nginx Reverse Proxy (Optional - for production)
+  # Nginx Reverse Proxy (Production HTTPS)
   nginx:
     image: nginx:alpine
     container_name: cid-nginx
@@ -113,13 +114,13 @@ services:
     depends_on:
       - app
     restart: unless-stopped
-    profiles:
-      - production
 
 volumes:
   postgres_data:
     driver: local
   app_uploads:
+    driver: local
+  app_logs:
     driver: local
   pgadmin_data:
     driver: local

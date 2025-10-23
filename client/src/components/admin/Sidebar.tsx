@@ -24,8 +24,7 @@ import {
 
 export default function AdminSidebar() {
   const [location] = useLocation();
-  const { logout } = useAuth();
-  const { user } = useAuth();
+  const { logout, user } = useAuth();
 
   const navigationItems = [
     {

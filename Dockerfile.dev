@@ -1,11 +1,28 @@
 # Development Dockerfile with hot reload
 FROM node:20-alpine AS development
 
-# Install development dependencies
-RUN apk add --no-cache git
+# Install build dependencies for canvas and native modules
+RUN apk add --no-cache \
+    git \
+    python3 \
+    py3-pip \
+    make \
+    g++ \
+    cairo-dev \
+    jpeg-dev \
+    pango-dev \
+    musl-dev \
+    giflib-dev \
+    pixman-dev \
+    pangomm-dev \
+    libjpeg-turbo-dev \
+    freetype-dev
 
 # Set working directory
 WORKDIR /app
+
+# Set Python path for node-gyp
+ENV PYTHON=/usr/bin/python3
 
 # Copy package files
 COPY package*.json ./

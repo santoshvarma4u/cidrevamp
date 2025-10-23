@@ -17,7 +17,7 @@ import type { LoginData } from "@shared/schema";
 export default function AdminAuth() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, refreshAuth } = useAuth();
   const [formData, setFormData] = useState<LoginData>({
     username: "",
     password: "",
@@ -64,13 +64,19 @@ export default function AdminAuth() {
       return res.json();
     },
     onSuccess: (data) => {
+      console.log("Login successful, user data:", data);
       toast({
         title: "Login successful",
         description: `Welcome back, ${data.firstName || data.username}!`,
       });
       
-      // Refresh the page to update auth state
-      window.location.href = '/admin';
+      // Force refresh of auth state and then navigate
+      refreshAuth();
+      
+      // Use a longer delay to ensure auth state is updated
+      setTimeout(() => {
+        setLocation('/admin');
+      }, 500);
     },
     onError: (error: Error) => {
       toast({

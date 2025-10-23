@@ -511,11 +511,17 @@ export function logSecurityEvent(
   requestSize?: number,
   responseSize?: number
 ) {
-  // Import the enhanced logging function
-  const { logSecurityEvent: enhancedLogSecurityEvent } = require('./auditLogger');
-  
-  // Call the enhanced logging function
-  enhancedLogSecurityEvent(event, details, req, severity, status, responseTime, requestSize, responseSize);
+  // Import the enhanced logging function synchronously
+  try {
+    const auditLogger = require('./auditLogger');
+    const { logSecurityEvent: enhancedLogSecurityEvent } = auditLogger;
+    
+    // Call the enhanced logging function
+    enhancedLogSecurityEvent(event, details, req, severity, status, responseTime, requestSize, responseSize);
+  } catch (error) {
+    // Fallback to console logging if audit logger fails
+    console.log(`[SECURITY] ${event}:`, details);
+  }
 }
 
 // Clear login attempts (for testing)

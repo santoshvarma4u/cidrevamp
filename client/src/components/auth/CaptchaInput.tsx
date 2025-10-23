@@ -111,7 +111,7 @@ export default function CaptchaInput({ onCaptchaChange, onValidationChange, erro
     setUserInput(value);
     onCaptchaChange(captchaData?.id || "", value);
     
-    // Auto-verify when user types 5 characters
+    // Auto-verify when user types 5 characters (matching server generation)
     if (value.length === 5 && captchaData) {
       setIsValidating(true);
       verifyMutation.mutate({ sessionId: captchaData.id, input: value });

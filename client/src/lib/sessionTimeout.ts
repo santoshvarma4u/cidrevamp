@@ -21,6 +21,7 @@ class SessionTimeoutManager {
   private statusCheckInterval: NodeJS.Timeout | null = null;
   private activityTimeout: NodeJS.Timeout | null = null;
   private lastActivity: number = Date.now();
+  private lastExtensionTime: number = 0; // Track last extension time
 
   constructor(config: Partial<SessionTimeoutConfig> = {}) {
     this.config = {
@@ -37,36 +38,23 @@ class SessionTimeoutManager {
   private startActivityTracking(): void {
     if (!this.config.extendOnActivity) return;
 
-    // Track user activity events (reduced to prevent excessive API calls)
-    const activityEvents = ['mousedown', 'keypress', 'click'];
-    let lastExtensionTime = 0;
-    const EXTENSION_COOLDOWN = 600000; // 10 minute cooldown between extensions
+    // Track user activity events (very conservative to prevent excessive API calls)
+    const activityEvents = ['click', 'keypress']; // Only meaningful user actions
     
     const resetActivityTimeout = () => {
       this.lastActivity = Date.now();
-      
-      // Only extend session if:
-      // 1. Not currently showing a warning
-      // 2. Not already expired
-      // 3. Haven't extended in the last minute (cooldown)
-      const now = Date.now();
-      if (!this.warningShown && !this.isModalOpen && (now - lastExtensionTime) > EXTENSION_COOLDOWN) {
-        this.extendSession().then(() => {
-          lastExtensionTime = now;
-        }).catch(error => {
-          console.warn('Failed to extend session on activity:', error);
-        });
-      }
+      // Don't extend session on activity - let the periodic check handle it
     };
 
     activityEvents.forEach(event => {
       document.addEventListener(event, resetActivityTimeout, true);
     });
 
-    // Also track page visibility changes
+    // Also track page visibility changes (but don't extend immediately)
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
-        resetActivityTimeout();
+        this.lastActivity = Date.now();
+        // Don't extend session on visibility change, just update activity
       }
     });
   }
@@ -115,12 +103,28 @@ class SessionTimeoutManager {
         this.updateTimeoutWarning(status.timeRemaining);
       }
 
+      // Only extend session if it's very close to expiring (less than 2 minutes remaining)
+      // and we haven't extended recently
+      if (status.timeRemaining <= 120 && status.timeRemaining > 0) { // Less than 2 minutes
+        console.log(`Session close to expiry (${status.timeRemaining}s remaining), extending...`);
+        await this.extendSession();
+      }
+
     } catch (error) {
       console.warn('Session status check failed:', error);
     }
   }
 
   private async extendSession(): Promise<void> {
+    const now = Date.now();
+    const EXTENSION_COOLDOWN = 5 * 60 * 1000; // 5 minute cooldown between extensions
+    
+    // Check if we've extended recently
+    if (now - this.lastExtensionTime < EXTENSION_COOLDOWN) {
+      console.log('Session extension skipped - too recent');
+      return;
+    }
+    
     try {
       const response = await fetch('/api/auth/extend-session', {
         method: 'POST',
@@ -133,6 +137,7 @@ class SessionTimeoutManager {
       if (response.ok) {
         const result = await response.json();
         console.log('Session extended:', result.message);
+        this.lastExtensionTime = now; // Update last extension time
         
         // Hide warning if it was shown
         if (this.warningShown) {

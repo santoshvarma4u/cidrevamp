@@ -102,8 +102,10 @@ export function setupAuth(app: Express) {
       Object.keys(sessions).forEach(sessionId => {
         const session = sessions[sessionId];
         if (session && session.cookie) {
-          const maxAge = session.cookie.maxAge || SECURITY_CONFIG.SESSION_TIMEOUT;
-          const sessionAge = now - (session.cookie.originalMaxAge || now) + maxAge;
+          // Calculate session age correctly - time since session was created
+          // Use the session's creation time or fallback to cookie maxAge calculation
+          const sessionCreated = session.createdAt || (now - session.cookie.maxAge);
+          const sessionAge = now - sessionCreated;
           
           // Destroy sessions older than configured timeout
           if (sessionAge > SECURITY_CONFIG.SESSION_TIMEOUT) {
@@ -315,6 +317,12 @@ export function setupAuth(app: Express) {
 
       req.login(user, (err) => {
         if (err) return next(err);
+        
+        // Add creation timestamp to session for proper age calculation
+        if (req.session) {
+          req.session.createdAt = Date.now();
+        }
+        
         res.status(201).json({ 
           id: user.id, 
           username: user.username, 
@@ -401,6 +409,18 @@ export function setupAuth(app: Express) {
           logSecurityEvent('LOGIN_SESSION_ERROR', { username, error: err.message }, req);
           return res.status(500).json({ message: "Login failed" });
         }
+        
+        // Add creation timestamp to session for proper age calculation
+        if (req.session) {
+          req.session.createdAt = Date.now();
+        }
+        
+        console.log("Session established successfully:", {
+          sessionId: req.sessionID,
+          userId: user.id,
+          username: user.username,
+          isAuthenticated: req.isAuthenticated()
+        });
         
         logSecurityEvent('LOGIN_SUCCESS', { 
           username: user.username, 
@@ -498,11 +518,25 @@ export function setupAuth(app: Express) {
   app.get("/api/logout", logoutHandler);
 
   app.get("/api/auth/user", (req, res) => {
+    console.log("Auth user endpoint called:", {
+      sessionId: req.sessionID,
+      isAuthenticated: req.isAuthenticated(),
+      hasSession: !!req.session,
+      userAgent: req.get('User-Agent')
+    });
+    
     if (!req.isAuthenticated()) {
+      console.log("User not authenticated, returning 401");
       return res.status(401).json({ message: "Unauthorized" });
     }
     
     const user = req.user as SelectUser;
+    console.log("User authenticated successfully:", {
+      userId: user.id,
+      username: user.username,
+      role: user.role
+    });
+    
     res.json({
       id: user.id,
       username: user.username,
@@ -655,6 +689,18 @@ export function setupAuth(app: Express) {
           return res.status(500).json({ message: "Login failed" });
         }
         
+        // Add creation timestamp to session for proper age calculation
+        if (req.session) {
+          req.session.createdAt = Date.now();
+        }
+        
+        console.log("Session established successfully:", {
+          sessionId: req.sessionID,
+          userId: user.id,
+          username: user.username,
+          isAuthenticated: req.isAuthenticated()
+        });
+        
         logSecurityEvent('LOGIN_SUCCESS', { 
           username: user.username, 
           role: user.role,
@@ -709,7 +755,10 @@ function validateSession(req: any, res: any, next: any) {
   
   // Check session age (prevent stale sessions)
   if (req.session.cookie && req.session.cookie.maxAge) {
-    const sessionAge = Date.now() - req.session.cookie.originalMaxAge + req.session.cookie.maxAge;
+    // Calculate session age correctly - time since session was created
+    const sessionCreated = req.session.createdAt || (Date.now() - req.session.cookie.maxAge);
+    const sessionAge = Date.now() - sessionCreated;
+    
     if (sessionAge > SECURITY_CONFIG.SESSION_TIMEOUT) {
       logSecurityEvent('STALE_SESSION', { 
         sessionId: req.sessionID,

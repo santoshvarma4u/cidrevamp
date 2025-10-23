@@ -95,7 +95,7 @@ export function generateCaptcha(ipAddress?: string): { id: string; svg: string }
     '#fff3e0', '#f3e5f5', '#e0f2f1'
   ];
   const noiseLevel = 3 + Math.floor(Math.random() * 3); // 3-5 noise lines (random)
-  const size = 5 + Math.floor(Math.random() * 2); // 5-6 characters (random length)
+  const size = 5; // Fixed 5 characters for consistency
   const fontSize = 45 + Math.floor(Math.random() * 15); // 45-60 (random size)
   
   // Generate CAPTCHA with enhanced random options
@@ -152,8 +152,8 @@ export function verifyCaptcha(sessionId: string, input: string, ipAddress?: stri
       if (consume) {
         captchaSessions.delete(sessionId);
       } else {
-        session.used = true;
         session.verified = true;
+        // Don't mark as used in development mode for client-side verification
       }
       return true;
     }
@@ -204,17 +204,17 @@ export function verifyCaptcha(sessionId: string, input: string, ipAddress?: stri
   const isValid = verifyCaptchaHash(input, session.textHash, sessionId);
   
   if (isValid) {
-    // Mark as used immediately to prevent reuse
-    session.used = true;
-    
+    // Only mark as used if we're consuming the CAPTCHA (login process)
+    // Don't mark as used for client-side verification (preview)
     if (consume) {
+      session.used = true;
       // Remove session after successful verification
       captchaSessions.delete(sessionId);
       console.log(`CAPTCHA verified and consumed for session: ${sessionId}`);
     } else {
-      // Mark as verified but keep session temporarily
+      // Mark as verified but keep session temporarily for reuse
       session.verified = true;
-      console.log(`CAPTCHA verified for session: ${sessionId}`);
+      console.log(`CAPTCHA verified for session: ${sessionId} (not consumed)`);
     }
   } else {
     console.warn(`CAPTCHA verification failed: Invalid input for session ${sessionId}`);

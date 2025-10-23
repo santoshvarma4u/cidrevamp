@@ -78,12 +78,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/shared ./shared
 COPY --from=builder --chown=nextjs:nodejs /app/drizzle.config.ts ./
 COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
 
-# Create uploads directory
-RUN mkdir -p uploads
-
-# Create uploads directory if it doesn't exist
-RUN mkdir -p uploads && chown -R nextjs:nodejs uploads
-RUN mkdir -p logs && chown -R nextjs:nodejs logs
+# Create required directories
+RUN mkdir -p uploads logs/reports && chown -R nextjs:nodejs uploads logs
 
 # Switch to non-root user
 USER nextjs

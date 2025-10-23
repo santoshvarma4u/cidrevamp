@@ -46,8 +46,9 @@ import NclContentAdmin from "@/pages/admin/ncl-content/NclContentAdmin";
 import queryClient from "@/lib/queryClient";
 
 function Router() {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isLoading } = useAuth();
 
+// check 
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -58,8 +59,6 @@ function Router() {
       </div>
     );
   }
-
-  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin';
 
   return (
     <Switch>
@@ -84,24 +83,20 @@ function Router() {
       {/* Admin auth route (public) */}
       <Route path="/admin/login" component={AdminAuth} />
 
-      {/* Admin routes - must be before dynamic page route */}
-      {isAuthenticated && isAdmin && (
-        <>
-          <Route path="/admin" component={AdminDashboard} />
-          <Route path="/admin/content/pages" component={AdminPages} />
-          <Route path="/admin/content/videos" component={AdminVideos} />
-          <Route path="/admin/content/photos" component={AdminPhotos} />
-          <Route path="/admin/content/news" component={AdminNews} />
-          <Route path="/admin/complaints" component={AdminComplaints} />
-          <Route path="/admin/news-ticker" component={AdminNewsTicker} />
-          <Route path="/admin/director" component={AdminDirectorManager} />
-          <Route path="/admin/wings" component={AdminWingsManager} />
-          <Route path="/admin/contact" component={ContactManagement} />
-          <Route path="/admin/senior-officers" component={SeniorOfficersManagement} />
-          <Route path="/admin/alerts" component={AlertsAdmin} />
-          <Route path="/admin/ncl-content" component={NclContentAdmin} />
-        </>
-      )}
+      {/* Admin routes - always available, protected by component-level auth */}
+      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/admin/content/pages" component={AdminPages} />
+      <Route path="/admin/content/videos" component={AdminVideos} />
+      <Route path="/admin/content/photos" component={AdminPhotos} />
+      <Route path="/admin/content/news" component={AdminNews} />
+      <Route path="/admin/complaints" component={AdminComplaints} />
+      <Route path="/admin/news-ticker" component={AdminNewsTicker} />
+      <Route path="/admin/director" component={AdminDirectorManager} />
+      <Route path="/admin/wings" component={AdminWingsManager} />
+      <Route path="/admin/contact" component={ContactManagement} />
+      <Route path="/admin/senior-officers" component={SeniorOfficersManagement} />
+      <Route path="/admin/alerts" component={AlertsAdmin} />
+      <Route path="/admin/ncl-content" component={NclContentAdmin} />
 
       {/* Dynamic page route - must be LAST after all static routes */}
       <Route path="/:slug" component={DynamicPage} />

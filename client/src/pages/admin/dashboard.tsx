@@ -22,19 +22,25 @@ export default function AdminDashboard() {
   const { toast } = useToast();
   const { isAuthenticated, isLoading, user } = useAuth();
 
+  console.log("AdminDashboard render - isAuthenticated:", isAuthenticated, "isLoading:", isLoading, "user:", user);
+
   useEffect(() => {
+    console.log("AdminDashboard useEffect - isAuthenticated:", isAuthenticated, "isLoading:", isLoading);
+    console.log("AdminDashboard useEffect - user:", user);
+    
     if (!isLoading && !isAuthenticated) {
+      console.log("User not authenticated, redirecting to login");
       toast({
         title: "Unauthorized",
         description: "You are logged out. Logging in again...",
         variant: "destructive",
       });
       setTimeout(() => {
-        window.location.href = "/api/login";
+        window.location.href = "/admin/login";
       }, 500);
       return;
     }
-  }, [isAuthenticated, isLoading, toast]);
+  }, [isAuthenticated, isLoading, toast, user]);
 
   const { data: pages = [] } = useQuery({
     queryKey: ["/api/pages"],
