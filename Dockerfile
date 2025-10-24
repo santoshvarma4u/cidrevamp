@@ -35,6 +35,56 @@ COPY . .
 # Build the application
 RUN npm run build
 
+# Development stage
+FROM node:20-alpine AS development
+
+# Install runtime dependencies for canvas and other native modules
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    make \
+    g++ \
+    cairo-dev \
+    jpeg-dev \
+    pango-dev \
+    musl-dev \
+    giflib-dev \
+    pixman-dev \
+    pangomm-dev \
+    libjpeg-turbo-dev \
+    freetype-dev
+
+# Set working directory
+WORKDIR /app
+
+# Set Python path for node-gyp
+ENV PYTHON=/usr/bin/python3
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies)
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Create required directories
+RUN mkdir -p uploads logs/reports
+
+# Expose port
+EXPOSE 5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "const http = require('http'); \
+  http.get('http://127.0.0.1:5000/api/health', (res) => { \
+    process.exit(res.statusCode === 200 ? 0 : 1); \
+  }).on('error', () => process.exit(1));"
+
+# Start the application in development mode
+CMD ["npm", "run", "dev"]
+
 # Production stage
 FROM node:20-alpine AS production
 

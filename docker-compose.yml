@@ -86,6 +86,8 @@ services:
     volumes:
       - app_uploads:/app/uploads
       - app_logs:/app/logs
+      - .:/app
+      - /app/node_modules
     networks:
       - cid-network
     depends_on:
