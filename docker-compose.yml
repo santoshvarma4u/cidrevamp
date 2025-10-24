@@ -72,15 +72,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
+      target: development
     container_name: cid-app
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
       PORT: 5000
       DATABASE_URL: postgresql://ciduser:cidpassword@postgres:5432/ciddb
       SESSION_SECRET: your-super-secret-session-key-change-this-in-production
-      FORCE_HTTPS: "true"
-      ALLOW_HTTP_SESSIONS: "false"
+      FORCE_HTTPS: "false"
+      ALLOW_HTTP_SESSIONS: "true"
     ports:
       - "5000:5000"
     volumes:
@@ -103,6 +103,8 @@ services:
   nginx:
     image: nginx:alpine
     container_name: cid-nginx
+    profiles:
+      - production
     ports:
       - "80:80"
       - "443:443"
