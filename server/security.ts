@@ -62,8 +62,10 @@ export const SECURITY_CONFIG = {
   
   // Cookie security configuration
   COOKIE_SECURITY: {
-    // Secure flag - always true in production, configurable for development
-    secure: process.env.NODE_ENV === 'production' || process.env.FORCE_HTTPS === 'true',
+    // Secure flag - ALWAYS true for security compliance (requires HTTPS)
+    // This ensures cookies are only sent over HTTPS connections
+    // Note: Requires HTTPS to work properly - cookies will not be sent over HTTP
+    secure: true,
     
     // HttpOnly flag - prevent XSS attacks
     httpOnly: true,
