@@ -81,7 +81,31 @@ const FILE_UPLOAD_CONFIG = {
     /vbscript:/i,
     /onload=/i,
     /onerror=/i,
+    /<%/i, // ASP/JSP tags
+    /#!/i, // Shell shebang
   ],
+  
+  // File magic numbers (file signatures) for content validation
+  // Format: [signature bytes (hex), offset, description]
+  FILE_SIGNATURES: {
+    images: [
+      { signature: Buffer.from([0xFF, 0xD8, 0xFF]), offset: 0, ext: '.jpg', mime: 'image/jpeg' }, // JPEG
+      { signature: Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]), offset: 0, ext: '.png', mime: 'image/png' }, // PNG
+      { signature: Buffer.from([0x47, 0x49, 0x46, 0x38]), offset: 0, ext: '.gif', mime: 'image/gif' }, // GIF
+      { signature: Buffer.from([0x52, 0x49, 0x46, 0x46]), offset: 0, ext: '.webp', mime: 'image/webp' }, // WEBP (RIFF header)
+      { signature: Buffer.from([0x3C, 0x73, 0x76, 0x67]), offset: 0, ext: '.svg', mime: 'image/svg+xml' }, // SVG (text format)
+    ],
+    documents: [
+      { signature: Buffer.from([0x25, 0x50, 0x44, 0x46]), offset: 0, ext: '.pdf', mime: 'application/pdf' }, // PDF
+      { signature: Buffer.from([0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]), offset: 0, ext: '.doc', mime: 'application/msword' }, // DOC (OLE2)
+      { signature: Buffer.from([0x50, 0x4B, 0x03, 0x04]), offset: 0, ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }, // DOCX (ZIP-based)
+    ],
+    videos: [
+      { signature: Buffer.from([0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70]), offset: 4, ext: '.mp4', mime: 'video/mp4' }, // MP4
+      { signature: Buffer.from([0x1A, 0x45, 0xDF, 0xA3]), offset: 0, ext: '.webm', mime: 'video/webm' }, // WEBM (Matroska)
+      { signature: Buffer.from([0x4F, 0x67, 0x67, 0x53]), offset: 0, ext: '.ogg', mime: 'video/ogg' }, // OGG
+    ],
+  },
 };
 
 // File upload tracking for rate limiting
@@ -261,9 +285,56 @@ export function detectFileCategory(mimetype: string): 'images' | 'documents' | '
   return null;
 }
 
+// Validate file magic number (file signature) - content-based validation
+export function validateFileMagicNumber(buffer: Buffer, category: 'images' | 'documents' | 'videos', declaredMime: string): { valid: boolean; reason?: string; detectedType?: string } {
+  if (!buffer || buffer.length < 16) {
+    return { valid: false, reason: 'File too small to validate' };
+  }
+  
+  const signatures = FILE_UPLOAD_CONFIG.FILE_SIGNATURES[category];
+  
+  for (const sig of signatures) {
+    if (buffer.length < sig.offset + sig.signature.length) {
+      continue;
+    }
+    
+    const fileHeader = buffer.slice(sig.offset, sig.offset + sig.signature.length);
+    if (fileHeader.equals(sig.signature)) {
+      // Verify detected type matches declared MIME type
+      if (sig.mime === declaredMime || declaredMime === 'application/octet-stream') {
+        return { valid: true, detectedType: sig.mime };
+      } else {
+        return { valid: false, reason: `File signature (${sig.mime}) does not match declared type (${declaredMime})`, detectedType: sig.mime };
+      }
+    }
+  }
+  
+  // Special handling for SVG (text-based, check for SVG markers)
+  if (category === 'images' && declaredMime === 'image/svg+xml') {
+    const textStart = buffer.toString('utf8', 0, Math.min(buffer.length, 1024));
+    if (textStart.includes('<svg') || textStart.includes('<?xml')) {
+      return { valid: true, detectedType: 'image/svg+xml' };
+    }
+  }
+  
+  // Special handling for text files
+  if (category === 'documents' && declaredMime === 'text/plain') {
+    // Allow if it's valid UTF-8 text
+    try {
+      buffer.toString('utf8');
+      return { valid: true, detectedType: 'text/plain' };
+    } catch {
+      return { valid: false, reason: 'Invalid text file encoding' };
+    }
+  }
+  
+  return { valid: false, reason: `File signature does not match expected ${category} format` };
+}
+
 // Check file content for suspicious patterns
 export function checkFileContent(buffer: Buffer): { safe: boolean; reason?: string } {
-  const content = buffer.toString('utf8', 0, Math.min(buffer.length, 1024)); // Check first 1KB
+  // Check first 10KB for suspicious patterns
+  const content = buffer.toString('utf8', 0, Math.min(buffer.length, 10240));
   
   for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
     if (pattern.test(content)) {
@@ -271,7 +342,35 @@ export function checkFileContent(buffer: Buffer): { safe: boolean; reason?: stri
     }
   }
   
+  // Check for executable markers
+  if (buffer.length >= 2) {
+    // ELF executable (Linux/Unix)
+    if (buffer[0] === 0x7F && buffer[1] === 0x45 && buffer[2] === 0x4C && buffer[3] === 0x46) {
+      return { safe: false, reason: 'Executable file detected (ELF)' };
+    }
+    // PE executable (Windows)
+    if (buffer[0] === 0x4D && buffer[1] === 0x5A) {
+      return { safe: false, reason: 'Executable file detected (PE)' };
+    }
+    // Mach-O executable (macOS)
+    if (buffer[0] === 0xFE && buffer[1] === 0xED && buffer[2] === 0xFA && buffer[3] === 0xCE) {
+      return { safe: false, reason: 'Executable file detected (Mach-O)' };
+    }
+  }
+  
   return { safe: true };
+}
+
+// Set secure file permissions (readable but not executable)
+export function setSecureFilePermissions(filePath: string): void {
+  if (process.platform !== 'win32') {
+    try {
+      // Set permissions to 644 (rw-r--r--) - readable by all, writable by owner, NOT executable
+      fs.chmodSync(filePath, 0o644);
+    } catch (error) {
+      console.error(`Error setting file permissions for ${filePath}:`, error);
+    }
+  }
 }
 
 // Rate limiting for file uploads
@@ -381,7 +480,7 @@ export function createSecureUpload(category: 'images' | 'documents' | 'videos') 
   });
 }
 
-// Enhanced file validation middleware
+// Enhanced file validation middleware - validates after file is saved
 export function enhancedFileValidation(req: any, res: any, next: any) {
   if (!req.file) {
     return next();
@@ -390,8 +489,41 @@ export function enhancedFileValidation(req: any, res: any, next: any) {
   try {
     const file = req.file;
     
-    // Additional file content validation
-    const contentCheck = checkFileContent(file.buffer);
+    // Read file from disk for validation (multer saves to disk, so buffer might be empty)
+    const fileBuffer = fs.existsSync(file.path) ? fs.readFileSync(file.path) : (file.buffer || Buffer.alloc(0));
+    
+    if (fileBuffer.length === 0) {
+      // File might still be uploading or buffer was cleared
+      return res.status(400).json({
+        success: false,
+        message: 'File content could not be read for validation',
+      });
+    }
+    
+    // Detect file category from declared MIME type
+    const category = detectFileCategory(file.mimetype);
+    if (!category) {
+      fs.unlinkSync(file.path);
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid file category',
+      });
+    }
+    
+    // Validate file magic number (content-based validation)
+    const magicValidation = validateFileMagicNumber(fileBuffer, category, file.mimetype);
+    if (!magicValidation.valid) {
+      // Delete the uploaded file
+      fs.unlinkSync(file.path);
+      return res.status(400).json({
+        success: false,
+        message: `File content validation failed: ${magicValidation.reason}`,
+        details: magicValidation.detectedType ? `Detected as ${magicValidation.detectedType} but declared as ${file.mimetype}` : undefined,
+      });
+    }
+    
+    // Additional file content validation (suspicious patterns)
+    const contentCheck = checkFileContent(fileBuffer);
     if (!contentCheck.safe) {
       // Delete the uploaded file
       fs.unlinkSync(file.path);
@@ -401,17 +533,22 @@ export function enhancedFileValidation(req: any, res: any, next: any) {
       });
     }
     
+    // Ensure file permissions are set correctly (non-executable)
+    setSecureFilePermissions(file.path);
+    
     // Log successful upload
-    console.log(`File uploaded successfully: ${file.filename} (${file.size} bytes)`);
+    console.log(`File uploaded and validated successfully: ${file.filename} (${file.size} bytes, type: ${file.mimetype})`);
     
     next();
-  } catch (error) {
+  } catch (error: any) {
     console.error('File validation error:', error);
     
     // Clean up file if it exists
     if (req.file && req.file.path) {
       try {
-        fs.unlinkSync(req.file.path);
+        if (fs.existsSync(req.file.path)) {
+          fs.unlinkSync(req.file.path);
+        }
       } catch (cleanupError) {
         console.error('Error cleaning up file:', cleanupError);
       }
@@ -420,6 +557,7 @@ export function enhancedFileValidation(req: any, res: any, next: any) {
     res.status(500).json({
       success: false,
       message: 'File validation error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 }

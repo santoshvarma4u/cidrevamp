@@ -159,11 +159,11 @@ export function setupAuth(app: Express) {
   app.use((req: any, res: any, next: any) => {
     if (req.session && req.sessionID) {
       // Track last activity time
-      req.session.lastActivity = Date.now();
+      (req.session as any).lastActivity = Date.now();
       
-      // Check if session should be expired due to inactivity
+          // Check if session should be expired due to inactivity
       const now = Date.now();
-      const lastActivity = req.session.lastActivity || req.session.cookie.originalMaxAge || now;
+      const lastActivity = (req.session as any).lastActivity || req.session.cookie.originalMaxAge || now;
       const inactivityTime = now - lastActivity;
       
       if (inactivityTime > SECURITY_CONFIG.SESSION_TIMEOUT) {
@@ -234,10 +234,10 @@ export function setupAuth(app: Express) {
           loginTime: new Date().toISOString()
         });
         return done(null, user);
-      } catch (error) {
-        console.error("Authentication error:", error);
-        logSecurityEvent('AUTH_ERROR', { username, error: error.message }, undefined, 'CRITICAL', 'FAILURE');
-        logAuthenticationProcess(username, false, { reason: 'System error', error: error.message });
+    } catch (error: any) {
+      console.error("Authentication error:", error);
+      logSecurityEvent('AUTH_ERROR', { username, error: error?.message || String(error) }, undefined, 'CRITICAL', 'FAILURE');
+      logAuthenticationProcess(username, false, { reason: 'System error', error: error?.message || String(error) });
         return done(error);
       }
     })
@@ -327,21 +327,35 @@ export function setupAuth(app: Express) {
         ip: clientIp 
       }, req);
 
-      req.login(user, (err) => {
-        if (err) return next(err);
-        
-        // Add creation timestamp to session for proper age calculation
-        if (req.session) {
-          req.session.createdAt = Date.now();
+      // Regenerate session ID for new registration
+      req.session.regenerate((regenerateErr) => {
+        if (regenerateErr) {
+          console.error("Session regeneration error:", regenerateErr);
+          return res.status(500).json({ message: "Registration failed" });
         }
         
-        res.status(201).json({ 
-          id: user.id, 
-          username: user.username, 
-          email: user.email,
-          role: user.role,
-          firstName: user.firstName,
-          lastName: user.lastName,
+        req.login(user, (err) => {
+          if (err) return next(err);
+          
+          // Bind session to IP address and User-Agent
+          const userAgent = req.get('User-Agent') || 'unknown';
+          
+          // Add creation timestamp and binding info to session
+          if (req.session) {
+            (req.session as any).createdAt = Date.now();
+            (req.session as any).clientIp = clientIp;
+            (req.session as any).userAgent = userAgent;
+            (req.session as any).sessionRotatedAt = Date.now();
+          }
+          
+          res.status(201).json({ 
+            id: user.id, 
+            username: user.username, 
+            email: user.email,
+            role: user.role,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          });
         });
       });
     } catch (error) {
@@ -429,38 +443,53 @@ export function setupAuth(app: Express) {
       // Mark successful login attempt
       trackLoginAttempt(username, true);
       
-      req.login(user, (err) => {
-        if (err) {
-          console.error("Login session error:", err);
-          logSecurityEvent('LOGIN_SESSION_ERROR', { username, error: err.message }, req);
+      // Regenerate session ID to prevent session fixation and enable replay protection
+      req.session.regenerate((regenerateErr) => {
+        if (regenerateErr) {
+          console.error("Session regeneration error:", regenerateErr);
+          logSecurityEvent('SESSION_REGENERATION_ERROR', { username, error: regenerateErr.message }, req);
           return res.status(500).json({ message: "Login failed" });
         }
         
-        // Add creation timestamp to session for proper age calculation
-        if (req.session) {
-          req.session.createdAt = Date.now();
-        }
-        
-        console.log("Session established successfully:", {
-          sessionId: req.sessionID,
-          userId: user.id,
-          username: user.username,
-          isAuthenticated: req.isAuthenticated()
-        });
-        
-        logSecurityEvent('LOGIN_SUCCESS', { 
-          username: user.username, 
-          role: user.role,
-          ip: clientIp 
-        }, req);
-        console.log("Login successful for user:", user.username);
-        res.json({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          firstName: user.firstName,
-          lastName: user.lastName,
+        req.login(user, (err) => {
+          if (err) {
+            console.error("Login session error:", err);
+            logSecurityEvent('LOGIN_SESSION_ERROR', { username, error: err.message }, req);
+            return res.status(500).json({ message: "Login failed" });
+          }
+          
+          // Bind session to IP address and User-Agent for replay protection
+          if (req.session) {
+            (req.session as any).createdAt = Date.now();
+            (req.session as any).clientIp = clientIp; // Bind to IP address
+            (req.session as any).userAgent = userAgent; // Bind to User-Agent
+            (req.session as any).sessionRotatedAt = Date.now(); // Track rotation timestamp
+          }
+          
+          console.log("Session established successfully:", {
+            sessionId: req.sessionID,
+            userId: user.id,
+            username: user.username,
+            clientIp: clientIp,
+            isAuthenticated: req.isAuthenticated()
+          });
+          
+          logSecurityEvent('LOGIN_SUCCESS', { 
+            username: user.username, 
+            role: user.role,
+            ip: clientIp,
+            sessionId: req.sessionID,
+            sessionRotated: true
+          }, req);
+          console.log("Login successful for user:", user.username);
+          res.json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          });
         });
       });
     })(req, res, next);
@@ -583,7 +612,7 @@ export function setupAuth(app: Express) {
     }
 
     const now = Date.now();
-    const lastActivity = req.session.lastActivity || req.session.cookie.originalMaxAge || now;
+    const lastActivity = (req.session as any).lastActivity || req.session.cookie.originalMaxAge || now;
     const inactivityTime = now - lastActivity;
     const timeRemaining = Math.max(0, SECURITY_CONFIG.SESSION_TIMEOUT - inactivityTime);
     const timeRemainingSeconds = Math.ceil(timeRemaining / 1000);
@@ -625,7 +654,7 @@ export function setupAuth(app: Express) {
     }
 
     // Update last activity time
-    req.session.lastActivity = Date.now();
+    (req.session as any).lastActivity = Date.now();
     
     // Only log in production to reduce noise in development
     if (process.env.NODE_ENV === 'production') {
@@ -722,38 +751,53 @@ export function setupAuth(app: Express) {
       // Mark successful login attempt
       trackLoginAttempt(username, true);
       
-      req.login(user, (err) => {
-        if (err) {
-          console.error("Login session error:", err);
-          logSecurityEvent('LOGIN_SESSION_ERROR', { username, error: err.message }, req);
+      // Regenerate session ID to prevent session fixation and enable replay protection
+      req.session.regenerate((regenerateErr) => {
+        if (regenerateErr) {
+          console.error("Session regeneration error:", regenerateErr);
+          logSecurityEvent('SESSION_REGENERATION_ERROR', { username, error: regenerateErr.message }, req);
           return res.status(500).json({ message: "Login failed" });
         }
         
-        // Add creation timestamp to session for proper age calculation
-        if (req.session) {
-          req.session.createdAt = Date.now();
-        }
-        
-        console.log("Session established successfully:", {
-          sessionId: req.sessionID,
-          userId: user.id,
-          username: user.username,
-          isAuthenticated: req.isAuthenticated()
-        });
-        
-        logSecurityEvent('LOGIN_SUCCESS', { 
-          username: user.username, 
-          role: user.role,
-          ip: clientIp 
-        }, req);
-        console.log("Login successful for user:", user.username);
-        res.json({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          firstName: user.firstName,
-          lastName: user.lastName,
+        req.login(user, (err) => {
+          if (err) {
+            console.error("Login session error:", err);
+            logSecurityEvent('LOGIN_SESSION_ERROR', { username, error: err.message }, req);
+            return res.status(500).json({ message: "Login failed" });
+          }
+          
+          // Bind session to IP address and User-Agent for replay protection
+          if (req.session) {
+            (req.session as any).createdAt = Date.now();
+            (req.session as any).clientIp = clientIp; // Bind to IP address
+            (req.session as any).userAgent = userAgent; // Bind to User-Agent
+            (req.session as any).sessionRotatedAt = Date.now(); // Track rotation timestamp
+          }
+          
+          console.log("Session established successfully:", {
+            sessionId: req.sessionID,
+            userId: user.id,
+            username: user.username,
+            clientIp: clientIp,
+            isAuthenticated: req.isAuthenticated()
+          });
+          
+          logSecurityEvent('LOGIN_SUCCESS', { 
+            username: user.username, 
+            role: user.role,
+            ip: clientIp,
+            sessionId: req.sessionID,
+            sessionRotated: true
+          }, req);
+          console.log("Login successful for user:", user.username);
+          res.json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          });
         });
       });
     })(req, res, next);
@@ -788,15 +832,57 @@ function validateSession(req: any, res: any, next: any) {
       sessionId: req.sessionID,
       ip: req.ip,
       path: req.path,
-      userAgent: req.get('User-Agent')
-    }, req);
+      userAgent: req.get('User-Agent'),
+      reason: 'Session was destroyed'
+    }, req, 'HIGH', 'FAILURE');
     return res.status(401).json({ message: "Session has been terminated" });
+  }
+  
+  // Bind session to IP address (prevent session hijacking/replay)
+  const currentIp = req.ip || req.connection.remoteAddress || 'unknown';
+  const sessionIp = (req.session as any).clientIp;
+  
+  if (sessionIp && sessionIp !== currentIp && process.env.NODE_ENV === 'production') {
+    // In production, reject requests from different IPs
+    // In development, allow but log the mismatch
+    logSecurityEvent('SESSION_IP_MISMATCH', { 
+      sessionId: req.sessionID,
+      sessionIp: sessionIp,
+      currentIp: currentIp,
+      path: req.path,
+      reason: 'IP address changed'
+    }, req, 'HIGH', 'FAILURE');
+    
+    if (process.env.NODE_ENV === 'production') {
+      req.session.destroy(() => {});
+      return res.status(401).json({ message: "Session security violation: IP address mismatch" });
+    }
+  }
+  
+  // Bind session to User-Agent (prevent session hijacking)
+  const currentUserAgent = req.get('User-Agent') || 'unknown';
+  const sessionUserAgent = (req.session as any).userAgent;
+  
+  if (sessionUserAgent && sessionUserAgent !== currentUserAgent && process.env.NODE_ENV === 'production') {
+    // In production, reject requests with different User-Agent
+    logSecurityEvent('SESSION_USER_AGENT_MISMATCH', { 
+      sessionId: req.sessionID,
+      sessionUserAgent: sessionUserAgent,
+      currentUserAgent: currentUserAgent,
+      path: req.path,
+      reason: 'User-Agent changed'
+    }, req, 'HIGH', 'FAILURE');
+    
+    if (process.env.NODE_ENV === 'production') {
+      req.session.destroy(() => {});
+      return res.status(401).json({ message: "Session security violation: User-Agent mismatch" });
+    }
   }
   
   // Check session age (prevent stale sessions)
   if (req.session.cookie && req.session.cookie.maxAge) {
     // Calculate session age correctly - time since session was created
-    const sessionCreated = req.session.createdAt || (Date.now() - req.session.cookie.maxAge);
+    const sessionCreated = (req.session as any).createdAt || (Date.now() - req.session.cookie.maxAge);
     const sessionAge = Date.now() - sessionCreated;
     
     if (sessionAge > SECURITY_CONFIG.SESSION_TIMEOUT) {
@@ -804,7 +890,7 @@ function validateSession(req: any, res: any, next: any) {
         sessionId: req.sessionID,
         age: sessionAge,
         ip: req.ip
-      }, req);
+      }, req, 'MEDIUM', 'FAILURE');
       req.session.destroy(() => {});
       return res.status(401).json({ message: "Session expired" });
     }

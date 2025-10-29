@@ -3,7 +3,7 @@ import { registerRoutes } from "./routes";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
-import { xssProtection, CSP_CONFIG, enforceHttpsForAuth, validateHostHeader } from "./security";
+import { xssProtection, CSP_CONFIG, enforceHttpsForAuth, validateHostHeader, cookieSecurityMiddleware, getCorsOptions } from "./security";
 import { initializePasswordEncryption } from "./passwordEncryption";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -40,6 +40,9 @@ app.use(helmet({
 // Additional security headers
 app.use(xssProtection);
 
+// Cookie Security Middleware - MUST be before session middleware to enforce secure cookie attributes
+app.use(cookieSecurityMiddleware);
+
 // HTTPS Enforcement for Authentication - Block cleartext password submission over HTTP
 app.use(enforceHttpsForAuth);
 
@@ -60,23 +63,9 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// CORS configuration
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [
-        'https://*.replit.app', 
-        'https://*.replit.dev',
-        'https://*.tspolice.gov.in',
-        'http://localhost:5000',
-        'http://localhost:3000',
-        'http://127.0.0.1:5000',
-        'http://127.0.0.1:3000'
-      ]
-    : true,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-}));
+// CORS configuration - Strict whitelist only (CWE-942)
+// Uses secure validator from security.ts - NEVER allows wildcard *
+app.use(cors(getCorsOptions()));
 
 // Apply rate limiting
 app.use('/api', generalLimiter);
