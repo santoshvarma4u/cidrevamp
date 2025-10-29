@@ -75,7 +75,7 @@ services:
       target: development
     container_name: cid-app
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       PORT: 5000
       DATABASE_URL: postgresql://ciduser:cidpassword@postgres:5432/ciddb
       SESSION_SECRET: your-super-secret-session-key-change-this-in-production
