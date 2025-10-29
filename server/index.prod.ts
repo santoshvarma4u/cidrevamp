@@ -3,7 +3,8 @@ import { registerRoutes } from "./routes";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
-import { xssProtection, CSP_CONFIG } from "./security";
+import { xssProtection, CSP_CONFIG, enforceHttpsForAuth } from "./security";
+import { initializePasswordEncryption } from "./passwordEncryption";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -34,6 +35,9 @@ app.use(helmet({
 
 // Additional security headers
 app.use(xssProtection);
+
+// HTTPS Enforcement for Authentication - Block cleartext password submission over HTTP
+app.use(enforceHttpsForAuth);
 
 // Rate limiting - Production settings
 const generalLimiter = rateLimit({
@@ -89,6 +93,11 @@ app.use('*', (req: Request, res: Response, next: NextFunction) => {
 });
 
 async function main() {
+  // Initialize password encryption system
+  await initializePasswordEncryption().catch(error => {
+    console.error('Failed to initialize password encryption:', error);
+  });
+  
   // CRITICAL: Register API routes FIRST, before any static file serving
   log('🔧 Registering API routes...');
   const server = await registerRoutes(app);

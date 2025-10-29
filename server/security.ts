@@ -239,68 +239,178 @@ export function getCorsOptions() {
   };
 }
 
-// Host Header Validation - Prevent Host Header Injection attacks
+// Host Header Validation - Prevent Host Header Injection attacks (CWE-20)
 export function validateHostHeader(req: Request, res: Response, next: NextFunction) {
+  // Validate Host header (case-insensitive)
   const host = req.headers.host || req.hostname;
   
-  if (!host) {
+  if (!host || typeof host !== 'string' || host.trim().length === 0) {
     logSecurityEvent('MISSING_HOST_HEADER', { 
       ip: req.ip,
       path: req.path,
-      headers: req.headers 
-    }, req);
+      headers: Object.keys(req.headers)
+    }, req, 'HIGH', 'FAILURE');
     return res.status(400).json({ 
       message: 'Bad Request',
-      error: 'Host header is required'
+      error: 'Host header is required',
+      code: 'MISSING_HOST_HEADER'
     });
   }
   
   // Remove port number if present for validation
-  const hostWithoutPort = host.split(':')[0];
+  const hostWithoutPort = host.split(':')[0].toLowerCase().trim();
   
-  // Check against whitelist
+  // Validate host format (prevent injection)
+  if (!/^[a-zA-Z0-9.-]+$/.test(hostWithoutPort) && !hostWithoutPort.includes('localhost')) {
+    logSecurityEvent('INVALID_HOST_FORMAT', { 
+      host: hostWithoutPort,
+      ip: req.ip,
+      path: req.path
+    }, req, 'HIGH', 'FAILURE');
+    return res.status(400).json({ 
+      message: 'Bad Request',
+      error: 'Invalid host format',
+      code: 'INVALID_HOST_FORMAT'
+    });
+  }
+  
+  // Check against whitelist (case-insensitive)
   const isTrusted = SECURITY_CONFIG.TRUSTED_HOSTS.some(trustedHost => {
     if (trustedHost instanceof RegExp) {
       return trustedHost.test(hostWithoutPort);
     }
-    return trustedHost === hostWithoutPort;
+    return typeof trustedHost === 'string' && trustedHost.toLowerCase() === hostWithoutPort;
   });
   
   if (!isTrusted) {
     logSecurityEvent('UNTRUSTED_HOST_HEADER', { 
       host: hostWithoutPort,
+      originalHost: host,
       ip: req.ip,
       path: req.path,
-      userAgent: req.get('User-Agent')
-    }, req);
+      userAgent: req.get('User-Agent'),
+      allHeaders: Object.keys(req.headers)
+    }, req, 'HIGH', 'FAILURE');
     return res.status(403).json({ 
       message: 'Forbidden',
-      error: 'Invalid host header'
+      error: 'Invalid host header',
+      code: 'UNTRUSTED_HOST'
     });
   }
   
-  // Additional validation for X-Forwarded-Host header
+  // Validate X-Forwarded-Host header (if present)
   const forwardedHost = req.headers['x-forwarded-host'];
-  if (forwardedHost && typeof forwardedHost === 'string') {
-    const forwardedHostWithoutPort = forwardedHost.split(':')[0];
-    const isForwardedTrusted = SECURITY_CONFIG.TRUSTED_HOSTS.some(trustedHost => {
-      if (trustedHost instanceof RegExp) {
-        return trustedHost.test(forwardedHostWithoutPort);
+  if (forwardedHost) {
+    const forwardedHostStr = Array.isArray(forwardedHost) ? forwardedHost[0] : forwardedHost;
+    if (typeof forwardedHostStr === 'string' && forwardedHostStr.trim().length > 0) {
+      const forwardedHostWithoutPort = forwardedHostStr.split(':')[0].toLowerCase().trim();
+      
+      // X-Forwarded-Host must match Host header or be in whitelist
+      if (forwardedHostWithoutPort !== hostWithoutPort) {
+        const isForwardedTrusted = SECURITY_CONFIG.TRUSTED_HOSTS.some(trustedHost => {
+          if (trustedHost instanceof RegExp) {
+            return trustedHost.test(forwardedHostWithoutPort);
+          }
+          return typeof trustedHost === 'string' && trustedHost.toLowerCase() === forwardedHostWithoutPort;
+        });
+        
+        if (!isForwardedTrusted) {
+          logSecurityEvent('UNTRUSTED_FORWARDED_HOST', { 
+            host: hostWithoutPort,
+            forwardedHost: forwardedHostWithoutPort,
+            ip: req.ip,
+            path: req.path
+          }, req, 'HIGH', 'FAILURE');
+          return res.status(403).json({ 
+            message: 'Forbidden',
+            error: 'Invalid forwarded host header',
+            code: 'UNTRUSTED_FORWARDED_HOST'
+          });
+        }
       }
-      return trustedHost === forwardedHostWithoutPort;
-    });
-    
-    if (!isForwardedTrusted) {
-      logSecurityEvent('UNTRUSTED_FORWARDED_HOST', { 
-        forwardedHost: forwardedHostWithoutPort,
-        ip: req.ip,
-        path: req.path
-      }, req);
-      return res.status(403).json({ 
-        message: 'Forbidden',
-        error: 'Invalid forwarded host header'
-      });
     }
+  }
+  
+  // Validate X-Real-Host header (if present) - another proxy header
+  const realHost = req.headers['x-real-host'];
+  if (realHost) {
+    const realHostStr = Array.isArray(realHost) ? realHost[0] : realHost;
+    if (typeof realHostStr === 'string' && realHostStr.trim().length > 0) {
+      const realHostWithoutPort = realHostStr.split(':')[0].toLowerCase().trim();
+      
+      if (realHostWithoutPort !== hostWithoutPort) {
+        const isRealHostTrusted = SECURITY_CONFIG.TRUSTED_HOSTS.some(trustedHost => {
+          if (trustedHost instanceof RegExp) {
+            return trustedHost.test(realHostWithoutPort);
+          }
+          return typeof trustedHost === 'string' && trustedHost.toLowerCase() === realHostWithoutPort;
+        });
+        
+        if (!isRealHostTrusted) {
+          logSecurityEvent('UNTRUSTED_REAL_HOST', { 
+            host: hostWithoutPort,
+            realHost: realHostWithoutPort,
+            ip: req.ip,
+            path: req.path
+          }, req, 'HIGH', 'FAILURE');
+          return res.status(403).json({ 
+            message: 'Forbidden',
+            error: 'Invalid real host header',
+            code: 'UNTRUSTED_REAL_HOST'
+          });
+        }
+      }
+    }
+  }
+  
+  // Store validated host in request for downstream use
+  req.headers['x-validated-host'] = hostWithoutPort;
+  
+  next();
+}
+
+// HTTPS Enforcement Middleware - Block cleartext password submission over HTTP
+export function enforceHttpsForAuth(req: Request, res: Response, next: NextFunction) {
+  // Only check authentication endpoints (login, register)
+  const isAuthEndpoint = [
+    '/api/login',
+    '/api/auth/login',
+    '/api/register'
+  ].includes(req.path);
+  
+  if (!isAuthEndpoint) {
+    return next();
+  }
+  
+  // Check if request is over HTTPS
+  const isHttps = 
+    req.secure || // Direct HTTPS connection
+    req.protocol === 'https' || // Protocol is HTTPS
+    req.headers['x-forwarded-proto'] === 'https' || // Behind proxy (Nginx)
+    (req.headers['x-forwarded-ssl'] === 'on') || // Alternative proxy header
+    (req.headers['x-forwarded-port'] === '443'); // HTTPS port indicator
+  
+  // Allow HTTP only if explicitly configured for development
+  const allowHttpSessions = process.env.ALLOW_HTTP_SESSIONS === 'true';
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
+  // Block HTTP requests to auth endpoints unless explicitly allowed
+  if (!isHttps && !(allowHttpSessions && isDevelopment)) {
+    logSecurityEvent('CLEARTEXT_PASSWORD_BLOCKED', { 
+      path: req.path,
+      protocol: req.protocol,
+      secure: req.secure,
+      forwardedProto: req.headers['x-forwarded-proto'],
+      ip: req.ip,
+      message: 'HTTP request blocked - passwords must be submitted over HTTPS'
+    }, req, 'CRITICAL');
+    
+    return res.status(400).json({ 
+      message: 'Security Error: Passwords must be submitted over HTTPS',
+      error: 'CLEARTEXT_PASSWORD_BLOCKED',
+      details: 'This endpoint requires a secure HTTPS connection. Please use HTTPS to submit passwords.',
+      code: 'HTTPS_REQUIRED'
+    });
   }
   
   next();
@@ -573,7 +683,9 @@ export function getLockedAccounts(): Array<{identifier: string, attempts: number
   const now = Date.now();
   const locked: Array<{identifier: string, attempts: number, lockedUntil?: number}> = [];
   
-  for (const [identifier, data] of loginAttempts.entries()) {
+  // Use Array.from to avoid iterator issues
+  const entries = Array.from(loginAttempts.entries());
+  for (const [identifier, data] of entries) {
     if (data.lockedUntil && now < data.lockedUntil) {
       locked.push({
         identifier,

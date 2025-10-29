@@ -36,6 +36,23 @@ export default function AdminAuth() {
 
   const loginMutation = useMutation({
     mutationFn: async (credentials: LoginData & { captchaSessionId: string; captchaInput: string }) => {
+      // Security: Check if we're on HTTP and warn/prevent password submission
+      if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        throw new Error('Security Error: Passwords must be submitted over HTTPS. Please use HTTPS to login.');
+      }
+      
+      // Encrypt password before sending (if supported)
+      let encryptedCredentials = { ...credentials };
+      try {
+        const { encryptPassword, isPasswordEncryptionSupported } = await import('@/lib/passwordEncryption');
+        if (isPasswordEncryptionSupported() && credentials.password) {
+          encryptedCredentials.password = await encryptPassword(credentials.password);
+        }
+      } catch (error) {
+        console.warn('Password encryption not available, sending unencrypted (over HTTPS):', error);
+        // Continue with unencrypted if encryption fails - still secure over HTTPS
+      }
+      
       console.log("Making fetch request to /api/login");
       const res = await fetch('/api/login', {
         method: 'POST',
@@ -43,7 +60,7 @@ export default function AdminAuth() {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(credentials),
+        body: JSON.stringify(encryptedCredentials),
       });
 
       if (!res.ok) {

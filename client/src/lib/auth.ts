@@ -30,10 +30,22 @@ export const useAuthStore = create<AuthState>()(
       
       login: async (username: string, password: string) => {
         try {
+          // Encrypt password before sending (if supported)
+          let encryptedPassword = password;
+          try {
+            const { encryptPassword, isPasswordEncryptionSupported } = await import('@/lib/passwordEncryption');
+            if (isPasswordEncryptionSupported() && password) {
+              encryptedPassword = await encryptPassword(password);
+            }
+          } catch (error) {
+            console.warn('Password encryption not available, sending unencrypted (over HTTPS):', error);
+            // Continue with unencrypted if encryption fails - still secure over HTTPS
+          }
+          
           // First try the auth/login endpoint
           let response = await apiRequest('POST', '/api/auth/login', {
             username,
-            password,
+            password: encryptedPassword,
             captchaSessionId: 'dev-captcha', // For development, you might need to handle CAPTCHA
             captchaInput: 'dev'
           });
@@ -42,7 +54,7 @@ export const useAuthStore = create<AuthState>()(
           if (!response) {
             response = await apiRequest('POST', '/api/login', {
               username,
-              password,
+              password: encryptedPassword,
               captchaSessionId: 'dev-captcha',
               captchaInput: 'dev'
             });

@@ -28,6 +28,7 @@ import {
   insertNclContentSchema,
 } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
+import { getPublicKey, decryptPassword, initializePasswordEncryption, isPasswordEncryptionEnabled } from "./passwordEncryption";
 import { body, validationResult } from "express-validator";
 import multer from "multer";
 import path from "path";
@@ -65,6 +66,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // CAPTCHA endpoints - Enhanced security
+  // Password encryption public key endpoint
+  app.get("/api/auth/public-key", async (req, res) => {
+    try {
+      if (!isPasswordEncryptionEnabled()) {
+        return res.status(404).json({ message: "Password encryption not enabled" });
+      }
+
+      const publicKeyPem = await getPublicKey();
+      res.json({ publicKeyPem });
+    } catch (error) {
+      console.error("Error getting public key:", error);
+      res.status(500).json({ message: "Failed to get encryption public key" });
+    }
+  });
+
   app.get("/api/captcha", (req, res) => {
     try {
       // Security: Pass IP address for rate limiting
@@ -1452,6 +1468,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to unlock all accounts" });
     }
   });
+  // Initialize password encryption system
+  initializePasswordEncryption().catch(error => {
+    console.error('Failed to initialize password encryption:', error);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

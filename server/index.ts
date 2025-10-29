@@ -4,7 +4,7 @@ import { setupVite, serveStatic, log } from "./vite";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
-import { xssProtection, CSP_CONFIG, httpMethodFilter, validateHostHeader, getCorsOptions, cookieSecurityMiddleware } from "./security";
+import { xssProtection, CSP_CONFIG, httpMethodFilter, validateHostHeader, getCorsOptions, cookieSecurityMiddleware, enforceHttpsForAuth } from "./security";
 
 const app = express();
 
@@ -21,8 +21,6 @@ app.use(helmet({
     maxAge: 31536000, // 1 year
     includeSubDomains: true,
     preload: true,
-    // Force HTTPS even in development if FORCE_HTTPS is set
-    force: process.env.FORCE_HTTPS === 'true',
   },
   
   // Additional security headers for TLS protection
@@ -56,6 +54,10 @@ app.use((req, res, next) => {
   
   next();
 });
+
+// HTTPS Enforcement for Authentication - Block cleartext password submission over HTTP
+// MUST be before login routes are registered
+app.use(enforceHttpsForAuth);
 
 // HTTP Method Filtering - Block insecure methods (TRACE, TRACK, etc.)
 app.use(httpMethodFilter);

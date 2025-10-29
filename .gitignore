@@ -4,3 +4,9 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+
+# Security Keys (password encryption - DO NOT COMMIT)
+.keys/
+*.pem
+*.key
+password-*.pem

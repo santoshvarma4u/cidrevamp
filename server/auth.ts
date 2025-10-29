@@ -10,6 +10,7 @@ import { verifyCaptcha } from "./captcha";
 import { User as SelectUser, LoginData } from "@shared/schema";
 import { validatePassword, trackLoginAttempt, logSecurityEvent, sanitizeInput, SECURITY_CONFIG } from "./security";
 import { logAuthenticationProcess, initializeLogging } from "./auditLogger";
+import { decryptPassword, isPasswordEncryptionEnabled } from "./passwordEncryption";
 import connectPg from "connect-pg-simple";
 import createMemoryStore from "memorystore";
 
@@ -268,9 +269,20 @@ export function setupAuth(app: Express) {
       // Input sanitization and validation
       const username = sanitizeInput(req.body.username || '');
       const email = sanitizeInput(req.body.email || '');
-      const password = req.body.password || '';
+      let password = req.body.password || '';
       const firstName = sanitizeInput(req.body.firstName || '');
       const lastName = sanitizeInput(req.body.lastName || '');
+      
+      // Decrypt password if encryption is enabled
+      if (isPasswordEncryptionEnabled() && password) {
+        try {
+          password = await decryptPassword(password);
+        } catch (error) {
+          console.error("Password decryption error:", error);
+          logSecurityEvent('PASSWORD_DECRYPTION_ERROR', { username, ip: clientIp }, req, 'HIGH', 'FAILURE');
+          return res.status(400).json({ message: "Password decryption failed. Please try again." });
+        }
+      }
       
       if (!username || !email || !password || !firstName || !lastName) {
         return res.status(400).json({ message: "All fields are required" });
@@ -341,7 +353,7 @@ export function setupAuth(app: Express) {
 
   // Register login route explicitly with debugging
   console.log('🔐 Registering login route: POST /api/login');
-  app.post("/api/login", (req, res, next) => {
+  app.post("/api/login", async (req, res, next) => {
     const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
     const userAgent = req.get('User-Agent') || 'unknown';
     
@@ -352,12 +364,26 @@ export function setupAuth(app: Express) {
     
     // Input sanitization
     const username = sanitizeInput(req.body.username || '');
-    const password = req.body.password || '';
+    let password = req.body.password || '';
+    
+    // Decrypt password if encryption is enabled
+    if (isPasswordEncryptionEnabled() && password) {
+      try {
+        password = await decryptPassword(password);
+      } catch (error) {
+        console.error("Password decryption error:", error);
+        logSecurityEvent('PASSWORD_DECRYPTION_ERROR', { username, ip: clientIp }, req, 'HIGH', 'FAILURE');
+        return res.status(400).json({ message: "Password decryption failed. Please try again." });
+      }
+    }
     
     if (!username || !password) {
       logSecurityEvent('LOGIN_ATTEMPT_MISSING_CREDENTIALS', { username, ip: clientIp }, req);
       return res.status(400).json({ message: "Username and password are required" });
     }
+    
+    // Update request body with decrypted password for passport
+    req.body.password = password;
     
     // Check for login attempt lockout
     const canAttemptLogin = trackLoginAttempt(username, false);
@@ -619,7 +645,7 @@ export function setupAuth(app: Express) {
   
   // Additional explicit login route registration for production compatibility
   console.log('🔧 Registering /api/auth/login route for frontend compatibility...');
-  app.post("/api/auth/login", (req, res, next) => {
+  app.post("/api/auth/login", async (req, res, next) => {
     console.log("AUTH LOGIN ROUTE HIT - processing login request");
     const clientIp = req.ip || req.connection.remoteAddress || 'unknown';
     const userAgent = req.get('User-Agent') || 'unknown';
@@ -631,12 +657,26 @@ export function setupAuth(app: Express) {
     
     // Input sanitization
     const username = sanitizeInput(req.body.username || '');
-    const password = req.body.password || '';
+    let password = req.body.password || '';
+    
+    // Decrypt password if encryption is enabled
+    if (isPasswordEncryptionEnabled() && password) {
+      try {
+        password = await decryptPassword(password);
+      } catch (error) {
+        console.error("Password decryption error:", error);
+        logSecurityEvent('PASSWORD_DECRYPTION_ERROR', { username, ip: clientIp }, req, 'HIGH', 'FAILURE');
+        return res.status(400).json({ message: "Password decryption failed. Please try again." });
+      }
+    }
     
     if (!username || !password) {
       logSecurityEvent('LOGIN_ATTEMPT_MISSING_CREDENTIALS', { username, ip: clientIp }, req);
       return res.status(400).json({ message: "Username and password are required" });
     }
+    
+    // Update request body with decrypted password for passport
+    req.body.password = password;
     
     // Check for login attempt lockout
     const canAttemptLogin = trackLoginAttempt(username, false);
