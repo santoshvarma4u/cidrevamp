@@ -11,6 +11,10 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 
+// CRITICAL: Trust proxy to correctly detect HTTPS
+// This is essential for cookies with secure=true when behind Nginx reverse proxy
+app.set("trust proxy", 1);
+
 // Host Header Validation - MUST be first for security
 // Validates Host, X-Forwarded-Host, and X-Real-Host headers to prevent Host Header Injection attacks
 app.use(validateHostHeader);

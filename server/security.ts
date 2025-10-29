@@ -6,10 +6,39 @@ export function cookieSecurityMiddleware(req: Request, res: Response, next: Next
   // Override res.cookie to enforce security attributes
   const originalCookie = res.cookie;
   res.cookie = function(name: string, value: string, options: any = {}) {
+    // CRITICAL: Determine if request is actually secure (HTTPS)
+    // This checks multiple sources to handle reverse proxy scenarios
+    // req.secure is true when Express trusts proxy AND x-forwarded-proto is 'https'
+    const isSecureRequest = req.secure || 
+                            req.protocol === 'https' || 
+                            req.headers['x-forwarded-proto'] === 'https' ||
+                            req.headers['x-forwarded-ssl'] === 'on' ||
+                            (req.headers['x-forwarded-port'] && req.headers['x-forwarded-port'] === '443');
+    
+    // For secure flag: If config requires secure=true, use actual request security status
+    // This ensures cookies work correctly behind reverse proxies (Nginx)
+    // When secure=true is required, only set it if request is actually HTTPS
+    let shouldUseSecure = options.secure !== undefined 
+      ? options.secure 
+      : SECURITY_CONFIG.COOKIE_SECURITY.secure;
+    
+    // If secure flag should be true but request isn't actually secure, log warning
+    if (shouldUseSecure && !isSecureRequest) {
+      console.warn(`[COOKIE] Attempting to set secure cookie on non-HTTPS request:`, {
+        name,
+        protocol: req.protocol,
+        secure: req.secure,
+        xForwardedProto: req.headers['x-forwarded-proto'],
+        host: req.headers.host
+      });
+      // Still set secure=false if request isn't actually secure (to prevent cookie rejection)
+      shouldUseSecure = false;
+    }
+    
     // Apply security defaults
     const secureOptions = {
       ...options,
-      secure: options.secure !== undefined ? options.secure : SECURITY_CONFIG.COOKIE_SECURITY.secure,
+      secure: shouldUseSecure, // Use detected security status
       httpOnly: options.httpOnly !== undefined ? options.httpOnly : SECURITY_CONFIG.COOKIE_SECURITY.httpOnly,
       sameSite: options.sameSite || SECURITY_CONFIG.COOKIE_SECURITY.sameSite,
       domain: options.domain || SECURITY_CONFIG.COOKIE_SECURITY.domain,
@@ -27,9 +56,19 @@ export function cookieSecurityMiddleware(req: Request, res: Response, next: Next
   // Override res.clearCookie to use same security attributes
   const originalClearCookie = res.clearCookie;
   res.clearCookie = function(name: string, options: any = {}) {
+    // Determine if request is secure (same logic as cookie setting)
+    const isSecureRequest = req.secure || 
+                            req.protocol === 'https' || 
+                            req.headers['x-forwarded-proto'] === 'https' ||
+                            req.headers['x-forwarded-ssl'] === 'on';
+    
+    let shouldUseSecure = options.secure !== undefined 
+      ? options.secure 
+      : (isSecureRequest && SECURITY_CONFIG.COOKIE_SECURITY.secure);
+    
     const secureOptions = {
       ...options,
-      secure: options.secure !== undefined ? options.secure : SECURITY_CONFIG.COOKIE_SECURITY.secure,
+      secure: shouldUseSecure,
       httpOnly: options.httpOnly !== undefined ? options.httpOnly : SECURITY_CONFIG.COOKIE_SECURITY.httpOnly,
       sameSite: options.sameSite || SECURITY_CONFIG.COOKIE_SECURITY.sameSite,
       domain: options.domain || SECURITY_CONFIG.COOKIE_SECURITY.domain,
