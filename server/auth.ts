@@ -185,6 +185,78 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // CRITICAL: Global session validation middleware - checks blacklist for ALL sessions
+  // MUST be after session middleware but before other middleware
+  // This prevents blacklisted sessions from being used anywhere
+  app.use((req: any, res: any, next: any) => {
+    // Only validate if session exists
+    if (req.session && req.sessionID) {
+      const sessionId = req.sessionID;
+      
+      // Debug: Log session ID for troubleshooting
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`[SESSION CHECK] Session ID: ${sessionId.substring(0, 20)}..., Blacklist size: ${invalidatedSessions.size}`);
+        if (invalidatedSessions.size > 0) {
+          console.log(`[SESSION CHECK] Blacklisted IDs:`, Array.from(invalidatedSessions.keys()).map(id => id.substring(0, 20) + '...'));
+        }
+      }
+      
+      // Check if session is in blacklist (prevents session replay)
+      if (invalidatedSessions.has(sessionId)) {
+        console.log(`[SESSION CHECK] ✗ BLOCKED: Session ${sessionId.substring(0, 20)}... is in blacklist!`);
+        const blacklistInfo = invalidatedSessions.get(sessionId);
+        
+        // Log the replay attempt
+        logSecurityEvent('SESSION_REPLAY_ATTEMPT', { 
+          sessionId,
+          ip: req.ip,
+          path: req.path,
+          userAgent: req.get('User-Agent'),
+          reason: `Session blacklisted: ${blacklistInfo?.reason || 'unknown'}`,
+          invalidatedAt: blacklistInfo?.invalidatedAt,
+          timeSinceInvalidation: blacklistInfo ? Date.now() - blacklistInfo.invalidatedAt : 0
+        }, req, 'CRITICAL', 'FAILURE');
+        
+        // Destroy the session immediately
+        if (req.session && !req.session.destroyed) {
+          req.session.destroy(() => {});
+        }
+        
+        // Clear the cookie
+        res.clearCookie('cid.session.id', {
+          path: SECURITY_CONFIG.COOKIE_SECURITY.path,
+          httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly,
+          secure: SECURITY_CONFIG.COOKIE_SECURITY.secure,
+          sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite,
+          domain: SECURITY_CONFIG.COOKIE_SECURITY.domain,
+        });
+        
+        // Return 401 for API requests, redirect for browser requests
+        if (req.path.startsWith('/api')) {
+          return res.status(401).json({ 
+            message: "Session has been terminated and cannot be reused",
+            code: "SESSION_REPLAY_BLOCKED"
+          });
+        } else {
+          // For non-API requests, just redirect to login
+          return res.redirect('/admin/login');
+        }
+      }
+      
+      // Check if session was destroyed
+      if (req.session.destroyed) {
+        if (req.path.startsWith('/api')) {
+          return res.status(401).json({ message: "Session has been terminated" });
+        } else {
+          return res.redirect('/admin/login');
+        }
+      }
+    }
+    
+    // Continue to next middleware if session is valid
+    next();
+  });
+
   // Session activity tracking middleware - MUST be after session middleware
   app.use((req: any, res: any, next: any) => {
     if (req.session && req.sessionID) {
@@ -552,13 +624,23 @@ export function setupAuth(app: Express) {
       }
       
       // Step 2: Add session to blacklist BEFORE destroying (prevents replay attacks)
+      // CRITICAL: Use req.sessionID which is the unsigned session ID (matches what we check in middleware)
       const sessionId = req.sessionID;
       if (sessionId) {
+        // Add to blacklist - use the exact session ID from req.sessionID
+        // This is the unsigned session ID that express-session uses internally
         invalidatedSessions.set(sessionId, {
           invalidatedAt: Date.now(),
           reason: 'logout'
         });
-        console.log(`Session ${sessionId} added to blacklist due to logout`);
+        console.log(`[LOGOUT] Session ID: ${sessionId.substring(0, 20)}... added to blacklist. Total blacklisted: ${invalidatedSessions.size}`);
+        
+        // Verify it was added
+        if (invalidatedSessions.has(sessionId)) {
+          console.log(`[LOGOUT] ✓ Verified session is in blacklist`);
+        } else {
+          console.error(`[LOGOUT] ✗ ERROR: Session NOT in blacklist after adding!`);
+        }
         logSecurityEvent('SESSION_BLACKLISTED', { 
           sessionId, 
           username,
