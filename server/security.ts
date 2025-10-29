@@ -65,7 +65,7 @@ export const SECURITY_CONFIG = {
     // Secure flag - true in production, configurable via ALLOW_INSECURE_COOKIES for development
     // Set ALLOW_INSECURE_COOKIES=true ONLY if testing over HTTP (not recommended for production)
     // In production, this should always be true (requires HTTPS)
-    secure: true,
+    secure: false,
     
     // HttpOnly flag - prevent XSS attacks
     httpOnly: true,
