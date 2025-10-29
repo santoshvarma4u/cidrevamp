@@ -260,40 +260,68 @@ export function setupAuth(app: Express) {
   // Session activity tracking middleware - MUST be after session middleware
   app.use((req: any, res: any, next: any) => {
     if (req.session && req.sessionID) {
-      // Track last activity time
-      (req.session as any).lastActivity = Date.now();
-      
-          // Check if session should be expired due to inactivity
       const now = Date.now();
-      const lastActivity = (req.session as any).lastActivity || req.session.cookie.originalMaxAge || now;
-      const inactivityTime = now - lastActivity;
+      const lastActivity = (req.session as any).lastActivity;
+      const sessionCreated = (req.session as any).createdAt || now;
       
-      if (inactivityTime > SECURITY_CONFIG.SESSION_TIMEOUT) {
-        logSecurityEvent('SESSION_INACTIVITY_TIMEOUT', { 
-          sessionId: req.sessionID,
-          inactivityTime: inactivityTime,
-          ip: req.ip,
-          path: req.path
-        }, req);
+      // Only check inactivity if we have a previous activity timestamp
+      // For brand new sessions (just created), use session creation time
+      if (lastActivity) {
+        const inactivityTime = now - lastActivity;
         
-        req.session.destroy((err: any) => {
-          if (err) {
-            console.error('Session destruction error:', err);
-          }
-        });
+        if (inactivityTime > SECURITY_CONFIG.SESSION_TIMEOUT) {
+          logSecurityEvent('SESSION_INACTIVITY_TIMEOUT', { 
+            sessionId: req.sessionID,
+            inactivityTime: inactivityTime,
+            ip: req.ip,
+            path: req.path
+          }, req);
+          
+          req.session.destroy((err: any) => {
+            if (err) {
+              console.error('Session destruction error:', err);
+            }
+          });
+          
+          return res.status(401).json({ 
+            message: "Session expired due to inactivity",
+            code: "SESSION_TIMEOUT"
+          });
+        }
         
-        return res.status(401).json({ 
-          message: "Session expired due to inactivity",
-          code: "SESSION_TIMEOUT"
-        });
+        // Check if session is approaching timeout (warning)
+        const timeUntilTimeout = SECURITY_CONFIG.SESSION_TIMEOUT - inactivityTime;
+        if (timeUntilTimeout <= SECURITY_CONFIG.SESSION_WARNING_TIME && timeUntilTimeout > 0) {
+          // Add warning header for client-side handling
+          res.setHeader('X-Session-Warning', Math.ceil(timeUntilTimeout / 1000)); // seconds remaining
+        }
+      } else {
+        // New session - check if it's too old based on creation time
+        const sessionAge = now - sessionCreated;
+        if (sessionAge > SECURITY_CONFIG.SESSION_TIMEOUT) {
+          logSecurityEvent('SESSION_INACTIVITY_TIMEOUT', { 
+            sessionId: req.sessionID,
+            inactivityTime: sessionAge,
+            ip: req.ip,
+            path: req.path,
+            reason: 'Session expired based on creation time'
+          }, req);
+          
+          req.session.destroy((err: any) => {
+            if (err) {
+              console.error('Session destruction error:', err);
+            }
+          });
+          
+          return res.status(401).json({ 
+            message: "Session expired due to inactivity",
+            code: "SESSION_TIMEOUT"
+          });
+        }
       }
       
-      // Check if session is approaching timeout (warning)
-      const timeUntilTimeout = SECURITY_CONFIG.SESSION_TIMEOUT - inactivityTime;
-      if (timeUntilTimeout <= SECURITY_CONFIG.SESSION_WARNING_TIME && timeUntilTimeout > 0) {
-        // Add warning header for client-side handling
-        res.setHeader('X-Session-Warning', Math.ceil(timeUntilTimeout / 1000)); // seconds remaining
-      }
+      // Update last activity time AFTER validation (prevents immediate expiration)
+      (req.session as any).lastActivity = now;
     }
     
     next();
@@ -583,24 +611,38 @@ export function setupAuth(app: Express) {
             userId: user.id,
             username: user.username,
             clientIp: clientIp,
-            isAuthenticated: req.isAuthenticated()
+            isAuthenticated: req.isAuthenticated(),
+            hasSessionToken: !!(req.session as any).sessionToken,
+            sessionCreated: !!(req.session as any).createdAt
           });
           
-          logSecurityEvent('LOGIN_SUCCESS', { 
-            username: user.username, 
-            role: user.role,
-            ip: clientIp,
-            sessionId: req.sessionID,
-            sessionRotated: true
-          }, req);
-          console.log("Login successful for user:", user.username);
-          res.json({
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            role: user.role,
-            firstName: user.firstName,
-            lastName: user.lastName,
+          // CRITICAL: Save the session explicitly to ensure it's persisted before sending response
+          // This is essential for production - ensures session is saved to store before client makes next request
+          req.session.save((saveErr: any) => {
+            if (saveErr) {
+              console.error("Session save error:", saveErr);
+              logSecurityEvent('SESSION_SAVE_ERROR', { username, error: saveErr.message }, req);
+              return res.status(500).json({ message: "Failed to save session" });
+            }
+            
+            console.log("Session saved successfully:", req.sessionID);
+            
+            logSecurityEvent('LOGIN_SUCCESS', { 
+              username: user.username, 
+              role: user.role,
+              ip: clientIp,
+              sessionId: req.sessionID,
+              sessionRotated: true
+            }, req);
+            console.log("Login successful for user:", user.username);
+            res.json({
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              role: user.role,
+              firstName: user.firstName,
+              lastName: user.lastName,
+            });
           });
         });
       });
@@ -923,24 +965,38 @@ export function setupAuth(app: Express) {
             userId: user.id,
             username: user.username,
             clientIp: clientIp,
-            isAuthenticated: req.isAuthenticated()
+            isAuthenticated: req.isAuthenticated(),
+            hasSessionToken: !!(req.session as any).sessionToken,
+            sessionCreated: !!(req.session as any).createdAt
           });
           
-          logSecurityEvent('LOGIN_SUCCESS', { 
-            username: user.username, 
-            role: user.role,
-            ip: clientIp,
-            sessionId: req.sessionID,
-            sessionRotated: true
-          }, req);
-          console.log("Login successful for user:", user.username);
-          res.json({
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            role: user.role,
-            firstName: user.firstName,
-            lastName: user.lastName,
+          // CRITICAL: Save the session explicitly to ensure it's persisted before sending response
+          // This is essential for production - ensures session is saved to store before client makes next request
+          req.session.save((saveErr: any) => {
+            if (saveErr) {
+              console.error("Session save error:", saveErr);
+              logSecurityEvent('SESSION_SAVE_ERROR', { username, error: saveErr.message }, req);
+              return res.status(500).json({ message: "Failed to save session" });
+            }
+            
+            console.log("Session saved successfully:", req.sessionID);
+            
+            logSecurityEvent('LOGIN_SUCCESS', { 
+              username: user.username, 
+              role: user.role,
+              ip: clientIp,
+              sessionId: req.sessionID,
+              sessionRotated: true
+            }, req);
+            console.log("Login successful for user:", user.username);
+            res.json({
+              id: user.id,
+              username: user.username,
+              email: user.email,
+              role: user.role,
+              firstName: user.firstName,
+              lastName: user.lastName,
+            });
           });
         });
       });
@@ -1044,20 +1100,41 @@ function validateSession(req: any, res: any, next: any) {
         });
       }
     } else if (req.isAuthenticated()) {
-      // If authenticated but no token, this might be an old session before token system
-      // OR a session that was just created (token generation happens async)
-      // In development, allow but log. In production, we should be more strict.
-      if (process.env.NODE_ENV === 'production') {
-        // In production, allow sessions without tokens for now (backward compatibility)
-        // But log for monitoring
+      // If authenticated but no token, this might be:
+      // 1. An old session before token system (backward compatibility)
+      // 2. A session that was just created (token generation happens in req.login callback)
+      // 3. A timing issue where token hasn't been saved yet
+      
+      // Check if session was recently created (within last 5 seconds) - likely a new login
+      const sessionCreated = (req.session as any).createdAt;
+      const sessionAge = sessionCreated ? Date.now() - sessionCreated : Infinity;
+      
+      // Allow sessions without tokens if:
+      // - Session was just created (< 5 seconds ago) - likely in the middle of login process
+      // - OR in development mode
+      if (sessionAge < 5000 || process.env.NODE_ENV === 'development') {
+        // Log but allow - this is a newly created session
+        if (process.env.NODE_ENV === 'production') {
+          logSecurityEvent('SESSION_TOKEN_MISSING_NEW_SESSION', { 
+            sessionId,
+            ip: req.ip,
+            path: req.path,
+            reason: `Session token missing but session is new (${Math.round(sessionAge/1000)}s old) - allowing`,
+            sessionAge
+          }, req, 'LOW', 'INFO');
+        }
+        // Allow the session to continue - token will be generated soon
+      } else {
+        // Older session without token - this is suspicious but allow for now
         logSecurityEvent('SESSION_TOKEN_MISSING', { 
           sessionId,
           ip: req.ip,
           path: req.path,
-          reason: 'Session token missing on authenticated session - may be newly created'
+          reason: 'Session token missing on authenticated session',
+          sessionAge
         }, req, 'MEDIUM', 'WARNING');
+        // Still allow - backward compatibility
       }
-      // In development, allow sessions without tokens (they might be in the process of being created)
     }
   }
   
