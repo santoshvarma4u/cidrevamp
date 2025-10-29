@@ -233,7 +233,7 @@ export function corsOriginValidator(origin: string | undefined, callback: (err: 
 export function getCorsOptions() {
   return {
     origin: corsOriginValidator,
-    credentials: true, // Allow credentials (cookies, authorization headers)
+    credentials: false, // Disable credentials for all requests (security enhancement)
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type', 

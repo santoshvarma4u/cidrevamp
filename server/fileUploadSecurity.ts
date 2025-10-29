@@ -73,7 +73,7 @@ const FILE_UPLOAD_CONFIG = {
     /\.(htaccess|htpasswd|ini|conf|config)$/i,
   ],
   
-  // Suspicious content patterns
+  // Suspicious content patterns (expanded for code injection detection)
   SUSPICIOUS_CONTENT: [
     /<\?php/i,
     /<script/i,
@@ -83,6 +83,40 @@ const FILE_UPLOAD_CONFIG = {
     /onerror=/i,
     /<%/i, // ASP/JSP tags
     /#!/i, // Shell shebang
+    /eval\(/i, // JavaScript eval
+    /eval\s*\(/i, // JavaScript eval with spaces
+    /exec\(/i, // Python/JS/PHP exec
+    /system\(/i, // System call
+    /Runtime\.exec/i, // Java Runtime.exec
+    /Process\.start/i, // Process execution
+    /base64_decode/i, // Base64 decode (often used in obfuscated code)
+    /gzinflate/i, // PHP gzinflate (compressed code)
+    /str_rot13/i, // ROT13 encoding
+    /preg_replace/i, // PHP preg_replace (code execution)
+    /create_function/i, // PHP create_function
+    /assert\(/i, // Assert function
+    /preg_replace.*\/e/i, // PHP preg_replace /e flag
+    /call_user_func/i, // PHP call_user_func
+    /call_user_func_array/i, // PHP call_user_func_array
+    /file_get_contents.*http/i, // Remote file inclusion
+    /curl_exec/i, // cURL execution
+    /fsockopen/i, // Network socket
+    /socket_create/i, // Socket creation
+    /proc_open/i, // Process opening
+    /shell_exec/i, // Shell execution
+    /passthru/i, // Passthru execution
+    /\$\{.*\}/, // Variable expansion
+    /\$\(.*\)/, // Command substitution
+    /`.*`/, // Backtick execution
+  ],
+  
+  // Suspicious patterns in image metadata/EXIF
+  SUSPICIOUS_IMAGE_METADATA: [
+    /<svg.*on\w+\s*=/i, // SVG event handlers
+    /<svg.*<script/i, // SVG embedded scripts
+    /GIF89a.*<script/i, // GIF polyglot
+    /JPEG.*<script/i, // JPEG polyglot
+    /PNG.*<script/i, // PNG polyglot
   ],
   
   // File magic numbers (file signatures) for content validation
@@ -331,19 +365,223 @@ export function validateFileMagicNumber(buffer: Buffer, category: 'images' | 'do
   return { valid: false, reason: `File signature does not match expected ${category} format` };
 }
 
-// Check file content for suspicious patterns
-export function checkFileContent(buffer: Buffer): { safe: boolean; reason?: string } {
-  // Check first 10KB for suspicious patterns
-  const content = buffer.toString('utf8', 0, Math.min(buffer.length, 10240));
+// Validate JPEG structure (check for code injection in segments)
+function validateJPEGStructure(buffer: Buffer): { valid: boolean; reason?: string } {
+  // JPEG files start with FF D8 (SOI - Start of Image marker)
+  if (buffer.length < 2 || buffer[0] !== 0xFF || buffer[1] !== 0xD8) {
+    return { valid: false, reason: 'Invalid JPEG header (missing SOI marker)' };
+  }
   
-  for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
-    if (pattern.test(content)) {
-      return { safe: false, reason: 'Suspicious content detected' };
+  let pos = 2; // After FF D8
+  const scannedSegments = new Set<string>();
+  
+  // Scan through JPEG segments looking for suspicious content
+  while (pos < buffer.length - 1) {
+    if (buffer[pos] !== 0xFF) {
+      // Not a valid segment marker, might be code injection
+      const remaining = buffer.slice(pos, Math.min(pos + 1000, buffer.length));
+      const content = remaining.toString('utf8', 0, Math.min(remaining.length, 500));
+      
+      for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
+        if (pattern.test(content)) {
+          return { valid: false, reason: 'Code injection detected in JPEG data segment' };
+        }
+      }
+      break; // End of segments
+    }
+    
+    const marker = buffer[pos + 1];
+    
+    // Skip padding bytes (0xFF followed by 0x00)
+    if (marker === 0x00) {
+      pos += 2;
+      continue;
+    }
+    
+    // Check for code injection in comment segments (0xFF 0xFE)
+    if (marker === 0xFE) {
+      // Comment segment
+      const commentLength = (buffer[pos + 2] << 8) | buffer[pos + 3];
+      if (commentLength > 2 && pos + commentLength + 2 <= buffer.length) {
+        const commentData = buffer.slice(pos + 4, pos + 2 + commentLength);
+        const commentText = commentData.toString('utf8', 0, Math.min(commentData.length, 1000));
+        
+        for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
+          if (pattern.test(commentText)) {
+            return { valid: false, reason: 'Code injection detected in JPEG comment' };
+          }
+        }
+      }
+    }
+    
+    // Application-specific segments (0xFF 0xE0-0xEF) - check for code
+    if (marker >= 0xE0 && marker <= 0xEF) {
+      const segmentLength = (buffer[pos + 2] << 8) | buffer[pos + 3];
+      if (segmentLength > 2 && pos + segmentLength + 2 <= buffer.length) {
+        const segmentData = buffer.slice(pos + 4, pos + 2 + segmentLength);
+        const segmentText = segmentData.toString('utf8', 0, Math.min(segmentData.length, 500));
+        
+        for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
+          if (pattern.test(segmentText)) {
+            return { valid: false, reason: 'Code injection detected in JPEG metadata' };
+          }
+        }
+      }
+    }
+    
+    // Scan for executable markers within segments
+    if (marker >= 0xE0 && marker <= 0xFE && marker !== 0xFF) {
+      const segmentLength = (buffer[pos + 2] << 8) | buffer[pos + 3];
+      if (segmentLength > 0 && pos + segmentLength + 2 < buffer.length) {
+        const segmentStart = pos + 4;
+        const segmentEnd = Math.min(pos + segmentLength + 2, buffer.length);
+        const segmentData = buffer.slice(segmentStart, segmentEnd);
+        
+        // Check for executable markers
+        if (segmentData.length >= 4) {
+          // ELF
+          if (segmentData[0] === 0x7F && segmentData[1] === 0x45 && segmentData[2] === 0x4C && segmentData[3] === 0x46) {
+            return { valid: false, reason: 'Executable code detected in JPEG segment' };
+          }
+          // PE
+          if (segmentData[0] === 0x4D && segmentData[1] === 0x5A) {
+            return { valid: false, reason: 'Executable code detected in JPEG segment' };
+          }
+          // Mach-O
+          if (segmentData[0] === 0xFE && segmentData[1] === 0xED && segmentData[2] === 0xFA && segmentData[3] === 0xCE) {
+            return { valid: false, reason: 'Executable code detected in JPEG segment' };
+          }
+        }
+      }
+      
+      pos += segmentLength + 2;
+    } else if (marker === 0xD9) {
+      // End of image
+      break;
+    } else {
+      pos += 2;
+    }
+    
+    // Safety check to prevent infinite loops
+    if (pos >= buffer.length - 1) break;
+    scannedSegments.add(marker.toString());
+    if (scannedSegments.size > 100) break; // Too many segments, might be malicious
+  }
+  
+  // Check the end of file for appended code (common attack vector)
+  if (buffer.length > 1000) {
+    const endSection = buffer.slice(Math.max(0, buffer.length - 1000), buffer.length);
+    const endContent = endSection.toString('utf8', 0, Math.min(endSection.length, 1000));
+    
+    for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
+      if (pattern.test(endContent)) {
+        return { valid: false, reason: 'Code injection detected at end of JPEG file' };
+      }
     }
   }
   
-  // Check for executable markers
-  if (buffer.length >= 2) {
+  return { valid: true };
+}
+
+// Validate PNG structure (check for code injection in chunks)
+function validatePNGStructure(buffer: Buffer): { valid: boolean; reason?: string } {
+  // PNG signature: 89 50 4E 47 0D 0A 1A 0A
+  const pngSignature = Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]);
+  if (buffer.length < 8 || !buffer.slice(0, 8).equals(pngSignature)) {
+    return { valid: false, reason: 'Invalid PNG header' };
+  }
+  
+  let pos = 8;
+  
+  // Scan through PNG chunks
+  while (pos < buffer.length - 12) {
+    // Read chunk length (4 bytes, big-endian)
+    const chunkLength = buffer.readUInt32BE(pos);
+    
+    // Safety check
+    if (chunkLength > buffer.length || chunkLength > 10 * 1024 * 1024) {
+      return { valid: false, reason: 'Invalid PNG chunk length' };
+    }
+    
+    // Read chunk type (4 bytes)
+    const chunkType = buffer.toString('ascii', pos + 4, pos + 8);
+    
+    // Check chunk data for suspicious content
+    if (chunkLength > 0 && pos + 8 + chunkLength <= buffer.length) {
+      const chunkData = buffer.slice(pos + 8, pos + 8 + chunkLength);
+      
+      // Convert to string for pattern matching (limit to prevent issues)
+      const chunkText = chunkData.toString('utf8', 0, Math.min(chunkData.length, 2000));
+      
+      // Check for suspicious patterns in chunk data
+      for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
+        if (pattern.test(chunkText)) {
+          return { valid: false, reason: `Code injection detected in PNG chunk (${chunkType})` };
+        }
+      }
+      
+      // Check text chunks specifically (tEXt, zTXt, iTXt can contain arbitrary text)
+      if (chunkType === 'tEXt' || chunkType === 'zTXt' || chunkType === 'iTXt') {
+        // These chunks can legitimately contain text, but check for code
+        for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
+          if (pattern.test(chunkText)) {
+            return { valid: false, reason: `Code injection detected in PNG text chunk` };
+          }
+        }
+      }
+      
+      // Check for executable markers
+      if (chunkData.length >= 4) {
+        // ELF
+        if (chunkData[0] === 0x7F && chunkData[1] === 0x45 && chunkData[2] === 0x4C && chunkData[3] === 0x46) {
+          return { valid: false, reason: 'Executable code detected in PNG chunk' };
+        }
+        // PE
+        if (chunkData[0] === 0x4D && chunkData[1] === 0x5A) {
+          return { valid: false, reason: 'Executable code detected in PNG chunk' };
+        }
+        // Mach-O
+        if (chunkData[0] === 0xFE && chunkData[1] === 0xED && chunkData[2] === 0xFA && chunkData[3] === 0xCE) {
+          return { valid: false, reason: 'Executable code detected in PNG chunk' };
+        }
+      }
+    }
+    
+    // Move to next chunk (length + type + data + CRC)
+    pos += 8 + chunkLength + 4;
+    
+    // Check for IEND chunk (end of PNG)
+    if (chunkType === 'IEND') {
+      break;
+    }
+    
+    // Safety check
+    if (pos >= buffer.length) break;
+  }
+  
+  // Check the end of file for appended code
+  if (buffer.length > 1000) {
+    const endSection = buffer.slice(Math.max(0, buffer.length - 1000), buffer.length);
+    const endContent = endSection.toString('utf8', 0, Math.min(endSection.length, 1000));
+    
+    for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
+      if (pattern.test(endContent)) {
+        return { valid: false, reason: 'Code injection detected at end of PNG file' };
+      }
+    }
+  }
+  
+  return { valid: true };
+}
+
+// Check file content for suspicious patterns (ENHANCED - scans entire file)
+export function checkFileContent(buffer: Buffer): { safe: boolean; reason?: string } {
+  if (!buffer || buffer.length === 0) {
+    return { safe: false, reason: 'Empty file' };
+  }
+  
+  // Check for executable markers at the start
+  if (buffer.length >= 4) {
     // ELF executable (Linux/Unix)
     if (buffer[0] === 0x7F && buffer[1] === 0x45 && buffer[2] === 0x4C && buffer[3] === 0x46) {
       return { safe: false, reason: 'Executable file detected (ELF)' };
@@ -355,6 +593,64 @@ export function checkFileContent(buffer: Buffer): { safe: boolean; reason?: stri
     // Mach-O executable (macOS)
     if (buffer[0] === 0xFE && buffer[1] === 0xED && buffer[2] === 0xFA && buffer[3] === 0xCE) {
       return { safe: false, reason: 'Executable file detected (Mach-O)' };
+    }
+  }
+  
+  // ENHANCED: Scan entire file for suspicious patterns (not just first 10KB)
+  // For very large files, scan in chunks to avoid memory issues
+  const scanChunkSize = 100 * 1024; // 100KB chunks
+  const maxScans = Math.min(50, Math.ceil(buffer.length / scanChunkSize)); // Limit to 5MB total scan
+  
+  for (let scanIndex = 0; scanIndex < maxScans; scanIndex++) {
+    const startPos = scanIndex * scanChunkSize;
+    const endPos = Math.min(startPos + scanChunkSize, buffer.length);
+    const chunk = buffer.slice(startPos, endPos);
+    
+    // Convert chunk to string for pattern matching
+    const content = chunk.toString('utf8', 0, Math.min(chunk.length, scanChunkSize));
+    
+    // Check for suspicious content patterns
+    for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
+      if (pattern.test(content)) {
+        return { safe: false, reason: 'Code injection detected in file content' };
+      }
+    }
+    
+    // Also check raw bytes for executable markers anywhere in file
+    for (let i = 0; i < chunk.length - 4; i++) {
+      // ELF marker
+      if (chunk[i] === 0x7F && chunk[i + 1] === 0x45 && chunk[i + 2] === 0x4C && chunk[i + 3] === 0x46) {
+        return { safe: false, reason: 'Executable code detected in file content' };
+      }
+      // PE marker
+      if (chunk[i] === 0x4D && chunk[i + 1] === 0x5A && chunk[i + 2] !== undefined) {
+        // Additional check to reduce false positives (MZ is common in some formats)
+        if (i + 64 < chunk.length) {
+          // Check for PE header signature at offset 0x3C
+          const peOffset = chunk.readUInt32LE(i + 60);
+          if (peOffset < chunk.length && peOffset > 0) {
+            const peSigPos = i + peOffset;
+            if (peSigPos + 4 < chunk.length) {
+              if (chunk[peSigPos] === 0x50 && chunk[peSigPos + 1] === 0x45 && 
+                  chunk[peSigPos + 2] === 0x00 && chunk[peSigPos + 3] === 0x00) {
+                return { safe: false, reason: 'Executable code detected in file content (PE)' };
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // CRITICAL: Always check the last portion of the file (common injection point)
+  if (buffer.length > 1000) {
+    const endSection = buffer.slice(Math.max(0, buffer.length - 1000), buffer.length);
+    const endContent = endSection.toString('utf8', 0, Math.min(endSection.length, 1000));
+    
+    for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
+      if (pattern.test(endContent)) {
+        return { safe: false, reason: 'Code injection detected at end of file' };
+      }
     }
   }
   
@@ -522,7 +818,30 @@ export function enhancedFileValidation(req: any, res: any, next: any) {
       });
     }
     
-    // Additional file content validation (suspicious patterns)
+    // ENHANCED: Validate image structure for JPEG and PNG files
+    if (category === 'images') {
+      if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
+        const jpegValidation = validateJPEGStructure(fileBuffer);
+        if (!jpegValidation.valid) {
+          fs.unlinkSync(file.path);
+          return res.status(400).json({
+            success: false,
+            message: `JPEG structure validation failed: ${jpegValidation.reason}`,
+          });
+        }
+      } else if (file.mimetype === 'image/png') {
+        const pngValidation = validatePNGStructure(fileBuffer);
+        if (!pngValidation.valid) {
+          fs.unlinkSync(file.path);
+          return res.status(400).json({
+            success: false,
+            message: `PNG structure validation failed: ${pngValidation.reason}`,
+          });
+        }
+      }
+    }
+    
+    // ENHANCED: Full file content validation (scans entire file, not just headers)
     const contentCheck = checkFileContent(fileBuffer);
     if (!contentCheck.safe) {
       // Delete the uploaded file

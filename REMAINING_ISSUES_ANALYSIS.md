@@ -20,7 +20,7 @@ Analysis of remaining security issues from the revalidation audit:
 ### Current Implementation Status
 
 **Good Security Measures Already in Place:**
-- ✅ Rate limiting: 50 CAPTCHAs per 15 minutes per IP
+- ✅ Rate limiting: 100 CAPTCHAs per 15 minutes per IP
 - ✅ SHA-256 hashing: CAPTCHA text never stored in plaintext
 - ✅ Server-side state: All validation happens on server
 - ✅ Enhanced randomization: Random backgrounds, noise, dimensions, font sizes
