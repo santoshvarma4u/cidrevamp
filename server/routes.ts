@@ -558,6 +558,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     "/api/admin/videos",
     requireAdmin,
     secureVideoUpload.single("video"),
+    enhancedFileValidation,
     async (req: any, res) => {
       try {
         if (!req.file) {
@@ -622,6 +623,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     "/api/admin/photos",
     requireAdmin,
     secureImageUpload.single("photo"),
+    enhancedFileValidation,
     async (req: any, res) => {
       try {
         if (!req.file) {
@@ -868,6 +870,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     "/api/admin/director-info",
     requireAdmin,
     secureImageUpload.single("photo"),
+    enhancedFileValidation,
     async (req: any, res) => {
       try {
         const validatedData = insertDirectorInfoSchema.parse({
@@ -898,6 +901,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     "/api/admin/director-info/:id",
     requireAdmin,
     secureImageUpload.single("photo"),
+    enhancedFileValidation,
     async (req: any, res) => {
       try {
         const id = parseInt(req.params.id);
@@ -1195,6 +1199,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     "/api/admin/senior-officers",
     requireAdmin,
     secureImageUpload.single("photo"),
+    enhancedFileValidation,
     async (req: any, res) => {
       try {
         const data = { ...req.body };
@@ -1229,6 +1234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     "/api/admin/senior-officers/:id",
     requireAdmin,
     secureImageUpload.single("photo"),
+    enhancedFileValidation,
     async (req: any, res) => {
       try {
         const id = parseInt(req.params.id);
