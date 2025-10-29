@@ -137,7 +137,7 @@ export async function generateEmailImage(email: string): Promise<string> {
   if (fs.existsSync(imagePath)) {
     const stats = fs.statSync(imagePath);
     if (Date.now() - stats.mtime.getTime() < EMAIL_PROTECTION_CONFIG.CACHE_DURATION) {
-      return `/uploads/email-images/${emailHash}.png`;
+      return `/api/uploads/email-images/${emailHash}.png`;
     }
   }
   
@@ -203,11 +203,11 @@ export async function generateEmailImage(email: string): Promise<string> {
     
     // Cache the image path
     imageCache.set(emailHash, {
-      path: `/uploads/email-images/${emailHash}.png`,
+      path: `/api/uploads/email-images/${emailHash}.png`,
       timestamp: Date.now(),
     });
     
-    return `/uploads/email-images/${emailHash}.png`;
+    return `/api/uploads/email-images/${emailHash}.png`;
   } catch (error) {
     console.error('Error generating email image:', error);
     // Fallback to obfuscated text
@@ -270,7 +270,9 @@ export function protectEmailInHTML(html: string, method: 'image' | 'obfuscated' 
   const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
   
   return html.replace(emailRegex, (match) => {
-    const protectedEmail = obfuscateEmail(match, method);
+    // Only obfuscation methods are supported for HTML (not image)
+    const obfuscationMethod = method === 'image' ? 'obfuscated' : method;
+    const protectedEmail = obfuscateEmail(match, obfuscationMethod);
     return protectedEmail;
   });
 }
@@ -416,10 +418,53 @@ export function setupEmailProtectionRoutes(app: any) {
     }
   });
   
+  // Public API endpoint to get protected email (image or obfuscated text)
+  app.get('/api/email-protect', async (req: any, res: any) => {
+    try {
+      const email = req.query.email as string;
+      const method = (req.query.method || 'obfuscated') as 'image' | 'obfuscated' | 'encoded';
+      
+      if (!email || !EMAIL_REGEX.test(email)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Valid email address is required',
+        });
+      }
+      
+      const result = await getProtectedEmail(email, method);
+      
+      // If it's an image, return the image URL/path
+      if (result.type === 'image') {
+        // The imagePath is already a URL path like /api/uploads/email-images/...
+        return res.json({
+          success: true,
+          type: 'image',
+          content: result.content,
+          original: result.original,
+        });
+      }
+      
+      // Otherwise return the obfuscated/encoded text
+      return res.json({
+        success: true,
+        type: 'text',
+        content: result.content,
+        original: result.original,
+      });
+    } catch (error) {
+      console.error('Error protecting email:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to protect email',
+      });
+    }
+  });
+  
   console.log('✅ Email protection routes registered:');
   console.log('  - GET /api/admin/email-protection/stats');
   console.log('  - POST /api/admin/email-protection/clear-cache');
   console.log('  - POST /api/admin/email-protection/test');
+  console.log('  - GET /api/email-protect (public)');
 }
 
 // Run cleanup every hour

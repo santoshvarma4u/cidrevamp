@@ -57,9 +57,27 @@ export function ProtectedEmail({
           protectedContent = encodeEmail(email);
           break;
         case 'image':
-          // For images, we'll use obfuscated text as fallback
-          // In production, this would call the server API
-          protectedContent = obfuscateEmail(email);
+          // Fetch image from server API
+          try {
+            const response = await fetch(`/api/email-protect?email=${encodeURIComponent(email)}&method=image`);
+            if (response.ok) {
+              const data = await response.json();
+              if (data.success && data.type === 'image') {
+                protectedContent = data.content;
+                type = 'image';
+              } else {
+                // Fallback to obfuscated text if image generation fails
+                protectedContent = obfuscateEmail(email);
+              }
+            } else {
+              // Fallback to obfuscated text if API call fails
+              protectedContent = obfuscateEmail(email);
+            }
+          } catch (err) {
+            console.warn('Failed to fetch email image, using obfuscated text:', err);
+            // Fallback to obfuscated text if API call fails
+            protectedContent = obfuscateEmail(email);
+          }
           break;
         default:
           protectedContent = obfuscateEmail(email);

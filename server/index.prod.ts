@@ -3,13 +3,17 @@ import { registerRoutes } from "./routes";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
-import { xssProtection, CSP_CONFIG, enforceHttpsForAuth } from "./security";
+import { xssProtection, CSP_CONFIG, enforceHttpsForAuth, validateHostHeader } from "./security";
 import { initializePasswordEncryption } from "./passwordEncryption";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
+
+// Host Header Validation - MUST be first for security
+// Validates Host, X-Forwarded-Host, and X-Real-Host headers to prevent Host Header Injection attacks
+app.use(validateHostHeader);
 
 // Production logging function
 export function log(message: string, source = "express") {

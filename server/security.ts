@@ -91,23 +91,28 @@ export const SECURITY_CONFIG = {
   ],
   
   // Trusted domains whitelist (Host header validation)
+  // Production: Only allow official domains
+  // Development: Allow localhost for local testing
   // Can be extended via TRUSTED_HOSTS environment variable (comma-separated)
   get TRUSTED_HOSTS() {
-    const defaultHosts = [
+    // Production domains - only these are allowed in production
+    const productionHosts = [
+      'cid-staging.tspolice.gov.in',
+      'cid.tspolice.gov.in',
+    ];
+    
+    // Development hosts - only added in development mode
+    const developmentHosts = process.env.NODE_ENV === 'development' ? [
       'localhost',
       '127.0.0.1',
       '0.0.0.0',
-      'cid-staging.tspolice.gov.in',
-      'cid.tspolice.gov.in',
-      'cid-telangana.replit.app',
       'cid-telangana.local',
-      // Add patterns for dynamic Replit domains
-      /^.*\.replit\.app$/,
-      /^.*\.replit\.dev$/,
       // Docker internal networking
       'app',
       'cid-app',
-    ];
+    ] : [];
+    
+    const defaultHosts = [...productionHosts, ...developmentHosts];
     
     // Allow adding additional trusted hosts via environment variable
     if (process.env.TRUSTED_HOSTS) {
@@ -146,11 +151,15 @@ export const SECURITY_CONFIG = {
     return defaultOrigins;
   },
   
-  // Regex patterns for dynamic origins (e.g., Replit)
-  CORS_ORIGIN_PATTERNS: [
-    /^https:\/\/.*\.replit\.app$/,
-    /^https:\/\/.*\.replit\.dev$/,
-    /^https:\/\/.*\.tspolice\.gov\.in$/,
+  // Regex patterns for dynamic origins
+  // Production: Only allow subdomains under tspolice.gov.in
+  CORS_ORIGIN_PATTERNS: process.env.NODE_ENV === 'production' ? [
+    /^https:\/\/.*\.tspolice\.gov\.in$/, // Allow any subdomain of tspolice.gov.in (for flexibility)
+  ] : [
+    // Development: Allow localhost patterns for local testing
+    /^http:\/\/localhost(:\d+)?$/,
+    /^http:\/\/127\.0\.0\.1(:\d+)?$/,
+    /^https:\/\/.*\.tspolice\.gov\.in$/, // Also allow tspolice.gov.in subdomains in dev
   ],
 };
 

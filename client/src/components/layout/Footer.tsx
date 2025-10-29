@@ -11,6 +11,7 @@ import {
   Youtube,
 } from "lucide-react";
 import vatinsLogoSrc from "@assets/vatins-logo.png";
+import { ProtectedEmail } from "@/components/common/ProtectedEmail";
 
 export default function Footer() {
   return (
@@ -116,7 +117,12 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-gray-400" />
-                <p className="text-gray-300">adgcid-ts@tspolice.gov.in</p>
+                <ProtectedEmail 
+                  email="adgcid-ts@tspolice.gov.in" 
+                  method="image"
+                  showIcon={false}
+                  className="text-gray-300"
+                />
               </div>
             </div>
           </div>
