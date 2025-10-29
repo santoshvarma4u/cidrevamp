@@ -1,0 +1,31 @@
+{
+  "reportId": 24,
+  "generatedAt": "2025-10-27T09:00:00.012Z",
+  "period": {
+    "start": "2025-10-20",
+    "end": "2025-10-27"
+  },
+  "summary": {
+    "totalEvents": 0,
+    "criticalEvents": 0,
+    "highEvents": 0,
+    "mediumEvents": 0,
+    "lowEvents": 0
+  },
+  "authenticationStats": {
+    "totalUsers": 0,
+    "totalSuccessfulLogins": 0,
+    "totalFailedLogins": 0,
+    "lockedAccounts": 0,
+    "topFailedUsers": []
+  },
+  "securityEvents": {
+    "loginAttempts": 0,
+    "suspiciousActivity": 0,
+    "blockedIPs": 0,
+    "securityAlerts": 0
+  },
+  "topIPs": [],
+  "topUserAgents": [],
+  "recommendations": []
+}
