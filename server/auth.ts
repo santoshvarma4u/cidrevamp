@@ -627,6 +627,21 @@ export function setupAuth(app: Express) {
             
             console.log("Session saved successfully:", req.sessionID);
             
+            // Debug: Check if cookie will be set
+            const cookieName = sessionSettings.name || 'cid.session.id';
+            console.log("Login - Cookie configuration:", {
+              cookieName,
+              secure: SECURITY_CONFIG.COOKIE_SECURITY.secure,
+              httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly,
+              sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite,
+              domain: SECURITY_CONFIG.COOKIE_SECURITY.domain || 'not set (exact domain)',
+              partitioned: SECURITY_CONFIG.COOKIE_SECURITY.partitioned,
+              protocol: req.protocol,
+              secureFlag: req.secure,
+              xForwardedProto: req.headers['x-forwarded-proto'],
+              host: req.headers.host
+            });
+            
             logSecurityEvent('LOGIN_SUCCESS', { 
               username: user.username, 
               role: user.role,
@@ -757,8 +772,23 @@ export function setupAuth(app: Express) {
       sessionId: req.sessionID,
       isAuthenticated: req.isAuthenticated(),
       hasSession: !!req.session,
-      userAgent: req.get('User-Agent')
+      userAgent: req.get('User-Agent'),
+      cookies: req.headers.cookie,
+      host: req.headers.host,
+      protocol: req.protocol,
+      secure: req.secure,
+      xForwardedProto: req.headers['x-forwarded-proto']
     });
+    
+    // Check if session exists but not authenticated (possible cookie issue)
+    if (req.session && !req.isAuthenticated()) {
+      console.log("WARNING: Session exists but not authenticated - possible cookie/session store issue");
+      console.log("Session data:", {
+        sessionId: req.sessionID,
+        passport: (req.session as any).passport,
+        userId: (req.session as any).userId
+      });
+    }
     
     if (!req.isAuthenticated()) {
       console.log("User not authenticated, returning 401");
@@ -980,6 +1010,21 @@ export function setupAuth(app: Express) {
             }
             
             console.log("Session saved successfully:", req.sessionID);
+            
+            // Debug: Check if cookie will be set
+            const cookieName = sessionSettings.name || 'cid.session.id';
+            console.log("Login - Cookie configuration:", {
+              cookieName,
+              secure: SECURITY_CONFIG.COOKIE_SECURITY.secure,
+              httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly,
+              sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite,
+              domain: SECURITY_CONFIG.COOKIE_SECURITY.domain || 'not set (exact domain)',
+              partitioned: SECURITY_CONFIG.COOKIE_SECURITY.partitioned,
+              protocol: req.protocol,
+              secureFlag: req.secure,
+              xForwardedProto: req.headers['x-forwarded-proto'],
+              host: req.headers.host
+            });
             
             logSecurityEvent('LOGIN_SUCCESS', { 
               username: user.username, 

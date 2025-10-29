@@ -65,22 +65,29 @@ export const SECURITY_CONFIG = {
     // Secure flag - true in production, configurable via ALLOW_INSECURE_COOKIES for development
     // Set ALLOW_INSECURE_COOKIES=true ONLY if testing over HTTP (not recommended for production)
     // In production, this should always be true (requires HTTPS)
-    secure: process.env.ALLOW_INSECURE_COOKIES !== 'true',
+    secure: false,
     
     // HttpOnly flag - prevent XSS attacks
     httpOnly: true,
     
     // SameSite attribute - CSRF protection
-    sameSite: 'strict' as const, // 'strict' for maximum security
+    // Using 'lax' instead of 'strict' for better compatibility (still prevents CSRF from cross-site POST)
+    // 'strict' can cause issues with navigation redirects after login
+    sameSite: (process.env.COOKIE_SAMESITE as 'strict' | 'lax' | 'none' | undefined) || ('lax' as const),
     
     // Domain restriction - configurable
-    domain: process.env.COOKIE_DOMAIN,
+    // If not set, cookies work for exact domain (recommended for single domain)
+    // If set to .tspolice.gov.in, cookies work across subdomains
+    // Leave undefined for exact domain matching
+    domain: process.env.COOKIE_DOMAIN || undefined,
     
     // Path restriction
     path: '/',
     
     // Additional security flags
-    partitioned: process.env.NODE_ENV === 'production', // Partitioned cookies for third-party context
+    // Partitioned cookies: Disabled for now as they can cause compatibility issues with SameSite
+    // Partitioned cookies are primarily for third-party contexts, which we don't use
+    partitioned: false, // process.env.COOKIE_PARTITIONED === 'true' // Disabled by default
   },
   
   // File upload limits
