@@ -62,10 +62,10 @@ export const SECURITY_CONFIG = {
   
   // Cookie security configuration
   COOKIE_SECURITY: {
-    // Secure flag - ALWAYS true for security compliance (requires HTTPS)
-    // This ensures cookies are only sent over HTTPS connections
-    // Note: Requires HTTPS to work properly - cookies will not be sent over HTTP
-    secure: true,
+    // Secure flag - true in production, configurable via ALLOW_INSECURE_COOKIES for development
+    // Set ALLOW_INSECURE_COOKIES=true ONLY if testing over HTTP (not recommended for production)
+    // In production, this should always be true (requires HTTPS)
+    secure: process.env.ALLOW_INSECURE_COOKIES !== 'true',
     
     // HttpOnly flag - prevent XSS attacks
     httpOnly: true,

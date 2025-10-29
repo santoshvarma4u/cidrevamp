@@ -81,6 +81,7 @@ services:
       SESSION_SECRET: your-super-secret-session-key-change-this-in-production
       FORCE_HTTPS: "false"
       ALLOW_HTTP_SESSIONS: "true"
+      ALLOW_INSECURE_COOKIES: "false"
     ports:
       - "5000:5000"
     volumes:

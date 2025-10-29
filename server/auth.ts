@@ -565,11 +565,17 @@ export function setupAuth(app: Express) {
           }
           
           // Bind session to IP address and User-Agent for replay protection
+          // Generate unique session token that changes on every login (prevents replay)
           if (req.session) {
+            const sessionToken = generateSessionToken(req.sessionID, user.id);
             (req.session as any).createdAt = Date.now();
             (req.session as any).clientIp = clientIp; // Bind to IP address
             (req.session as any).userAgent = userAgent; // Bind to User-Agent
             (req.session as any).sessionRotatedAt = Date.now(); // Track rotation timestamp
+            (req.session as any).sessionToken = sessionToken; // Unique token for this login session
+            (req.session as any).userId = user.id; // Store userId for token validation
+            
+            console.log(`Session token generated for session ${req.sessionID}: ${sessionToken.substring(0, 16)}...`);
           }
           
           console.log("Session established successfully:", {
@@ -899,11 +905,17 @@ export function setupAuth(app: Express) {
           }
           
           // Bind session to IP address and User-Agent for replay protection
+          // Generate unique session token that changes on every login (prevents replay)
           if (req.session) {
+            const sessionToken = generateSessionToken(req.sessionID, user.id);
             (req.session as any).createdAt = Date.now();
             (req.session as any).clientIp = clientIp; // Bind to IP address
             (req.session as any).userAgent = userAgent; // Bind to User-Agent
             (req.session as any).sessionRotatedAt = Date.now(); // Track rotation timestamp
+            (req.session as any).sessionToken = sessionToken; // Unique token for this login session
+            (req.session as any).userId = user.id; // Store userId for token validation
+            
+            console.log(`Session token generated for session ${req.sessionID}: ${sessionToken.substring(0, 16)}...`);
           }
           
           console.log("Session established successfully:", {
@@ -1033,17 +1045,19 @@ function validateSession(req: any, res: any, next: any) {
       }
     } else if (req.isAuthenticated()) {
       // If authenticated but no token, this might be an old session before token system
-      // In production, we should be strict and reject it
+      // OR a session that was just created (token generation happens async)
+      // In development, allow but log. In production, we should be more strict.
       if (process.env.NODE_ENV === 'production') {
+        // In production, allow sessions without tokens for now (backward compatibility)
+        // But log for monitoring
         logSecurityEvent('SESSION_TOKEN_MISSING', { 
           sessionId,
           ip: req.ip,
           path: req.path,
-          reason: 'Session token missing on authenticated session'
+          reason: 'Session token missing on authenticated session - may be newly created'
         }, req, 'MEDIUM', 'WARNING');
-        
-        // For now, allow but log - in future, we might want to force re-authentication
       }
+      // In development, allow sessions without tokens (they might be in the process of being created)
     }
   }
   
