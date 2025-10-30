@@ -82,6 +82,7 @@ services:
       FORCE_HTTPS: "false"
       ALLOW_HTTP_SESSIONS: "true"
       ALLOW_INSECURE_COOKIES: "false"
+      ENABLE_PASSWORD_ENCRYPTION: "false"
     ports:
       - "5000:5000"
     volumes:
