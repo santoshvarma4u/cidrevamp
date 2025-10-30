@@ -176,19 +176,16 @@ export function setupAuth(app: Express) {
     store: sessionStore,
     proxy: true, // Trust proxy - required for secure cookies to work with reverse proxy
     cookie: {
-      // Enhanced cookie security using centralized configuration
-      // secure: true means cookies ONLY sent over HTTPS (security requirement)
-      // With proxy: true and trust proxy enabled, express-session will only set secure=true when req.secure is true
-      // req.secure is true when x-forwarded-proto is 'https' (from Nginx)
-      secure: 'true',
-      httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly, // Prevent XSS attacks
-      maxAge: SECURITY_CONFIG.SESSION_TIMEOUT, // 20 minutes (enhanced security)
-      sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite, // Enhanced CSRF protection
-      domain: SECURITY_CONFIG.COOKIE_SECURITY.domain, // Allow domain restriction
-      path: SECURITY_CONFIG.COOKIE_SECURITY.path, // Path restriction
-      partitioned: SECURITY_CONFIG.COOKIE_SECURITY.partitioned, // Partitioned cookies for third-party context
+      // Use boolean, not string. Enable secure cookies in production unless explicitly allowed insecure.
+      secure: process.env.NODE_ENV === 'production' && process.env.ALLOW_INSECURE_COOKIES !== 'true',
+      httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly,
+      maxAge: SECURITY_CONFIG.SESSION_TIMEOUT,
+      sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite,
+      domain: SECURITY_CONFIG.COOKIE_SECURITY.domain,
+      path: SECURITY_CONFIG.COOKIE_SECURITY.path,
+      partitioned: SECURITY_CONFIG.COOKIE_SECURITY.partitioned,
     },
-    name: 'cid.session.id', // Custom session name
+    name: 'cid.session.id',
   };
 
   app.use(session(sessionSettings));
@@ -223,12 +220,14 @@ export function setupAuth(app: Express) {
       // If this is the session cookie
       if (name === 'cid.session.id' || name === sessionSettings.name) {
         // Check if request is actually secure
-        const isSecureRequest = req.secure || 
+        const forceHttps = process.env.FORCE_HTTPS === 'true';
+        const isSecureRequest = forceHttps ||
+                                req.secure || 
                                 req.protocol === 'https' || 
                                 req.headers['x-forwarded-proto'] === 'https' ||
                                 req.headers['x-forwarded-ssl'] === 'on';
         
-        // Force secure=true if in production and request is HTTPS
+        // Force secure=true if in production and request is HTTPS (or FORCE_HTTPS is set)
         if (process.env.NODE_ENV === 'production' && 
             process.env.ALLOW_INSECURE_COOKIES !== 'true' && 
             isSecureRequest) {
@@ -241,6 +240,7 @@ export function setupAuth(app: Express) {
             protocol: req.protocol,
             reqSecure: req.secure,
             xForwardedProto: req.headers['x-forwarded-proto'],
+            forceHttps: forceHttps,
             host: req.headers.host
           });
         }
