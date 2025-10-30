@@ -162,14 +162,25 @@ export function setupAuth(app: Express) {
     });
   }, 2 * 60 * 1000); // Run every 2 minutes (more frequent for 20-minute timeout)
 
+  // CRITICAL: Set trust proxy BEFORE session configuration
+  // This allows Express to detect HTTPS from x-forwarded-proto header
+  app.set("trust proxy", 1);
+  
+  // Session cookie configuration - secure flag must be set correctly for production
+  // With proxy: true, express-session will use req.secure (which is true when x-forwarded-proto is 'https')
+  // secure: true means cookies ONLY sent over HTTPS (required by security team)
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "CID-Telangana-Super-Secret-Key-2025-" + randomBytes(32).toString('hex'),
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
+    proxy: true, // Trust proxy - required for secure cookies to work with reverse proxy
     cookie: {
       // Enhanced cookie security using centralized configuration
-      secure: SECURITY_CONFIG.COOKIE_SECURITY.secure,
+      // secure: true means cookies ONLY sent over HTTPS (security requirement)
+      // With proxy: true and trust proxy enabled, express-session will only set secure=true when req.secure is true
+      // req.secure is true when x-forwarded-proto is 'https' (from Nginx)
+      secure: process.env.NODE_ENV === 'production' && process.env.ALLOW_INSECURE_COOKIES !== 'true',
       httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly, // Prevent XSS attacks
       maxAge: SECURITY_CONFIG.SESSION_TIMEOUT, // 20 minutes (enhanced security)
       sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite, // Enhanced CSRF protection
@@ -180,7 +191,6 @@ export function setupAuth(app: Express) {
     name: 'cid.session.id', // Custom session name
   };
 
-  app.set("trust proxy", 1);
   app.use(session(sessionSettings));
   app.use(passport.initialize());
   app.use(passport.session());
