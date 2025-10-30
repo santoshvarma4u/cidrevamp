@@ -73,7 +73,7 @@ function checkCaptchaRateLimit(ipAddress: string): boolean {
   }
   
   // Max 100 CAPTCHAs per 15 minutes per IP (increased for high usage scenarios)
-  if (limit.count >= 100) {
+  if (limit.count >= 5) {
     console.warn(`CAPTCHA rate limit exceeded for IP: ${ipAddress}`);
     return false;
   }

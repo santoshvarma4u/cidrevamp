@@ -195,6 +195,25 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // === DEBUG: Add cookie/session diagnostic logging middleware ===
+  app.use((req, res, next) => {
+    // Capture current outgoing cookie header
+    const setCookieHeaders = res.getHeader('Set-Cookie');
+    console.log('[COOKIE-DEBUG]', {
+      method: req.method,
+      url: req.originalUrl,
+      protocol: req.protocol,
+      reqSecure: req.secure,
+      xForwardedProto: req.headers['x-forwarded-proto'],
+      host: req.headers.host,
+      cookiesInRequest: req.headers.cookie,
+      setCookieHeaders,
+      nodeEnv: process.env.NODE_ENV,
+      allowInsecure: process.env.ALLOW_INSECURE_COOKIES
+    });
+    next();
+  });
+
   // CRITICAL: Middleware to force secure flag on session cookies
   // express-session sets cookies directly, so we intercept and enforce secure flag
   app.use((req: any, res: any, next: any) => {
