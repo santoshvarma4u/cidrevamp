@@ -233,7 +233,7 @@ export function setupAuth(app: Express) {
 
   // CRITICAL: Global session validation middleware - checks blacklist for ALL sessions
   // MUST be after session middleware but before other middleware
-(_  // This prevents blacklisted sessions from being used anywhere
+  // This prevents blacklisted sessions from being used anywhere
   app.use((req: any, res: any, next: any) => {
     // Only validate if session exists
     if (req.session && req.sessionID) {
