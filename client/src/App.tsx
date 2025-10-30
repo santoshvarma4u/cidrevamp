@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/toaster";
 import Watermark from "@/components/layout/Watermark";
 import LoadingSpinner from "@/components/ui/loading-spinner";
-import { ThemeSelector } from "@/components/ThemeSelector";
+// import { ThemeSelector } from "@/components/ThemeSelector";
 import { useState, useEffect } from "react";
 
 // Public pages
@@ -122,10 +122,10 @@ function App() {
         <Watermark type="pattern" opacity={0.015} size={120} />
         <Router />
         <Toaster />
-        <ThemeSelector
+        {/* <ThemeSelector
           currentTheme={currentTheme as any}
           onThemeChange={setCurrentTheme}
-        />
+        /> */}
       </div>
     </QueryClientProvider>
   );

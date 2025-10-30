@@ -24,7 +24,7 @@ import {
 import VideoPlayer from "@/components/media/VideoPlayer";
 import AutoScrollNews from "@/components/common/AutoScrollNews";
 import NewsTicker from "@/components/home/NewsTicker";
-import { ThemeSelector, type Theme } from "@/components/ThemeSelector";
+// import { ThemeSelector, type Theme } from "@/components/ThemeSelector";
 
 // Helper function to safely convert dates to ISO strings
 const formatDate = (date: any): string => {
@@ -386,7 +386,7 @@ export default function ModernHome() {
       <Footer />
       
       {/* Theme Selector */}
-      <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} />
+      {/* <ThemeSelector currentTheme={currentTheme} onThemeChange={setCurrentTheme} /> */}
     </div>
   );
 }

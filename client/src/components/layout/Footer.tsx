@@ -142,14 +142,13 @@ export default function Footer() {
             
             {/* Powered by VATINS */}
             <div className="flex items-center space-x-3 text-gray-400">
-              <span className="text-sm">Powered by</span>
+              <span className="text-sm">Designed and Developed by Vatins Systems</span>
               <div className="flex items-center space-x-2">
                 <img 
                   src={vatinsLogoSrc} 
                   alt="VATINS Logo" 
                   className="h-6 w-auto object-contain"
                 />
-                <span className="text-sm font-medium text-white">VATINS</span>
               </div>
             </div>
           </div>
