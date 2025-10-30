@@ -109,7 +109,7 @@ export const SECURITY_CONFIG = {
     // With Nginx reverse proxy, this relies on x-forwarded-proto header
     // Must ensure Express trusts proxy (app.set('trust proxy', 1))
     // Cookie middleware will automatically detect HTTPS and set secure flag accordingly
-    secure: 'true',
+    secure: 'false',
     
     // HttpOnly flag - prevent XSS attacks
     httpOnly: true,
