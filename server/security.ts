@@ -101,15 +101,15 @@ export const SECURITY_CONFIG = {
   
   // Cookie security configuration
   COOKIE_SECURITY: {
-    // Secure flag - true in production, configurable via ALLOW_INSECURE_COOKIES for development
+    // Secure flag - ALWAYS true unless ALLOW_INSECURE_COOKIES is set to 'true' (security best practice)
     // Set ALLOW_INSECURE_COOKIES=true ONLY if testing over HTTP (not recommended for production)
     // In production, this should always be true (requires HTTPS)
-    // Secure flag: true in production (requires HTTPS)
+    // Secure flag: always true by default (requires HTTPS)
     // When secure=true, cookies ONLY work over HTTPS connections
     // With Nginx reverse proxy, this relies on x-forwarded-proto header
     // Must ensure Express trusts proxy (app.set('trust proxy', 1))
     // Cookie middleware will automatically detect HTTPS and set secure flag accordingly
-    secure: process.env.ALLOW_INSECURE_COOKIES !== 'true' && process.env.NODE_ENV === 'production',
+    secure: 'true',
     
     // HttpOnly flag - prevent XSS attacks
     httpOnly: true,

@@ -8,6 +8,11 @@ import { xssProtection, CSP_CONFIG, httpMethodFilter, validateHostHeader, getCor
 
 const app = express();
 
+// CRITICAL: Set trust proxy BEFORE any other middleware
+// This allows Express to detect HTTPS from x-forwarded-proto header
+// This is essential for cookies with secure=true when behind Nginx reverse proxy
+app.set("trust proxy", 1);
+
 // Host Header Validation - MUST be first for security
 app.use(validateHostHeader);
 

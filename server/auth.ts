@@ -180,7 +180,7 @@ export function setupAuth(app: Express) {
       // secure: true means cookies ONLY sent over HTTPS (security requirement)
       // With proxy: true and trust proxy enabled, express-session will only set secure=true when req.secure is true
       // req.secure is true when x-forwarded-proto is 'https' (from Nginx)
-      secure: process.env.NODE_ENV === 'production' && process.env.ALLOW_INSECURE_COOKIES !== 'true',
+      secure: 'true',
       httpOnly: SECURITY_CONFIG.COOKIE_SECURITY.httpOnly, // Prevent XSS attacks
       maxAge: SECURITY_CONFIG.SESSION_TIMEOUT, // 20 minutes (enhanced security)
       sameSite: SECURITY_CONFIG.COOKIE_SECURITY.sameSite, // Enhanced CSRF protection
