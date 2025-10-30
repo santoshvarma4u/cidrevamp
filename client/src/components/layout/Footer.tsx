@@ -153,7 +153,7 @@ export default function Footer() {
                 <img 
                   src={vatinsLogoSrc} 
                   alt="VATINS Logo" 
-                  className="h-6 w-auto object-contain"
+                  className="h-12 w-auto object-contain mix-blend-multiply"
                 />
               </div>
             </div>
