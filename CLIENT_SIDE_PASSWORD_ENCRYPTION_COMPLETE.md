@@ -4,11 +4,16 @@
 **Issue:** Cleartext Submission of Password  
 **Status:** ✅ COMPLETE - Client-Side Encryption Implemented
 
+**Security Update (October 20, 2025):** ✅ Enhanced with Nonce-Based Security  
+See `PASSWORD_ENCRYPTION_NONCE_SECURITY_FIX.md` for replay attack prevention details.
+
 ---
 
 ## Executive Summary
 
 Implemented comprehensive client-side password encryption using RSA-OAEP encryption with 2048-bit keys. Passwords are now encrypted on the client before being sent to the server, providing an additional layer of security beyond HTTPS.
+
+**NEW:** Each password encryption now includes a unique nonce and timestamp to prevent replay attacks and ensure encrypted passwords cannot be reused.
 
 ---
 

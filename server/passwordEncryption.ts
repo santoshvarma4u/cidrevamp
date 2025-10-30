@@ -101,7 +101,29 @@ export async function getPublicKey(): Promise<string> {
   }
 }
 
-// Decrypt password on server side
+// Nonce tracking for replay attack prevention
+// Store seen nonces temporarily to prevent reuse
+const seenNonces = new Map<string, number>();
+const NONCE_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes
+
+// Clean up expired nonces periodically
+setInterval(() => {
+  const now = Date.now();
+  const entries = Array.from(seenNonces.entries());
+  for (const [nonceHash, timestamp] of entries) {
+    if (now - timestamp > NONCE_EXPIRY_TIME) {
+      seenNonces.delete(nonceHash);
+    }
+  }
+}, 60 * 1000); // Clean up every minute
+
+// Hash function for nonce tracking
+function hashNonce(nonce: number[]): string {
+  const { createHash } = require('crypto');
+  return createHash('sha256').update(JSON.stringify(nonce)).digest('hex');
+}
+
+// Decrypt password on server side with replay attack prevention
 export async function decryptPassword(encryptedPassword: string): Promise<string> {
   try {
     const { privateKey } = await getOrCreateKeyPair();
@@ -119,7 +141,44 @@ export async function decryptPassword(encryptedPassword: string): Promise<string
       encryptedBuffer
     );
     
-    return decrypted.toString('utf8');
+    // Parse the decrypted JSON data
+    const decryptedData = JSON.parse(decrypted.toString('utf8'));
+    
+    // Check if this is the new format with nonce and timestamp
+    if (decryptedData.password && decryptedData.nonce && decryptedData.timestamp) {
+      // Validate timestamp - reject passwords older than 5 minutes
+      const now = Date.now();
+      const passwordAge = now - decryptedData.timestamp;
+      const MAX_PASSWORD_AGE = 5 * 60 * 1000; // 5 minutes
+      
+      if (passwordAge > MAX_PASSWORD_AGE) {
+        throw new Error('Encrypted password expired - too old');
+      }
+      
+      // Check for replay attack - hash the nonce and check if we've seen it
+      const nonceHash = hashNonce(decryptedData.nonce);
+      
+      if (seenNonces.has(nonceHash)) {
+        console.error('REPLAY ATTACK DETECTED: Nonce reuse attempted');
+        throw new Error('Replay attack detected - nonce already used');
+      }
+      
+      // Mark this nonce as seen
+      seenNonces.set(nonceHash, now);
+      
+      // Return the password
+      return decryptedData.password;
+    }
+    
+    // Fallback: If it's the old format (just a password string), return it
+    // This provides backward compatibility during the transition period
+    if (typeof decryptedData === 'string') {
+      console.warn('⚠️ Received password in legacy format (no nonce). Please update client.');
+      return decryptedData;
+    }
+    
+    throw new Error('Invalid encrypted password format');
+    
   } catch (error) {
     console.error('Error decrypting password:', error);
     throw new Error('Failed to decrypt password');

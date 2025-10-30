@@ -72,15 +72,39 @@ async function getPublicKey(): Promise<CryptoKey> {
 }
 
 /**
- * Encrypt password using RSA-OAEP
+ * Generate a random nonce for this encryption session
+ * This ensures each encryption is unique and prevents replay attacks
+ */
+function generateNonce(): Uint8Array {
+  const nonce = new Uint8Array(32); // 256 bits of randomness
+  crypto.getRandomValues(nonce);
+  return nonce;
+}
+
+/**
+ * Encrypt password using RSA-OAEP with nonce-based security
+ * The nonce ensures each encryption is unique, preventing replay attacks
  */
 export async function encryptPassword(password: string): Promise<string> {
   try {
     // Get public key
     const publicKey = await getPublicKey();
 
-    // Convert password to ArrayBuffer
-    const passwordBuffer = new TextEncoder().encode(password);
+    // Generate a unique nonce for this encryption
+    const nonce = generateNonce();
+    
+    // Create a timestamp to prevent reuse of old encrypted passwords
+    const timestamp = Date.now();
+    
+    // Combine password with nonce and timestamp to make each encryption unique
+    const passwordWithNonce = JSON.stringify({
+      password,
+      nonce: Array.from(nonce), // Convert to plain array for JSON
+      timestamp
+    });
+    
+    // Convert combined data to ArrayBuffer
+    const dataBuffer = new TextEncoder().encode(passwordWithNonce);
 
     // Encrypt using RSA-OAEP
     const encrypted = await crypto.subtle.encrypt(
@@ -88,12 +112,13 @@ export async function encryptPassword(password: string): Promise<string> {
         name: 'RSA-OAEP',
       },
       publicKey,
-      passwordBuffer
+      dataBuffer
     );
 
     // Convert encrypted data to base64 string
+    const encryptedUint8Array = new Uint8Array(encrypted);
     const encryptedBase64 = btoa(
-      String.fromCharCode(...new Uint8Array(encrypted))
+      String.fromCharCode.apply(null, Array.from(encryptedUint8Array))
     );
 
     return encryptedBase64;
