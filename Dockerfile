@@ -83,7 +83,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   }).on('error', () => process.exit(1));"
 
 # Start the application in development mode
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
 
 # Production stage
 FROM node:20-alpine AS production
