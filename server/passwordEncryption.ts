@@ -1,4 +1,4 @@
-import { generateKeyPair, privateDecrypt, constants } from 'crypto';
+import { generateKeyPair, privateDecrypt, constants, createHash } from 'crypto';
 import { promisify } from 'util';
 import fs from 'fs';
 import path from 'path';
@@ -119,7 +119,6 @@ setInterval(() => {
 
 // Hash function for nonce tracking
 function hashNonce(nonce: number[]): string {
-  const { createHash } = require('crypto');
   return createHash('sha256').update(JSON.stringify(nonce)).digest('hex');
 }
 
@@ -181,7 +180,12 @@ export async function decryptPassword(encryptedPassword: string): Promise<string
     
   } catch (error) {
     console.error('Error decrypting password:', error);
-    throw new Error('Failed to decrypt password');
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      encryptedLength: encryptedPassword?.length
+    });
+    throw error; // Re-throw original error with details
   }
 }
 
