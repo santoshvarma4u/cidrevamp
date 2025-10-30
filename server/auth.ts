@@ -195,9 +195,45 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  // CRITICAL: Middleware to force secure flag on session cookies
+  // express-session sets cookies directly, so we intercept and enforce secure flag
+  app.use((req: any, res: any, next: any) => {
+    // Override res.cookie to force secure flag when request is HTTPS
+    const originalCookie = res.cookie;
+    res.cookie = function(name: string, value: string, options: any = {}) {
+      // If this is the session cookie
+      if (name === 'cid.session.id' || name === sessionSettings.name) {
+        // Check if request is actually secure
+        const isSecureRequest = req.secure || 
+                                req.protocol === 'https' || 
+                                req.headers['x-forwarded-proto'] === 'https' ||
+                                req.headers['x-forwarded-ssl'] === 'on';
+        
+        // Force secure=true if in production and request is HTTPS
+        if (process.env.NODE_ENV === 'production' && 
+            process.env.ALLOW_INSECURE_COOKIES !== 'true' && 
+            isSecureRequest) {
+          options.secure = true;
+          
+          // Debug logging
+          console.log(`[COOKIE] Forcing secure=true for session cookie:`, {
+            name,
+            secure: options.secure,
+            protocol: req.protocol,
+            reqSecure: req.secure,
+            xForwardedProto: req.headers['x-forwarded-proto'],
+            host: req.headers.host
+          });
+        }
+      }
+      return originalCookie.call(this, name, value, options);
+    };
+    next();
+  });
+
   // CRITICAL: Global session validation middleware - checks blacklist for ALL sessions
   // MUST be after session middleware but before other middleware
-  // This prevents blacklisted sessions from being used anywhere
+(_  // This prevents blacklisted sessions from being used anywhere
   app.use((req: any, res: any, next: any) => {
     // Only validate if session exists
     if (req.session && req.sessionID) {

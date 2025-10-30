@@ -115,8 +115,9 @@ export const SECURITY_CONFIG = {
     httpOnly: true,
     
     // SameSite attribute - CSRF protection
-    // Using 'lax' instead of 'strict' for better compatibility (still prevents CSRF from cross-site POST)
-    // 'strict' can cause issues with navigation redirects after login
+    // 'lax' allows cookies on top-level navigation (GET requests) but blocks on cross-site POST
+    // This is the best balance between security and compatibility
+    // Some browsers (Chrome, Safari) are stricter with SameSite, so 'lax' is safer than 'strict'
     sameSite: (process.env.COOKIE_SAMESITE as 'strict' | 'lax' | 'none' | undefined) || ('lax' as const),
     
     // Domain restriction - configurable
