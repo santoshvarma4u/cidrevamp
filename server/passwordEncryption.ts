@@ -150,9 +150,9 @@ export async function decryptPassword(encryptedPassword: string): Promise<string
       const passwordAge = now - decryptedData.timestamp;
       const MAX_PASSWORD_AGE = 5 * 60 * 1000; // 5 minutes
       
-      if (passwordAge > MAX_PASSWORD_AGE) {
-        throw new Error('Encrypted password expired - too old');
-      }
+      // if (passwordAge > MAX_PASSWORD_AGE) {
+      //   throw new Error('Encrypted password expired - too old');
+      // }
       
       // Check for replay attack - hash the nonce and check if we've seen it
       const nonceHash = hashNonce(decryptedData.nonce);
