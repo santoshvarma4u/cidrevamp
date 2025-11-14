@@ -126,6 +126,7 @@ export const SECURITY_CONFIG = {
     // Leave undefined for exact domain matching
     domain: process.env.COOKIE_DOMAIN || undefined,
     
+
     // Path restriction
     path: '/',
     
@@ -323,25 +324,6 @@ export function validateHostHeader(req: Request, res: Response, next: NextFuncti
   // Remove port number if present for validation
   const hostWithoutPort = host.split(':')[0].toLowerCase().trim();
   
-  const referer = req.headers['referer'] || req.headers['referrer'];
-if (referer) {
-  // Only allow if referer starts with https://cid-staging.tspolice.gov.in/
-  if (typeof referer !== 'string' || !referer.startsWith('https://cid-staging.tspolice.gov.in/')) {
-    logSecurityEvent('INVALID_REFERER_HEADER', {
-      host: hostWithoutPort,
-      referer,
-      ip: req.ip,
-      path: req.path,
-      env: process.env.NODE_ENV
-    }, req, 'HIGH', 'FAILURE');
-    return res.status(403).json({
-      message: 'Forbidden',
-      error: 'Invalid Referer header',
-      code: 'INVALID_REFERER'
-    });
-  }
-}
-
   // Validate host format (prevent injection)
   if (!/^[a-zA-Z0-9.-]+$/.test(hostWithoutPort) && !hostWithoutPort.includes('localhost')) {
     logSecurityEvent('INVALID_HOST_FORMAT', { 
@@ -357,11 +339,21 @@ if (referer) {
   }
   
   // Check against whitelist (case-insensitive)
-  const isTrusted = SECURITY_CONFIG.TRUSTED_HOSTS.some(trustedHost => {
+  const trustedHosts = SECURITY_CONFIG.TRUSTED_HOSTS;
+  const isTrusted = trustedHosts.some(trustedHost => {
     if (trustedHost instanceof RegExp) {
       return trustedHost.test(hostWithoutPort);
     }
     return typeof trustedHost === 'string' && trustedHost.toLowerCase() === hostWithoutPort;
+  });
+  
+  // Debug logging for host validation
+  console.log('[HOST_VALIDATION]', {
+    host: hostWithoutPort,
+    originalHost: host,
+    trustedHosts: trustedHosts,
+    isTrusted,
+    path: req.path
   });
   
   if (!isTrusted) {
@@ -371,12 +363,15 @@ if (referer) {
       ip: req.ip,
       path: req.path,
       userAgent: req.get('User-Agent'),
+      trustedHosts: trustedHosts,
       allHeaders: Object.keys(req.headers)
     }, req, 'HIGH', 'FAILURE');
     return res.status(403).json({ 
       message: 'Forbidden',
       error: 'Invalid host header',
-      code: 'UNTRUSTED_HOST'
+      code: 'UNTRUSTED_HOST',
+      receivedHost: hostWithoutPort,
+      trustedHosts: trustedHosts
     });
   }
   
