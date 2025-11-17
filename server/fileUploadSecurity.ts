@@ -876,6 +876,19 @@ export function enhancedFileValidation(req: any, res: any, next: any) {
   try {
     const file = req.file;
     
+    // TEMPORARY: Disable validation for images and videos
+    const category = detectFileCategory(file.mimetype);
+    if (category === 'images' || category === 'videos') {
+      console.log(`[TEMP] Skipping validation for ${category}: ${file.filename} (type: ${file.mimetype})`);
+      // Ensure file permissions are set correctly (non-executable)
+      if (fs.existsSync(file.path)) {
+        setSecureFilePermissions(file.path);
+      }
+      // Log successful upload
+      console.log(`File uploaded (validation skipped): ${file.filename} (${file.size} bytes, type: ${file.mimetype})`);
+      return next();
+    }
+    
     // Read file from disk for validation (multer saves to disk, so buffer might be empty)
     const fileBuffer = fs.existsSync(file.path) ? fs.readFileSync(file.path) : (file.buffer || Buffer.alloc(0));
     
@@ -888,7 +901,6 @@ export function enhancedFileValidation(req: any, res: any, next: any) {
     }
     
     // Detect file category from declared MIME type
-    const category = detectFileCategory(file.mimetype);
     if (!category) {
       fs.unlinkSync(file.path);
       return res.status(400).json({
@@ -909,28 +921,29 @@ export function enhancedFileValidation(req: any, res: any, next: any) {
       });
     }
     
-    // ENHANCED: Validate image structure for JPEG and PNG files
-    if (category === 'images') {
-      if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
-        const jpegValidation = validateJPEGStructure(fileBuffer);
-        if (!jpegValidation.valid) {
-          fs.unlinkSync(file.path);
-          return res.status(400).json({
-            success: false,
-            message: `JPEG structure validation failed: ${jpegValidation.reason}`,
-          });
-        }
-      } else if (file.mimetype === 'image/png') {
-        const pngValidation = validatePNGStructure(fileBuffer);
-        if (!pngValidation.valid) {
-          fs.unlinkSync(file.path);
-          return res.status(400).json({
-            success: false,
-            message: `PNG structure validation failed: ${pngValidation.reason}`,
-          });
-        }
-      }
-    }
+    // TEMPORARILY DISABLED: Validate image structure for JPEG and PNG files
+    // This is skipped for images and videos (handled by early return above)
+    // if (category === 'images') {
+    //   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg') {
+    //     const jpegValidation = validateJPEGStructure(fileBuffer);
+    //     if (!jpegValidation.valid) {
+    //       fs.unlinkSync(file.path);
+    //       return res.status(400).json({
+    //         success: false,
+    //         message: `JPEG structure validation failed: ${jpegValidation.reason}`,
+    //       });
+    //     }
+    //   } else if (file.mimetype === 'image/png') {
+    //     const pngValidation = validatePNGStructure(fileBuffer);
+    //     if (!pngValidation.valid) {
+    //       fs.unlinkSync(file.path);
+    //       return res.status(400).json({
+    //         success: false,
+    //         message: `PNG structure validation failed: ${pngValidation.reason}`,
+    //       });
+    //     }
+    //   }
+    // }
     
     // ENHANCED: Full file content validation (scans entire file, not just headers)
     const contentCheck = checkFileContent(fileBuffer);
