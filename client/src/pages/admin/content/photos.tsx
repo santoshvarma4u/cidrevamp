@@ -363,7 +363,7 @@ export default function AdminPhotos() {
                       <div key={photo.id} className="relative group">
                         <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
                           <img
-                            src={`/uploads/${photo.fileName}`}
+                            src={`/uploads/images/${photo.fileName}`}
                             alt={photo.title}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                           />

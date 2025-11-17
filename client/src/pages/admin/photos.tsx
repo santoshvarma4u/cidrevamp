@@ -404,7 +404,7 @@ export default function AdminPhotos() {
             <Card key={photo.id} className="overflow-hidden">
               <div className="aspect-video bg-gray-200">
                 <img
-                  src={`/uploads/${photo.fileName}`}
+                  src={`/uploads/images/${photo.fileName}`}
                   alt={photo.title}
                   className="w-full h-full object-cover"
                   onError={(e) => {

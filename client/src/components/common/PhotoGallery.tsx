@@ -101,7 +101,7 @@ export default function PhotoGallery({
           >
             <div className="relative aspect-square bg-gray-200 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               <img
-                src={`/uploads/${photo.fileName}`}
+                src={`/uploads/images/${photo.fileName}`}
                 alt={photo.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 loading="lazy"
@@ -185,7 +185,7 @@ export default function PhotoGallery({
               {/* Image */}
               <div className="flex items-center justify-center h-[80vh]">
                 <img
-                  src={`/uploads/${selectedPhoto.fileName}`}
+                  src={`/uploads/images/${selectedPhoto.fileName}`}
                   alt={selectedPhoto.title}
                   className="max-w-full max-h-full object-contain"
                 />

@@ -97,10 +97,10 @@ export default function VideoPlayer({
         onEnded={handleVideoEnd}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
-        poster={video.thumbnailPath ? `/uploads/${video.thumbnailPath}` : undefined}
+        poster={video.thumbnailPath ? `/uploads/videos/${video.thumbnailPath}` : undefined}
       >
-        <source src={`/uploads/${video.fileName}`} type="video/mp4" />
-        <source src={`/uploads/${video.fileName}`} type="video/webm" />
+        <source src={`/uploads/videos/${video.fileName}`} type="video/mp4" />
+        <source src={`/uploads/videos/${video.fileName}`} type="video/webm" />
         Your browser does not support the video tag.
       </video>
 

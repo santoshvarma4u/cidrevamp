@@ -128,7 +128,7 @@ export default function MediaGallery() {
                   <Card key={photo.id} className="group cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handlePhotoClick(photo)}>
                     <div className="aspect-square bg-gray-200 overflow-hidden rounded-t-lg">
                       <img
-                        src={`/uploads/${photo.fileName}`}
+                        src={`/uploads/images/${photo.fileName}`}
                         alt={photo.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -171,7 +171,7 @@ export default function MediaGallery() {
                     <div className="aspect-video bg-gray-900 overflow-hidden rounded-t-lg relative">
                       {video.thumbnailPath ? (
                         <img
-                          src={`/uploads/${video.thumbnailPath}`}
+                          src={`/uploads/videos/${video.thumbnailPath}`}
                           alt={video.title}
                           className="w-full h-full object-cover"
                         />
@@ -223,7 +223,7 @@ export default function MediaGallery() {
           {selectedPhoto && (
             <div>
               <img
-                src={`/uploads/${selectedPhoto.fileName}`}
+                src={`/uploads/images/${selectedPhoto.fileName}`}
                 alt={selectedPhoto.title}
                 className="w-full max-h-[70vh] object-contain rounded-t-lg"
               />
@@ -268,7 +268,7 @@ export default function MediaGallery() {
                 <video
                   controls
                   className="w-full h-full"
-                  src={`/uploads/${selectedVideo.fileName}`}
+                  src={`/uploads/videos/${selectedVideo.fileName}`}
                 >
                   Your browser does not support the video tag.
                 </video>

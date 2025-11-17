@@ -287,7 +287,7 @@ export default function ModernHome() {
                     <div className="aspect-video bg-muted relative">
                       {video.thumbnailPath ? (
                         <img
-                          src={`/api/uploads/${video.thumbnailPath}`}
+                          src={`/uploads/videos/${video.thumbnailPath}`}
                           alt={video.title}
                           className="w-full h-full object-cover"
                         />
