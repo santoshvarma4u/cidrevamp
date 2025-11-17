@@ -79,7 +79,7 @@ export default function ModernHeader() {
             {/* Right-aligned Text */}
             <div className="text-right">
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C3680] to-[#1E2A5E] bg-clip-text text-transparent">
-                Crime Investigation Department
+                Crime Investigation Department <span className="normal-case text-lg md:text-2xl lg:text-3xl">(Demo)</span>
               </h1>
             </div>
           </div>

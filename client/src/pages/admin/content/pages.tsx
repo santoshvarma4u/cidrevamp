@@ -556,13 +556,21 @@ export default function AdminPages() {
                                 <Badge variant="outline" className="text-xs">
                                   In Menu
                                 </Badge>
+                                <div className="text-xs text-gray-500">
+                                  Location: {page.menuLocation === "main_menu" ? "Main Menu" : "More Menu"}
+                                </div>
                                 {page.menuParent ? (
                                   <div className="text-xs text-gray-500">
                                     Under: {page.menuParent}
                                   </div>
                                 ) : (
                                   <div className="text-xs text-gray-500">
-                                    Main Menu Item
+                                    Top Level
+                                  </div>
+                                )}
+                                {page.menuLocation === "main_menu" && page.displayUntilDate && (
+                                  <div className="text-xs text-orange-500">
+                                    Until: {new Date(page.displayUntilDate).toLocaleDateString()}
                                   </div>
                                 )}
                               </div>

@@ -135,9 +135,21 @@ const FILE_UPLOAD_CONFIG = {
       { signature: Buffer.from([0x50, 0x4B, 0x03, 0x04]), offset: 0, ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }, // DOCX (ZIP-based)
     ],
     videos: [
-      { signature: Buffer.from([0x00, 0x00, 0x00, 0x18, 0x66, 0x74, 0x79, 0x70]), offset: 4, ext: '.mp4', mime: 'video/mp4' }, // MP4
+      // MP4/MOV files - check for 'ftyp' box at various offsets (box size can vary)
+      { signature: Buffer.from([0x66, 0x74, 0x79, 0x70]), offset: 4, ext: '.mp4', mime: 'video/mp4', flexible: true }, // MP4 - ftyp at offset 4
+      { signature: Buffer.from([0x66, 0x74, 0x79, 0x70]), offset: 8, ext: '.mp4', mime: 'video/mp4', flexible: true }, // MP4 - ftyp at offset 8
+      { signature: Buffer.from([0x66, 0x74, 0x79, 0x70]), offset: 12, ext: '.mp4', mime: 'video/mp4', flexible: true }, // MP4 - ftyp at offset 12
+      // QuickTime/MOV files - check for 'ftyp' or 'moov'/'mdat' boxes
+      { signature: Buffer.from([0x66, 0x74, 0x79, 0x70]), offset: 4, ext: '.mov', mime: 'video/quicktime', flexible: true }, // MOV - ftyp at offset 4
+      { signature: Buffer.from([0x6D, 0x6F, 0x6F, 0x76]), offset: 4, ext: '.mov', mime: 'video/quicktime', flexible: true }, // MOV - moov box
+      { signature: Buffer.from([0x6D, 0x64, 0x61, 0x74]), offset: 4, ext: '.mov', mime: 'video/quicktime', flexible: true }, // MOV - mdat box
+      // WebM (Matroska format)
       { signature: Buffer.from([0x1A, 0x45, 0xDF, 0xA3]), offset: 0, ext: '.webm', mime: 'video/webm' }, // WEBM (Matroska)
+      // OGG/OGV
       { signature: Buffer.from([0x4F, 0x67, 0x67, 0x53]), offset: 0, ext: '.ogg', mime: 'video/ogg' }, // OGG
+      { signature: Buffer.from([0x4F, 0x67, 0x67, 0x53]), offset: 0, ext: '.ogv', mime: 'video/ogg' }, // OGV
+      // AVI files
+      { signature: Buffer.from([0x52, 0x49, 0x46, 0x46]), offset: 0, ext: '.avi', mime: 'video/x-msvideo', flexible: true }, // AVI - RIFF header
     ],
   },
 };
@@ -334,11 +346,93 @@ export function validateFileMagicNumber(buffer: Buffer, category: 'images' | 'do
     
     const fileHeader = buffer.slice(sig.offset, sig.offset + sig.signature.length);
     if (fileHeader.equals(sig.signature)) {
-      // Verify detected type matches declared MIME type
-      if (sig.mime === declaredMime || declaredMime === 'application/octet-stream') {
-        return { valid: true, detectedType: sig.mime };
-      } else {
-        return { valid: false, reason: `File signature (${sig.mime}) does not match declared type (${declaredMime})`, detectedType: sig.mime };
+      // For flexible MP4/MOV files, check for 'ftyp' box at common offsets
+      if ((sig as any).flexible && (sig.mime === 'video/mp4' || sig.mime === 'video/quicktime')) {
+        // For MP4/MOV, verify 'ftyp' box exists somewhere in the first 32 bytes
+        const searchRange = buffer.slice(0, Math.min(32, buffer.length));
+        const ftypIndex = searchRange.indexOf(Buffer.from([0x66, 0x74, 0x79, 0x70])); // 'ftyp'
+        const moovIndex = searchRange.indexOf(Buffer.from([0x6D, 0x6F, 0x6F, 0x76])); // 'moov'
+        const mdatIndex = searchRange.indexOf(Buffer.from([0x6D, 0x64, 0x61, 0x74])); // 'mdat'
+        
+        if (ftypIndex >= 4 || moovIndex >= 4 || mdatIndex >= 4) {
+          // Verify detected type matches declared MIME type
+          if (sig.mime === declaredMime || declaredMime === 'application/octet-stream' || 
+              (sig.mime === 'video/mp4' && declaredMime === 'video/mp4') ||
+              (sig.mime === 'video/quicktime' && declaredMime === 'video/quicktime')) {
+            return { valid: true, detectedType: sig.mime };
+          } else {
+            // For flexible formats, be more lenient with MIME type matching
+            if (declaredMime.startsWith('video/')) {
+              return { valid: true, detectedType: sig.mime };
+            }
+            return { valid: false, reason: `File signature (${sig.mime}) does not match declared type (${declaredMime})`, detectedType: sig.mime };
+          }
+        }
+      }
+      
+      // For AVI files with RIFF header, verify it contains "AVI " chunk
+      if ((sig as any).flexible && sig.mime === 'video/x-msvideo') {
+        // RIFF files: check if it contains "AVI " at offset 8
+        if (buffer.length >= 12) {
+          const aviCheck = buffer.slice(8, 12);
+          if (aviCheck.equals(Buffer.from([0x41, 0x56, 0x49, 0x20]))) { // "AVI "
+            // Verify detected type matches declared MIME type
+            if (sig.mime === declaredMime || declaredMime === 'application/octet-stream' || 
+                declaredMime === 'video/x-msvideo' || declaredMime === 'video/avi') {
+              return { valid: true, detectedType: sig.mime };
+            }
+          }
+        }
+      }
+      
+      // Standard validation for non-flexible formats
+      if (!(sig as any).flexible) {
+        // Verify detected type matches declared MIME type
+        if (sig.mime === declaredMime || declaredMime === 'application/octet-stream') {
+          return { valid: true, detectedType: sig.mime };
+        } else {
+          return { valid: false, reason: `File signature (${sig.mime}) does not match declared type (${declaredMime})`, detectedType: sig.mime };
+        }
+      }
+    }
+  }
+  
+  // Special handling for MP4/MOV videos - search for 'ftyp', 'moov', or 'mdat' boxes
+  // MP4 files have a variable box structure, so we need to search more flexibly
+  if (category === 'videos' && (declaredMime === 'video/mp4' || declaredMime === 'video/quicktime' || declaredMime === 'video/x-m4v')) {
+    // Search for MP4/MOV box signatures in the first 64 bytes
+    const searchRange = buffer.slice(0, Math.min(64, buffer.length));
+    const ftypIndex = searchRange.indexOf(Buffer.from([0x66, 0x74, 0x79, 0x70])); // 'ftyp'
+    const moovIndex = searchRange.indexOf(Buffer.from([0x6D, 0x6F, 0x6F, 0x76])); // 'moov'
+    const mdatIndex = searchRange.indexOf(Buffer.from([0x6D, 0x64, 0x61, 0x74])); // 'mdat'
+    const freeIndex = searchRange.indexOf(Buffer.from([0x66, 0x72, 0x65, 0x65])); // 'free' (free space box)
+    
+    // MP4 files must have 'ftyp' box typically at offset 4, 8, 12, 16, 20, or 24
+    // But we check if any of these boxes exist at valid offsets (after box size header)
+    if (ftypIndex >= 4 && ftypIndex < 32) {
+      // Verify it's not just random bytes - check if there's a valid box structure
+      // The 4 bytes before 'ftyp' should represent a reasonable box size
+      const boxSizeBytes = buffer.slice(ftypIndex - 4, ftypIndex);
+      const boxSize = boxSizeBytes.readUInt32BE(0);
+      // Box size should be reasonable (not too large, and account for the header)
+      if (boxSize >= 8 && boxSize < buffer.length && (boxSize % 4 === 0 || ftypIndex === 4)) {
+        return { valid: true, detectedType: declaredMime === 'video/quicktime' ? 'video/quicktime' : 'video/mp4' };
+      }
+    }
+    
+    // Also accept if we find 'moov' or 'mdat' boxes (common in fragmented MP4)
+    if ((moovIndex >= 4 && moovIndex < 32) || (mdatIndex >= 4 && mdatIndex < 32)) {
+      return { valid: true, detectedType: declaredMime === 'video/quicktime' ? 'video/quicktime' : 'video/mp4' };
+    }
+  }
+  
+  // Special handling for AVI files - RIFF header with "AVI " chunk
+  if (category === 'videos' && (declaredMime === 'video/x-msvideo' || declaredMime === 'video/avi')) {
+    // Check for RIFF header at start
+    if (buffer.length >= 12 && buffer.slice(0, 4).equals(Buffer.from([0x52, 0x49, 0x46, 0x46]))) {
+      // Check for "AVI " at offset 8
+      if (buffer.slice(8, 12).equals(Buffer.from([0x41, 0x56, 0x49, 0x20]))) {
+        return { valid: true, detectedType: 'video/x-msvideo' };
       }
     }
   }
@@ -510,39 +604,36 @@ function validatePNGStructure(buffer: Buffer): { valid: boolean; reason?: string
     if (chunkLength > 0 && pos + 8 + chunkLength <= buffer.length) {
       const chunkData = buffer.slice(pos + 8, pos + 8 + chunkLength);
       
-      // Convert to string for pattern matching (limit to prevent issues)
-      const chunkText = chunkData.toString('utf8', 0, Math.min(chunkData.length, 2000));
+      // Only check text-based chunks for suspicious text patterns
+      // Binary chunks like iCCP (ICC color profile), IDAT (image data), PLTE (palette), etc.
+      // contain binary data that can accidentally match regex patterns when converted to UTF-8
+      const isTextChunk = chunkType === 'tEXt' || chunkType === 'zTXt' || chunkType === 'iTXt';
       
-      // Check for suspicious patterns in chunk data
-      for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
-        if (pattern.test(chunkText)) {
-          return { valid: false, reason: `Code injection detected in PNG chunk (${chunkType})` };
-        }
-      }
-      
-      // Check text chunks specifically (tEXt, zTXt, iTXt can contain arbitrary text)
-      if (chunkType === 'tEXt' || chunkType === 'zTXt' || chunkType === 'iTXt') {
-        // These chunks can legitimately contain text, but check for code
+      if (isTextChunk) {
+        // Text chunks can legitimately contain text, but check for code injection
+        const chunkText = chunkData.toString('utf8', 0, Math.min(chunkData.length, 2000));
+        
         for (const pattern of FILE_UPLOAD_CONFIG.SUSPICIOUS_CONTENT) {
           if (pattern.test(chunkText)) {
-            return { valid: false, reason: `Code injection detected in PNG text chunk` };
+            return { valid: false, reason: `Code injection detected in PNG text chunk (${chunkType})` };
           }
         }
       }
       
-      // Check for executable markers
+      // Check ALL chunks for executable code markers (binary signatures)
+      // This is safe because we're checking for specific binary signatures, not text patterns
       if (chunkData.length >= 4) {
         // ELF
         if (chunkData[0] === 0x7F && chunkData[1] === 0x45 && chunkData[2] === 0x4C && chunkData[3] === 0x46) {
-          return { valid: false, reason: 'Executable code detected in PNG chunk' };
+          return { valid: false, reason: `Executable code detected in PNG chunk (${chunkType})` };
         }
         // PE
         if (chunkData[0] === 0x4D && chunkData[1] === 0x5A) {
-          return { valid: false, reason: 'Executable code detected in PNG chunk' };
+          return { valid: false, reason: `Executable code detected in PNG chunk (${chunkType})` };
         }
         // Mach-O
         if (chunkData[0] === 0xFE && chunkData[1] === 0xED && chunkData[2] === 0xFA && chunkData[3] === 0xCE) {
-          return { valid: false, reason: 'Executable code detected in PNG chunk' };
+          return { valid: false, reason: `Executable code detected in PNG chunk (${chunkType})` };
         }
       }
     }

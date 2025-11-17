@@ -101,7 +101,7 @@ export default function Header() {
           {/* Center Content - Updated Layout */}
           <div className="flex-1 text-center px-6">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-              Crime Investigation Department
+              Crime Investigation Department <span className="font-normal text-2xl md:text-3xl">(Demo)</span>
             </h1>
             <p className="text-lg text-gray-600 mt-1">Telangana State Police</p>
             <p className="text-sm text-gray-500 mt-1">

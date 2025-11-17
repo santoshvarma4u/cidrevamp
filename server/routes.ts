@@ -473,6 +473,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               ? new Date(req.body.displayUntilDate)
               : null,
         menuParent: req.body.menuParent === "" ? null : req.body.menuParent,
+        menuLocation: req.body.menuLocation || "more", // Default to "more" if not provided
         metaTitle: req.body.metaTitle === "" ? null : req.body.metaTitle,
         metaDescription:
           req.body.metaDescription === "" ? null : req.body.metaDescription,
@@ -513,6 +514,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               ? new Date(req.body.displayUntilDate)
               : null,
         menuParent: req.body.menuParent === "" ? null : req.body.menuParent,
+        menuLocation: req.body.menuLocation || "more", // Default to "more" if not provided
         metaTitle: req.body.metaTitle === "" ? null : req.body.metaTitle,
         metaDescription:
           req.body.metaDescription === "" ? null : req.body.metaDescription,
