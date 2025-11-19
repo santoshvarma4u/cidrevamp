@@ -31,6 +31,43 @@ import {
 } from "@/components/ui/table";
 import { Plus, Edit, Trash2, Eye, FileText } from "lucide-react";
 
+// Helper function to safely parse dates
+const safeParseDate = (dateValue: any): Date | null => {
+  if (!dateValue) return null;
+  try {
+    const date = new Date(dateValue);
+    if (isNaN(date.getTime())) return null;
+    return date;
+  } catch (error) {
+    console.error("Error parsing date:", dateValue, error);
+    return null;
+  }
+};
+
+// Helper function to safely format date for input field
+const safeFormatDateForInput = (dateValue: any): string => {
+  const date = safeParseDate(dateValue);
+  if (!date) return "";
+  try {
+    return date.toISOString().split('T')[0];
+  } catch (error) {
+    console.error("Error formatting date for input:", dateValue, error);
+    return "";
+  }
+};
+
+// Helper function to safely format date for display
+const safeFormatDateForDisplay = (dateValue: any): string => {
+  const date = safeParseDate(dateValue);
+  if (!date) return "N/A";
+  try {
+    return date.toLocaleDateString();
+  } catch (error) {
+    console.error("Error formatting date for display:", dateValue, error);
+    return "N/A";
+  }
+};
+
 interface PageFormData {
   slug: string;
   title: string;
@@ -219,13 +256,28 @@ export default function AdminPages() {
     e.preventDefault();
     
     // Convert "none" back to empty string for database and handle date formatting
+    let displayUntilDateValue = "";
+    if (formData.displayUntilDate) {
+      try {
+        const date = new Date(formData.displayUntilDate + 'T23:59:59');
+        if (!isNaN(date.getTime())) {
+          displayUntilDateValue = date.toISOString();
+        }
+      } catch (error) {
+        console.error("Error formatting displayUntilDate:", error);
+        toast({
+          title: "Invalid Date",
+          description: "Please enter a valid date for 'Display Until Date'",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+    
     const submissionData = {
       ...formData,
       menuParent: formData.menuParent === "none" ? "" : formData.menuParent,
-      // Convert date string to proper timestamp if provided
-      displayUntilDate: formData.displayUntilDate ? 
-        new Date(formData.displayUntilDate + 'T23:59:59').toISOString() : 
-        ""
+      displayUntilDate: displayUntilDateValue
     };
     
     if (editingPage) {
@@ -236,24 +288,33 @@ export default function AdminPages() {
   };
 
   const handleEdit = (page: any) => {
-    setEditingPage(page);
-    setFormData({
-      slug: page.slug,
-      title: page.title,
-      content: page.content || "",
-      metaTitle: page.metaTitle || "",
-      metaDescription: page.metaDescription || "",
-      isPublished: page.isPublished,
-      showInMenu: page.showInMenu || false,
-      menuTitle: page.menuTitle || "",
-      menuParent: page.menuParent || "none",
-      menuOrder: page.menuOrder || 0,
-      menuDescription: page.menuDescription || "",
-      menuLocation: page.menuLocation || "more",
-      displayUntilDate: page.displayUntilDate ? new Date(page.displayUntilDate).toISOString().split('T')[0] : "",
-      isNew: page.isNew || false,
-    });
-    setIsDialogOpen(true);
+    try {
+      setEditingPage(page);
+      setFormData({
+        slug: page.slug || "",
+        title: page.title || "",
+        content: page.content || "",
+        metaTitle: page.metaTitle || "",
+        metaDescription: page.metaDescription || "",
+        isPublished: page.isPublished || false,
+        showInMenu: page.showInMenu || false,
+        menuTitle: page.menuTitle || "",
+        menuParent: page.menuParent || "none",
+        menuOrder: page.menuOrder || 0,
+        menuDescription: page.menuDescription || "",
+        menuLocation: page.menuLocation || "more",
+        displayUntilDate: safeFormatDateForInput(page.displayUntilDate),
+        isNew: page.isNew || false,
+      });
+      setIsDialogOpen(true);
+    } catch (error) {
+      console.error("Error editing page:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load page data. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDelete = (id: number) => {
@@ -570,7 +631,7 @@ export default function AdminPages() {
                                 )}
                                 {page.menuLocation === "main_menu" && page.displayUntilDate && (
                                   <div className="text-xs text-orange-500">
-                                    Until: {new Date(page.displayUntilDate).toLocaleDateString()}
+                                    Until: {safeFormatDateForDisplay(page.displayUntilDate)}
                                   </div>
                                 )}
                               </div>
@@ -579,7 +640,7 @@ export default function AdminPages() {
                             )}
                           </TableCell>
                           <TableCell>
-                            {new Date(page.updatedAt).toLocaleDateString()}
+                            {safeFormatDateForDisplay(page.updatedAt)}
                           </TableCell>
                           <TableCell>
                             <div className="flex space-x-2">

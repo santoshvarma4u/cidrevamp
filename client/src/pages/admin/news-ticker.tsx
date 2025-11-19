@@ -14,6 +14,43 @@ import { Plus, Edit, Trash2, Megaphone, Clock, Calendar } from "lucide-react";
 import type { NewsTicker, InsertNewsTicker } from "@shared/schema";
 import { format } from "date-fns";
 
+// Helper function to safely parse dates
+const safeParseDate = (dateValue: any): Date | null => {
+  if (!dateValue) return null;
+  try {
+    const date = new Date(dateValue);
+    if (isNaN(date.getTime())) return null;
+    return date;
+  } catch (error) {
+    console.error("Error parsing date:", dateValue, error);
+    return null;
+  }
+};
+
+// Helper function to safely format date for input field
+const safeFormatDateForInput = (dateValue: any): string => {
+  const date = safeParseDate(dateValue);
+  if (!date) return "";
+  try {
+    return format(date, 'yyyy-MM-dd');
+  } catch (error) {
+    console.error("Error formatting date for input:", dateValue, error);
+    return "";
+  }
+};
+
+// Helper function to safely format date for display
+const safeFormatDateForDisplay = (dateValue: any, formatStr: string = 'MMM dd, yyyy'): string => {
+  const date = safeParseDate(dateValue);
+  if (!date) return "N/A";
+  try {
+    return format(date, formatStr);
+  } catch (error) {
+    console.error("Error formatting date for display:", dateValue, error);
+    return "N/A";
+  }
+};
+
 interface TickerFormData {
   text: string;
   isActive: boolean;
@@ -44,6 +81,24 @@ export default function AdminNewsTicker() {
 
   const createTickerMutation = useMutation({
     mutationFn: async (data: TickerFormData) => {
+      // Safely parse dates
+      let startDateValue = null;
+      let endDateValue = null;
+      
+      if (data.startDate) {
+        const date = safeParseDate(data.startDate);
+        if (date) {
+          startDateValue = date.toISOString();
+        }
+      }
+      
+      if (data.endDate) {
+        const date = safeParseDate(data.endDate);
+        if (date) {
+          endDateValue = date.toISOString();
+        }
+      }
+      
       const response = await fetch('/api/admin/news-ticker', {
         method: 'POST',
         headers: {
@@ -52,8 +107,8 @@ export default function AdminNewsTicker() {
         credentials: 'include',
         body: JSON.stringify({
           ...data,
-          startDate: data.startDate ? new Date(data.startDate).toISOString() : null,
-          endDate: data.endDate ? new Date(data.endDate).toISOString() : null,
+          startDate: startDateValue,
+          endDate: endDateValue,
         }),
       });
       
@@ -84,6 +139,24 @@ export default function AdminNewsTicker() {
 
   const updateTickerMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<TickerFormData> }) => {
+      // Safely parse dates
+      let startDateValue = null;
+      let endDateValue = null;
+      
+      if (data.startDate) {
+        const date = safeParseDate(data.startDate);
+        if (date) {
+          startDateValue = date.toISOString();
+        }
+      }
+      
+      if (data.endDate) {
+        const date = safeParseDate(data.endDate);
+        if (date) {
+          endDateValue = date.toISOString();
+        }
+      }
+      
       const response = await fetch(`/api/admin/news-ticker/${id}`, {
         method: 'PATCH',
         headers: {
@@ -92,8 +165,8 @@ export default function AdminNewsTicker() {
         credentials: 'include',
         body: JSON.stringify({
           ...data,
-          startDate: data.startDate ? new Date(data.startDate).toISOString() : null,
-          endDate: data.endDate ? new Date(data.endDate).toISOString() : null,
+          startDate: startDateValue,
+          endDate: endDateValue,
         }),
       });
       
@@ -174,15 +247,24 @@ export default function AdminNewsTicker() {
   };
 
   const handleEdit = (ticker: NewsTicker) => {
-    setEditingTicker(ticker);
-    setFormData({
-      text: ticker.text,
-      isActive: ticker.isActive,
-      priority: ticker.priority || 0,
-      startDate: ticker.startDate ? format(new Date(ticker.startDate), 'yyyy-MM-dd') : "",
-      endDate: ticker.endDate ? format(new Date(ticker.endDate), 'yyyy-MM-dd') : "",
-    });
-    setIsDialogOpen(true);
+    try {
+      setEditingTicker(ticker);
+      setFormData({
+        text: ticker.text || "",
+        isActive: ticker.isActive || false,
+        priority: ticker.priority || 0,
+        startDate: safeFormatDateForInput(ticker.startDate),
+        endDate: safeFormatDateForInput(ticker.endDate),
+      });
+      setIsDialogOpen(true);
+    } catch (error) {
+      console.error("Error editing ticker:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load ticker data. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDelete = (id: number) => {
@@ -365,19 +447,19 @@ export default function AdminNewsTicker() {
                       {ticker.startDate && (
                         <div className="flex items-center gap-1">
                           <Calendar className="h-4 w-4" />
-                          Start: {format(new Date(ticker.startDate), 'MMM dd, yyyy')}
+                          Start: {safeFormatDateForDisplay(ticker.startDate)}
                         </div>
                       )}
                       {ticker.endDate && (
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
-                          End: {format(new Date(ticker.endDate), 'MMM dd, yyyy')}
+                          End: {safeFormatDateForDisplay(ticker.endDate)}
                         </div>
                       )}
                       {ticker.createdAt && (
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
-                          Created: {format(new Date(ticker.createdAt), 'MMM dd, yyyy')}
+                          Created: {safeFormatDateForDisplay(ticker.createdAt)}
                         </div>
                       )}
                     </div>

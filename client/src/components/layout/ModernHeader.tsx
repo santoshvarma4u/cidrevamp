@@ -36,9 +36,19 @@ export default function ModernHeader() {
     if (page.menuLocation === 'more') return false;
     if (page.menuLocation === 'main_menu') {
       if (!page.displayUntilDate) return true; // No expiry date set
-      const expiryDate = new Date(page.displayUntilDate);
-      const now = new Date();
-      return now <= expiryDate;
+      try {
+        const expiryDate = new Date(page.displayUntilDate);
+        if (isNaN(expiryDate.getTime())) {
+          // Invalid date, treat as no expiry
+          return true;
+        }
+        const now = new Date();
+        return now <= expiryDate;
+      } catch (error) {
+        // Error parsing date, treat as no expiry
+        console.warn("Error parsing displayUntilDate:", page.displayUntilDate, error);
+        return true;
+      }
     }
     return false; // Default to 'more' section
   };

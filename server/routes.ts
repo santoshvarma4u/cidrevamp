@@ -40,6 +40,22 @@ const secureImageUpload = createSecureUpload('images');
 const secureDocumentUpload = createSecureUpload('documents');
 const secureVideoUpload = createSecureUpload('videos');
 
+// Helper function to safely parse dates
+const safeParseDate = (dateValue: any): Date | null => {
+  if (!dateValue || dateValue === "") return null;
+  try {
+    const date = new Date(dateValue);
+    if (isNaN(date.getTime())) {
+      console.warn("Invalid date value:", dateValue);
+      return null;
+    }
+    return date;
+  } catch (error) {
+    console.error("Error parsing date:", dateValue, error);
+    return null;
+  }
+};
+
 // Input validation middleware
 const validateInput = (req: any, res: any, next: any) => {
   const errors = validationResult(req);
@@ -466,12 +482,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Process request body to handle empty strings for nullable fields and convert date strings
       const processedBody = {
         ...req.body,
-        displayUntilDate:
-          req.body.displayUntilDate === ""
-            ? null
-            : req.body.displayUntilDate
-              ? new Date(req.body.displayUntilDate)
-              : null,
+        displayUntilDate: safeParseDate(req.body.displayUntilDate),
         menuParent: req.body.menuParent === "" ? null : req.body.menuParent,
         menuLocation: req.body.menuLocation || "more", // Default to "more" if not provided
         metaTitle: req.body.metaTitle === "" ? null : req.body.metaTitle,
@@ -507,12 +518,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Process request body to handle empty strings for nullable fields and convert date strings
       const processedBody = {
         ...req.body,
-        displayUntilDate:
-          req.body.displayUntilDate === ""
-            ? null
-            : req.body.displayUntilDate
-              ? new Date(req.body.displayUntilDate)
-              : null,
+        displayUntilDate: safeParseDate(req.body.displayUntilDate),
         menuParent: req.body.menuParent === "" ? null : req.body.menuParent,
         menuLocation: req.body.menuLocation || "more", // Default to "more" if not provided
         metaTitle: req.body.metaTitle === "" ? null : req.body.metaTitle,
@@ -798,10 +804,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/admin/news-ticker", requireAdmin, async (req: any, res) => {
     try {
-      const validatedData = insertNewsTickerSchema.parse({
+      const processedBody = {
         ...req.body,
+        startDate: safeParseDate(req.body.startDate),
+        endDate: safeParseDate(req.body.endDate),
         createdBy: req.user.id,
-      });
+      };
+      const validatedData = insertNewsTickerSchema.parse(processedBody);
       const ticker = await storage.createNewsTicker(validatedData);
       res.json(ticker);
     } catch (error) {
@@ -821,7 +830,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     async (req: any, res) => {
       try {
         const id = parseInt(req.params.id);
-        const validatedData = insertNewsTickerSchema.partial().parse(req.body);
+        const processedBody = {
+          ...req.body,
+          startDate: req.body.startDate !== undefined ? safeParseDate(req.body.startDate) : undefined,
+          endDate: req.body.endDate !== undefined ? safeParseDate(req.body.endDate) : undefined,
+        };
+        const validatedData = insertNewsTickerSchema.partial().parse(processedBody);
         const ticker = await storage.updateNewsTicker(id, validatedData);
         res.json(ticker);
       } catch (error) {
