@@ -15,6 +15,8 @@ import {
   seniorOfficers,
   alerts,
   nclContent,
+  rtiOfficers,
+  rtiPayScales,
   type User,
   type InsertUser,
   type InsertPage,
@@ -45,6 +47,10 @@ import {
   type InsertAlert,
   type NclContent,
   type InsertNclContent,
+  type RtiOfficer,
+  type InsertRtiOfficer,
+  type RtiPayScale,
+  type InsertRtiPayScale,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, asc, and, like, sql } from "drizzle-orm";
@@ -158,6 +164,20 @@ export interface IStorage {
   getNclContent(id: number): Promise<NclContent | undefined>;
   getActiveNclContent(): Promise<NclContent | undefined>;
   getAllNclContent(): Promise<NclContent[]>;
+
+  // RTI Officers operations
+  createRtiOfficer(officer: InsertRtiOfficer): Promise<RtiOfficer>;
+  updateRtiOfficer(id: number, officer: Partial<InsertRtiOfficer>): Promise<RtiOfficer>;
+  deleteRtiOfficer(id: number): Promise<void>;
+  getRtiOfficer(id: number): Promise<RtiOfficer | undefined>;
+  getAllRtiOfficers(): Promise<RtiOfficer[]>;
+
+  // RTI Pay Scales operations
+  createRtiPayScale(payScale: InsertRtiPayScale): Promise<RtiPayScale>;
+  updateRtiPayScale(id: number, payScale: Partial<InsertRtiPayScale>): Promise<RtiPayScale>;
+  deleteRtiPayScale(id: number): Promise<void>;
+  getRtiPayScale(id: number): Promise<RtiPayScale | undefined>;
+  getAllRtiPayScales(): Promise<RtiPayScale[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -703,6 +723,70 @@ export class DatabaseStorage implements IStorage {
   async getAllNclContent(): Promise<NclContent[]> {
     return await db.select().from(nclContent)
       .orderBy(desc(nclContent.updatedAt));
+  }
+
+  // RTI Officers operations
+  async createRtiOfficer(officerData: InsertRtiOfficer): Promise<RtiOfficer> {
+    const [newOfficer] = await db
+      .insert(rtiOfficers)
+      .values(officerData)
+      .returning();
+    return newOfficer;
+  }
+
+  async updateRtiOfficer(id: number, officerData: Partial<InsertRtiOfficer>): Promise<RtiOfficer> {
+    const [updatedOfficer] = await db
+      .update(rtiOfficers)
+      .set({ ...officerData, updatedAt: new Date() })
+      .where(eq(rtiOfficers.id, id))
+      .returning();
+    return updatedOfficer;
+  }
+
+  async deleteRtiOfficer(id: number): Promise<void> {
+    await db.delete(rtiOfficers).where(eq(rtiOfficers.id, id));
+  }
+
+  async getRtiOfficer(id: number): Promise<RtiOfficer | undefined> {
+    const [officer] = await db.select().from(rtiOfficers).where(eq(rtiOfficers.id, id));
+    return officer;
+  }
+
+  async getAllRtiOfficers(): Promise<RtiOfficer[]> {
+    return await db.select().from(rtiOfficers)
+      .orderBy(asc(rtiOfficers.sno), asc(rtiOfficers.displayOrder));
+  }
+
+  // RTI Pay Scales operations
+  async createRtiPayScale(payScaleData: InsertRtiPayScale): Promise<RtiPayScale> {
+    const [newPayScale] = await db
+      .insert(rtiPayScales)
+      .values(payScaleData)
+      .returning();
+    return newPayScale;
+  }
+
+  async updateRtiPayScale(id: number, payScaleData: Partial<InsertRtiPayScale>): Promise<RtiPayScale> {
+    const [updatedPayScale] = await db
+      .update(rtiPayScales)
+      .set({ ...payScaleData, updatedAt: new Date() })
+      .where(eq(rtiPayScales.id, id))
+      .returning();
+    return updatedPayScale;
+  }
+
+  async deleteRtiPayScale(id: number): Promise<void> {
+    await db.delete(rtiPayScales).where(eq(rtiPayScales.id, id));
+  }
+
+  async getRtiPayScale(id: number): Promise<RtiPayScale | undefined> {
+    const [payScale] = await db.select().from(rtiPayScales).where(eq(rtiPayScales.id, id));
+    return payScale;
+  }
+
+  async getAllRtiPayScales(): Promise<RtiPayScale[]> {
+    return await db.select().from(rtiPayScales)
+      .orderBy(asc(rtiPayScales.sno), asc(rtiPayScales.displayOrder));
   }
 }
 

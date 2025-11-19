@@ -26,6 +26,8 @@ import {
   insertSeniorOfficerSchema,
   insertAlertSchema,
   insertNclContentSchema,
+  insertRtiOfficerSchema,
+  insertRtiPayScaleSchema,
 } from "@shared/schema";
 import { generateCaptcha, verifyCaptcha, refreshCaptcha } from "./captcha";
 import { getPublicKey, decryptPassword, initializePasswordEncryption, isPasswordEncryptionEnabled } from "./passwordEncryption";
@@ -1490,6 +1492,139 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to unlock all accounts" });
     }
   });
+
+  // RTI Officers routes - Public API
+  app.get("/api/rti/officers", async (req, res) => {
+    try {
+      const officers = await storage.getAllRtiOfficers();
+      res.json(officers);
+    } catch (error) {
+      console.error("Error fetching RTI officers:", error);
+      res.status(500).json({ message: "Failed to fetch RTI officers" });
+    }
+  });
+
+  // RTI Pay Scales routes - Public API
+  app.get("/api/rti/pay-scales", async (req, res) => {
+    try {
+      const payScales = await storage.getAllRtiPayScales();
+      res.json(payScales);
+    } catch (error) {
+      console.error("Error fetching RTI pay scales:", error);
+      res.status(500).json({ message: "Failed to fetch RTI pay scales" });
+    }
+  });
+
+  // RTI Officers routes - Admin API
+  app.get("/api/admin/rti/officers", requireAdmin, async (req, res) => {
+    try {
+      const officers = await storage.getAllRtiOfficers();
+      res.json(officers);
+    } catch (error) {
+      console.error("Error fetching RTI officers:", error);
+      res.status(500).json({ message: "Failed to fetch RTI officers" });
+    }
+  });
+
+  app.post("/api/admin/rti/officers", requireAdmin, async (req: any, res) => {
+    try {
+      const validatedData = insertRtiOfficerSchema.parse(req.body);
+      const officer = await storage.createRtiOfficer(validatedData);
+      res.json(officer);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating RTI officer:", error);
+      res.status(500).json({ message: "Failed to create RTI officer" });
+    }
+  });
+
+  app.put("/api/admin/rti/officers/:id", requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertRtiOfficerSchema.partial().parse(req.body);
+      const officer = await storage.updateRtiOfficer(id, validatedData);
+      res.json(officer);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating RTI officer:", error);
+      res.status(500).json({ message: "Failed to update RTI officer" });
+    }
+  });
+
+  app.delete("/api/admin/rti/officers/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteRtiOfficer(id);
+      res.json({ message: "RTI officer deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting RTI officer:", error);
+      res.status(500).json({ message: "Failed to delete RTI officer" });
+    }
+  });
+
+  // RTI Pay Scales routes - Admin API
+  app.get("/api/admin/rti/pay-scales", requireAdmin, async (req, res) => {
+    try {
+      const payScales = await storage.getAllRtiPayScales();
+      res.json(payScales);
+    } catch (error) {
+      console.error("Error fetching RTI pay scales:", error);
+      res.status(500).json({ message: "Failed to fetch RTI pay scales" });
+    }
+  });
+
+  app.post("/api/admin/rti/pay-scales", requireAdmin, async (req: any, res) => {
+    try {
+      const validatedData = insertRtiPayScaleSchema.parse(req.body);
+      const payScale = await storage.createRtiPayScale(validatedData);
+      res.json(payScale);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error creating RTI pay scale:", error);
+      res.status(500).json({ message: "Failed to create RTI pay scale" });
+    }
+  });
+
+  app.put("/api/admin/rti/pay-scales/:id", requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertRtiPayScaleSchema.partial().parse(req.body);
+      const payScale = await storage.updateRtiPayScale(id, validatedData);
+      res.json(payScale);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: "Invalid data", errors: error.errors });
+      }
+      console.error("Error updating RTI pay scale:", error);
+      res.status(500).json({ message: "Failed to update RTI pay scale" });
+    }
+  });
+
+  app.delete("/api/admin/rti/pay-scales/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteRtiPayScale(id);
+      res.json({ message: "RTI pay scale deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting RTI pay scale:", error);
+      res.status(500).json({ message: "Failed to delete RTI pay scale" });
+    }
+  });
+
   // Initialize password encryption system
   initializePasswordEncryption().catch(error => {
     console.error('Failed to initialize password encryption:', error);

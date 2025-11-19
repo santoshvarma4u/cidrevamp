@@ -20,6 +20,7 @@ import {
   Building,
   Phone,
   AlertTriangle,
+  FileCheck,
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -67,6 +68,11 @@ export default function AdminSidebar() {
       title: "Alerts Management",
       href: "/admin/alerts",
       icon: AlertTriangle,
+    },
+    {
+      title: "RTI Management",
+      href: "/admin/rti",
+      icon: FileCheck,
     },
     {
       title: "NCL Content Management",

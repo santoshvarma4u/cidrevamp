@@ -457,6 +457,49 @@ export const insertAlertSchema = createInsertSchema(alerts).omit({
 export type InsertAlert = z.infer<typeof insertAlertSchema>;
 export type Alert = typeof alerts.$inferSelect;
 
+// RTI Officers table
+export const rtiOfficers = pgTable("rti_officers", {
+  id: serial("id").primaryKey(),
+  sno: integer("sno").notNull(),
+  category: varchar("category", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  designation: text("designation").notNull(),
+  phone: varchar("phone", { length: 50 }),
+  displayOrder: integer("display_order").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertRtiOfficerSchema = createInsertSchema(rtiOfficers).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertRtiOfficer = z.infer<typeof insertRtiOfficerSchema>;
+export type RtiOfficer = typeof rtiOfficers.$inferSelect;
+
+// RTI Pay Scales table
+export const rtiPayScales = pgTable("rti_pay_scales", {
+  id: serial("id").primaryKey(),
+  sno: integer("sno").notNull(),
+  category: varchar("category", { length: 255 }).notNull(),
+  basicPay: varchar("basic_pay", { length: 100 }),
+  sgp6: varchar("sgp6", { length: 100 }),
+  spp12_18: varchar("spp12_18", { length: 100 }),
+  spp24: varchar("spp24", { length: 100 }),
+  displayOrder: integer("display_order").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertRtiPayScaleSchema = createInsertSchema(rtiPayScales).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+export type InsertRtiPayScale = z.infer<typeof insertRtiPayScaleSchema>;
+export type RtiPayScale = typeof rtiPayScales.$inferSelect;
+
 // NCL Content table
 export const nclContent = pgTable("ncl_content", {
   id: serial("id").primaryKey(),
