@@ -102,7 +102,7 @@ export default function SeniorOfficersPage() {
                         <MapPin className="h-5 w-5 text-blue-500" />
                         <div>
                           <p className="text-sm font-medium text-gray-500">Office Location</p>
-                          <p className="font-medium">{officer.location}</p>
+                          <p className="font-medium"><a href={officer.location} target="_blank" rel="noopener noreferrer">{officer.location}</a></p>
                         </div>
                       </div>
                     )}

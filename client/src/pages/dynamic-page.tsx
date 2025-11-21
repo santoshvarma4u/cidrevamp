@@ -89,6 +89,7 @@ export default function DynamicPage() {
                 [&_ul]:text-gray-700 [&_ul]:font-['Inter']
                 [&_li]:text-gray-700 [&_li]:font-['Inter']
                 [&_strong]:text-gray-800 [&_strong]:font-semibold
+                [&_a]:text-blue-600 [&_a]:underline [&_a]:hover:text-blue-800 [&_a]:font-medium
                 [&_table]:shadow-lg [&_table]:border-collapse [&_table]:w-full
                 [&_th]:bg-primary [&_th]:text-primary-foreground [&_th]:font-['Poppins'] [&_th]:font-semibold [&_th]:p-4 [&_th]:border [&_th]:border-border
                 [&_td]:text-gray-700 [&_td]:font-['Inter'] [&_td]:p-4 [&_td]:border [&_td]:border-gray-300

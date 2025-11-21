@@ -116,19 +116,104 @@ export default function RichTextEditor({
   };
 
   const insertLink = () => {
-    if (linkUrl) {
-      const selectedText = window.getSelection()?.toString() || linkText;
-      if (selectedText) {
-        const linkHtml = `<a href="${linkUrl}" target="_blank" rel="noopener noreferrer">${selectedText}</a>`;
-        document.execCommand('insertHTML', false, linkHtml);
-      } else {
-        formatText('createLink', linkUrl);
+    if (!linkUrl) return;
+    
+    if (!editorRef.current) return;
+    
+    // Ensure editor has focus
+    editorRef.current.focus();
+    
+    const selection = window.getSelection();
+    let range: Range | null = null;
+    
+    // Get a valid range within the editor
+    if (selection && selection.rangeCount > 0) {
+      range = selection.getRangeAt(0);
+      // Ensure range is within the editor
+      if (!editorRef.current.contains(range.commonAncestorContainer)) {
+        range = null;
       }
-      editorRef.current?.focus();
+    }
+    
+    // If no valid range, create one at the end of editor
+    if (!range) {
+      range = document.createRange();
+      range.selectNodeContents(editorRef.current);
+      range.collapse(false); // Collapse to end
+    }
+    
+    // Get selected text or use linkText from dialog
+    const selectedText = selection?.toString().trim() || linkText.trim();
+    
+    // Ensure URL has protocol
+    let finalUrl = linkUrl.trim();
+    if (!finalUrl.match(/^https?:\/\//i) && !finalUrl.match(/^mailto:/i) && !finalUrl.match(/^tel:/i)) {
+      finalUrl = 'https://' + finalUrl;
+    }
+    
+    // Create link HTML string
+    const linkTextToUse = selectedText || linkText.trim() || finalUrl;
+    const linkHtml = `<a href="${finalUrl.replace(/"/g, '&quot;')}" target="_blank" rel="noopener noreferrer">${linkTextToUse.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</a>`;
+    
+    try {
+      // Use insertHTML command which is more reliable for contentEditable
+      if (range && !range.collapsed && selectedText) {
+        // If text is selected, replace it with the link
+        range.deleteContents();
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = linkHtml;
+        const linkNode = tempDiv.firstChild;
+        if (linkNode) {
+          range.insertNode(linkNode);
+          // Move cursor after the link
+          range.setStartAfter(linkNode);
+          range.collapse(true);
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+        }
+      } else {
+        // Insert HTML at cursor position
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = linkHtml;
+        const linkNode = tempDiv.firstChild;
+        if (linkNode) {
+          range.insertNode(linkNode);
+          // Move cursor after the link
+          range.setStartAfter(linkNode);
+          range.collapse(true);
+          selection?.removeAllRanges();
+          selection?.addRange(range);
+        }
+      }
+      
+      editorRef.current.focus();
       handleInput();
       setIsLinkDialogOpen(false);
       setLinkUrl('');
       setLinkText('');
+      
+      toast({
+        title: "Link inserted",
+        description: "Link has been added to the content",
+      });
+    } catch (error) {
+      console.error('Error inserting link:', error);
+      // Fallback: use insertHTML command directly
+      try {
+        document.execCommand('insertHTML', false, linkHtml);
+        editorRef.current.focus();
+        handleInput();
+        setIsLinkDialogOpen(false);
+        setLinkUrl('');
+        setLinkText('');
+      } catch (fallbackError) {
+        console.error('Fallback insertHTML also failed:', fallbackError);
+        toast({
+          title: "Error",
+          description: "Failed to insert link. Please try again.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -636,6 +721,14 @@ export default function RichTextEditor({
           content: attr(data-placeholder);
           color: #9ca3af;
           pointer-events: none;
+        }
+        .rich-text-editor [contenteditable] a {
+          color: #2563eb;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+        .rich-text-editor [contenteditable] a:hover {
+          color: #1d4ed8;
         }
       `}</style>
 
