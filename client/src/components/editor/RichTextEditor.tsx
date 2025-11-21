@@ -391,6 +391,80 @@ export default function RichTextEditor({
     handleInput();
   };
 
+  const insertCidStructureBox = () => {
+    const boxHtml = `<div class="bg-white rounded-xl shadow-lg p-6 border border-blue-100 hover:shadow-xl transition-shadow">
+      <div class="mb-4">
+        <h2 class="text-xl font-bold text-blue-800 mb-2">Wing Name</h2>
+        <p class="text-gray-600 text-sm mb-4">
+          Description of the wing and its primary functions.
+        </p>
+      </div>
+      <div class="space-y-2 text-sm text-gray-700 mb-4">
+        <p><strong>Key Functions:</strong></p>
+        <ul class="list-disc list-inside space-y-1">
+          <li>Function 1</li>
+          <li>Function 2</li>
+          <li>Function 3</li>
+        </ul>
+      </div>
+    </div>`;
+    
+    try {
+      // Try to find if we're inside a grid container
+      const selection = window.getSelection();
+      const range = selection?.rangeCount ? selection.getRangeAt(0) : null;
+      
+      if (range && editorRef.current) {
+        let container: Node | null = range.commonAncestorContainer;
+        
+        // Find if we're inside a grid container
+        while (container && container !== editorRef.current) {
+          if (container.nodeType === Node.ELEMENT_NODE) {
+            const element = container as Element;
+            if (element.classList && 
+                (element.classList.contains('grid') || 
+                 element.getAttribute('class')?.includes('grid'))) {
+              // Insert into existing grid
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = boxHtml;
+              const boxNode = tempDiv.firstElementChild;
+              if (boxNode) {
+                element.appendChild(boxNode);
+                editorRef.current.focus();
+                handleInput();
+                toast({
+                  title: "Box added",
+                  description: "CID Structure box has been added to the grid",
+                });
+                return;
+              }
+            }
+          }
+          container = container.parentNode;
+        }
+      }
+      
+      // If no grid found or insertion failed, use insertHTML
+      document.execCommand('insertHTML', false, boxHtml);
+      editorRef.current?.focus();
+      handleInput();
+      toast({
+        title: "Box added",
+        description: "CID Structure box has been added. Make sure it's inside a grid container (grid md:grid-cols-2 gap-8) for proper layout.",
+      });
+    } catch (error) {
+      console.error('Error inserting CID Structure box:', error);
+      // Fallback: use insertHTML
+      document.execCommand('insertHTML', false, boxHtml);
+      editorRef.current?.focus();
+      handleInput();
+      toast({
+        title: "Box added",
+        description: "CID Structure box has been added",
+      });
+    }
+  };
+
   const changeTextColor = (color: string) => {
     formatText('foreColor', color);
   };
@@ -620,6 +694,14 @@ export default function RichTextEditor({
           title="Insert Officer Grid"
         >
           👥
+        </button>
+        <button
+          type="button"
+          onClick={insertCidStructureBox}
+          className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-200"
+          title="Insert CID Structure Box"
+        >
+          📦
         </button>
         
         <div className="w-px bg-gray-300 mx-1"></div>
