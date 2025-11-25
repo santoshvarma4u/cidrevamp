@@ -40,6 +40,7 @@ export default function RichTextEditor({
   const [imageAlt, setImageAlt] = useState('');
   const [linkUrl, setLinkUrl] = useState('');
   const [linkText, setLinkText] = useState('');
+  const [savedSelection, setSavedSelection] = useState<Range | null>(null);
 
   useEffect(() => {
     if (editorRef.current && !isUpdatingRef.current) {
@@ -115,22 +116,78 @@ export default function RichTextEditor({
     }
   };
 
-  const insertLink = () => {
-    if (!linkUrl) return;
-    
+  const handleOpenLinkDialog = () => {
     if (!editorRef.current) return;
+    
+    // Save the current selection before opening dialog
+    const selection = window.getSelection();
+    if (selection && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      // Only save if range is within editor
+      if (editorRef.current.contains(range.commonAncestorContainer)) {
+        try {
+          const clonedRange = range.cloneRange();
+          setSavedSelection(clonedRange);
+          // Also get selected text if any
+          const selectedText = selection.toString().trim();
+          if (selectedText) {
+            setLinkText(selectedText);
+          }
+        } catch (e) {
+          console.error('Error saving selection:', e);
+        }
+      }
+    }
+    
+    setIsLinkDialogOpen(true);
+  };
+
+  const insertLink = () => {
+    if (!linkUrl.trim()) {
+      toast({
+        title: "URL required",
+        description: "Please enter a URL for the link",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!editorRef.current) {
+      toast({
+        title: "Error",
+        description: "Editor not available",
+        variant: "destructive",
+      });
+      return;
+    }
     
     // Ensure editor has focus
     editorRef.current.focus();
     
+    // Restore saved selection or get current selection
     const selection = window.getSelection();
     let range: Range | null = null;
+    let selectedText = '';
     
-    // Get a valid range within the editor
-    if (selection && selection.rangeCount > 0) {
+    // Try to use saved selection first
+    if (savedSelection) {
+      try {
+        // Check if saved selection is still valid
+        if (editorRef.current.contains(savedSelection.commonAncestorContainer)) {
+          range = savedSelection;
+          selectedText = savedSelection.toString().trim();
+        }
+      } catch (e) {
+        console.error('Error using saved selection:', e);
+      }
+    }
+    
+    // If saved selection is invalid, try current selection
+    if (!range && selection && selection.rangeCount > 0) {
       range = selection.getRangeAt(0);
-      // Ensure range is within the editor
-      if (!editorRef.current.contains(range.commonAncestorContainer)) {
+      if (editorRef.current.contains(range.commonAncestorContainer)) {
+        selectedText = selection.toString().trim();
+      } else {
         range = null;
       }
     }
@@ -142,75 +199,92 @@ export default function RichTextEditor({
       range.collapse(false); // Collapse to end
     }
     
-    // Get selected text or use linkText from dialog
-    const selectedText = selection?.toString().trim() || linkText.trim();
+    // Get link text: selected text > dialog text > URL
+    const linkTextToUse = selectedText || linkText.trim() || linkUrl.trim();
     
     // Ensure URL has protocol
     let finalUrl = linkUrl.trim();
-    if (!finalUrl.match(/^https?:\/\//i) && !finalUrl.match(/^mailto:/i) && !finalUrl.match(/^tel:/i)) {
+    if (!finalUrl.match(/^https?:\/\//i) && !finalUrl.match(/^mailto:/i) && !finalUrl.match(/^tel:/i) && !finalUrl.startsWith('/')) {
       finalUrl = 'https://' + finalUrl;
     }
     
-    // Create link HTML string
-    const linkTextToUse = selectedText || linkText.trim() || finalUrl;
-    const linkHtml = `<a href="${finalUrl.replace(/"/g, '&quot;')}" target="_blank" rel="noopener noreferrer">${linkTextToUse.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</a>`;
+    // Create link element
+    const linkElement = document.createElement('a');
+    linkElement.href = finalUrl;
+    linkElement.target = '_blank';
+    linkElement.rel = 'noopener noreferrer';
+    linkElement.textContent = linkTextToUse;
     
     try {
-      // Use insertHTML command which is more reliable for contentEditable
-      if (range && !range.collapsed && selectedText) {
-        // If text is selected, replace it with the link
+      // If text is selected, replace it with the link
+      if (!range.collapsed && selectedText) {
         range.deleteContents();
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = linkHtml;
-        const linkNode = tempDiv.firstChild;
-        if (linkNode) {
-          range.insertNode(linkNode);
-          // Move cursor after the link
-          range.setStartAfter(linkNode);
-          range.collapse(true);
-          selection?.removeAllRanges();
-          selection?.addRange(range);
-        }
+        range.insertNode(linkElement);
+        // Move cursor after the link
+        range.setStartAfter(linkElement);
+        range.collapse(true);
       } else {
-        // Insert HTML at cursor position
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = linkHtml;
-        const linkNode = tempDiv.firstChild;
-        if (linkNode) {
-          range.insertNode(linkNode);
-          // Move cursor after the link
-          range.setStartAfter(linkNode);
-          range.collapse(true);
-          selection?.removeAllRanges();
-          selection?.addRange(range);
-        }
+        // Insert link at cursor position
+        range.insertNode(linkElement);
+        // Move cursor after the link
+        range.setStartAfter(linkElement);
+        range.collapse(true);
+      }
+      
+      // Update selection
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
       }
       
       editorRef.current.focus();
       handleInput();
+      
+      // Reset state
       setIsLinkDialogOpen(false);
       setLinkUrl('');
       setLinkText('');
+      setSavedSelection(null);
       
       toast({
         title: "Link inserted",
-        description: "Link has been added to the content",
+        description: "Link has been successfully added to the content",
       });
     } catch (error) {
       console.error('Error inserting link:', error);
-      // Fallback: use insertHTML command directly
+      
+      // Fallback: use insertHTML command
       try {
-        document.execCommand('insertHTML', false, linkHtml);
-        editorRef.current.focus();
-        handleInput();
-        setIsLinkDialogOpen(false);
-        setLinkUrl('');
-        setLinkText('');
+        const linkHtml = `<a href="${finalUrl.replace(/"/g, '&quot;')}" target="_blank" rel="noopener noreferrer">${linkTextToUse.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</a>`;
+        
+        // Restore range for execCommand
+        if (range && selection) {
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+        
+        const success = document.execCommand('insertHTML', false, linkHtml);
+        
+        if (success) {
+          editorRef.current.focus();
+          handleInput();
+          setIsLinkDialogOpen(false);
+          setLinkUrl('');
+          setLinkText('');
+          setSavedSelection(null);
+          
+          toast({
+            title: "Link inserted",
+            description: "Link has been successfully added to the content",
+          });
+        } else {
+          throw new Error('execCommand failed');
+        }
       } catch (fallbackError) {
         console.error('Fallback insertHTML also failed:', fallbackError);
         toast({
           title: "Error",
-          description: "Failed to insert link. Please try again.",
+          description: "Failed to insert link. Please try selecting text first, then click the link button.",
           variant: "destructive",
         });
       }
@@ -633,7 +707,7 @@ export default function RichTextEditor({
         {/* Links and Tables */}
         <button
           type="button"
-          onClick={() => setIsLinkDialogOpen(true)}
+          onClick={handleOpenLinkDialog}
           className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-200"
           title="Insert Link"
         >
@@ -857,7 +931,18 @@ export default function RichTextEditor({
       </Dialog>
 
       {/* Link Dialog */}
-      <Dialog open={isLinkDialogOpen} onOpenChange={setIsLinkDialogOpen}>
+      <Dialog 
+        open={isLinkDialogOpen} 
+        onOpenChange={(open) => {
+          setIsLinkDialogOpen(open);
+          if (!open) {
+            // Reset state when dialog closes
+            setLinkUrl('');
+            setLinkText('');
+            setSavedSelection(null);
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Insert Link</DialogTitle>
@@ -868,12 +953,19 @@ export default function RichTextEditor({
           
           <div className="space-y-4">
             <div>
-              <Label htmlFor="linkUrl">URL</Label>
+              <Label htmlFor="linkUrl">URL *</Label>
               <Input
                 id="linkUrl"
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
-                placeholder="https://example.com"
+                placeholder="https://example.com or /page"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && linkUrl.trim()) {
+                    e.preventDefault();
+                    insertLink();
+                  }
+                }}
+                autoFocus
               />
             </div>
             <div>
@@ -882,19 +974,35 @@ export default function RichTextEditor({
                 id="linkText"
                 value={linkText}
                 onChange={(e) => setLinkText(e.target.value)}
-                placeholder="Leave empty to use selected text"
+                placeholder="Leave empty to use selected text or URL"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && linkUrl.trim()) {
+                    e.preventDefault();
+                    insertLink();
+                  }
+                }}
               />
               <p className="text-xs text-gray-500 mt-1">
-                If you have text selected, it will be used as the link text
+                {savedSelection && savedSelection.toString().trim() 
+                  ? `Selected text: "${savedSelection.toString().trim()}" will be used if left empty`
+                  : "If you have text selected, it will be used as the link text"}
               </p>
             </div>
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsLinkDialogOpen(false)}>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setIsLinkDialogOpen(false);
+                setLinkUrl('');
+                setLinkText('');
+                setSavedSelection(null);
+              }}
+            >
               Cancel
             </Button>
-            <Button onClick={insertLink} disabled={!linkUrl}>
+            <Button onClick={insertLink} disabled={!linkUrl.trim()}>
               Insert Link
             </Button>
           </DialogFooter>
