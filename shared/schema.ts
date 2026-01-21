@@ -140,8 +140,8 @@ export const complaints = pgTable("complaints", {
 // News articles table
 export const news = pgTable("news", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  content: text("content").notNull(),
+  title: text("title"), // Nullable - either title or titleTelugu must be provided
+  content: text("content"), // Nullable - either content or contentTelugu must be provided
   titleTelugu: text("title_telugu"),
   contentTelugu: text("content_telugu"),
   excerpt: text("excerpt"),
@@ -346,10 +346,22 @@ export const insertComplaintSchema = createInsertSchema(complaints).omit({
 
 export const insertNewsSchema = createInsertSchema(news, {
   publishedAt: z.string().datetime().nullable().transform((val) => val ? new Date(val) : null),
+  title: z.string().nullable(),
+  content: z.string().nullable(),
+  titleTelugu: z.string().nullable(),
+  contentTelugu: z.string().nullable(),
 }).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).refine((data) => {
+  // Either English or Telugu content must be provided
+  const hasEnglish = data.title && data.title.trim().length > 0 && data.content && data.content.trim().length > 0;
+  const hasTelugu = data.titleTelugu && data.titleTelugu.trim().length > 0 && data.contentTelugu && data.contentTelugu.trim().length > 0;
+  return hasEnglish || hasTelugu;
+}, {
+  message: "Either English or Telugu title and content must be provided",
+  path: ["title"],
 });
 
 export const insertNewsTickerSchema = createInsertSchema(newsTicker, {

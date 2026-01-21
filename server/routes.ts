@@ -748,10 +748,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin News
   app.post("/api/news", requireAdmin, async (req: any, res) => {
     try {
-      const validatedData = insertNewsSchema.parse({
+      // Convert empty strings to null for optional fields
+      const processedBody = {
         ...req.body,
+        title: req.body.title && req.body.title.trim() !== "" ? req.body.title : null,
+        content: req.body.content && req.body.content.trim() !== "" ? req.body.content : null,
+        titleTelugu: req.body.titleTelugu && req.body.titleTelugu.trim() !== "" ? req.body.titleTelugu : null,
+        contentTelugu: req.body.contentTelugu && req.body.contentTelugu.trim() !== "" ? req.body.contentTelugu : null,
+        excerpt: req.body.excerpt && req.body.excerpt.trim() !== "" ? req.body.excerpt : null,
         authorId: req.user.id,
-      });
+      };
+      const validatedData = insertNewsSchema.parse(processedBody);
       const news = await storage.createNews(validatedData);
       res.json(news);
     } catch (error) {
@@ -768,7 +775,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.patch("/api/news/:id", requireAdmin, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id);
-      const validatedData = insertNewsSchema.partial().parse(req.body);
+      // Convert empty strings to null for optional fields
+      const processedBody: any = {};
+      if (req.body.title !== undefined) {
+        processedBody.title = req.body.title && req.body.title.trim() !== "" ? req.body.title : null;
+      }
+      if (req.body.content !== undefined) {
+        processedBody.content = req.body.content && req.body.content.trim() !== "" ? req.body.content : null;
+      }
+      if (req.body.titleTelugu !== undefined) {
+        processedBody.titleTelugu = req.body.titleTelugu && req.body.titleTelugu.trim() !== "" ? req.body.titleTelugu : null;
+      }
+      if (req.body.contentTelugu !== undefined) {
+        processedBody.contentTelugu = req.body.contentTelugu && req.body.contentTelugu.trim() !== "" ? req.body.contentTelugu : null;
+      }
+      if (req.body.excerpt !== undefined) {
+        processedBody.excerpt = req.body.excerpt && req.body.excerpt.trim() !== "" ? req.body.excerpt : null;
+      }
+      // Copy other fields
+      Object.keys(req.body).forEach(key => {
+        if (!['title', 'content', 'titleTelugu', 'contentTelugu', 'excerpt'].includes(key)) {
+          processedBody[key] = req.body[key];
+        }
+      });
+      const validatedData = insertNewsSchema.partial().parse(processedBody);
       const news = await storage.updateNews(id, validatedData);
       res.json(news);
     } catch (error) {

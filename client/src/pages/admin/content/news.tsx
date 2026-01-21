@@ -83,11 +83,11 @@ export default function AdminNews() {
   const createMutation = useMutation({
     mutationFn: async (data: NewsFormData) => {
       const payload = {
-        title: data.language === "english" ? data.title : null,
-        content: data.language === "english" ? data.content : null,
-        titleTelugu: data.language === "telugu" ? data.titleTelugu : null,
-        contentTelugu: data.language === "telugu" ? data.contentTelugu : null,
-        excerpt: data.excerpt,
+        title: data.language === "english" ? (data.title || null) : null,
+        content: data.language === "english" ? (data.content || null) : null,
+        titleTelugu: data.language === "telugu" ? (data.titleTelugu || null) : null,
+        contentTelugu: data.language === "telugu" ? (data.contentTelugu || null) : null,
+        excerpt: data.excerpt || null,
         category: data.category,
         isPublished: data.isPublished,
         isPinned: data.isPinned,
@@ -120,11 +120,11 @@ export default function AdminNews() {
     mutationFn: async (data: NewsFormData) => {
       if (!editingNews) throw new Error("No news item selected for editing");
       const payload = {
-        title: data.language === "english" ? data.title : null,
-        content: data.language === "english" ? data.content : null,
-        titleTelugu: data.language === "telugu" ? data.titleTelugu : null,
-        contentTelugu: data.language === "telugu" ? data.contentTelugu : null,
-        excerpt: data.excerpt,
+        title: data.language === "english" ? (data.title || null) : null,
+        content: data.language === "english" ? (data.content || null) : null,
+        titleTelugu: data.language === "telugu" ? (data.titleTelugu || null) : null,
+        contentTelugu: data.language === "telugu" ? (data.contentTelugu || null) : null,
+        excerpt: data.excerpt || null,
         category: data.category,
         isPublished: data.isPublished,
         isPinned: data.isPinned,
