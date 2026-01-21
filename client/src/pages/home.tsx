@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ModernHeader from "@/components/layout/ModernHeader";
 import Footer from "@/components/layout/Footer";
 import NewsTicker from "@/components/home/NewsTicker";
@@ -6,7 +6,7 @@ import AutoScrollNews from "@/components/common/AutoScrollNews";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog";
 
 import { Link } from "wouter";
 import {
@@ -36,6 +36,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
   const [currentPhotoSlide, setCurrentPhotoSlide] = useState(0);
+  const [isNewsDialogOpen, setIsNewsDialogOpen] = useState(false);
 
   // Fetch real data
   const { data: latestVideos = [] } = useQuery({
@@ -443,14 +444,25 @@ export default function Home() {
                       {latestNews.slice(0, 3).map((news: any) => (
                         <div
                           key={news.id}
-                          className="border-l-4 border-blue-500 pl-4 pb-3 border-b border-gray-200"
+                          onClick={() => setIsNewsDialogOpen(true)}
+                          className="border-l-4 border-blue-500 pl-4 pb-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors rounded-r"
                         >
                           <h4 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2">
                             {news.title}
                           </h4>
+                          {news.titleTelugu && (
+                            <h4 className="font-semibold text-sm text-gray-700 mb-1 line-clamp-2" style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}>
+                              {news.titleTelugu}
+                            </h4>
+                          )}
                           <p className="text-xs text-gray-600 mb-2 line-clamp-3">
                             {news.content?.substring(0, 100)}...
                           </p>
+                          {news.contentTelugu && (
+                            <p className="text-xs text-gray-600 mb-2 line-clamp-3" style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}>
+                              {news.contentTelugu?.substring(0, 100)}...
+                            </p>
+                          )}
                           <div className="flex items-center text-xs text-gray-500">
                             <Clock className="h-3 w-3 mr-1" />
                             {new Date(news.publishedAt).toLocaleDateString()}
@@ -474,6 +486,65 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* News Dialog - Shows all news with full content */}
+      <Dialog open={isNewsDialogOpen} onOpenChange={setIsNewsDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] p-0 flex flex-col">
+          <DialogHeader className="px-6 pt-6 pb-4 border-b">
+            <DialogTitle className="text-2xl font-bold flex items-center gap-3">
+              <FileText className="h-6 w-6" />
+              All News Updates
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            {latestNews.length > 0 ? (
+              <div className="space-y-6">
+                {latestNews.map((news: any) => (
+                  <div
+                    key={news.id}
+                    className="border-l-4 border-blue-500 pl-4 pb-4 border-b border-gray-200 last:border-b-0"
+                  >
+                    <h3 className="font-bold text-lg text-gray-900 mb-2">
+                      {news.title}
+                    </h3>
+                    {news.titleTelugu && (
+                      <h3 className="font-bold text-lg text-gray-800 mb-2" style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}>
+                        {news.titleTelugu}
+                      </h3>
+                    )}
+                    <div 
+                      className="text-sm text-gray-700 mb-3 prose prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: news.content || '' }}
+                    />
+                    {news.contentTelugu && (
+                      <div 
+                        className="text-sm text-gray-700 mb-3 prose prose-sm max-w-none"
+                        style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}
+                        dangerouslySetInnerHTML={{ __html: news.contentTelugu || '' }}
+                      />
+                    )}
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Clock className="h-3 w-3 mr-1" />
+                      {new Date(news.publishedAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <Clock className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+                <p className="text-gray-500 text-sm">
+                  No news available
+                </p>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Specialized Wings */}
       <section className="py-16 bg-muted/30">

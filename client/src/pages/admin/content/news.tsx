@@ -34,6 +34,8 @@ import queryClient from "@/lib/queryClient";
 const newsFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
   content: z.string().min(1, "Content is required"),
+  titleTelugu: z.string().optional(),
+  contentTelugu: z.string().optional(),
   excerpt: z.string().optional(),
   category: z.string().default("general"),
   isPublished: z.boolean().default(false),
@@ -56,6 +58,8 @@ export default function AdminNews() {
     defaultValues: {
       title: "",
       content: "",
+      titleTelugu: "",
+      contentTelugu: "",
       excerpt: "",
       category: "general",
       isPublished: false,
@@ -68,6 +72,8 @@ export default function AdminNews() {
       const payload = {
         title: data.title,
         content: data.content,
+        titleTelugu: data.titleTelugu || null,
+        contentTelugu: data.contentTelugu || null,
         excerpt: data.excerpt,
         category: data.category,
         isPublished: data.isPublished,
@@ -103,6 +109,8 @@ export default function AdminNews() {
       const payload = {
         title: data.title,
         content: data.content,
+        titleTelugu: data.titleTelugu || null,
+        contentTelugu: data.contentTelugu || null,
         excerpt: data.excerpt,
         category: data.category,
         isPublished: data.isPublished,
@@ -168,6 +176,8 @@ export default function AdminNews() {
     form.reset({
       title: news.title,
       content: news.content,
+      titleTelugu: (news as any).titleTelugu || "",
+      contentTelugu: (news as any).contentTelugu || "",
       excerpt: news.excerpt || "",
       category: news.category || "general",
       isPublished: Boolean(news.isPublished),
@@ -241,6 +251,29 @@ export default function AdminNews() {
                     {form.formState.errors.content.message}
                   </p>
                 )}
+              </div>
+
+              <div className="border-t pt-4 mt-4">
+                <h3 className="text-lg font-semibold mb-4">Telugu Content (Optional)</h3>
+                
+                <div className="mb-4">
+                  <Label htmlFor="titleTelugu">Title (Telugu)</Label>
+                  <Input
+                    id="titleTelugu"
+                    {...form.register("titleTelugu")}
+                    placeholder="Enter article title in Telugu"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="contentTelugu">Content (Telugu)</Label>
+                  <Textarea
+                    id="contentTelugu"
+                    {...form.register("contentTelugu")}
+                    placeholder="Enter article content in Telugu"
+                    rows={6}
+                  />
+                </div>
               </div>
 
               <div>

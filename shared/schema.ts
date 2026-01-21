@@ -142,6 +142,8 @@ export const news = pgTable("news", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   content: text("content").notNull(),
+  titleTelugu: text("title_telugu"),
+  contentTelugu: text("content_telugu"),
   excerpt: text("excerpt"),
   featuredImage: varchar("featured_image"),
   category: varchar("category").default("general"), // general, operations, alerts, press_release
