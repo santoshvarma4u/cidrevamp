@@ -236,10 +236,12 @@ export default function Home() {
               </CardHeader>
               <CardContent className="p-8 flex-1 flex bg-white rounded-b-2xl">
                 <div className="flex flex-col md:flex-row gap-6">
-                  {/* Director Photo */}
+                  {/* Director Photo - cache-bust with updatedAt so new upload shows immediately */}
                   <div className="flex-shrink-0">
                     <img
-                      src={directorInfo?.photoPath ? `/${directorInfo.photoPath}` : adgpImagePath}
+                      src={directorInfo?.photoPath
+                        ? `/${directorInfo.photoPath}${directorInfo?.updatedAt ? `?v=${new Date(directorInfo.updatedAt).getTime()}` : ''}`
+                        : adgpImagePath}
                       alt={directorInfo?.name || "Director General of Police"}
                       className="w-32 h-40 object-cover rounded-lg"
                     />
@@ -487,7 +489,7 @@ export default function Home() {
                                 <h4 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2" style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}>
                                   {news.titleTelugu}
                                 </h4>
-                                <p className="text-xs text-gray-600 mb-2 line-clamp-3" style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}>
+                                <p className="text-xs text-gray-600 mb-2 line-clamp-3 whitespace-pre-line" style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}>
                                   {news.contentTelugu?.substring(0, 100)}...
                                 </p>
                               </>
@@ -496,7 +498,7 @@ export default function Home() {
                                 <h4 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2">
                                   {news.title}
                                 </h4>
-                                <p className="text-xs text-gray-600 mb-2 line-clamp-3">
+                                <p className="text-xs text-gray-600 mb-2 line-clamp-3 whitespace-pre-line">
                                   {news.content?.substring(0, 100)}...
                                 </p>
                               </>
@@ -554,20 +556,20 @@ export default function Home() {
                           {selectedNews.titleTelugu}
                         </h3>
                         <div 
-                          className="text-sm text-gray-700 mb-3 prose prose-sm max-w-none"
+                          className="text-sm text-gray-700 mb-3 prose prose-sm max-w-none whitespace-pre-wrap"
                           style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}
-                          dangerouslySetInnerHTML={{ __html: selectedNews.contentTelugu || '' }}
-                        />
+                        >
+                          {selectedNews.contentTelugu || ''}
+                        </div>
                       </>
                     ) : (
                       <>
                         <h3 className="font-bold text-lg text-gray-900 mb-2">
                           {selectedNews.title}
                         </h3>
-                        <div 
-                          className="text-sm text-gray-700 mb-3 prose prose-sm max-w-none"
-                          dangerouslySetInnerHTML={{ __html: selectedNews.content || '' }}
-                        />
+                        <div className="text-sm text-gray-700 mb-3 prose prose-sm max-w-none whitespace-pre-wrap">
+                          {selectedNews.content || ''}
+                        </div>
                       </>
                     )}
                     {formatDateFull(selectedNews.publishedAt) && (
