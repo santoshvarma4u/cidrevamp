@@ -23,9 +23,14 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
       <div className={`container mx-auto px-4 ${className}`}>
         <div className="bg-card backdrop-blur-sm rounded-xl p-6 shadow-md border-2 border-border overflow-hidden">
           <div className="whitespace-nowrap">
-            <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow">
-              {placeholderText} • {placeholderText} • {placeholderText} •{" "}
-              {placeholderText}
+            <div className="inline-block text-lg font-bold animate-scroll-slow">
+              <span className="text-slate-700">{placeholderText}</span>
+              <span className="text-slate-500"> • </span>
+              <span className="text-indigo-800">{placeholderText}</span>
+              <span className="text-slate-500"> • </span>
+              <span className="text-teal-800">{placeholderText}</span>
+              <span className="text-slate-500"> • </span>
+              <span className="text-rose-800">{placeholderText}</span>
             </div>
           </div>
         </div>
