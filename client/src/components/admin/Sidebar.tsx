@@ -6,13 +6,11 @@ import { Separator } from "@/components/ui/separator";
 import {
   Shield,
   LayoutDashboard,
-  FileText,
   Video,
   Image,
-  MessageSquare,
+  FileText,
   Newspaper,
   Users,
-  Settings,
   LogOut,
   Menu,
   FolderOpen,
@@ -73,6 +71,11 @@ export default function AdminSidebar() {
       title: "RTI Management",
       href: "/admin/rti",
       icon: FileCheck,
+    },
+    {
+      title: "Complaints Management",
+      href: "/admin/complaints",
+      icon: MessageSquare,
     },
     {
       title: "NCL Content Management",
