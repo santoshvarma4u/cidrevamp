@@ -38,16 +38,33 @@ export default function NewsTicker({ className = "" }: NewsTickerProps) {
     );
   }
 
-  // Create continuous scrolling text from all tickers
-  const allTickerText = tickers.map((ticker) => ticker.text).join(" • ");
-  const repeatedText = `${allTickerText} • ${allTickerText} • ${allTickerText}`;
+  const tickerColors = [
+    "text-slate-700",
+    "text-indigo-800",
+    "text-teal-800",
+    "text-rose-800",
+    "text-amber-800",
+    "text-cyan-800",
+  ];
+
+  // Repeat the ticker list 3 times for continuous scrolling
+  const repeatedTickers = [...tickers, ...tickers, ...tickers];
 
   return (
     <div className={`container mx-auto px-4 ${className}`}>
       <div className="bg-card backdrop-blur-sm rounded-xl p-4 shadow-md border-2 border-border overflow-hidden">
         <div className="whitespace-nowrap">
-          <div className="inline-block text-red-600 text-lg font-bold animate-scroll-slow">
-            {repeatedText}
+          <div className="inline-block text-lg font-bold animate-scroll-slow">
+            {repeatedTickers.map((ticker, index) => (
+              <span key={index}>
+                <span className={tickerColors[index % tickerColors.length]}>
+                  {ticker.text}
+                </span>
+                {index < repeatedTickers.length - 1 && (
+                  <span className="text-slate-500"> • </span>
+                )}
+              </span>
+            ))}
           </div>
         </div>
       </div>
