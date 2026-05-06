@@ -4,11 +4,8 @@ import Footer from "@/components/layout/Footer";
 import NewsTicker from "@/components/home/NewsTicker";
 import AutoScrollNews from "@/components/common/AutoScrollNews";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogHeader } from "@/components/ui/dialog";
-
-import { Link } from "wouter";
 import {
   Shield,
   Users,
@@ -629,14 +626,6 @@ export default function Home() {
                         </div>
                       ))}
                     </div>
-                    <Link href={wing.href}>
-                      <Button
-                        variant="link"
-                        className="p-0 text-primary font-semibold hover:text-primary/80"
-                      >
-                        Learn More →
-                      </Button>
-                    </Link>
                   </div>
                 </CardContent>
               </Card>

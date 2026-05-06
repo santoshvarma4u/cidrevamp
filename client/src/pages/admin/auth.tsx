@@ -261,7 +261,7 @@ export default function AdminAuth() {
         {/* Footer */}
         <div className="text-center mt-8">
           <p className="text-blue-100 text-sm">
-            © 2025 Crime Investigation Department
+            © 2026 Crime Investigation Department
           </p>
           <p className="text-blue-200 text-xs mt-1">
             Telangana State Police

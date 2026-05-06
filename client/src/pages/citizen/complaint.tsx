@@ -358,14 +358,7 @@ export default function ComplaintForm() {
                   <Phone className="h-4 w-4 text-gray-600" />
                   <span>Emergency: 100</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Mail className="h-4 w-4 text-gray-600" />
-                  <ProtectedEmail 
-                    email="help.tspolice@cgg.gov.in" 
-                    method="obfuscated"
-                    showIcon={false}
-                  />
-                </div>
+                
                 <div className="flex items-center space-x-2">
                   <MapPin className="h-4 w-4 text-gray-600" />
                   <span>CID Office, Hyderabad</span>

@@ -19,7 +19,6 @@ import {
   Play,
   Images,
   Clock,
-  ArrowRight,
 } from "lucide-react";
 import VideoPlayer from "@/components/media/VideoPlayer";
 import AutoScrollNews from "@/components/common/AutoScrollNews";
@@ -252,11 +251,6 @@ export default function ModernHome() {
                         </div>
                       ))}
                     </div>
-                    <Link href={wing.href}>
-                      <Button className="modern-button w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                        Learn More <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    </Link>
                   </div>
                 </div>
               ))}

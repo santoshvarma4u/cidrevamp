@@ -89,7 +89,7 @@ export default function ModernHeader() {
             {/* Right-aligned Text */}
             <div className="text-right">
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C3680] to-[#1E2A5E] bg-clip-text text-transparent">
-                Crime Investigation Department <span className="normal-case text-lg md:text-2xl lg:text-3xl">(Demo)</span>
+                Crime Investigation Department
               </h1>
             </div>
           </div>
@@ -117,49 +117,40 @@ export default function ModernHeader() {
                 const childPages = getChildPages(page.slug);
 
                 if (childPages.length > 0) {
-                  // Has children - render as dropdown with clickable parent
+                  // Has children - render as dropdown only (no direct navigation on parent)
                   return (
                     <div key={page.slug} className="relative inline-block">
-                      <div className="flex items-center">
-                        <Button
-                          variant="ghost"
-                          className="hover:bg-transparent transition-colors px-3 py-2 font-semibold capitalize"
-                          style={{ color: '#2C3680' }}
-                          onClick={() => (window.location.href = `/${page.slug}`)}
-                        >
-                          <span className="flex items-center">
-                            {page.menuTitle || page.title}
-                            {page.isNew && <span className="new-badge">NEW</span>}
-                          </span>
-                        </Button>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              className="hover:bg-transparent transition-colors px-1 py-2"
-                              style={{ color: '#2C3680' }}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="hover:bg-transparent transition-colors flex items-center space-x-1 px-3 py-2 font-semibold capitalize"
+                            style={{ color: '#2C3680' }}
+                          >
+                            <span className="flex items-center">
+                              {page.menuTitle || page.title}
+                              {page.isNew && <span className="new-badge">NEW</span>}
+                            </span>
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start">
+                          {childPages.map((childPage: any) => (
+                            <DropdownMenuItem
+                              key={childPage.slug}
+                              onClick={() =>
+                                (window.location.href = `/${childPage.slug}`)
+                              }
+                              className="capitalize"
                             >
-                              <ChevronDown className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="start">
-                            {childPages.map((childPage: any) => (
-                              <DropdownMenuItem
-                                key={childPage.slug}
-                                onClick={() =>
-                                  (window.location.href = `/${childPage.slug}`)
-                                }
-                                className="capitalize"
-                              >
-                                <span className="flex items-center justify-between w-full">
-                                  <span>{childPage.menuTitle || childPage.title}</span>
-                                  {childPage.isNew && <span className="new-badge">NEW</span>}
-                                </span>
-                              </DropdownMenuItem>
-                            ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
+                              <span className="flex items-center justify-between w-full">
+                                <span>{childPage.menuTitle || childPage.title}</span>
+                                {childPage.isNew && <span className="new-badge">NEW</span>}
+                              </span>
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   );
                 } else {
@@ -343,19 +334,26 @@ export default function ModernHeader() {
                     {/* All parent menu pages (both main menu and more section) */}
                     {[...mainMenuPages, ...moreMenuPages].map((page: any) => {
                       const childPages = getChildPages(page.slug);
+                      const hasChildren = childPages.length > 0;
 
                       return (
                         <div key={page.slug} className="space-y-1">
-                          <Button
-                            variant="ghost"
-                            className="w-full justify-start font-medium capitalize"
-                            onClick={() => {
-                              window.location.href = `/${page.slug}`;
-                              setIsMobileMenuOpen(false);
-                            }}
-                          >
-                            {page.menuTitle || page.title}
-                          </Button>
+                          {hasChildren ? (
+                            <div className="w-full px-3 py-2 font-medium capitalize text-left text-sm">
+                              {page.menuTitle || page.title}
+                            </div>
+                          ) : (
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start font-medium capitalize"
+                              onClick={() => {
+                                window.location.href = `/${page.slug}`;
+                                setIsMobileMenuOpen(false);
+                              }}
+                            >
+                              {page.menuTitle || page.title}
+                            </Button>
+                          )}
 
                           {/* Child pages */}
                           {childPages.map((childPage: any) => (

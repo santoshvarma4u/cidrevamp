@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { Video, Photo } from "@shared/schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shield, Phone, FileText, Search, Smartphone, Play, ChevronRight, TriangleAlert, ChartLine, Users, Gavel, Heart } from "lucide-react";
+import { Shield, Phone, FileText, Search, Smartphone, Play, TriangleAlert, ChartLine, Users, Gavel, Heart } from "lucide-react";
 
 export default function Landing() {
   const { data: videos = [] } = useQuery<Video[]>({
@@ -194,11 +194,6 @@ export default function Landing() {
                         <span className="text-sm">Banking Fraud Investigation</span>
                       </div>
                     </div>
-                    <Link href="/specialized-wings/economic-offences">
-                      <Button variant="ghost" className="text-gov-blue font-semibold hover:text-blue-700 p-0">
-                        Learn More <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    </Link>
                   </div>
                 </div>
               </CardContent>
@@ -229,11 +224,6 @@ export default function Landing() {
                         <span className="text-sm">Training & Capacity Building</span>
                       </div>
                     </div>
-                    <Link href="/specialized-wings/cyber-crimes">
-                      <Button variant="ghost" className="text-gov-blue font-semibold hover:text-blue-700 p-0">
-                        Learn More <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    </Link>
                   </div>
                 </div>
               </CardContent>
@@ -264,11 +254,6 @@ export default function Landing() {
                         <span className="text-sm">Missing Persons Monitoring</span>
                       </div>
                     </div>
-                    <Link href="/specialized-wings/women-protection">
-                      <Button variant="ghost" className="text-gov-blue font-semibold hover:text-blue-700 p-0">
-                        Learn More <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    </Link>
                   </div>
                 </div>
               </CardContent>
@@ -299,11 +284,6 @@ export default function Landing() {
                         <span className="text-sm">Inter-district Coordination</span>
                       </div>
                     </div>
-                    <Link href="/specialized-wings/general-offences">
-                      <Button variant="ghost" className="text-gov-blue font-semibold hover:text-blue-700 p-0">
-                        Learn More <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    </Link>
                   </div>
                 </div>
               </CardContent>

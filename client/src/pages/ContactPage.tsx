@@ -280,8 +280,7 @@ export function ContactPage() {
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-3">Office Hours</h4>
                 <div className="space-y-2 text-gray-700">
-                  <p><strong>Monday to Friday:</strong> 10:00 AM - 5:30 PM</p>
-                  <p><strong>Saturday:</strong> 10:00 AM - 2:00 PM</p>
+                  <p><strong>Monday to Saturday:</strong> 10:00 AM - 5:30 PM</p>
                   <p><strong>Sunday:</strong> Closed (Emergency services available)</p>
                 </div>
               </div>

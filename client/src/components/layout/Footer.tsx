@@ -4,11 +4,6 @@ import {
   Phone,
   Mail,
   MapPin,
-  Clock,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
 } from "lucide-react";
 import vatinsLogoSrc from "@assets/vatins-logo.png";
 import { ProtectedEmail } from "@/components/common/ProtectedEmail";
@@ -59,38 +54,6 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/economic-offences"
-                  className="text-gray-700 hover:text-gray-900 transition"
-                >
-                  Economic Offences
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/cyber-crimes"
-                  className="text-gray-700 hover:text-gray-900 transition"
-                >
-                  Cyber Crimes
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/women-child-protection"
-                  className="text-gray-700 hover:text-gray-900 transition"
-                >
-                  Women Protection
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/general-offences"
-                  className="text-gray-700 hover:text-gray-900 transition"
-                >
-                  General Offences
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/officers"
                   className="text-gray-700 hover:text-gray-900 transition"
                 >
@@ -123,9 +86,9 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-gray-500" />
-                <ProtectedEmail 
-                  email="adgcid-ts@tspolice.gov.in" 
-                  method="image"
+                <ProtectedEmail
+                  email="adgcid-ts@tspolice.gov.in"
+                  method="obfuscated"
                   showIcon={false}
                   className="text-gray-700"
                 />
@@ -141,7 +104,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <p className="text-gray-600">
-                © 2025 Crime Investigation Department, Telangana State Police.
+                © 2026 Crime Investigation Department, Telangana State Police.
                 All rights reserved.
               </p>
             </div>
