@@ -231,7 +231,7 @@ export default function Home() {
               <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                 <CardTitle className="text-2xl flex items-center gap-3">
                   <Users className="h-8 w-8" />
-                  Addl. Director General's Message
+                   Director General's Message
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-8 flex-1 flex bg-white rounded-b-2xl">
