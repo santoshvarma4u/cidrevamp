@@ -9,6 +9,7 @@ import {
   Video,
   Image,
   FileText,
+  MessageSquare,
   Newspaper,
   Users,
   LogOut,
