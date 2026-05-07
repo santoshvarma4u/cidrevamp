@@ -463,13 +463,14 @@ export default function Home() {
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
                     <FileText className="h-6 w-6" />
+                    <span className="new-badge">NEW</span>
                     Latest News Updates
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 flex-1 min-h-0 overflow-y-auto bg-white rounded-b-2xl">
                   {latestNews.length > 0 ? (
                     <div className="space-y-4">
-                      {latestNews.slice(0, 3).map((news: any) => {
+                      {latestNews.map((news: any) => {
                         const hasTelugu = news.titleTelugu || news.contentTelugu;
                         
                         return (
