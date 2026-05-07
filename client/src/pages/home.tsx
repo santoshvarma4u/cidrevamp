@@ -463,16 +463,16 @@ export default function Home() {
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-2xl card-header-gradient">
                   <CardTitle className="text-xl flex items-center gap-3">
                     <FileText className="h-6 w-6" />
-                    <span className="new-badge">NEW</span>
                     Latest News Updates
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 flex-1 min-h-0 overflow-y-auto bg-white rounded-b-2xl">
                   {latestNews.length > 0 ? (
                     <div className="space-y-4">
-                      {latestNews.map((news: any) => {
+                      {latestNews.map((news: any, index: number) => {
                         const hasTelugu = news.titleTelugu || news.contentTelugu;
-                        
+                        const isLatest = index === 0;
+
                         return (
                           <div
                             key={news.id}
@@ -485,6 +485,7 @@ export default function Home() {
                             {hasTelugu ? (
                               <>
                                 <h4 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2" style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}>
+                                  {isLatest && <span className="new-badge mr-2">NEW</span>}
                                   {news.titleTelugu}
                                 </h4>
                                 <p className="text-xs text-gray-600 mb-2 line-clamp-3 whitespace-pre-line" style={{ fontFamily: 'Noto Sans Telugu, sans-serif' }}>
@@ -494,6 +495,7 @@ export default function Home() {
                             ) : (
                               <>
                                 <h4 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2">
+                                  {isLatest && <span className="new-badge mr-2">NEW</span>}
                                   {news.title}
                                 </h4>
                                 <p className="text-xs text-gray-600 mb-2 line-clamp-3 whitespace-pre-line">
