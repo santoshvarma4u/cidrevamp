@@ -495,7 +495,7 @@ export default function Home() {
                             ) : (
                               <>
                                 <h4 className="font-semibold text-sm text-gray-800 mb-1 line-clamp-2">
-                                  {isLatest && <span className="new-badge mr-2">NEW</span>}
+                                  {isLatest && <span className="new-badge mr-2 mt-4">NEW</span>}
                                   {news.title}
                                 </h4>
                                 <p className="text-xs text-gray-600 mb-2 line-clamp-3 whitespace-pre-line">
