@@ -31,6 +31,12 @@ export default function ModernHeader() {
   const pages = Array.isArray(menuPages) ? menuPages : [];
   const allMenuPages = (pages || []).filter((page: any) => page.showInMenu);
 
+  // External links to show inside the "More" dropdown
+  const externalMoreLinks: { title: string; url: string }[] = [
+    { title: "CEIR", url: "https://www.ceir.gov.in" },
+    { title: "Citizen Feedback", url: "https://form.jotform.com/243391395570058" },
+  ];
+
   // Function to check if a page should be in main menu based on expiry date
   const isInMainMenu = (page: any) => {
     if (page.menuLocation === 'more') return false;
@@ -88,7 +94,7 @@ export default function ModernHeader() {
 
             {/* Right-aligned Text */}
             <div className="text-right">
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C3680] to-[#1E2A5E] bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl pr-5 font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C3680] to-[#1E2A5E] bg-clip-text text-transparent">
                 Crime Investigation Department
               </h1>
             </div>
@@ -173,7 +179,7 @@ export default function ModernHeader() {
               })}
 
               {/* More Dropdown for Remaining Menu Items and More Section Pages */}
-              {(mainMenuPages.length > 4 || moreMenuPages.length > 0) && (
+              {(mainMenuPages.length > 4 || moreMenuPages.length > 0 || externalMoreLinks.length > 0) && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -262,6 +268,22 @@ export default function ModernHeader() {
                         </div>
                       );
                     })}
+
+                    {/* Separator before external links */}
+                    {externalMoreLinks.length > 0 && (mainMenuPages.length > 4 || moreMenuPages.length > 0) && (
+                      <div className="border-t border-gray-200 my-2"></div>
+                    )}
+
+                    {/* External links */}
+                    {externalMoreLinks.map((link) => (
+                      <DropdownMenuItem
+                        key={link.url}
+                        onClick={() => window.open(link.url, "_blank", "noopener,noreferrer")}
+                        className="font-medium capitalize"
+                      >
+                        {link.title}
+                      </DropdownMenuItem>
+                    ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
               )}
@@ -372,6 +394,21 @@ export default function ModernHeader() {
                         </div>
                       );
                     })}
+
+                    {/* External links (mobile) */}
+                    {externalMoreLinks.map((link) => (
+                      <Button
+                        key={link.url}
+                        variant="ghost"
+                        className="w-full justify-start font-medium capitalize"
+                        onClick={() => {
+                          window.open(link.url, "_blank", "noopener,noreferrer");
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        {link.title}
+                      </Button>
+                    ))}
 
                     {/* Mobile Admin Menu */}
                     {isAuthenticated && user ? (
