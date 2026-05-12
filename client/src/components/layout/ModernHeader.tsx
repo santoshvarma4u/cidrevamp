@@ -34,7 +34,7 @@ export default function ModernHeader() {
   // External links to show inside the "More" dropdown
   const externalMoreLinks: { title: string; url: string }[] = [
     { title: "CEIR", url: "https://www.ceir.gov.in" },
-    { title: "Citizen Feedback", url: "https://form.jotform.com/243391395570058" },
+    { title: "Citizen Feedback on Police Services", url: "https://form.jotform.com/243391395570058" },
   ];
 
   // Function to check if a page should be in main menu based on expiry date
@@ -269,11 +269,6 @@ export default function ModernHeader() {
                       );
                     })}
 
-                    {/* Separator before external links */}
-                    {externalMoreLinks.length > 0 && (mainMenuPages.length > 4 || moreMenuPages.length > 0) && (
-                      <div className="border-t border-gray-200 my-2"></div>
-                    )}
-
                     {/* External links */}
                     {externalMoreLinks.map((link) => (
                       <DropdownMenuItem
@@ -281,7 +276,10 @@ export default function ModernHeader() {
                         onClick={() => window.open(link.url, "_blank", "noopener,noreferrer")}
                         className="font-medium capitalize"
                       >
-                        {link.title}
+                        <span className="flex items-center justify-between w-full">
+                          <span>{link.title}</span>
+                          <span className="new-badge">NEW</span>
+                        </span>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
@@ -406,7 +404,10 @@ export default function ModernHeader() {
                           setIsMobileMenuOpen(false);
                         }}
                       >
-                        {link.title}
+                        <span className="flex items-center w-full">
+                          <span>{link.title}</span>
+                          <span className="new-badge">NEW</span>
+                        </span>
                       </Button>
                     ))}
 
