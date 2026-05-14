@@ -69,21 +69,7 @@ function AlertSection({
 
   return (
     <section className="mb-12">
-      <div className={`flex items-center justify-between mb-6 pb-3 border-b-2 ${theme.accent}`}>
-        <div className="flex items-center gap-3">
-          <div className={`${theme.iconBg} ${theme.iconColor} rounded-lg p-2`}>
-            <HeaderIcon className="h-6 w-6" />
-          </div>
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">{theme.title}</h2>
-            <p className="text-sm text-gray-500">{theme.subtitle}</p>
-          </div>
-        </div>
-        <span className={`text-sm font-semibold px-3 py-1 rounded-full ${theme.badge}`}>
-          {items.length} {items.length === 1 ? "alert" : "alerts"}
-        </span>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1  gap-6">
         {items.map((item) => (
           <AlertCard key={item.id} item={item} theme={theme} />
         ))}
